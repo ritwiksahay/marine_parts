@@ -30,13 +30,24 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'marine_parts.User'
 
 # Application definition
 
-INSTALLED_APPS = [
-    'marine_parts',
+THIRD_PARTIES_APP = [
     'bootstrap_admin',
+    'safedelete',
+    'wkhtmltopdf',
+    'bootstrap3',
+    'django_countries',
+    'widget_tweaks',
+    'ads',
+]
+
+SYSTEM_APPS = [
+    'marine_parts.users',
+]
+
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,15 +56,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
-    #'compressor',
-    'widget_tweaks',
-    'ads',
-    'safedelete',
-    'wkhtmltopdf',
-    'bootstrap3',
-    'django_countries',
+]
 
-] + get_core_apps()
+INSTALLED_APPS = DJANGO_APPS + SYSTEM_APPS + THIRD_PARTIES_APP \
+    + get_core_apps()
+
+AUTH_USER_MODEL = 'users.User'
 
 SITE_ID = 1
 
@@ -70,7 +78,7 @@ MIDDLEWARE = [
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
-ROOT_URLCONF = 'frobshop.urls'
+ROOT_URLCONF = 'marine_parts.urls'
 
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.EmailBackend',
@@ -111,7 +119,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'frobshop.wsgi.application'
+WSGI_APPLICATION = 'marine_parts.wsgi.application'
 
 
 # Database
