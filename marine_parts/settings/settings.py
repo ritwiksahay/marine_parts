@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 from oscar.defaults import *
 from oscar import get_core_apps, OSCAR_MAIN_TEMPLATE_DIR
+location = lambda x: os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', x)
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -45,6 +46,7 @@ THIRD_PARTIES_APP = [
 
 SYSTEM_APPS = [
     'marine_parts.users',
+    'marine_parts.authorize'
 ]
 
 DJANGO_APPS = [
@@ -62,6 +64,17 @@ INSTALLED_APPS = DJANGO_APPS + SYSTEM_APPS + THIRD_PARTIES_APP \
     + get_core_apps()
 
 AUTH_USER_MODEL = 'users.User'
+
+
+# Order processing
+OSCAR_INITIAL_ORDER_STATUS = 'Pending'
+OSCAR_INITIAL_LINE_STATUS = 'Pending'
+OSCAR_ORDER_STATUS_PIPELINE = {
+    'Pending': ('Being processed', 'Cancelled',),
+    'Being processed': ('Processed', 'Cancelled',),
+    'Cancelled': (),
+}
+
 
 SITE_ID = 1
 
@@ -96,7 +109,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
+            #oin(BASE_DIR, 'templates'),
+            location('templates'),
             OSCAR_MAIN_TEMPLATE_DIR
         ],
         'APP_DIRS': True,
