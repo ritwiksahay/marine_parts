@@ -45,6 +45,7 @@ THIRD_PARTIES_APP = [
 
 SYSTEM_APPS = [
     'marine_parts.users',
+    'marine_parts.parts_scrapper'
 ]
 
 DJANGO_APPS = [
