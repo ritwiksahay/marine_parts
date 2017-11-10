@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -31,7 +32,7 @@ class PaymentDetailsView(views.PaymentDetailsView):
         cardCode = request.POST['cvv']
 
         print(card_number)
-        # Validar la informaciónhttps://github.com/django-oscar/django-oscar/blob/f34ee23785741d090e68c937e2a9fab2e
+        # Validar la informacinhttps://github.com/django-oscar/django-oscar/blob/f34ee23785741d090e68c937e2a9fab2e
         if not (card_number and cardCode):
             return self.render_payment_details(request, cvv=cardCode)
 
