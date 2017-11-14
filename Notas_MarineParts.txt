@@ -15,6 +15,10 @@ Se usa el requirements.txt para la referencia exhaustiva
 - safedelete -> https://github.com/makinacorpus/django-safedelete
 - authorizenet -> https://github.com/AuthorizeNet/sdk-python
 
+
+Authorize.net - Testing Guide
+https://developer.authorize.net/hello_world/testing_guide/
+
 Se investiga, si se investiga: sustituir el User de Django en base a:
     - email como login.
     - Customers
