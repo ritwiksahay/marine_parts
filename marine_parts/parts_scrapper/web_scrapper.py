@@ -93,6 +93,7 @@ def marineengine_mercury_scrapper():
     ximg_selector = "/html/body/main/div[2]/p[1]/img"
     xproduct_selector = "/html/body/main/table/tbody//tr"
     xproduct_details_selector = "/html/body/main/div[1]/div[1]/div[1]/div[2]/table//tr/td/p"
+    xproduct_unavailable_selector = "/html/body/main/div[1]/div[1]/div[1]/div[2]/div/a"
     xproduct_img_selector = "/html/body/main/div[1]/div[1]/div[1]/div[1]/p/img"
     
     for cat in tree.xpath(xpath_selector):
@@ -157,6 +158,9 @@ def marineengine_mercury_scrapper():
                                 prod_image = tree.xpath(xproduct_img_selector)[0]
 
                             print(etree.tostring(prod_image))
+
+                            if tree.xpath(xproduct_unavailable_selector):
+                                print("recomended", tree.xpath(xproduct_unavailable_selector)[0].get('href').replace(' ', '20%'))
 
                             for details in tree.xpath(xproduct_details_selector):
                                 value = (etree.tostring(details).decode('utf-8').replace('\n', '').replace('\t', '').replace('</p>', '')
