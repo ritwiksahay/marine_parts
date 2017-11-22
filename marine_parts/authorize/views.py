@@ -2,15 +2,13 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from oscar.apps.checkout import views
-from oscar.apps.payment import forms, models
+from oscar.apps.payment import forms, models, exceptions
+import time
 
 from authorizenet import apicontractsv1
 from authorizenet.apicontrollers import createTransactionController
-import marine_parts.authorize.constants
-#import imp
-
-
-#CONSTANTS = imp.load_source('modulename', 'constants.py')
+import requests
+from marine_parts.authorize import constants
 
 
 class PaymentDetailsView(views.PaymentDetailsView):
@@ -20,116 +18,142 @@ class PaymentDetailsView(views.PaymentDetailsView):
     """
 
     def post(self, request, *args, **kwargs):
-        # Override so we can validate the bankcard/billingaddress submission.
+        # Override so we can validate the bankcard submission.
         # If it is valid, we render the preview screen with the forms hidden
         # within it.  When the preview is submitted, we pick up the 'action'
         # parameters and actually place the order.
         if request.POST.get('action', '') == 'place_order':
             return self.do_place_order(request)
 
-        card_number = request.POST['card-number']
-        cardCode = request.POST['cvv']
+        payment_m = request.POST['payment-method']
+        if  payment_m == 'payeezy':
+            token = request.POST['token_chk']
+            card_type = request.POST['card_type']
+            cardholder_name = request.POST['cardholder_name']
+            exp_date = request.POST['exp_date']
+            if token and card_type and cardholder_name and exp_date:
+                # Render preview with bankcard and billing address details hidden
+                return self.render_preview(request, token=token, card_type=card_type
+                                           , cardholder_name=cardholder_name, exp_date=exp_date, payment_method=payment_m)
+            else:
+                return self.render_payment_details(requests)
+        else:
+            token = request.POST['dataValue']
+            descriptor = request.POST['dataDescriptor']
+            if token and descriptor:
+                return self.render_preview(request, token=token, payment_method=payment_m, descriptor=descriptor )
+            else:
+                return self.render_payment_details(requests)
 
-        print(card_number)
-        # Validar la informaciónhttps://github.com/django-oscar/django-oscar/blob/f34ee23785741d090e68c937e2a9fab2e
-        if not (card_number and cardCode):
-            return self.render_payment_details(request, cvv=cardCode)
-
-        # Render preview with bankcard and billing address details hidden
-        return self.render_preview(request,
-                                   cvv=cardCode,
-                                   cardNumber=card_number)
 
     def do_place_order(self, request):
         # Helper method to check that the hidden forms wasn't tinkered
         # with.
-        card_number = request.POST["card-number"]
-        cardCode = request.POST['cvv']
-
-        if not (card_number and cardCode):
-            messages.error(request, "Invalid submission")
-            return HttpResponseRedirect(reverse('checkout:payment-details'))
+        submission = self.build_submission()
+        submission['payment_kwargs']['payment-method'] = request.POST['payment-method']
+        if  request.POST['payment-method'] == 'payeezy':
+            token = request.POST['token_chk']
+            card_type = request.POST['card_type']
+            cardholder_name = request.POST['cardholder_name']
+            exp_date = request.POST['exp_date']
+            if token and card_type and cardholder_name and exp_date:
+                submission['payment_kwargs']['token_chk'] = token
+                submission['payment_kwargs']['cardholder_name'] = cardholder_name
+                submission['payment_kwargs']['card_type'] = card_type
+                submission['payment_kwargs']['exp_date'] = exp_date
+            else:
+                messages.error(request, "Invalid submission")
+                return HttpResponseRedirect(reverse('checkout:payment-details'))
+        else:
+            token = request.POST['dataValue']
+            descriptor = request.POST['dataDescriptor']
+            if token and descriptor:
+                submission['payment_kwargs']['token_chk'] = token
+                submission['payment_kwargs']['descriptor'] = descriptor
+            else:
+                messages.error(request, "Invalid submission")
+                return HttpResponseRedirect(reverse('checkout:payment-details'))
 
         # Attempt to submit the order, passing the bankcard object so that it
         # gets passed back to the 'handle_payment' method below.
-        submission = self.build_submission()
-        submission['payment_kwargs']['card_number'] = card_number
-        submission['payment_kwargs']['cvv'] = cardCode
+
         return self.submit(**submission)
 
     def handle_payment(self, order_number, total, **kwargs):
         """
-        Make submission to PayPal
+        Make submission to Authorize.net and Payeezy
         """
-        # Using authorization here (two-stage model).  You could use sale to
-        # perform the auth and capture in one step.  The choice is dependent
-        # on your business model.
-        response = self.charge_credit_card(
-            total.incl_tax
-            , kwargs['card_number']
-            , kwargs['cvv'])
+        #
+        # Payeezy payment
+        #
+        if kwargs['payment-method'] == 'payeezy':
+            constants.payload['amount'] = str(total.incl_tax)
+            constants.payload['token']['token_data']['type'] = kwargs['card_type']
+            constants.payload['token']['token_data']['value'] = kwargs['token_chk']
+            constants.payload['token']['token_data']['cardholder_name'] = kwargs['cardholder_name']
+            constants.payload['token']['token_data']['exp_date'] = kwargs['exp_date']
+            self.execPaymentPayeezy(order_number, total)
 
-        reference = "Transaction ID: " + response.transactionResponse.transId
-        # Record payment source and event
-        source_type, is_created = models.SourceType.objects.get_or_create(
-            name='Authorize.net')
+        else:
+            #
+            # Authorize.net payment
+            #
+            self.create_an_accept_payment_transaction(order_number
+                  , kwargs['token_chk'], kwargs['descriptor'], total )
+
+    def execPaymentPayeezy(self, order_number, total, payload):
+        # Charge the token requested
+        response = requests.post(constants.url_payeezy_sandbox, json=constants.payload, headers=constants.headers)
+        # Check errors
+        #print('Response: ' + str(response.status_code))
+        response_json = response.json()
+        if response.status_code >= 400:
+            # print("Transaction status: " + response_json['transaction_status'])
+            #print(response_json)
+            #for x in response_json['Error']['messages']:
+                #print(x['code'] + " " + x['description'])
+            raise exceptions.UnableToTakePayment
+        else:
+            # Notify payment event if there is success
+            reference = "Transaction ID: %s\nBank response code: %s\n, Bank message: %s\n" \
+                        % (
+                        response_json['transaction_id'], response_json['bank_resp_code'], response_json['bank_message'])
+
+            # Record payment source and event
+            self.recordPayment('Payeezy', total, reference)
+
+    def recordPayment(self, name, total, reference):
+        source_type, is_created = models.SourceType.objects.get_or_create(name=name)
         source = source_type.sources.model(
             source_type=source_type,
             amount_allocated=total.incl_tax,
             currency=total.currency,
             reference=reference)
-
         self.add_payment_source(source)
-
         # Note that payment events don’t distinguish between different sources.
-        self.add_payment_event('Successfully charged', total.incl_tax)
+        self.add_payment_event(name, total.incl_tax, reference)
 
-    def charge_credit_card(self, amount, card_number, cardCode):
-        """
-        Charge a credit card
-        """
 
-        # BORRAR para consultar con estas constanes aparte
-        apiLoginId = "6X5kyB5yF"
-        transactionKey = "8hr8HwR2TSU83H4D"
-        transactionId = "2245440957"
+    def create_an_accept_payment_transaction(self, order_number, dataValue, dataDescriptor, total):
         # Create a merchantAuthenticationType object with authentication details
         # retrieved from the constants file
         merchantAuth = apicontractsv1.merchantAuthenticationType()
-        merchantAuth.name = apiLoginId
-        merchantAuth.transactionKey = transactionKey
+        merchantAuth.name = constants.apiLoginId
+        merchantAuth.transactionKey = constants.transactionKey
 
-        # Create the payment data for a credit card
-        creditCard = apicontractsv1.creditCardType()
-        creditCard.cardNumber = card_number
-        creditCard.expirationDate = "2020-12"
-        creditCard.cardCode = cardCode
+        # Create the payment object for a payment nonce
+        opaqueData = apicontractsv1.opaqueDataType()
+        opaqueData.dataDescriptor = dataDescriptor
+        opaqueData.dataValue = dataValue
 
         # Add the payment data to a paymentType object
-        payment = apicontractsv1.paymentType()
-        payment.creditCard = creditCard
+        paymentOne = apicontractsv1.paymentType()
+        paymentOne.opaqueData = opaqueData
 
         # Create order information
-        order = apicontractsv1.orderType()
-        order.invoiceNumber = "10101"
-        order.description = "Golf Shirts"
-
-        # Set the customer's Bill To address
-        customerAddress = apicontractsv1.customerAddressType()
-        customerAddress.firstName = "Ellen"
-        customerAddress.lastName = "Johnson"
-        customerAddress.company = "Souveniropolis"
-        customerAddress.address = "14 Main Street"
-        customerAddress.city = "Pecan Springs"
-        customerAddress.state = "TX"
-        customerAddress.zip = "44628"
-        customerAddress.country = "USA"
-
-        # Set the customer's identifying information
-        customerData = apicontractsv1.customerDataType()
-        customerData.type = "individual"
-        customerData.id = "99999456654"
-        customerData.email = "EllenJohnson@example.com"
+        #order = apicontractsv1.orderType()
+        #order.invoiceNumber = "10101"
+        #order.description = "Golf Shirts"
 
         # Add values for transaction settings
         duplicateWindowSetting = apicontractsv1.settingType()
@@ -138,44 +162,22 @@ class PaymentDetailsView(views.PaymentDetailsView):
         settings = apicontractsv1.ArrayOfSetting()
         settings.setting.append(duplicateWindowSetting)
 
-        # setup individual line items
-        line_item_1 = apicontractsv1.lineItemType()
-        line_item_1.itemId = "12345"
-        line_item_1.name = "first"
-        line_item_1.description = "Here's the first line item"
-        line_item_1.quantity = "2"
-        line_item_1.unitPrice = "12.95"
-        line_item_2 = apicontractsv1.lineItemType()
-        line_item_2.itemId = "67890"
-        line_item_2.name = "second"
-        line_item_2.description = "Here's the second line item"
-        line_item_2.quantity = "3"
-        line_item_2.unitPrice = "7.95"
-
-        # build the array of line items
-        line_items = apicontractsv1.ArrayOfLineItem()
-        line_items.lineItem.append(line_item_1)
-        line_items.lineItem.append(line_item_2)
-
-        # Create a transactionRequestType object and add the previous objects to it.
+        # Create a transactionRequestType object and add the previous objects to it
         transactionrequest = apicontractsv1.transactionRequestType()
         transactionrequest.transactionType = "authCaptureTransaction"
-        transactionrequest.amount = amount
-        transactionrequest.payment = payment
-        transactionrequest.order = order
-        transactionrequest.billTo = customerAddress
-        transactionrequest.customer = customerData
-        transactionrequest.transactionSettings = settings
-        transactionrequest.lineItems = line_items
+        transactionrequest.amount = total.incl_tax
+        #transactionrequest.order = order
+        transactionrequest.payment = paymentOne
 
         # Assemble the complete transaction request
         createtransactionrequest = apicontractsv1.createTransactionRequest()
         createtransactionrequest.merchantAuthentication = merchantAuth
-        createtransactionrequest.refId = "MerchantID-0001"
+        # Set the transaction's refId
+        createtransactionrequest.refId = str(order_number)
         createtransactionrequest.transactionRequest = transactionrequest
-        # Create the controller
-        createtransactioncontroller = createTransactionController(
-            createtransactionrequest)
+
+        # Create the controller and get response
+        createtransactioncontroller = createTransactionController(createtransactionrequest)
         createtransactioncontroller.execute()
 
         response = createtransactioncontroller.getresponse()
@@ -185,39 +187,27 @@ class PaymentDetailsView(views.PaymentDetailsView):
             if response.messages.resultCode == "Ok":
                 # Since the API request was successful, look for a transaction response
                 # and parse it to display the results of authorizing the card
-                if hasattr(response.transactionResponse, 'messages') is True:
-                    print(
-                        'Successfully created transaction with Transaction ID: %s'
-                        % response.transactionResponse.transId)
-                    print('Transaction Response Code: %s' %
-                          response.transactionResponse.responseCode)
-                    print('Message Code: %s' %
-                          response.transactionResponse.messages.message[0].code)
-                    print('Description: %s' % response.transactionResponse.
-                          messages.message[0].description)
+                if hasattr(response.transactionResponse, 'messages'):
+                    reference = "Transaction ID: %s\nAuth Code: %s\nTransaction Response Code: %s" \
+                                % (response.transactionResponse.transId, response.transactionResponse.authCode,
+                                   response.transactionResponse.responseCode)
+                    # Record payment source and event
+                    self.recordPayment('Authorize.net', total, reference)
                 else:
-                    print('Failed Transaction.')
-                    if hasattr(response.transactionResponse, 'errors') is True:
-                        print('Error Code:  %s' % str(response.transactionResponse.
-                                                      errors.error[0].errorCode))
-                        print(
-                            'Error message: %s' %
-                            response.transactionResponse.errors.error[0].errorText)
-            # Or, print errors if the API request wasn't successful
+                    # print('Failed Transaction.')
+                    # if hasattr(response.transactionResponse, 'errors') == True:
+                    #     print('Error Code:  %s' % str(response.transactionResponse.errors.error[0].errorCode))
+                    #     print('Error message: %s' % response.transactionResponse.errors.error[0].errorText)
+                    raise exceptions.UnableToTakePayment
             else:
-                print('Failed Transaction.')
-                if hasattr(response, 'transactionResponse') is True and hasattr(
-                        response.transactionResponse, 'errors') is True:
-                    print('Error Code: %s' % str(
-                        response.transactionResponse.errors.error[0].errorCode))
-                    print('Error message: %s' %
-                          response.transactionResponse.errors.error[0].errorText)
-                else:
-                    print('Error Code: %s' %
-                          response.messages.message[0]['code'].text)
-                    print('Error message: %s' %
-                          response.messages.message[0]['text'].text)
+                # print('Failed Transaction.')
+                # if hasattr(response, 'transactionResponse') == True and hasattr(response.transactionResponse,
+                #                                                                 'errors') == True:
+                #     print('Error Code: %s' % str(response.transactionResponse.errors.error[0].errorCode))
+                #     print('Error message: %s' % response.transactionResponse.errors.error[0].errorText)
+                # else:
+                #     print('Error Code: %s' % response.messages.message[0]['code'].text)
+                #     print('Error message: %s' % response.messages.message[0]['text'].text)
+                raise exceptions.PaymentError
         else:
-            print('Null Response.')
-
-        return response
+            raise exceptions.PaymentError

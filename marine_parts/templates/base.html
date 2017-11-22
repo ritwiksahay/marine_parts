@@ -13,6 +13,12 @@
         <meta name="description" content="{% block description %}{% endblock %}" />
         <meta name="viewport" content="{% block viewport %}width=device-width{% endblock %}" />
         <meta name="robots" content="NOARCHIVE,NOCACHE" />
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
+        <script src="{% static 'authorize/js/payeezy_us_v5.1.js' %}" type="text/javascript"></script>
+        <script src="{% static 'authorize/js/paymentHandler.js' %}" type="text/javascript"></script>
+        <script type="text/javascript" src="https://jstest.authorize.net/v1/Accept.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{% static 'authorize/js/authorizeHandler.js' %}" charset="utf-8"></script>
+
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
         <!--[if lt IE 9]>
