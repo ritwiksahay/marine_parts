@@ -34,7 +34,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-THIRD_PARTIES_APP = [
+THIRD_PARTY_APPS = [
     'bootstrap_admin',
     'safedelete',
     'wkhtmltopdf',
@@ -45,8 +45,8 @@ THIRD_PARTIES_APP = [
 ]
 
 SYSTEM_APPS = [
-    'marine_parts.users',
-    'marine_parts.authorize'
+    'marine_parts.apps.users',
+    'marine_parts.apps.authorize'
 ]
 
 DJANGO_APPS = [
@@ -60,7 +60,7 @@ DJANGO_APPS = [
     'django.contrib.flatpages',
 ]
 
-INSTALLED_APPS = DJANGO_APPS + SYSTEM_APPS + THIRD_PARTIES_APP \
+INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + SYSTEM_APPS \
     + get_core_apps()
 
 AUTH_USER_MODEL = 'users.User'
@@ -109,7 +109,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            #oin(BASE_DIR, 'templates'),
+            # join(BASE_DIR, 'templates'),
             location('templates'),
             OSCAR_MAIN_TEMPLATE_DIR
         ],
@@ -117,12 +117,11 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.i18n',
                 'django.contrib.messages.context_processors.messages',
-
-
+                'django.template.context_processors.request',
+                # Oscar templates
                 'oscar.apps.search.context_processors.search_form',
                 'oscar.apps.promotions.context_processors.promotions',
                 'oscar.apps.checkout.context_processors.checkout',
@@ -133,19 +132,13 @@ TEMPLATES = [
     },
 ]
 
+BOOTSTRAP_ADMIN_SIDEBAR_MENU = True
+
 WSGI_APPLICATION = 'marine_parts.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -160,7 +153,7 @@ DATABASES = {
 
 
 # Google Ads
-ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  # OPTIONAL - DEFAULT TO None
+ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  #OPTIONAL-DEFAULT TO None
 
 ADS_ZONES = {
     'header': {
@@ -182,8 +175,6 @@ ADS_ZONES = {
         'google_adsense_format': 'auto',  # OPTIONAL - DEFAULT TO None
     },
 }
-
-
 
 
 # Password validation

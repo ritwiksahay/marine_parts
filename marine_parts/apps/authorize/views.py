@@ -7,7 +7,7 @@ from oscar.apps.payment import forms, models
 
 from authorizenet import apicontractsv1
 from authorizenet.apicontrollers import createTransactionController
-import marine_parts.authorize.constants
+import marine_parts.apps.authorize.constants
 #import imp
 
 
