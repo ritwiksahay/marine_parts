@@ -22,18 +22,31 @@ from marine_parts.apps.authorize import views
 
 
 urlpatterns = [
-    url(r'^i18n/', include('django.conf.urls.i18n')),
-    url(r'^checkout/payment-details/',
+    url(
+        r'^i18n/',
+        include('django.conf.urls.i18n')
+    ),
+    url(
+        r'^checkout/payment-details/',
         views.PaymentDetailsView.as_view(),
-        name='payment-details'),
-    url(r'^checkout/preview/',
+        name='payment-details'
+    ),
+    url(
+        r'^checkout/preview/',
         views.PaymentDetailsView.as_view(),
-        name='payment-details'),
+        name='payment-details'
+    ),
     # The Django admin is not officially supported; expect breakage.
     # Nonetheless, it's often useful for debugging.
-    url(r'^admin/', include(admin.site.urls)),
+    url(
+        r'^admin/',
+        include(admin.site.urls)
+    ),
 
-    url(r'', include(application.urls)),
+    url(
+        r'^',
+        include(application.urls)
+    ),
 ]
 
 urlpatterns = urlpatterns + static(
