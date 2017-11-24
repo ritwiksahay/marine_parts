@@ -8,6 +8,7 @@ from datetime import date
 from logging.handlers import RotatingFileHandler
 
 
+''' Not in use
 def boatsnet_manufacturers(base_url):
     page = requests.get(
         base_url
@@ -77,6 +78,7 @@ def boatsnet_scrapper():
         if provider == "Yamaha":
             provider_src = base_url + '/parts/search/' + provider + 'parts.html'
             boats_yamaha_scrapper(base_url, provider_src)
+'''
 
 
 def marineengine_mercury_scrapper():
@@ -199,6 +201,9 @@ def marineengine_mercury_scrapper():
                             catalog['products'].append(product)
 
                             if counter > 20:
+                                with open('marineengine_mercury.json', 'w') as outfile:
+                                    json.dump(catalog, outfile)
+
                                 print(catalog)
                                 return
 
@@ -324,8 +329,13 @@ def marineengine_evinrude_scrapper():
 
                                 catalog['products'].append(product)
                                 counter += 1
-                                if counter > 20:
-                                    print(catalog)
+                                print(counter)
+                                if counter > 5:
+
+                                    with open('marineengine_envinrude.json', 'w') as outfile:
+                                        json.dump(catalog, outfile)
+
+                                    #print(catalog)
                                     print('Ignoring manuals')
                                     return
 
@@ -369,5 +379,9 @@ def marineengine_evinrude_scrapper():
 
 
 if __name__ == '__main__':
+    print('Started Scrapping.')
+    print('Starting Marine Engine Mercury Scrarpping...')
     marineengine_mercury_scrapper()
+    print('Starting Marine Engine Evinrude Scrarpping...')
     marineengine_evinrude_scrapper()
+    print('Finished Scrapping.')
