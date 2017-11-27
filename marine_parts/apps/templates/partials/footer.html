@@ -1,12 +1,41 @@
+{% load static%}
+{% load staticfiles %}
 {% load i18n %}
 <footer class="footer container-fluid">
     {% block footer %}
-        {% comment %}
-            Could be used for displaying links to privacy policy, terms of service, etc.
-            We have a CSS class defined:
-                <ul class="footer_links inline">
-                    ...
-                </ul>
-         {% endcomment %}
+        <nav class="footer_links inline navbar primary navbar-static-bottom navbar-default">
+            <ul class="nav navbar-nav footer">
+                <li>
+                    {% if LANGUAGES|length > 1 %}
+                        <form id="language_selector" class="navbar-left navbar-form" action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ language_neutral_url_path }}" />
+                            <div class="form-group">
+                                <select name="language" class="form-control">
+                                    {% get_language_info_list for LANGUAGES as languages %}
+                                    {% for language in languages %}
+                                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE%} selected="selected"{% endif %}>
+                                            {{ language.name_local }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button class="btn btn-default" type="submit" data-loading-text="{% trans 'Submitting...' %}">{% trans "Go" %}</button>
+                        </form>
+                    {% endif %}
+                </li>
+                <li>
+                    <a href="">{% trans "Categories"%}</a>
+                </li>
+                <li>
+                    <a href="">{% trans "Brands"%}</a>
+                </li>
+                <li>
+                    <a href="">
+                        <img src="{% static 'img/logo/isotipo-white-small.png' %}" alt="">
+                    </a>
+                </li>
+            </ul>
+        </nav>
     {% endblock %}
 </footer>

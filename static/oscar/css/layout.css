@@ -7,3 +7,6 @@ Light Blue: #25ACCB;
 Light Gray: #e6e6e6;
 
 */
+.page .page_inner{
+    border-radius: 0px 0px 0px 0px;
+}
