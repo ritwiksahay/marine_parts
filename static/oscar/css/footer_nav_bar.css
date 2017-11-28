@@ -3,6 +3,7 @@ Footer style sheet file
 Marine Parts Colors:
 
 Deep Blue: #11274F;
+Mid Blue: #274164;
 Light Blue: #25ACCB;
 Light Gray: #e6e6e6;
 
@@ -12,6 +13,32 @@ Light Gray: #e6e6e6;
     height: 110px;
 }
 
-.nav.footer{
+.footer .footer_links{
+    background-color: #274164;
+}
+
+.footer > li > a{
+    color: #FFFFFF !important;
+}
+
+.footer .navbar-left,.footer .navbar-right{
     margin-top: 2.5%;
 }
+
+.nav.footer{
+    margin-top: 0%;
+    width: 100%;
+}
+
+.footer > nav > ul > li > a.brand{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 40%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.footer > nav > ul > li > a.brand > img{
+    width: 100%;
+}
+

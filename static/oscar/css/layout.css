@@ -10,3 +10,23 @@ Light Gray: #e6e6e6;
 .page .page_inner{
     border-radius: 0px 0px 0px 0px;
 }
+
+@font-face {
+    font-family: 'Gotham Book';
+    src: url('fonts/gotham-book.ttf');
+}
+
+@font-face {
+    font-family: 'Gotham Bold';
+    src: url('fonts/gotham-bold.ttf');
+}
+
+@font-face {
+    font-family: 'YourFontName';
+    src: url('http://domain.com/fonts/font.ttf');
+}
+
+@font-face {
+    font-family: 'YourFontName';
+    src: url('http://domain.com/fonts/font.ttf');
+}

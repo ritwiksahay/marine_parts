@@ -1,11 +1,12 @@
 {% load static%}
 {% load staticfiles %}
+{% load currency_filters %}
 {% load i18n %}
 <footer class="footer container-fluid">
     {% block footer %}
         <nav class="footer_links inline navbar primary navbar-static-bottom navbar-default">
             <ul class="nav navbar-nav footer">
-                <li>
+                <li class="navbar-left">
                     {% if LANGUAGES|length > 1 %}
                         <form id="language_selector" class="navbar-left navbar-form" action="{% url 'set_language' %}" method="post">
                             {% csrf_token %}
@@ -20,19 +21,45 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <button class="btn btn-default" type="submit" data-loading-text="{% trans 'Submitting...' %}">{% trans "Go" %}</button>
                         </form>
                     {% endif %}
                 </li>
-                <li>
+                <li class="navbar-left">
                     <a href="">{% trans "Categories"%}</a>
                 </li>
-                <li>
+                <li class="navbar-left">
                     <a href="">{% trans "Brands"%}</a>
                 </li>
                 <li>
-                    <a href="">
-                        <img src="{% static 'img/logo/isotipo-white-small.png' %}" alt="">
+                    <a class="brand" href="{{ homepage_url }}">
+                        <img class="img-responsive" src="{% static 'img/logo/isotipo-white-small.png' %}" alt="">
+                    </a>
+                </li>
+                <li class="navbar-right">
+                    <a href="">{% trans "Contact"%}</a>
+                </li>
+                <li class="navbar-right">
+                    <a class="navbar-right" href="{% url 'basket:summary' %}">
+                        <i class="icon-shopping-cart"></i>
+                        {% trans "Basket" %}
+                        {% if not request.basket.is_empty %}
+                            {% if request.basket.is_tax_known %}
+                                {% blocktrans with total=request.basket.total_incl_tax|currency:request.basket.currency %}
+                                    Total: {{ total }}
+                                {% endblocktrans %}
+                            {% else %}
+                                {% blocktrans with total=request.basket.total_excl_tax|currency:request.basket.currency %}
+                                    Total: {{ total }}
+                                {% endblocktrans %}
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="navbar-right">
+                    <a href="{% url 'customer:notifications-inbox' %}">
+                        <i class="icon-user"></i>
+                        {% trans "Account" %}
+                        <span class="label label-important">{{ num_unread_notifications }}</span>
                     </a>
                 </li>
             </ul>

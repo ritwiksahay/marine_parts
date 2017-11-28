@@ -3,33 +3,30 @@ Header style sheet file
 Marine Parts Colors:
 
 Deep Blue: #11274F;
+Mid Blue: #274164;
 Light Blue: #25ACCB;
 Light Gray: #e6e6e6;
 
 */
-
-.navbar{
-    height: 110px;
-}
 
 .navbar-default{
     border-color: #e6e6e6;
     background-color: #e6e6e6;
 }
 
-.navbar-header{
-    width: 20%;
-}
-
 .navbar-brand{
-    padding: 5px 5px 5px 5px;
-    height: 110px;
-}
-
-.navbar-collapse{
-    padding-top: 2.5%;
+    border-right-style: solid;
+    border-right-color: #274164;
+    border-right-width: 1.5px;
+    height: 95px;
+    padding: 0px;
 }
 
 .navbar-form{
     margin-right: 0px;
+}
+
+.header .navbar-static-top{
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
