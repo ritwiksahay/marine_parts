@@ -124,7 +124,7 @@ def marineengine_mercury_scrapper():
 
         for hp in tree.xpath(xcategory_selector):
             horse_power = {
-                'horse_power': re.sub(r'[\n\t]', '', hp.text),
+                'horse_power': re.sub(r'[\n\t]+', '', hp.text),
                 'hp_url': hp.get('href'),
                 'serial_range': []
             }
@@ -138,7 +138,7 @@ def marineengine_mercury_scrapper():
 
             for srange in tree.xpath(xcategory_selector):
                 serial_range = {
-                    'serial_range': re.sub(r'[\n\t]', '', srange.text),
+                    'serial_range': re.sub(r'[\n\t]+', '', srange.text),
                     'serials_url': srange.get('href'),
                     'components': []
                 }
@@ -515,7 +515,7 @@ def marineengine_mercruiser_scrapper():
             tree = html.fromstring(page.content)
             for sr in tree.xpath(xserial_range_selector):
                 serial_range = {
-                    'serial_range': sr.text,
+                    'serial_range': re.sub(r'[\n\t]+', '', sr.text),
                     'serial_range_url': sr.get('href'),
                     'components': []
                 }
@@ -637,4 +637,4 @@ if __name__ == '__main__':
     
     print('\nStarting Marine Engine Evinrude Scraping...')
     marineengine_evinrude_scrapper()
-    print('Finished scraping.')
+    print('\nFinished scraping.')
