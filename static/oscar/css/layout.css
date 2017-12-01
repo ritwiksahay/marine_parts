@@ -22,11 +22,11 @@ Light Gray: #e6e6e6;
 }
 
 @font-face {
-    font-family: 'YourFontName';
-    src: url('http://domain.com/fonts/font.ttf');
+    font-family: 'Magneto';
+    src: url('fonts/magneto.ttf');
 }
 
 @font-face {
-    font-family: 'YourFontName';
-    src: url('http://domain.com/fonts/font.ttf');
+    font-family: 'Neo Latina';
+    src: url('fonts/neo-latina.ttf');
 }

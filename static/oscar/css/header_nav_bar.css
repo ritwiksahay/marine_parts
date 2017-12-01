@@ -9,24 +9,41 @@ Light Gray: #e6e6e6;
 
 */
 
+.navbar-nav{
+    float: none;
+}
+
 .navbar-default{
     border-color: #e6e6e6;
     background-color: #e6e6e6;
 }
 
-.navbar-brand{
+.brand-col{
+    padding-right: 0px;
+}
+
+.brand{
     border-right-style: solid;
     border-right-color: #274164;
-    border-right-width: 1.5px;
-    height: 95px;
-    padding: 0px;
+    border-right-width: 2px;
+    padding-right: 15px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 .navbar-form{
     margin-right: 0px;
+    margin-top: 1px;
+    margin-bottom: 0px;
 }
 
 .header .navbar-static-top{
     padding-top: 15px;
     padding-bottom: 15px;
+}
+
+.navbar-nav li a{
+    font-family: "Gotham Book";
+    color: #274164;
+    font-size: 18px;
 }

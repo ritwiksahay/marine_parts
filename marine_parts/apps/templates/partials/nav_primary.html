@@ -4,123 +4,126 @@
 {% load category_tags %}
 {% load i18n %}
 
-<div class="navbar primary navbar-static-top navbar-default">
-    <div class="navbar-header">
-        {# This is used in mobile view #}
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".primary-collapse">
-            <span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </span>
-        </button>
-    </div>
-
-    <div class="navbar-collapse primary-collapse collapse">
-        {% block nav_dropdown %}
-            <div id="browse" class="nav navbar-nav row">
-                <div class="col-lg-3 col-md-2 col-sm-2">
-                    <a class="navbar-brand" href="{{ homepage_url }}">
-                        <img class="brand img-responsive" src="{% static 'img/logo/isologo-small.png'%}" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-1 col-md-1 col-sm-2">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            {% trans "Brands" %}
-                        </a>
-                        <ul class="dropdown-menu" data-navigation="dropdown-menu">
-                            {% category_tree depth=2 as tree_categories %}
-                            <li><a tabindex="-1" href="{% url 'catalogue:index' %}">{% trans "All products" %}</a></li>
-                            {% if tree_categories %}
-                                <li class="divider"></li>
-                                {% for tree_category, info in tree_categories %}
-                                    {% if info.has_children %}
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a>
-                                            <ul class="dropdown-menu">
-                                            {% else %}
-                                                <li><a tabindex="-1" href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a></li>
-                                            {% endif %}
-
-                                            {% for close in info.num_to_close %}
-                                                </ul></li>
-                                            {% endfor %}
-                                {% endfor %}
-                            {% endif %}
-                            <li class="divider"></li>
-                            <li><a href="{% url 'offer:list' %}">{% trans "Offers" %}</a></li>
-                        </ul>
-                    </li>
-                </div>
-                <div class="col-lg-1 col-md-1 col-sm-2">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            {% trans "Categories" %}
-                        </a>
-                        <ul class="dropdown-menu" data-navigation="dropdown-menu">
-                            {% category_tree depth=2 as tree_categories %}
-                            <li><a tabindex="-1" href="{% url 'catalogue:index' %}">{% trans "All products" %}</a></li>
-                            {% if tree_categories %}
-                                <li class="divider"></li>
-                                {% for tree_category, info in tree_categories %}
-                                    {% if info.has_children %}
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a>
-                                            <ul class="dropdown-menu">
-                                            {% else %}
-                                                <li><a tabindex="-1" href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a></li>
-                                            {% endif %}
-
-                                            {% for close in info.num_to_close %}
-                                                </ul></li>
-                                            {% endfor %}
-                                {% endfor %}
-                            {% endif %}
-                            <li class="divider"></li>
-                            <li><a href="{% url 'offer:list' %}">{% trans "Offers" %}</a></li>
-                        </ul>
-                    </li>
-                </div>
-                <div class="col-lg-5 col-md-6 col-sm-6">
-                    <li>
-                        {% include "partials/search.html" %}
-                    </li>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-2">
-                    <li>
-                        <a class="navbar-right" href="{% url 'basket:summary' %}">
-                            <i class="icon-shopping-cart"></i>
-                            {% if not request.basket.is_empty %}
-                                {% if request.basket.is_tax_known %}
-                                    {% blocktrans with total=request.basket.total_incl_tax|currency:request.basket.currency %}
-                                        Total: {{ total }}
-                                    {% endblocktrans %}
-                                {% else %}
-                                    {% blocktrans with total=request.basket.total_excl_tax|currency:request.basket.currency %}
-                                        Total: {{ total }}
-                                    {% endblocktrans %}
-                                {% endif %}
-                            {% endif %}
-                        </a>
-                    </li>
-                    <li>
-                    {% if user.is_authenticated %}
-                        {% if num_unread_notifications > 0 %}
-                            {# If user has new notifications - we change account link to go to inbox #}
-                            <a href="{% url 'customer:notifications-inbox' %}">
-                                <i class="icon-user"></i>
-                                <span class="label label-important">{{ num_unread_notifications }}</span>
-                            </a>
-                        {% else %}
-                            <a href="{% url 'customer:summary' %}"><i class="icon-user"></i></a>
-                        {% endif %}
-                    {% else %}
-                        <a id="login_link" href="{% url 'customer:login' %}"><i class="icon-signin"></i> {% trans "Login or register" %}</a>
-                    {% endif %}
-                    </li>
-                </div>
+<div class="navbar primary navbar-static-top navbar-default container-fluid">
+        <div class="row">
+            <div class="navbar-header">
+                {# This is used in mobile view #}
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".primary-collapse">
+                    <span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </span>
+                </button>
             </div>
-        {% endblock %}
-    </div><!-- /navbar-collapse -->
+        </div>
+        <div class="row">
+            <div class="navbar-collapse primary-collapse collapse">
+                {% block nav_dropdown %}
+                    <div class="nav navbar-nav row">
+                        <div class="brand-col col-lg-2 col-md-3 col-sm-2">
+                            <a class="logo-brand" href="{{ homepage_url }}">
+                                <img class="brand img-responsive" src="{% static 'img/logo/isologo-small.png'%}" alt="">
+                            </a>
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-2">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    {% trans "Brands" %}
+                                </a>
+                                <ul class="dropdown-menu" data-navigation="dropdown-menu">
+                                    {% category_tree depth=2 as tree_categories %}
+                                    <li><a tabindex="-1" href="{% url 'catalogue:index' %}">{% trans "All products" %}</a></li>
+                                    {% if tree_categories %}
+                                        <li class="divider"></li>
+                                        {% for tree_category, info in tree_categories %}
+                                            {% if info.has_children %}
+                                                <li class="dropdown-submenu">
+                                                    <a tabindex="-1" href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a>
+                                                    <ul class="dropdown-menu">
+                                                    {% else %}
+                                                        <li><a tabindex="-1" href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a></li>
+                                                    {% endif %}
+
+                                                    {% for close in info.num_to_close %}
+                                                        </ul></li>
+                                                    {% endfor %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    <li class="divider"></li>
+                                    <li><a href="{% url 'offer:list' %}">{% trans "Offers" %}</a></li>
+                                </ul>
+                            </li>
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-2">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    {% trans "Categories" %}
+                                </a>
+                                <ul class="dropdown-menu" data-navigation="dropdown-menu">
+                                    {% category_tree depth=2 as tree_categories %}
+                                    <li><a tabindex="-1" href="{% url 'catalogue:index' %}">{% trans "All products" %}</a></li>
+                                    {% if tree_categories %}
+                                        <li class="divider"></li>
+                                        {% for tree_category, info in tree_categories %}
+                                            {% if info.has_children %}
+                                                <li class="dropdown-submenu">
+                                                    <a tabindex="-1" href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a>
+                                                    <ul class="dropdown-menu">
+                                                    {% else %}
+                                                        <li><a tabindex="-1" href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a></li>
+                                                    {% endif %}
+
+                                                    {% for close in info.num_to_close %}
+                                                        </ul></li>
+                                                    {% endfor %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    <li class="divider"></li>
+                                    <li><a href="{% url 'offer:list' %}">{% trans "Offers" %}</a></li>
+                                </ul>
+                            </li>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <li>
+                                {% include "partials/search.html" %}
+                            </li>
+                        </div>
+                        <div class="col-lg-1 col-md-2 col-sm-2">
+                            <li>
+                                <a class="navbar-right" href="{% url 'basket:summary' %}">
+                                    <i class="icon-shopping-cart"></i>
+                                    {% if not request.basket.is_empty %}
+                                        {% if request.basket.is_tax_known %}
+                                            {% blocktrans with total=request.basket.total_incl_tax|currency:request.basket.currency %}
+                                                Total: {{ total }}
+                                            {% endblocktrans %}
+                                        {% else %}
+                                            {% blocktrans with total=request.basket.total_excl_tax|currency:request.basket.currency %}
+                                                Total: {{ total }}
+                                            {% endblocktrans %}
+                                        {% endif %}
+                                    {% endif %}
+                                </a>
+                            </li>
+                            <li>
+                            {% if user.is_authenticated %}
+                                {% if num_unread_notifications > 0 %}
+                                    {# If user has new notifications - we change account link to go to inbox #}
+                                    <a href="{% url 'customer:notifications-inbox' %}">
+                                        <i class="icon-user"></i>
+                                        <span class="label label-important">{{ num_unread_notifications }}</span>
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'customer:summary' %}"><i class="icon-user"></i></a>
+                                {% endif %}
+                            {% else %}
+                                <a id="login_link" href="{% url 'customer:login' %}"><i class="icon-user"></i>
+                            {% endif %}
+                            </li>
+                        </div>
+                    </div>
+                {% endblock %}
+            </div><!-- /navbar-collapse -->
+        </div>
 </div><!-- /navbar -->
