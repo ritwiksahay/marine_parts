@@ -1,0 +1,35 @@
+/*
+Custom style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #274164;
+Light Blue: #25ACCB;
+Light Gray: #e6e6e6;
+
+*/
+
+.btn{
+    border-radius: 0px;
+    font-family: 'Gotham Book';
+}
+
+.btn-primary{
+    background-color: #25ACCB;
+    border-color: #25ACCB;
+}
+
+.btn-danger{
+    color: #25ACCB;
+    background-color: #274164;
+    border-color: #274164;
+}
+
+.table-bordered{
+    border: 2px solid #11274F; 
+}
+
+.table-striped > tbody > tr:nth-child(odd) > td, 
+.table-striped > tbody > tr:nth-child(odd) > th{
+    background-color: #FFFFFF;
+}

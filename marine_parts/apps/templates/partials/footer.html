@@ -2,17 +2,18 @@
 {% load staticfiles %}
 {% load currency_filters %}
 {% load i18n %}
+
 <footer class="footer container-fluid">
     {% block footer %}
-        <nav class="footer_links inline navbar primary navbar-static-bottom navbar-default">
-            <ul class="nav navbar-nav footer">
-                <li class="navbar-left">
+        <div class="footer_links inline navbar primary navbar-static-bottom navbar-default">
+            <div class="nav navbar-nav row">
+                <div class="col-lg-2 col-md-2 language-bar">
                     {% if LANGUAGES|length > 1 %}
-                        <form id="language_selector" class="navbar-left navbar-form" action="{% url 'set_language' %}" method="post">
+                        <form id="language_selector" action="{% url 'set_language' %}" method="post">
                             {% csrf_token %}
                             <input name="next" type="hidden" value="{{ language_neutral_url_path }}" />
                             <div class="form-group">
-                                <select name="language" class="form-control">
+                                <select name="language" class="form-control" id="language">
                                     {% get_language_info_list for LANGUAGES as languages %}
                                     {% for language in languages %}
                                         <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE%} selected="selected"{% endif %}>
@@ -23,24 +24,31 @@
                             </div>
                         </form>
                     {% endif %}
-                </li>
-                <li class="navbar-left">
-                    <a href="">{% trans "Categories"%}</a>
-                </li>
-                <li class="navbar-left">
-                    <a href="">{% trans "Brands"%}</a>
-                </li>
-                <li>
-                    <a class="brand" href="{{ homepage_url }}">
-                        <img class="img-responsive" src="{% static 'img/logo/isotipo-white-small.png' %}" alt="">
+                </div>
+                <div class="col-lg-1 col-md-1 text-center">
+                    <a href="">
+                        {% trans "Categories"%}
                     </a>
-                </li>
-                <li class="navbar-right">
-                    <a href="">{% trans "Contact"%}</a>
-                </li>
-                <li class="navbar-right">
-                    <a class="navbar-right" href="{% url 'basket:summary' %}">
-                        <i class="icon-shopping-cart"></i>
+                </div>
+                <div class="col-lg-2 col-md-1 text-center">
+                    <a href="">
+                        {% trans "Brands"%}
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-5 hidden-sm hidden-xs">
+                    <a class="brand" href="{{ homepage_url }}">
+                        <img class="col-lg-8  img-responsive" src="{% static 'img/logo/isotipo-white-small.png' %}" alt="">
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-1 text-center">
+                    <a href="{% url 'customer:notifications-inbox' %}">
+                        {% trans "Account" %}
+                        <span class="label label-important">{{ num_unread_notifications }}</span>
+                        <i class="icon-user"></i>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-1 text-center">
+                    <a href="{% url 'basket:summary' %}">
                         {% trans "Basket" %}
                         {% if not request.basket.is_empty %}
                             {% if request.basket.is_tax_known %}
@@ -53,16 +61,15 @@
                                 {% endblocktrans %}
                             {% endif %}
                         {% endif %}
+                        <i class="icon-shopping-cart"></i>
                     </a>
-                </li>
-                <li class="navbar-right">
-                    <a href="{% url 'customer:notifications-inbox' %}">
-                        <i class="icon-user"></i>
-                        {% trans "Account" %}
-                        <span class="label label-important">{{ num_unread_notifications }}</span>
+                </div>
+                <div class="col-lg-1 col-md-1 text-center">
+                    <a href="">
+                        {% trans "Contact"%}
                     </a>
-                </li>
-            </ul>
-        </nav>
+                </div>
+            </div>
+        </div>
     {% endblock %}
 </footer>

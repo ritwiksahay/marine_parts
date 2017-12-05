@@ -22,7 +22,7 @@ Light Gray: #e6e6e6;
     padding-right: 0px;
 }
 
-.brand{
+.logo-brand .brand{
     border-right-style: solid;
     border-right-color: #274164;
     border-right-width: 2px;
@@ -42,8 +42,16 @@ Light Gray: #e6e6e6;
     padding-bottom: 15px;
 }
 
-.navbar-nav li a{
+.header .navbar-nav a{
     font-family: "Gotham Book";
     color: #274164;
     font-size: 18px;
+}
+
+.header .navbar-nav div.text-center{
+    margin-top: 2.0%;
+}
+
+.header .navbar-nav div.search-bar{
+    margin-top: 1.5%;
 }

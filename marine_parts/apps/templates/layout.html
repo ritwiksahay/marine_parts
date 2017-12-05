@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/header_nav_bar.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/footer_nav_bar.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/layout.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "oscar/css/custom.css" %}" />
     <link rel="stylesheet" href="{% static "oscar/js/bootstrap-datetimepicker/bootstrap-datetimepicker.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/datetimepicker.css" %}" />
 {% endblock %}
@@ -59,7 +60,6 @@
             </div>
         </div>
     {% endblock %}
-
     {% include "partials/footer.html" %}
 {% endblock %}
 
@@ -81,6 +81,11 @@
 
     <script src="{% static "oscar/js/bootstrap-datetimepicker/bootstrap-datetimepicker.js" %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static "oscar/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.all.js" %}" type="text/javascript" charset="utf-8"></script>
+    <script>
+        $('#language').change(function(){
+            $('#language_selector').submit();
+        });
+    </script>
 {% endblock %}
 
 {% block extrascripts %}

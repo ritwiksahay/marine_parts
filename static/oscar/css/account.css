@@ -1,0 +1,52 @@
+/*
+Account style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #274164;
+Light Blue: #25ACCB;
+Light Gray: #e6e6e6;
+
+*/
+
+/*Breadcrum*/
+.breadcrumb{
+    background-color: #25ACCB;
+    border-radius: 0px;
+}
+
+.breadcrumb li a{
+    color: #FFFFFF;
+    font-family:  'Gotham Bold';
+}
+
+.breadcrumb > li + li:before{
+    color: #FFFFFF;
+}
+
+.breadcrumb li.active{
+    color: #FFFFFF;
+    font-family:  'Gotham Bold';
+    font-weight: bold;
+}
+
+/*Navigation bar*/
+.nav-pills li a{
+    font-family:  'Gotham Bold';
+    color: #11274F;
+}
+
+.nav-pills li.active a{
+    background-color: #25ACCB;
+    border-radius: 0px;
+}
+
+/*Page header*/
+.page-header{
+    border-bottom: 1px solid #25ACCB;
+}
+
+.page-header h1{
+    font-family: 'Gotham Bold';
+    color: #11274F;
+}

@@ -3,6 +3,7 @@ Layout style sheet file
 Marine Parts Colors:
 
 Deep Blue: #11274F;
+Mid Blue: #274164;
 Light Blue: #25ACCB;
 Light Gray: #e6e6e6;
 
@@ -11,6 +12,8 @@ Light Gray: #e6e6e6;
     border-radius: 0px 0px 0px 0px;
 }
 
+
+/*Fonts*/
 @font-face {
     font-family: 'Gotham Book';
     src: url('fonts/gotham-book.ttf');
@@ -29,4 +32,9 @@ Light Gray: #e6e6e6;
 @font-face {
     font-family: 'Neo Latina';
     src: url('fonts/neo-latina.ttf');
+}
+
+/*General styles*/
+form{
+    margin-bottom: 0px;
 }

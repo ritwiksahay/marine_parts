@@ -1,0 +1,74 @@
+/*
+Basket style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #274164;
+Light Blue: #25ACCB;
+Light Gray: #e6e6e6;
+
+*/
+
+/*Title*/
+.page-header h1{
+    font-size: 22.4px;
+    line-height: 2.14285714;
+    font-weight: normal;
+}
+
+/*Breadcrum*/
+.breadcrumb{
+    background-color: #274164;
+    border-radius: 0px;
+}
+
+.breadcrumb li a{
+    color: #FFFFFF;
+    font-family:  'Gotham Bold';
+}
+
+.breadcrumb > li + li:before{
+    color: #FFFFFF;
+}
+
+.breadcrumb li.active{
+    color: #FFFFFF;
+    font-family:  'Gotham Bold';
+    font-weight: bold;
+}
+
+/*Page header*/
+.page-header{
+    border-bottom: 1px solid #274164;
+}
+
+.page-header h1{
+    font-family: 'Gotham Bold';
+    color: #274164;
+}
+
+/*Content styles*/
+.basket-title div .h3{
+    font-family: 'Gotham Bold';
+    color: #274164;
+}
+
+.basket-items{
+    background: transparent !important;
+    border: 1px solid #274164;
+}
+
+.basket-items div h3 a{
+    font-family: 'Gotham Bold';
+    color: #274164;
+}
+
+.basket-items div p.price_color,
+.basket-items div p.availability{
+    color: #25ACCB;
+}
+
+.sub-header .h3{
+    font-family: 'Gotham Bold';
+    color: #274164;
+}

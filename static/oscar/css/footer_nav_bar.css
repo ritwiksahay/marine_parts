@@ -9,36 +9,28 @@ Light Gray: #e6e6e6;
 
 */
 
-.footer{
-    height: 110px;
-}
-
 .footer .footer_links{
     background-color: #274164;
 }
 
-.footer > li > a{
-    color: #FFFFFF !important;
-}
-
-.footer .navbar-left,.footer .navbar-right{
+.footer .footer_links .nav div.text-center{
     margin-top: 2.5%;
 }
 
-.nav.footer{
-    margin-top: 0%;
-    width: 100%;
+.footer .footer_links .nav div.language-bar{
+    margin-top: 2.25%;
 }
 
-.footer > nav > ul > li > a.brand{
+.footer .footer_links .nav div a{
+    color: #FFFFFF;
+    font-family: "Gotham Book";
+    font-size: 18px;
+}
+
+.footer .footer_links .nav div a.brand img{
     padding-top: 0px;
     padding-bottom: 0px;
-    width: 40%;
+    float: none;
     margin-right: auto;
     margin-left: auto;
 }
-
-.footer > nav > ul > li > a.brand > img{
-    width: 100%;
-}
-
