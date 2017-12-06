@@ -33,3 +33,13 @@ Light Gray: #e6e6e6;
 .table-striped > tbody > tr:nth-child(odd) > th{
     background-color: #FFFFFF;
 }
+
+.alert-info{
+    background-color: #25ACCB;
+    border-color: #25ACCB;
+    color: #FFFFFF;
+}
+
+.form-control{
+    border-radius: 0px;
+}

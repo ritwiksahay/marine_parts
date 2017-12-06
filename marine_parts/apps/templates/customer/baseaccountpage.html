@@ -1,5 +1,10 @@
 {% extends "layout_2_col.html" %}
+{% load staticfiles %}
 {% load i18n %}
+
+{% block extrastyles %}
+    <link rel="stylesheet" type="text/css" href="{% static "oscar/css/account.css" %}" />
+{% endblock extrastyles %}
 
 {% block title %}
     {{ page_title }} | {% trans 'Account' %} | {{ block.super }}

@@ -50,18 +50,10 @@
                 <div class="col-lg-2 col-md-1 text-center">
                     <a href="{% url 'basket:summary' %}">
                         {% trans "Basket" %}
-                        {% if not request.basket.is_empty %}
-                            {% if request.basket.is_tax_known %}
-                                {% blocktrans with total=request.basket.total_incl_tax|currency:request.basket.currency %}
-                                    Total: {{ total }}
-                                {% endblocktrans %}
-                            {% else %}
-                                {% blocktrans with total=request.basket.total_excl_tax|currency:request.basket.currency %}
-                                    Total: {{ total }}
-                                {% endblocktrans %}
-                            {% endif %}
-                        {% endif %}
                         <i class="icon-shopping-cart"></i>
+                        {% if not request.basket.is_empty %}
+                            {{request.basket.num_items}}
+                        {% endif %}
                     </a>
                 </div>
                 <div class="col-lg-1 col-md-1 text-center">

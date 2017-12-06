@@ -68,7 +68,50 @@ Light Gray: #e6e6e6;
     color: #25ACCB;
 }
 
+.basket-items div .checkout-quantity div .quantity{
+    background-color: #274164;
+    color: #FFFFFF;
+    border-radius: 0px;
+}
+
+.sub-header{
+    border-bottom: 1px solid #274164;
+}
+
 .sub-header .h3{
     font-family: 'Gotham Bold';
     color: #274164;
+}
+
+.voucher_form_link a{
+    background-color: #274164;
+    color: #FFFFFF;
+}
+
+.voucher_form_link a:hover{
+    color: #FFFFFF;
+}
+
+.table-condensed tbody tr th{
+    font-family: 'Gotham Bold';
+}
+
+.table-condensed tbody tr th h3{
+    color: #274164;
+}
+
+.table-condensed tr th.total,
+.table-condensed tr td.total{
+    background-color: #FFFFFF !important;
+    border-bottom: 1px solid #25ACCB;
+    border-top: 1px solid #25ACCB;
+    color: #25ACCB;
+}
+
+.table-condensed tr td.total .price_color{
+    color: #25ACCB;
+}
+
+.checkout-button a{
+    font-family: 'Gotham Bold';
 }

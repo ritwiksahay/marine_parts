@@ -6,7 +6,9 @@
     <table class="table table-condensed">
         <tbody>
             <tr>
-                <th colspan="2"><h3>{% trans "Basket" %}</h3></th>
+                <th colspan="2">
+                    <h3>{% trans "Basket" %}</h3>
+                </th>
             </tr>
             {% with offer_discounts=basket.offer_discounts voucher_discounts=basket.grouped_voucher_discounts %}
                 {% block discount_totals %}

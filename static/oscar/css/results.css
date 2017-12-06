@@ -1,0 +1,51 @@
+/*
+Header style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #274164;
+Light Blue: #25ACCB;
+Light Gray: #E6E6E6;
+
+*/
+
+.filter-title{
+    font-family: 'Gotham Bold';
+    color: #274164;
+}
+
+.page_inner{
+    padding: 0px 15px;
+}
+
+.page-header{
+    font-family: 'Gotham Bold';
+}
+
+.page_inner div .sidebar,
+.page_inner div .content{
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.page_inner div .content{
+    background-color: #274164;
+    color: #FFFFFF;
+}
+
+.page_inner div .sidebar form div .search-field{
+    width: 90%;
+    float: none;
+    display: inline-block;
+    background-color: #E6E6E6;
+    font-family: 'Gotham Book';
+    font-size: 16px;
+    height: 40px;
+}
+
+.page_inner div .sidebar form div .search-button{
+    float: none;
+    font-family: 'Gotham Bold';
+    font-size: 16px;
+    height: 40px;
+}
