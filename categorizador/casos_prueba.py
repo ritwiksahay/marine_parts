@@ -3,15 +3,15 @@ caso_nivelesCompletos_UnElemento = \
         "categories": [
             {
                 "category": "category1",
-                "horse_powers": [
+                "sub_category": [
                     {
-                        "horse_power": "HP1",
-                        "serial_ranges": [
+                        "category": "HP1",
+                        "sub_category": [
                             {
-                                "serial_range": "serial1",
-                                "components": [
+                                "category": "serial1",
+                                "sub_category": [
                                     {
-                                        "component": "component1",
+                                        "category": "component1",
                                     }
                                 ]
                             }
@@ -30,24 +30,24 @@ caso_nivelesCompletos_variosElemComponentes = \
         "categories": [
             {
                 "category": "category1",
-                "horse_powers": [
+                "sub_category": [
                     {
-                        "horse_power": "HP1 ",
-                        "serial_ranges": [
+                        "category": "HP1 ",
+                        "sub_category": [
                             {
-                                "serial_range": "serial1",
-                                "components": [
+                                "category": "serial1",
+                                "sub_category": [
                                     {
-                                        "component": "component1",
+                                        "category": "component1",
                                     },
                                     {
-                                        "component": "component2",
+                                        "category": "component2",
                                     },
                                     {
-                                        "component": "component3",
+                                        "category": "component3",
                                     },
                                     {
-                                        "component": "component4",
+                                        "category": "component4",
                                     }
                                 ]
                             }
@@ -71,15 +71,15 @@ caso_nivelesCompletos_variasCateg_UnElemComp = \
         "categories": [
             {
                 "category": "category1",
-                "horse_powers": [
+                "sub_category": [
                     {
-                        "horse_power": "HP1 ",
-                        "serial_ranges": [
+                        "category": "HP1 ",
+                        "sub_category": [
                             {
-                                "serial_range": "serial1",
-                                "components": [
+                                "category": "serial1",
+                                "sub_category": [
                                     {
-                                        "component": "component1",
+                                        "category": "component1",
                                     }
                                 ]
                             }
@@ -89,15 +89,15 @@ caso_nivelesCompletos_variasCateg_UnElemComp = \
             },
             {
                 "category": "category2",
-                "horse_powers": [
+                "sub_category": [
                     {
-                        "horse_power": "HP2",
-                        "serial_ranges": [
+                        "category": "HP2",
+                        "sub_category": [
                             {
-                                "serial_range": "serial2",
-                                "components": [
+                                "category": "serial2",
+                                "sub_category": [
                                     {
-                                        "component": "component2",
+                                        "category": "component2",
                                     }
                                 ]
                             }
@@ -107,15 +107,15 @@ caso_nivelesCompletos_variasCateg_UnElemComp = \
             },
             {
                 "category": "category3",
-                "horse_powers": [
+                "sub_category": [
                     {
-                        "horse_power": "HP3",
-                        "serial_ranges": [
+                        "category": "HP3",
+                        "sub_category": [
                             {
-                                "serial_range": "serial3",
-                                "components": [
+                                "category": "serial3",
+                                "sub_category": [
                                     {
-                                        "component": "component3",
+                                        "category": "component3",
                                     }
                                 ]
                             }
@@ -139,15 +139,15 @@ caso_nivelesCompletos_variasCateg_variasSerial_variosComp = \
         "categories": [
             {
                 "category": "category1",
-                "horse_powers": [
+                "sub_category": [
                     {
-                        "horse_power": "HP1",
-                        "serial_ranges": [
+                        "category": "HP1",
+                        "sub_category": [
                             {
-                                "serial_range": "serial1",
-                                "components": [
+                                "category": "serial1",
+                                "sub_category": [
                                     {
-                                        "component": "component1",
+                                        "category": "component1",
                                     }
                                 ]
                             }
@@ -157,30 +157,30 @@ caso_nivelesCompletos_variasCateg_variasSerial_variosComp = \
             },
             {
                 "category": "category2",
-                "horse_powers": [
+                "sub_category": [
                     {
-                        "horse_power": "HP1",
-                        "serial_ranges": [
+                        "category": "HP1",
+                        "sub_category": [
                             {
-                                "serial_range": "serial1",
-                                "components": [
+                                "category": "serial1",
+                                "sub_category": [
                                     {
-                                        "component": "component1",
+                                        "category": "component1",
                                     },
                                     {
-                                        "component": "component2",
+                                        "category": "component2",
                                     },
                                     {
-                                        "component": "component3",
+                                        "category": "component3",
                                     }
 
                                 ]
                             },
                             {
-                                "serial_range": "serial2",
-                                "components": [
+                                "category": "serial2",
+                                "sub_category": [
                                     {
-                                        "component": "component1",
+                                        "category": "component1",
                                     }
                                 ]
                             }
@@ -190,18 +190,18 @@ caso_nivelesCompletos_variasCateg_variasSerial_variosComp = \
             },
             {
                 "category": "category3",
-                "horse_powers": [
+                "sub_category": [
                     {
-                        "horse_power": "HP1",
-                        "serial_ranges": [
+                        "category": "HP1",
+                        "sub_category": [
                             {
-                                "serial_range": "serial1",
-                                "components": [
+                                "category": "serial1",
+                                "sub_category": [
                                     {
-                                        "component": "component1",
+                                        "category": "component1",
                                     },
                                     {
-                                        "component": "component2",
+                                        "category": "component2",
                                     }
                                 ]
                             }

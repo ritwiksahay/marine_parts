@@ -1,5 +1,12 @@
+#
+#   Creador: Daniel Leones
+#   Descripción: Extrae las categorías de los archivos JSON usando un versión simplificada de DFS. Se imprime por
+#   salida estándar los resultados en la notación jerarquica de Oscar.
+#   Fecha: 7/12/2017
+#
 import json
 import sys
+
 
 class IOHandler:
     def leer(self, nomArch):
@@ -11,40 +18,25 @@ class FileHandler(IOHandler):
 
 
 def obtSucesores(hijo):
-    if 'categories' in hijo:
-        return hijo['categories']
-    elif 'years' in hijo:
-        return hijo['years']
-    elif 'horse_powers' in hijo:
-        return hijo['horse_powers']
-    elif 'models' in hijo:
-        return hijo['models']
-    elif 'serial_ranges' in hijo:
-        return hijo['serial_ranges']
-    elif 'components' in hijo:
-        return hijo['components']
+    sucCat = hijo.get('categories')
+    if sucCat:
+        return sucCat
+
+    sucSub_cat = hijo.get('sub_category')
+    if sucSub_cat:
+        return sucSub_cat
 
     return None
 
-
 def obtNombres(hijo):
-    if 'category' in hijo :
-        return hijo['category']
-    elif 'year' in hijo:
-        return hijo['year']
-    elif 'horse_power'in hijo:
-        return hijo['horse_power']
-    elif 'model' in hijo:
-        return hijo['model']
-    elif 'serial_range'in hijo:
-        return hijo['serial_range']
-    elif 'component' in hijo:
-        return hijo['component']
+    sucsNom = hijo.get('category')
+    if sucsNom:
+        return sucsNom
     else:
         return ''
 
 
-def extCat(json_categorias):
+def extraerCats(json_categorias):
     pila = list()
     pila.append((json_categorias,''))
     categorias = list()
@@ -73,7 +65,7 @@ def extCat(json_categorias):
     categorias.reverse()
     return categorias
 
-def aNotJerarquia(list):
+def aNotJerarquica(list):
     xs = []
     for li in (list):
         lit = ' > '.join(li[1:])
@@ -89,6 +81,6 @@ def imprimirCate(categorias):
 if __name__ == '__main__':
     fh = FileHandler()
     arbolCategorias = json.load(fh.leer(sys.argv[1]))
-    categorias = extCat(arbolCategorias)
-    imprimirCate(aNotJerarquia(categorias))
+    categorias = extraerCats(arbolCategorias)
+    imprimirCate(aNotJerarquica(categorias))
 

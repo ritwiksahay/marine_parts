@@ -11,29 +11,29 @@ class TestHandler(categorizador.IOHandler):
     def leer(self, nomArch):
         return self.entrada
 
-class TestUnit(unittest.TestCase):
+class TestUnitExtraerCats(unittest.TestCase):
     def setUp(self):
         self.handler = TestHandler()
         self.maxDiff = None
 
     def test_unElementoTodosNiveles_Cierto(self):
         self.handler.entrada = casos.caso_nivelesCompletos_UnElemento
-        resul = categorizador.extCat(self.handler.leer('prueba.json'))
+        resul = categorizador.extraerCats(self.handler.leer('prueba.json'))
         self.assertEqual(resul, casos.casoR_nivelesCompletos_UnElemento)
 
     def test_variosElementosComponentes_Cierto(self):
         self.handler.entrada = casos.caso_nivelesCompletos_variosElemComponentes
-        resul = categorizador.extCat(self.handler.leer('prueba.json'))
+        resul = categorizador.extraerCats(self.handler.leer('prueba.json'))
         self.assertEqual(resul, casos.casoR_nivelesCompletos_variosElementosCom)
 
     def test_variosElementosCate_Cierto(self):
         self.handler.entrada = casos.caso_nivelesCompletos_variasCateg_UnElemComp
-        resul = categorizador.extCat(self.handler.leer('prueba.json'))
+        resul = categorizador.extraerCats(self.handler.leer('prueba.json'))
         self.assertEqual(resul, casos.casoR_nivelesCompletos_variasCateg_UnElemComp)
 
     def test_variosElementosCateSerialComp_Cierto(self):
         self.handler.entrada = casos.caso_nivelesCompletos_variasCateg_variasSerial_variosComp
-        resul = categorizador.extCat(self.handler.leer('prueba.json'))
+        resul = categorizador.extraerCats(self.handler.leer('prueba.json'))
         self.assertEqual(resul, casos.casoR_nivelesCompletos_variasCateg_variasSerial_variosComp)
 
 if __name__ == '__main__':

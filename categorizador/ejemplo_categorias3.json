@@ -1,185 +1,189 @@
 {
-    "scraped_date": "2017-11-29",
-    "scraping_successful": true,
     "categories": [
         {
-            "category_url": "/parts/mercruiser-sterndrive-parts/",
-            "models": [
+            "category_name": "category",
+            "category": "All Engine & Drive Models",
+            "sub_category": [
                 {
-                    "model": "\n\t\t\t\t60 Renault   68 I / L4 1965-1968\t\t\t",
-                    "model_url": "/parts/mercruiser-sterndrive-parts/60-renault-68-il4-19651968",
-                    "serial_ranges": [
+                    "category_name": "model",
+                    "category": "\n\t\t\t\t60 Renault   68 I / L4 1965-1968\t\t\t",
+                    "sub_category": [
                         {
-                            "serial_range_url": "/parts/mercruiser-sterndrive-parts/60-renault-68-il4-19651968/1887079-thru-2049044",
-                            "serial_range": "1887079 - 2049044",
-                            "components": [
+                            "category_name": "serial_range",
+                            "category": "1887079 - 2049044",
+                            "sub_category": [
                                 {
-                                    "component_url": "/parts/mercruiser-sterndrive-parts/60-renault-68-il4-19651968/1887079-thru-2049044/accessories",
-                                    "image": null,
-                                    "component": "Accessories",
+                                    "category_name": "component",
+                                    "category": "Accessories",
                                     "products": [
                                         {
-                                            "product": "29071A 1 - WHEEL ASSY O NLA",
-                                            "manufacturer": "Mercury Quicksilver",
                                             "part_number": "29071A",
-                                            "recomended": "/newparts/part_search.php?part_num=29071A20%1",
-                                            "product_image": "/parts/images/mercury/29071A1.jpg",
                                             "product_url": "/newparts/part_details.php?pnum=MER29071A+1&pass_title=29071A+1+%3A",
-                                            "diagram_number": "#0     "
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "diagram_number": "#0     ",
+                                            "recomended": "/newparts/part_search.php?part_num=29071A20%1",
+                                            "product": "29071A 1 - WHEEL ASSY O NLA",
+                                            "product_image": "/parts/images/mercury/29071A1.jpg"
                                         },
                                         {
-                                            "product": "29401A 1 - WHEEL ASSY O NLA",
-                                            "manufacturer": "Mercury Quicksilver",
                                             "part_number": "29401A",
-                                            "recomended": "/newparts/part_search.php?part_num=29401A20%1",
-                                            "product_image": null,
                                             "product_url": "/newparts/part_details.php?pnum=MER29401A+1&pass_title=29401A+1+%3A",
-                                            "diagram_number": "#0     "
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "diagram_number": "#0     ",
+                                            "recomended": "/newparts/part_search.php?part_num=29401A20%1",
+                                            "product": "29401A 1 - WHEEL ASSY O NLA",
+                                            "product_image": null
                                         },
                                         {
-                                            "product": "32402A 1 - WHEEL ASSY O NLA",
-                                            "manufacturer": "Mercury Quicksilver",
                                             "part_number": "32402A",
-                                            "recomended": "/newparts/part_search.php?part_num=32402A20%1",
-                                            "product_image": null,
                                             "product_url": "/newparts/part_details.php?pnum=MER32402A+1&pass_title=32402A+1+%3A",
-                                            "diagram_number": "#0     "
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "diagram_number": "#0     ",
+                                            "recomended": "/newparts/part_search.php?part_num=32402A20%1",
+                                            "product": "32402A 1 - WHEEL ASSY O NLA",
+                                            "product_image": null
                                         },
                                         {
-                                            "product": "32401A 1 - WHEEL ASSY O NLA",
-                                            "manufacturer": "Mercury Quicksilver",
                                             "part_number": "32401A",
-                                            "recomended": "/newparts/part_search.php?part_num=32401A20%1",
-                                            "product_image": null,
                                             "product_url": "/newparts/part_details.php?pnum=MER32401A+1&pass_title=32401A+1+%3A",
-                                            "diagram_number": "#0     "
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "diagram_number": "#0     ",
+                                            "recomended": "/newparts/part_search.php?part_num=32401A20%1",
+                                            "product": "32401A 1 - WHEEL ASSY O NLA",
+                                            "product_image": null
                                         },
                                         {
-                                            "product": "34659A 2 - 34659A 2 - WHEEL ASSY O",
-                                            "manufacturer": "Mercury Quicksilver",
                                             "part_number": "34659A",
-                                            "recomended": "/newparts/part_search.php?part_num=34659A20%2",
-                                            "product_image": null,
                                             "product_url": "/newparts/part_details.php?pnum=MER34659A+2&pass_title=34659A+2+%3A+Replaced+by+-34659A+4",
-                                            "diagram_number": "#0     "
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "diagram_number": "#0     ",
+                                            "recomended": "/newparts/part_search.php?part_num=34659A20%2",
+                                            "product": "34659A 2 - 34659A 2 - WHEEL ASSY O",
+                                            "product_image": null
                                         },
                                         {
-                                            "product": "34659A 4 - WHEEL ASSY O NLA",
-                                            "manufacturer": "Mercury Quicksilver",
                                             "part_number": "34659A",
-                                            "recomended": "/newparts/part_search.php?part_num=34659A20%4",
-                                            "product_image": null,
                                             "product_url": "/newparts/part_details.php?pnum=MER34659A+4&pass_title=34659A+4+%3A",
-                                            "diagram_number": "#0     "
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "diagram_number": "#0     ",
+                                            "recomended": "/newparts/part_search.php?part_num=34659A20%4",
+                                            "product": "34659A 4 - WHEEL ASSY O NLA",
+                                            "product_image": null
                                         },
                                         {
-                                            "product": "32399A 1 - 32399A 1 - MOUNT ASSY O",
-                                            "manufacturer": "Mercury Quicksilver",
                                             "part_number": "32399A",
-                                            "recomended": "/newparts/part_search.php?part_num=32399A20%1",
-                                            "product_image": null,
                                             "product_url": "/newparts/part_details.php?pnum=MER32399A+1&pass_title=32399A+1+%3A+Replaced+by+-49003A+1",
-                                            "diagram_number": "#0     "
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "diagram_number": "#0     ",
+                                            "recomended": "/newparts/part_search.php?part_num=32399A20%1",
+                                            "product": "32399A 1 - 32399A 1 - MOUNT ASSY O",
+                                            "product_image": null
                                         },
                                         {
-                                            "list_price": "$25.00",
-                                            "product": "49003A 1 - Mount Assembly",
-                                            "manufacturer": "Mercury Quicksilver",
-                                            "your_price": "$25.00",
                                             "part_number": "49003A",
-                                            "recomended": null,
-                                            "product_image": null,
                                             "product_url": "/newparts/part_details.php?pnum=MER49003A+1",
-                                            "diagram_number": "#0     "
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "list_price": "$25.00",
+                                            "diagram_number": "#0     ",
+                                            "recomended": null,
+                                            "product": "49003A 1 - Mount Assembly",
+                                            "your_price": "$25.00",
+                                            "product_image": null
                                         },
                                         {
-                                            "list_price": "$34.15",
-                                            "product": "49003A 2 - Rg Mount Assembly",
-                                            "manufacturer": "Mercury Quicksilver",
-                                            "your_price": "$34.15",
                                             "part_number": "49003A",
-                                            "recomended": null,
-                                            "product_image": null,
                                             "product_url": "/newparts/part_details.php?pnum=MER49003A+2",
-                                            "diagram_number": "#0     "
-                                        },
-                                        {
-                                            "list_price": "$75.00",
-                                            "product": "49003A 5 - Mount Assembly",
                                             "manufacturer": "Mercury Quicksilver",
-                                            "your_price": "$75.00",
-                                            "part_number": "49003A",
-                                            "recomended": null,
-                                            "product_image": null,
-                                            "product_url": "/newparts/part_details.php?pnum=MER49003A+5",
-                                            "diagram_number": "#0     "
-                                        },
-                                        {
-                                            "product": "32400A 1 - 32400A 1 - MOUNT ASSY O",
-                                            "manufacturer": "Mercury Quicksilver",
-                                            "part_number": "32400A",
-                                            "recomended": "/newparts/part_search.php?part_num=32400A20%1",
-                                            "product_image": null,
-                                            "product_url": "/newparts/part_details.php?pnum=MER32400A+1&pass_title=32400A+1+%3A+Replaced+by+-49004A+1",
-                                            "diagram_number": "#0     "
-                                        },
-                                        {
-                                            "list_price": "$26.25",
-                                            "product": "49004A 1 - Mount Assembly",
-                                            "manufacturer": "Mercury Quicksilver",
-                                            "your_price": "$26.25",
-                                            "part_number": "49004A",
-                                            "recomended": null,
-                                            "product_image": null,
-                                            "product_url": "/newparts/part_details.php?pnum=MER49004A+1",
-                                            "diagram_number": "#0     "
-                                        },
-                                        {
                                             "list_price": "$34.15",
-                                            "product": "49004A 2 - Rg Mount Assembly",
-                                            "manufacturer": "Mercury Quicksilver",
-                                            "your_price": "$34.15",
-                                            "part_number": "49004A",
+                                            "diagram_number": "#0     ",
                                             "recomended": null,
-                                            "product_image": null,
-                                            "product_url": "/newparts/part_details.php?pnum=MER49004A+2",
-                                            "diagram_number": "#0     "
+                                            "product": "49003A 2 - Rg Mount Assembly",
+                                            "your_price": "$34.15",
+                                            "product_image": null
                                         },
                                         {
-                                            "product": "49004A 5 - MOUNT ASSY O NLA",
+                                            "part_number": "49003A",
+                                            "product_url": "/newparts/part_details.php?pnum=MER49003A+5",
                                             "manufacturer": "Mercury Quicksilver",
+                                            "list_price": "$75.00",
+                                            "diagram_number": "#0     ",
+                                            "recomended": null,
+                                            "product": "49003A 5 - Mount Assembly",
+                                            "your_price": "$75.00",
+                                            "product_image": null
+                                        },
+                                        {
+                                            "part_number": "32400A",
+                                            "product_url": "/newparts/part_details.php?pnum=MER32400A+1&pass_title=32400A+1+%3A+Replaced+by+-49004A+1",
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "diagram_number": "#0     ",
+                                            "recomended": "/newparts/part_search.php?part_num=32400A20%1",
+                                            "product": "32400A 1 - 32400A 1 - MOUNT ASSY O",
+                                            "product_image": null
+                                        },
+                                        {
                                             "part_number": "49004A",
-                                            "recomended": "/newparts/part_search.php?part_num=49004A20%5",
-                                            "product_image": null,
+                                            "product_url": "/newparts/part_details.php?pnum=MER49004A+1",
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "list_price": "$26.25",
+                                            "diagram_number": "#0     ",
+                                            "recomended": null,
+                                            "product": "49004A 1 - Mount Assembly",
+                                            "your_price": "$26.25",
+                                            "product_image": null
+                                        },
+                                        {
+                                            "part_number": "49004A",
+                                            "product_url": "/newparts/part_details.php?pnum=MER49004A+2",
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "list_price": "$34.15",
+                                            "diagram_number": "#0     ",
+                                            "recomended": null,
+                                            "product": "49004A 2 - Rg Mount Assembly",
+                                            "your_price": "$34.15",
+                                            "product_image": null
+                                        },
+                                        {
+                                            "part_number": "49004A",
                                             "product_url": "/newparts/part_details.php?pnum=MER49004A+5&pass_title=49004A+5+%3A",
-                                            "diagram_number": "#0     "
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "diagram_number": "#0     ",
+                                            "recomended": "/newparts/part_search.php?part_num=49004A20%5",
+                                            "product": "49004A 5 - MOUNT ASSY O NLA",
+                                            "product_image": null
                                         },
                                         {
-                                            "product": "34667A 1 - 34667A 1 - MOUNT ASSY O",
-                                            "manufacturer": "Mercury Quicksilver",
                                             "part_number": "34667A",
-                                            "recomended": "/newparts/part_search.php?part_num=34667A20%1",
-                                            "product_image": null,
                                             "product_url": "/newparts/part_details.php?pnum=MER34667A+1&pass_title=34667A+1+%3A+Replaced+by+-34667A+3",
-                                            "diagram_number": "#0     "
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "diagram_number": "#0     ",
+                                            "recomended": "/newparts/part_search.php?part_num=34667A20%1",
+                                            "product": "34667A 1 - 34667A 1 - MOUNT ASSY O",
+                                            "product_image": null
                                         },
                                         {
-                                            "product": "34667A 3 - 34667A 3 - RG MOUNT ASSY O",
-                                            "manufacturer": "Mercury Quicksilver",
                                             "part_number": "34667A",
-                                            "recomended": "/newparts/part_search.php?part_num=34667A20%3",
-                                            "product_image": null,
                                             "product_url": "/newparts/part_details.php?pnum=MER34667A+3&pass_title=34667A+3+%3A+Replaced+by+-34667A+5",
-                                            "diagram_number": "#0     "
+                                            "manufacturer": "Mercury Quicksilver",
+                                            "diagram_number": "#0     ",
+                                            "recomended": "/newparts/part_search.php?part_num=34667A20%3",
+                                            "product": "34667A 3 - 34667A 3 - RG MOUNT ASSY O",
+                                            "product_image": null
                                         }
-                                    ]
+                                    ],
+                                    "image": null,
+                                    "category_url": "/parts/mercruiser-sterndrive-parts/60-renault-68-il4-19651968/1887079-thru-2049044/accessories"
                                 }
-                            ]
+                            ],
+                            "category_url": "/parts/mercruiser-sterndrive-parts/60-renault-68-il4-19651968/1887079-thru-2049044"
                         }
-                    ]
+                    ],
+                    "category_url": "/parts/mercruiser-sterndrive-parts/60-renault-68-il4-19651968"
                 }
             ],
-            "category": "All Engine & Drive Models"
+            "category_url": "/parts/mercruiser-sterndrive-parts/"
         }
-    ]
+    ],
+    "scraping_successful": true,
+    "scraped_date": "2017-12-07"
 }
