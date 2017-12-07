@@ -110,9 +110,10 @@ def marineengine_mercury_scrapper():
     
     for cat in tree.xpath(xpath_selector):
         category = {
+            'category_name': 'category',
             'category': cat.text,
             'category_url': cat.get('href'),
-            'horse_power': []
+            'sub_category': []
         }
         catalog['categories'].append(category)
 
@@ -124,43 +125,46 @@ def marineengine_mercury_scrapper():
 
         for hp in tree.xpath(xcategory_selector):
             horse_power = {
-                'horse_power': re.sub(r'[\n\t]+', '', hp.text),
-                'hp_url': hp.get('href'),
-                'serial_range': []
+                'category_name': 'horse_power',
+                'category': re.sub(r'[\n\t]+', '', hp.text),
+                'category_url': hp.get('href'),
+                'sub_category': []
             }
-            category['horse_power'].append(horse_power)
+            category['sub_category'].append(horse_power)
 
             # Serial Range scraping
             page = requests.get(
-                base_url + horse_power['hp_url']
+                base_url + horse_power['category_url']
             )
             tree = html.fromstring(page.content)
 
             for srange in tree.xpath(xcategory_selector):
                 serial_range = {
-                    'serial_range': re.sub(r'[\n\t]+', '', srange.text),
-                    'serials_url': srange.get('href'),
-                    'components': []
+                    'category_name': 'serial_range',
+                    'category': re.sub(r'[\n\t]+', '', srange.text),
+                    'category_url': srange.get('href'),
+                    'sub_category': []
                 }
-                horse_power['serial_range'].append(serial_range)
+                horse_power['sub_category'].append(serial_range)
 
                 # Component scraping
                 page = requests.get(
-                    base_url + serial_range['serials_url']
+                    base_url + serial_range['category_url']
                 )
                 tree = html.fromstring(page.content)
 
                 for comp in tree.xpath(xcomponents_selector):
                     component = {
-                        'component': comp.text,
-                        'component_url': comp.get('href'),
+                        'category_name': 'component',
+                        'category': comp.text,
+                        'category_url': comp.get('href'),
                         'products': []
                     }
-                    serial_range['components'].append(component)
+                    serial_range['sub_category'].append(component)
 
                     # Products scraping
                     page = requests.get(
-                        base_url + component['component_url']
+                        base_url + component['category_url']
                     )
                     #print("component " + component['component_url'])
 
@@ -230,7 +234,7 @@ def marineengine_mercury_scrapper():
                             print('Finishing Marine Engine Mercury Scraping...\n')
                             catalog['scraping_successful'] = True
                             with open('marineengine_mercury-' + scrap_date + '.json', 'w') as outfile:
-                                json.dump(catalog, outfile)
+                                json.dump(catalog, outfile, indent=4)
                                 pass
 
                             print(catalog)
@@ -270,9 +274,10 @@ def marineengine_evinrude_scrapper():
     # Categorys on evinrude
     for cat in tree.xpath(xpath_selector):
         category = {
+            'category_name': 'category',
             'category': cat.text,
             'category_url': cat.get('href'),
-            'years': []
+            'sub_category': []
         }
         catalog['categories'].append(category)
 
@@ -284,59 +289,63 @@ def marineengine_evinrude_scrapper():
         # Years cycle
         for yr in tree.xpath(xyears_selector):
             year = {
-                'year': yr.text,
-                'year_url': yr.get('href'),
-                'horse_power': []
+                'category_name': 'years',
+                'category': yr.text,
+                'category_url': yr.get('href'),
+                'sub_category': []
             }
-            category['years'].append(year)
+            category['sub_category'].append(year)
 
             page = requests.get(
-                base_url + year['year_url']
+                base_url + year['category_url']
             )
-            print("aca2 " + year['year_url'])
+            print("aca2 " + year['category_url'])
             tree = html.fromstring(page.content)
             # Horse power cycle
             for hp in tree.xpath(xyears_selector):
                 horse_power = {
-                    'horse_power': hp.text,
-                    'hp_url': hp.get('href'),
-                    'models': []
+                    'category_name': 'horse_power',
+                    'category': hp.text,
+                    'category_url': hp.get('href'),
+                    'sub_category': []
                 }
-                year['horse_power'].append(horse_power)
+                year['sub_category'].append(horse_power)
 
                 page = requests.get(
-                    base_url + horse_power['hp_url']
+                    base_url + horse_power['category_url']
                 )
-                print("aca3 " + horse_power['hp_url'])
+                print("aca3 " + horse_power['category_url'])
                 tree = html.fromstring(page.content)
                 # Horse power cycle
                 for diagrams in tree.xpath(xyears_selector):
                     models = {
-                        'model': diagrams.text,
-                        'model_url': diagrams.get('href'),
-                        'components': []
+                        'category_name': 'model',
+                        'category': diagrams.text,
+                        'category_url': diagrams.get('href'),
+                        'sub_category': []
                     }
-                    horse_power['models'].append(models)
+                    horse_power['sub_category'].append(models)
 
                     page = requests.get(
-                        base_url + models['model_url']
+                        base_url + models['category_url']
                     )
-                    print("aca4 " + models['model_url'])
+                    print("aca4 " + models['category_url'])
                     tree = html.fromstring(page.content)
 
                     # Parts cycle
                     for comp in tree.xpath(xcomponents_selector):
                         component = {
-                            'component': comp.text,
-                            'component_url': comp.get('href'),
+                            'category_name': 'component',
+                            'category': comp.text,
+                            'category_url': comp.get('href'),
                             'products': []
                         }
-                        models['components'].append(component)
+                        models['sub_category'].append(component)
 
                         page = requests.get(
-                            base_url + component['component_url']
+                            base_url + component['category_url']
                         )
-                        print(component['component_url'])
+                        print(component['category_url'])
                         tree = html.fromstring(page.content)
 
                         if(len(tree.xpath(xcomponent_img_selector)) > 0):
@@ -413,7 +422,7 @@ def marineengine_evinrude_scrapper():
                                 print('Finishing Marine Engine Evinrude Scraping...\n')
                                 catalog['scraping_successful'] = True
                                 with open('marineengine_envinrude-' + scrap_date + '.json', 'w') as outfile:
-                                    json.dump(catalog, outfile)
+                                    json.dump(catalog, outfile, indent=4)
                                     pass
 
                                 print(catalog)
@@ -488,9 +497,10 @@ def marineengine_mercruiser_scrapper():
     # Categorys on evinrude
     for cat in tree.xpath(xpath_selector):
         category = {
+            'category_name': 'category',
             'category': cat.text,
             'category_url': cat.get('href'),
-            'models': []
+            'sub_category': []
         }
         catalog['categories'].append(category)
 
@@ -502,28 +512,30 @@ def marineengine_mercruiser_scrapper():
         # Years cycle
         for mod in tree.xpath(xmodel_selector):
             model = {
-                'model': mod.text,
-                'model_url': mod.get('href'),
-                'serial_ranges': []
+                'category_name': 'model',
+                'category': mod.text,
+                'category_url': mod.get('href'),
+                'sub_category': []
             }
-            category['models'].append(model)
+            category['sub_category'].append(model)
 
             page = requests.get(
-                base_url + model['model_url']
+                base_url + model['category_url']
             )
-            print("aca2 " + model['model_url'])
+            print("aca2 " + model['category_url'])
             tree = html.fromstring(page.content)
             for sr in tree.xpath(xserial_range_selector):
                 serial_range = {
-                    'serial_range': re.sub(r'[\n\t]+', '', sr.text),
-                    'serial_range_url': sr.get('href'),
-                    'components': []
+                    'category_name': 'serial_range',
+                    'category': re.sub(r'[\n\t]+', '', sr.text),
+                    'category_url': sr.get('href'),
+                    'sub_category': []
                 }
-                model['serial_ranges'].append(serial_range)
+                model['sub_category'].append(serial_range)
                 page = requests.get(
-                    base_url + serial_range['serial_range_url']
+                    base_url + serial_range['category_url']
                 )
-                print("aca3 " + serial_range['serial_range_url'])
+                print("aca3 " + serial_range['category_url'])
                 tree = html.fromstring(page.content)
 
                 if tree.xpath(xcomponents_selector):
@@ -533,16 +545,17 @@ def marineengine_mercruiser_scrapper():
 
                 for comp in comps:
                     component = {
-                        'component': comp.text,
-                        'component_url': comp.get('href'),
+                        'category_name': 'component',
+                        'category': comp.text,
+                        'category_url': comp.get('href'),
                         'products': []
                     }
-                    serial_range['components'].append(component)
+                    serial_range['sub_category'].append(component)
 
                     page = requests.get(
-                        base_url + component['component_url']
+                        base_url + component['category_url']
                     )
-                    print("aca4 " + component['component_url'])
+                    print("aca4 " + component['category_url'])
                     tree = html.fromstring(page.content)
 
                     component_image = None
@@ -619,16 +632,63 @@ def marineengine_mercruiser_scrapper():
                             print('Finishing Marine Engine Mercruiser Scraping...\n')
                             catalog['scraping_successful'] = True
                             with open('marineengine_mercruiser-' + scrap_date + '.json', 'w') as outfile:
-                                json.dump(catalog, outfile)
+                                json.dump(catalog, outfile, indent=4)
                                 pass
 
                             print(catalog)
                             return
 
 
+def marineengine_yamaha_scrapper():
+    # Marineengine base url
+    base_url = 'https://www.marineengine.com'
+    # Categorys scraping
+    page = requests.get(
+        base_url + '/parts/yamaha-outboard/'
+    )
+    tree = html.fromstring(page.content)
+
+    xpath_selector = "/html/body/main/div[1]/div[2]/div[1]/div[2]/div/h3[2]/a"
+    xmodel_selector = "/html/body/main/div[2]/ul//li/a"
+    xserial_range_selector = "/html/body/main/div[2]/ul//li/a"
+    xcomponents_selector = "/html/body/main/div[2]/div[2]/ul//li/a"
+    xcomponents_selector2 = "/html/body/main/div[2]/div/ul//li/a"
+    xcomponent_img_selector = "/html/body/main/div[2]/p[1]/img"
+    xcomponent_parts_selector = "/html/body/main/table//tr"
+    xproduct_details_selector = "/html/body/main/div[1]/div[1]/div[1]/div[2]/table//tr/td/p"
+    xproduct_unavailable_selector = "/html/body/main/div[1]/div[1]/div[1]/div[2]/div/a"
+    xproduct_img_selector = "/html/body/main/div[1]/div[1]/div[1]/div[1]/table/tr/td/a/img"
+
+    scrap_date = str(date.today()).replace(' ', '')
+    catalog = {
+        'categories': [],
+        'scraped_date': scrap_date,
+        'scraping_successful': False,
+    }
+
+    counter = 0
+    # Categorys on evinrude
+    for cat in tree.xpath(xpath_selector):
+        category = {
+            'category_name': 'category',
+            'category': cat.text,
+            'category_url': cat.get('href'),
+            'models': []
+        }
+        catalog['categories'].append(category)
+
+    print(catalog)
+
+
+def marineengine_volvo_scrapper():
+    # Marineengine base url
+    base_url = 'https://www.marineengine.com'
+
+
 if __name__ == '__main__':
     print('Started scraping.')
     print('Ignoring manuals...')
+
     print('Starting Marine Engine Mercury Scraping...')
     marineengine_mercury_scrapper()
 
@@ -637,4 +697,11 @@ if __name__ == '__main__':
     
     print('\nStarting Marine Engine Evinrude Scraping...')
     marineengine_evinrude_scrapper()
+
+    print('\nStarting Marine Engine Yamaha scraping...')
+    marineengine_yamaha_scrapper()
+
+    print('\nStarting Marine Engine Volvo scraping...')
+    marineengine_volvo_scrapper()
+
     print('\nFinished scraping.')
