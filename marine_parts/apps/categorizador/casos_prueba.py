@@ -223,3 +223,29 @@ casoR_nivelesCompletos_variasCateg_variasSerial_variosComp = \
         , ['',"category3", "HP1", "serial1", "component2"]
     ]
 ########################################################################################################################
+########################################################################################################################
+
+caso_variosProductos = \
+    {
+        "products": [
+            {
+                "part_number": "2189-832500A 1",
+                "manufacturer": "Mercury Quicksilver",
+                "diagram_number": "#1",
+                "product": "2189-832500A 1 - TOP COWL ASSEMBLY O",
+            },
+            {
+                "part_number": "2189-832500A 2",
+                "manufacturer": "Mercury Quicksilver",
+                "diagram_number": "#1",
+                "product": "2189-832500A 2 - TOP COWL ASSEMBLY O",
+            },
+            {
+                "part_number": "2189-832498A 1",
+                "manufacturer": "Mercury Quicksilver",
+                "diagram_number": "#2",
+                "product": "2189-832498A 1 - TOP COWL ASSEMBLY O",
+            }
+        ]
+    }
+

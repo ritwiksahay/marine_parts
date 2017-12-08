@@ -1,9 +1,12 @@
 #import sys
 import unittest
-#sys.path.insert(0,"./categorizador")
-#print(sys.path)
-import categorizador
+
 import casos_prueba as casos
+
+# sys.path.insert(0,"./categorizador")
+# print(sys.path)
+from marine_parts.apps import categorizador
+
 
 class TestHandler(categorizador.IOHandler):
     entrada = None
@@ -35,6 +38,17 @@ class TestUnitExtraerCats(unittest.TestCase):
         self.handler.entrada = casos.caso_nivelesCompletos_variasCateg_variasSerial_variosComp
         resul = categorizador.extraerCats(self.handler.leer('prueba.json'))
         self.assertEqual(resul, casos.casoR_nivelesCompletos_variasCateg_variasSerial_variosComp)
+
+class TestUnitExtraerProds(unittest.TestCase):
+    def setUp(self):
+        self.handler = TestHandler()
+        self.maxDiff = None
+
+    def test_unElementoTodosNiveles_regresa(self):
+        self.handler.entrada = casos.caso_nivelesCompletos_UnElemento
+        resul = categorizador.extraerCats(self.handler.leer('prueba.json'))
+        self.assertEqual(resul, casos.casoR_nivelesCompletos_UnElemento)
+
 
 if __name__ == '__main__':
     unittest.main()
