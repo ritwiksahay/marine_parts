@@ -1,222 +1,232 @@
 {
+    "scraped_date": "2017-12-10",
     "categories": [
         {
             "category_name": "category",
+            "category_url": "/parts/johnson-evinrude-parts.php",
             "category": "Johnson Evinrude Outboard (1955-present)",
             "sub_category": [
                 {
                     "category_name": "years",
+                    "category_url": "/parts/johnson-evinrude-parts.php?year=2011",
                     "category": "2011",
                     "sub_category": [
                         {
                             "category_name": "horse_power",
+                            "category_url": "/parts/johnson-evinrude-parts.php?year=2011&hp=300",
                             "category": "300 hp",
                             "sub_category": [
                                 {
                                     "category_name": "model",
+                                    "category_url": "/parts/johnson-evinrude-parts.php?year=2011&hp=300&model=DE300CXIIC",
                                     "category": "Model DE300CXIIC",
                                     "sub_category": [
                                         {
                                             "category_name": "component",
+                                            "category_url": "/parts/johnson-evinrude-parts.php?year=2011&hp=300&model=DE300CXIIC&manufacturer=Evinrude&section=Air+Silencer",
                                             "category": "Air Silencer",
                                             "products": [
                                                 {
-                                                    "part_number": "0334435",
                                                     "product_url": "/newparts/part_details.php?pnum=OMC0334435&pass_title=0334435+%3A+Replaced+by+0355633",
-                                                    "manufacturer": "Evinrude Johnson OMC",
+                                                    "product_image": "/parts/images/hg/omc/0334435.jpg",
                                                     "diagram_number": "#0 ",
-                                                    "recomended": "/newparts/part_search.php?part_num=0334435",
+                                                    "manufacturer": "Evinrude Johnson OMC",
                                                     "product": "0334435",
-                                                    "product_image": "/parts/images/hg/omc/0334435.jpg"
+                                                    "recomended": "/newparts/part_search.php?part_num=0334435",
+                                                    "part_number": "0334435"
                                                 },
                                                 {
-                                                    "part_number": "0355633",
                                                     "product_url": "/newparts/part_details.php?pnum=OMC0355633&pass_title=0355633+%3A",
-                                                    "manufacturer": "Evinrude Johnson OMC",
+                                                    "product_image": null,
                                                     "diagram_number": "#0 ",
-                                                    "recomended": "/newparts/part_search.php?part_num=0355633",
+                                                    "manufacturer": "Evinrude Johnson OMC",
                                                     "product": "0355633 - DECAL OWNER ATTN",
-                                                    "product_image": null
+                                                    "recomended": "/newparts/part_search.php?part_num=0355633",
+                                                    "part_number": "0355633"
                                                 },
                                                 {
-                                                    "part_number": "5007452",
                                                     "product_url": "/newparts/part_details.php?pnum=OMC5007452",
+                                                    "product_image": "/parts/images/hg/omc/5007452.jpg",
+                                                    "diagram_number": "#1 ",
                                                     "manufacturer": "Evinrude Johnson OMC",
                                                     "list_price": "$128.59",
-                                                    "diagram_number": "#1 ",
-                                                    "recomended": null,
                                                     "product": "5007452 - Air Silencer & Seal Assembly",
+                                                    "recomended": null,
                                                     "your_price": "$128.59",
-                                                    "product_image": "/parts/images/hg/omc/5007452.jpg"
+                                                    "part_number": "5007452"
                                                 },
                                                 {
-                                                    "part_number": "0350548",
                                                     "product_url": "/newparts/part_details.php?pnum=OMC0350548",
-                                                    "manufacturer": "Evinrude Johnson OMC",
-                                                    "list_price": "$6.69",
+                                                    "product_image": "/parts/images/hg/omc/0350548.jpg",
                                                     "diagram_number": "#2 ",
-                                                    "recomended": null,
-                                                    "product": "0350548 - Seal",
-                                                    "your_price": "$6.69",
-                                                    "product_image": "/parts/images/hg/omc/0350548.jpg"
-                                                },
-                                                {
-                                                    "part_number": "0314021",
-                                                    "product_url": "/newparts/part_details.php?pnum=OMC0314021",
                                                     "manufacturer": "Evinrude Johnson OMC",
                                                     "list_price": "$6.69",
-                                                    "diagram_number": "#3 ",
+                                                    "product": "0350548 - Seal",
                                                     "recomended": null,
-                                                    "product": "0314021 - Bumper",
                                                     "your_price": "$6.69",
-                                                    "product_image": null
+                                                    "part_number": "0350548"
                                                 },
                                                 {
-                                                    "part_number": "0324643",
+                                                    "product_url": "/newparts/part_details.php?pnum=OMC0314021",
+                                                    "product_image": null,
+                                                    "diagram_number": "#3 ",
+                                                    "manufacturer": "Evinrude Johnson OMC",
+                                                    "list_price": "$6.69",
+                                                    "product": "0314021 - Bumper",
+                                                    "recomended": null,
+                                                    "your_price": "$6.69",
+                                                    "part_number": "0314021"
+                                                },
+                                                {
                                                     "product_url": "/newparts/part_details.php?pnum=OMC0324643",
+                                                    "product_image": "/parts/images/hg/omc/0324643.jpg",
+                                                    "diagram_number": "#4 ",
                                                     "manufacturer": "Evinrude Johnson OMC",
                                                     "list_price": "$13.29",
-                                                    "diagram_number": "#4 ",
-                                                    "recomended": null,
                                                     "product": "0324643 - Screw",
+                                                    "recomended": null,
                                                     "your_price": "$13.29",
-                                                    "product_image": "/parts/images/hg/omc/0324643.jpg"
+                                                    "part_number": "0324643"
                                                 },
                                                 {
-                                                    "part_number": "0340840",
                                                     "product_url": "/newparts/part_details.php?pnum=OMC0340840",
+                                                    "product_image": null,
+                                                    "diagram_number": "#5 ",
                                                     "manufacturer": "Evinrude Johnson OMC",
                                                     "list_price": "$9.29",
-                                                    "diagram_number": "#5 ",
-                                                    "recomended": null,
                                                     "product": "0340840 - Seal, Air Box",
+                                                    "recomended": null,
                                                     "your_price": "$9.29",
-                                                    "product_image": null
+                                                    "part_number": "0340840"
                                                 },
                                                 {
-                                                    "part_number": "0511421",
                                                     "product_url": "/newparts/part_details.php?pnum=OMC0511421",
+                                                    "product_image": null,
+                                                    "diagram_number": "#6 ",
                                                     "manufacturer": "Evinrude Johnson OMC",
                                                     "list_price": "<span class=\"strike\">$8.29</span>",
-                                                    "diagram_number": "#6 ",
-                                                    "recomended": null,
                                                     "product": "0511421 - Washer",
+                                                    "recomended": null,
                                                     "your_price": "$4.77",
-                                                    "product_image": null
+                                                    "part_number": "0511421"
                                                 },
                                                 {
-                                                    "part_number": "0333040",
                                                     "product_url": "/newparts/part_details.php?pnum=OMC0333040",
+                                                    "product_image": null,
+                                                    "diagram_number": "#7 ",
                                                     "manufacturer": "Evinrude Johnson OMC",
                                                     "list_price": "$8.19",
-                                                    "diagram_number": "#7 ",
-                                                    "recomended": null,
                                                     "product": "0333040 - Isolator",
+                                                    "recomended": null,
                                                     "your_price": "$8.19",
-                                                    "product_image": null
+                                                    "part_number": "0333040"
                                                 }
                                             ],
-                                            "image": "/parts/evinrude-johnson-parts-diagrams/EVINRUDE/65690.gif",
-                                            "category_url": "/parts/johnson-evinrude-parts.php?year=2011&hp=300&model=DE300CXIIC&manufacturer=Evinrude&section=Air+Silencer"
+                                            "image": "/parts/evinrude-johnson-parts-diagrams/EVINRUDE/65690.gif"
                                         },
                                         {
                                             "category_name": "component",
+                                            "category_url": "/parts/johnson-evinrude-parts.php?year=2011&hp=300&model=DE300CXIIC&manufacturer=Evinrude&section=Cooling+Hoses",
                                             "category": "Cooling Hoses",
                                             "products": [
                                                 {
-                                                    "part_number": "0347233",
                                                     "product_url": "/newparts/part_details.php?pnum=OMC0347233",
-                                                    "manufacturer": "Evinrude Johnson OMC",
-                                                    "list_price": "$20.49",
+                                                    "product_image": "/parts/images/hg/omc/0347233.jpg",
                                                     "diagram_number": "#1 ",
-                                                    "recomended": null,
-                                                    "product": "0347233 - Hose",
-                                                    "your_price": "$20.49",
-                                                    "product_image": "/parts/images/hg/omc/0347233.jpg"
-                                                },
-                                                {
-                                                    "part_number": "0347234",
-                                                    "product_url": "/newparts/part_details.php?pnum=OMC0347234",
                                                     "manufacturer": "Evinrude Johnson OMC",
                                                     "list_price": "$20.49",
-                                                    "diagram_number": "#2 ",
+                                                    "product": "0347233 - Hose",
                                                     "recomended": null,
-                                                    "product": "0347234 - Hose",
                                                     "your_price": "$20.49",
-                                                    "product_image": "/parts/images/hg/omc/0347234.jpg"
+                                                    "part_number": "0347233"
                                                 },
                                                 {
-                                                    "part_number": "0346151",
+                                                    "product_url": "/newparts/part_details.php?pnum=OMC0347234",
+                                                    "product_image": "/parts/images/hg/omc/0347234.jpg",
+                                                    "diagram_number": "#2 ",
+                                                    "manufacturer": "Evinrude Johnson OMC",
+                                                    "list_price": "$20.49",
+                                                    "product": "0347234 - Hose",
+                                                    "recomended": null,
+                                                    "your_price": "$20.49",
+                                                    "part_number": "0347234"
+                                                },
+                                                {
                                                     "product_url": "/newparts/part_details.php?pnum=OMC0346151",
+                                                    "product_image": "/parts/images/hg/omc/0346151.jpg",
+                                                    "diagram_number": "#3 ",
                                                     "manufacturer": "Evinrude Johnson OMC",
                                                     "list_price": "$3.09",
-                                                    "diagram_number": "#3 ",
-                                                    "recomended": null,
                                                     "product": "0346151 - Clamp",
+                                                    "recomended": null,
                                                     "your_price": "$3.09",
-                                                    "product_image": "/parts/images/hg/omc/0346151.jpg"
+                                                    "part_number": "0346151"
                                                 },
                                                 {
-                                                    "part_number": "18-9135-9",
                                                     "product_url": "/newparts/part_details.php?pnum=SIE18-9135-9",
+                                                    "product_image": null,
+                                                    "diagram_number": "#3 ",
                                                     "manufacturer": "Sierra Marine",
                                                     "list_price": "<span class=\"strike\">$17.69</span>",
-                                                    "diagram_number": "#3 ",
-                                                    "recomended": null,
                                                     "product": "18-9135-9 - 10-Pack Oetiker Clamp 13/16",
+                                                    "recomended": {
+                                                        "product_url": "/newparts/part_details.php?pnum=OMC0346151",
+                                                        "product_image": "/parts/images/hg/omc/0346151.jpg",
+                                                        "diagram_number": "#3 ",
+                                                        "manufacturer": "Evinrude Johnson OMC",
+                                                        "list_price": "$3.09",
+                                                        "product": "0346151 - Clamp",
+                                                        "recomended": null,
+                                                        "your_price": "$3.09",
+                                                        "part_number": "0346151"
+                                                    },
                                                     "your_price": "$12.42",
-                                                    "product_image": null
+                                                    "part_number": "18-9135-9"
                                                 },
                                                 {
-                                                    "part_number": "0345702",
                                                     "product_url": "/newparts/part_details.php?pnum=OMC0345702",
+                                                    "product_image": "/parts/images/hg/omc/0345702.jpg",
+                                                    "diagram_number": "#4 ",
                                                     "manufacturer": "Evinrude Johnson OMC",
                                                     "list_price": "$11.29",
-                                                    "diagram_number": "#4 ",
-                                                    "recomended": null,
                                                     "product": "0345702- Nipple",
+                                                    "recomended": null,
                                                     "your_price": "$11.29",
-                                                    "product_image": "/parts/images/hg/omc/0345702.jpg"
+                                                    "part_number": "0345702"
                                                 },
                                                 {
-                                                    "part_number": "0351740",
                                                     "product_url": "/newparts/part_details.php?pnum=OMC0351740",
+                                                    "product_image": "/parts/images/hg/omc/0351740.jpg",
+                                                    "diagram_number": "#5 ",
                                                     "manufacturer": "Evinrude Johnson OMC",
                                                     "list_price": "$10.29",
-                                                    "diagram_number": "#5 ",
-                                                    "recomended": null,
                                                     "product": "0351740 - Hose",
+                                                    "recomended": null,
                                                     "your_price": "$10.29",
-                                                    "product_image": "/parts/images/hg/omc/0351740.jpg"
+                                                    "part_number": "0351740"
                                                 },
                                                 {
-                                                    "part_number": "0347034",
                                                     "product_url": "/newparts/part_details.php?pnum=OMC0347034",
+                                                    "product_image": "/parts/images/hg/omc/0347034.jpg",
+                                                    "diagram_number": "#6 ",
                                                     "manufacturer": "Evinrude Johnson OMC",
                                                     "list_price": "$19.49",
-                                                    "diagram_number": "#6 ",
-                                                    "recomended": null,
                                                     "product": "0347034 - Hose",
+                                                    "recomended": null,
                                                     "your_price": "$19.49",
-                                                    "product_image": "/parts/images/hg/omc/0347034.jpg"
+                                                    "part_number": "0347034"
                                                 }
                                             ],
-                                            "image": "/parts/evinrude-johnson-parts-diagrams/EVINRUDE/65703.gif",
-                                            "category_url": "/parts/johnson-evinrude-parts.php?year=2011&hp=300&model=DE300CXIIC&manufacturer=Evinrude&section=Cooling+Hoses"
+                                            "image": "/parts/evinrude-johnson-parts-diagrams/EVINRUDE/65703.gif"
                                         }
-                                    ],
-                                    "category_url": "/parts/johnson-evinrude-parts.php?year=2011&hp=300&model=DE300CXIIC"
+                                    ]
                                 }
-                            ],
-                            "category_url": "/parts/johnson-evinrude-parts.php?year=2011&hp=300"
+                            ]
                         }
-                    ],
-                    "category_url": "/parts/johnson-evinrude-parts.php?year=2011"
+                    ]
                 }
-            ],
-            "category_url": "/parts/johnson-evinrude-parts.php"
+            ]
         }
     ],
-    "scraping_successful": true,
-    "scraped_date": "2017-12-07"
+    "scraping_successful": true
 }

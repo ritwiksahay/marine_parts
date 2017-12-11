@@ -2,6 +2,7 @@
 import requests
 import json
 import re
+import copy
 
 from lxml import html, etree
 from datetime import date
@@ -81,6 +82,9 @@ def boatsnet_scrapper():
 '''
 
 
+##################################################################
+## MARINE ENGINE WEB
+##################################################################
 def marineengine_mercury_scrapper():
     # Marineengine base url
     base_url = 'https://www.marineengine.com'
@@ -178,8 +182,10 @@ def marineengine_mercury_scrapper():
 
                     # products cycle
                     diag_number = -1
+                    product = None
                     for prod in tree.xpath(xproduct_selector):
                         if prod.get('class') is None:
+                            recomended = product
                             product = {
                                 'product': re.sub(' +', ' ', prod.xpath('td[3]/a/strong')[0].text),
                                 'product_url': prod.xpath('td[3]/a')[0].get('href'),
@@ -200,7 +206,6 @@ def marineengine_mercury_scrapper():
 
                             product['product_image'] = prod_image
 
-                            recomended = None
                             if tree.xpath(xproduct_unavailable_selector):
                                 recomended = tree.xpath(xproduct_unavailable_selector)[0].get('href').replace(' ', '20%')
 
@@ -228,9 +233,10 @@ def marineengine_mercury_scrapper():
 
                             counter += 1
                         else:
+                            product = None
                             diag_number = prod.xpath("td[1]/span/strong")[0].text
 
-                        if counter > 15:
+                        if counter > 25:
                             print('Finishing Marine Engine Mercury Scraping...\n')
                             catalog['scraping_successful'] = True
                             with open('marineengine_mercury-' + scrap_date + '.json', 'w') as outfile:
@@ -241,7 +247,7 @@ def marineengine_mercury_scrapper():
                             return
 
 
-def marineengine_evinrude_scrapper():
+def marineengine_johnson_envinrude_scrapper():
     # Marineengine base url
     base_url = 'https://www.marineengine.com'
     # Categorys scraping
@@ -271,7 +277,7 @@ def marineengine_evinrude_scrapper():
 
     counter = 0
     
-    # Categorys on evinrude
+    # Categorys on johnson_envinrude
     for cat in tree.xpath(xpath_selector):
         category = {
             'category_name': 'category',
@@ -348,6 +354,7 @@ def marineengine_evinrude_scrapper():
                         print(component['category_url'])
                         tree = html.fromstring(page.content)
 
+                        component_image = None
                         if(len(tree.xpath(xcomponent_img_selector)) > 0):
                             component_image = tree.xpath(xcomponent_img_selector)[0].get('src')
 
@@ -356,6 +363,7 @@ def marineengine_evinrude_scrapper():
                         diag_number = -1
 
                         # products cycle
+                        product = None
                         for prod in tree.xpath(xcomponent_parts_selector):
                             if prod.get('class') is None:
                                 name = ''
@@ -369,6 +377,7 @@ def marineengine_evinrude_scrapper():
                                     link = prod.xpath('td[3]/p/strong/a')[0].get('href')
 
                                 if name and link:
+                                    recomended = product
                                     product = {
                                         'product': name,
                                         'product_url': link,
@@ -388,7 +397,6 @@ def marineengine_evinrude_scrapper():
 
                                     product['product_image'] = prod_image
 
-                                    recomended = None
                                     if tree.xpath(xproduct_unavailable_selector):
                                         recomended = tree.xpath(xproduct_unavailable_selector)[0].get('href').replace(' ', '20%')
 
@@ -415,11 +423,12 @@ def marineengine_evinrude_scrapper():
                                         count += 1
                                     counter += 1
                             else:
+                                product = None
                                 if prod.xpath('td/span/strong'):
                                     diag_number = prod.xpath("td/span/strong")[0].text
 
                             if counter > 15:
-                                print('Finishing Marine Engine Evinrude Scraping...\n')
+                                print('Finishing Marine Engine johnson_envinrude Scraping...\n')
                                 catalog['scraping_successful'] = True
                                 with open('marineengine_envinrude-' + scrap_date + '.json', 'w') as outfile:
                                     json.dump(catalog, outfile, indent=4)
@@ -494,7 +503,7 @@ def marineengine_mercruiser_scrapper():
     }
 
     counter = 0
-    # Categorys on evinrude
+    # Categorys on johnson_envinrude
     for cat in tree.xpath(xpath_selector):
         category = {
             'category_name': 'category',
@@ -565,6 +574,7 @@ def marineengine_mercruiser_scrapper():
                     component['image'] = component_image
 
                     diag_number = -1
+                    product = None
                     # products cycle
                     for prod in tree.xpath(xcomponent_parts_selector):
                         if prod.get('class') is None:
@@ -578,7 +588,7 @@ def marineengine_mercruiser_scrapper():
                                 link = prod.xpath('td[3]/p/strong/a')[0].get('href')
 
                             if name and link:
-
+                                recomended = product
                                 product = {
                                     'product': name,
                                     'product_url': link,
@@ -598,7 +608,6 @@ def marineengine_mercruiser_scrapper():
 
                                 product['product_image'] = prod_image
 
-                                recomended = None
                                 if tree.xpath(xproduct_unavailable_selector):
                                     recomended = tree.xpath(xproduct_unavailable_selector)[0].get('href').replace(' ', '20%')
 
@@ -625,6 +634,7 @@ def marineengine_mercruiser_scrapper():
                                     count += 1
                                 counter += 1
                         else:
+                            product = None
                             if prod.xpath('td/span/strong'):
                                 diag_number = prod.xpath("td/span/strong")[0].text
 
@@ -639,12 +649,12 @@ def marineengine_mercruiser_scrapper():
                             return
 
 
-def marineengine_yamaha_scrapper():
+def marineengine_force_scrapper():
     # Marineengine base url
     base_url = 'https://www.marineengine.com'
     # Categorys scraping
     page = requests.get(
-        base_url + '/parts/yamaha-outboard/'
+        base_url + '/parts/force-outboard-parts/'
     )
     tree = html.fromstring(page.content)
 
@@ -667,41 +677,248 @@ def marineengine_yamaha_scrapper():
     }
 
     counter = 0
-    # Categorys on evinrude
+    # Categorys on johnson_envinrude
     for cat in tree.xpath(xpath_selector):
         category = {
             'category_name': 'category',
             'category': cat.text,
             'category_url': cat.get('href'),
-            'models': []
+            'sub-category': []
         }
         catalog['categories'].append(category)
 
     print(catalog)
 
 
-def marineengine_volvo_scrapper():
+def marineengine_mariner_scrapper():
     # Marineengine base url
     base_url = 'https://www.marineengine.com'
+    # Categorys scraping
+    page = requests.get(
+        base_url + '/parts/mariner-outboard-parts/'
+    )
+    tree = html.fromstring(page.content)
+    
+    xpath_selector = "/html/body/div//table/tr/td[2]/a[1]"
+    xmodel_selector = "/html/body/main/div[2]/ul//li/a"
+    xserial_range_selector = "/html/body/main/div[2]/ul//li/a"
+    xcomponents_selector = "/html/body/main/div[2]/div[2]/ul//li/a"
+    xcomponents_selector2 = "/html/body/main/div[2]/div/ul//li/a"
+    xcomponent_img_selector = "/html/body/main/div[2]/p[1]/img"
+    xcomponent_parts_selector = "/html/body/main/table//tr"
+    xproduct_details_selector = "/html/body/main/div[1]/div[1]/div[1]/div[2]/table//tr/td/p"
+    xproduct_unavailable_selector = "/html/body/main/div[1]/div[1]/div[1]/div[2]/div/a"
+    xproduct_img_selector = "/html/body/main/div[1]/div[1]/div[1]/div[1]/table/tr/td/a/img"
+
+    scrap_date = str(date.today()).replace(' ', '')
+    catalog = {
+        'categories': [],
+        'scraped_date': scrap_date,
+        'scraping_successful': False,
+    }
+
+    counter = 0
+    # Categorys on johnson_envinrude
+    for cat in tree.xpath(xpath_selector):
+        category = {
+            'category_name': 'category',
+            'category': cat.text,
+            'category_url': cat.get('href'),
+            'sub_category': []
+        }
+        catalog['categories'].append(category)
+
+    print(catalog)
+
+
+def marineengine_omc_sterndrive_scrapper():
+    # Marineengine base url
+    base_url = 'https://www.marineengine.com'
+    # Categorys scraping
+    page = requests.get(
+        base_url + '/parts/omc-parts/omc-boat-parts.php'
+    )
+    tree = html.fromstring(page.content)
+
+
+########################################################
+## MARINE PARTS EXPRESS WEB
+########################################################
+def marinepartsexpress_chrysler_marine_scrapper():
+    base_url = 'http://www.marinepartsexpress.com/Chrysler_Schematics/'
+    # Categorys scraping
+    page = requests.get(
+        base_url
+    )
+    tree = html.fromstring(page.content)
+
+    xpath_selector = "/html/body/div//table/tr/td[2]/a[1]"
+    xcomponents_selector = "/html/body/div//table[position()>1]//tr"
+    xproduct_selector = "/html/body/div/table[2]/tr[position()>1]"
+    xcomponent_img_selector = "/html/body/div/img"
+
+    scrap_date = str(date.today()).replace(' ', '')
+    catalog = {
+        'categories': [],
+        'scraped_date': scrap_date,
+        'scraping_successful': False,
+    }
+
+    counter = 0
+    # Categorys on johnson_envinrude
+    for item in tree.xpath(xpath_selector):
+        models = []
+        page = requests.get(
+            base_url + item.get('href')
+        )
+        tree = html.fromstring(page.content)
+        old_cat = ''
+        
+        for comp in tree.xpath(xcomponents_selector):
+            # Means is a new component table
+            if comp.xpath('td[1]/strong') and comp.xpath('td[1]/strong')[0].text:
+                if "Components" in comp.xpath('td[1]/strong')[0].text:
+                    if old_cat != comp.xpath('td[1]/strong')[0].text:
+                        old_cat = comp.xpath('td[1]/strong')[0].text
+                        category = {
+                            'category_name': 'category',
+                            'category': comp.xpath('td[1]/strong')[0].text,
+                            'category_url': item.get('href'),
+                            'sub_category': []
+                        }
+                        subcat = None
+            elif comp.xpath('td[1]/strong/i'):
+                if comp.xpath('td[1]/strong/i')[0].text:
+                    subcat = {
+                        'category_name': 'category',
+                        'category': comp.xpath('td[1]/strong/i')[0].text,
+                        'category_url': item.get('href'),
+                        'sub_category': []
+                    }
+            else:
+                for model in comp.xpath('td/a'):
+                    component = {
+                        'category_name': 'component',
+                        'category': comp.xpath('td[1]')[0].text,
+                        'category_url': model.get('href'),
+                        'products': []
+                    }
+
+                    # Get Products for component
+                    page = requests.get(
+                        base_url + component['category_url']
+                    )
+                    tree2 = html.fromstring(page.content)
+
+                    component_image = None
+                    if(len(tree2.xpath(xcomponent_img_selector)) > 0):
+                        component_image = tree2.xpath(xcomponent_img_selector)[0].get('src')
+
+                    component['image'] = component_image
+
+                    for prod in tree2.xpath(xproduct_selector):
+                        product = {
+                            'product_url': component['category_url'],
+                        }
+                        component['products'].append(product)
+                        if prod.xpath('td[2]'):
+                            product['diagram_number'] = prod.xpath('td[1]')[0].text
+                            product['product'] = prod.xpath('td[2]')[0].text
+                            product['part_number'] = prod.xpath('td[3]')[0].text
+                        else:
+                            product['notes'] = prod.xpath('td[1]')[0].text
+
+                    # Keep the component and tree structure
+                    if model.text not in models:
+                        models.append(model.text)
+                        mod = {
+                            'category_name': 'model',
+                            'category': model.text,
+                            'category_url': item.get('href'),
+                            'sub_category': []
+                        }
+                        catalog['categories'].append(mod)
+                    else:
+                        for mod in catalog['categories']:
+                            if mod['category'] == model.text:
+                                break
+
+                    present = False
+                    for cat in mod['sub_category']:
+                        if cat['category'] == category['category']:
+                            present = True
+                            break
+
+                    if not present:
+                        catcopy = copy.deepcopy(category)
+                        mod['sub_category'].append(catcopy)
+                        if subcat:
+                            subpresent = False
+                            for subc in category['sub_category']:
+                                if subc['category'] == subcat['category']:
+                                    subpresent = True
+                                    break
+                            if not subpresent:
+                                subc = copy.deepcopy(subcat)
+                                catcopy['sub_category'].append(subc)
+
+                            catcopy = subc
+                    else:
+                        if subcat:
+                            subpresent = False
+                            for subc in cat['sub_category']:
+                                if subc['category'] == subcat['category']:
+                                    subpresent = True
+                                    break
+
+                            if not subpresent:
+                                subc = copy.deepcopy(subcat)
+                                cat['sub_category'].append(subc)
+
+                            catcopy = subc
+                        else:
+                            catcopy = cat
+
+                    catcopy['sub_category'].append(component)
+
+            counter += 1
+            if counter > 15:
+                print('Finishing Marine Parts Express Chrysler Marine Scraping...\n')
+                catalog['scraping_successful'] = True
+                with open('marinepartsexpress_chrysler_marine-' + scrap_date + '.json', 'w') as outfile:
+                    json.dump(catalog, outfile, indent=4)
+                    pass
+                break
 
 
 if __name__ == '__main__':
     print('Started scraping.')
     print('Ignoring manuals...')
 
+    ### MARINE ENGINE ########################################
+    print('Marine Engine web scrapping.')
     print('Starting Marine Engine Mercury Scraping...')
     marineengine_mercury_scrapper()
 
     print('\nStarting Marine Engine Mercruiser Scraping...')
     marineengine_mercruiser_scrapper()
     
-    print('\nStarting Marine Engine Evinrude Scraping...')
-    marineengine_evinrude_scrapper()
+    print('\nStarting Marine Engine Johnson & Envinrude Scraping...')
+    marineengine_johnson_envinrude_scrapper()
 
-    print('\nStarting Marine Engine Yamaha scraping...')
-    marineengine_yamaha_scrapper()
+    print('\nStarting Marine Engine Force scraping...')
+    #marineengine_force_scrapper()
 
-    print('\nStarting Marine Engine Volvo scraping...')
-    marineengine_volvo_scrapper()
+    print('\nStarting Marine Engine Mariner scraping...')
+    #marineengine_mariner_scrapper()
+
+    print('\nStarting Marine Engine OMC Sterndrive scraping...')
+    #marineengine_omc_sterndrive_scrapper()
+
+    ### MARINE EXPRESS ########################################
+    print('Marine Parts Express web scrapping.')
+    print('Starting Marine Express Chrysler Marine Scraping...')
+    marinepartsexpress_chrysler_marine_scrapper()
+
 
     print('\nFinished scraping.')
