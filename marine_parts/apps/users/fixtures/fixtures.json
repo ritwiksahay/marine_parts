@@ -1,5 +1,824 @@
 [
 {
+<<<<<<< HEAD
+=======
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+        "app_label": "ads",
+        "model": "impression"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+        "app_label": "ads",
+        "model": "ad"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+        "app_label": "ads",
+        "model": "advertiser"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+        "app_label": "ads",
+        "model": "click"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+        "app_label": "ads",
+        "model": "adimage"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+        "app_label": "ads",
+        "model": "category"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+        "app_label": "admin",
+        "model": "logentry"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+        "app_label": "auth",
+        "model": "permission"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+        "app_label": "auth",
+        "model": "group"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+        "app_label": "contenttypes",
+        "model": "contenttype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+        "app_label": "sessions",
+        "model": "session"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 12,
+    "fields": {
+        "app_label": "sites",
+        "model": "site"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 13,
+    "fields": {
+        "app_label": "flatpages",
+        "model": "flatpage"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 14,
+    "fields": {
+        "app_label": "users",
+        "model": "customer"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 15,
+    "fields": {
+        "app_label": "users",
+        "model": "store"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 16,
+    "fields": {
+        "app_label": "users",
+        "model": "note"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 17,
+    "fields": {
+        "app_label": "users",
+        "model": "user"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 18,
+    "fields": {
+        "app_label": "analytics",
+        "model": "usersearch"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 19,
+    "fields": {
+        "app_label": "analytics",
+        "model": "userrecord"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 20,
+    "fields": {
+        "app_label": "analytics",
+        "model": "productrecord"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 21,
+    "fields": {
+        "app_label": "analytics",
+        "model": "userproductview"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 22,
+    "fields": {
+        "app_label": "address",
+        "model": "country"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 23,
+    "fields": {
+        "app_label": "address",
+        "model": "useraddress"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 24,
+    "fields": {
+        "app_label": "shipping",
+        "model": "orderanditemcharges"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 25,
+    "fields": {
+        "app_label": "shipping",
+        "model": "weightband"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 26,
+    "fields": {
+        "app_label": "shipping",
+        "model": "weightbased"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 27,
+    "fields": {
+        "app_label": "catalogue",
+        "model": "option"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 28,
+    "fields": {
+        "app_label": "catalogue",
+        "model": "product"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 29,
+    "fields": {
+        "app_label": "catalogue",
+        "model": "productattribute"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 30,
+    "fields": {
+        "app_label": "catalogue",
+        "model": "attributeoptiongroup"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 31,
+    "fields": {
+        "app_label": "catalogue",
+        "model": "productrecommendation"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 32,
+    "fields": {
+        "app_label": "catalogue",
+        "model": "productcategory"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 33,
+    "fields": {
+        "app_label": "catalogue",
+        "model": "attributeoption"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 34,
+    "fields": {
+        "app_label": "catalogue",
+        "model": "productimage"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 35,
+    "fields": {
+        "app_label": "catalogue",
+        "model": "productattributevalue"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 36,
+    "fields": {
+        "app_label": "catalogue",
+        "model": "category"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 37,
+    "fields": {
+        "app_label": "catalogue",
+        "model": "productclass"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 38,
+    "fields": {
+        "app_label": "reviews",
+        "model": "vote"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 39,
+    "fields": {
+        "app_label": "reviews",
+        "model": "productreview"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 40,
+    "fields": {
+        "app_label": "partner",
+        "model": "partner"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 41,
+    "fields": {
+        "app_label": "partner",
+        "model": "stockalert"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 42,
+    "fields": {
+        "app_label": "partner",
+        "model": "stockrecord"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 43,
+    "fields": {
+        "app_label": "partner",
+        "model": "partneraddress"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 44,
+    "fields": {
+        "app_label": "basket",
+        "model": "lineattribute"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 45,
+    "fields": {
+        "app_label": "basket",
+        "model": "line"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 46,
+    "fields": {
+        "app_label": "basket",
+        "model": "basket"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 47,
+    "fields": {
+        "app_label": "payment",
+        "model": "source"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 48,
+    "fields": {
+        "app_label": "payment",
+        "model": "bankcard"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 49,
+    "fields": {
+        "app_label": "payment",
+        "model": "sourcetype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 50,
+    "fields": {
+        "app_label": "payment",
+        "model": "transaction"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 51,
+    "fields": {
+        "app_label": "offer",
+        "model": "conditionaloffer"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 52,
+    "fields": {
+        "app_label": "offer",
+        "model": "range"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 53,
+    "fields": {
+        "app_label": "offer",
+        "model": "benefit"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 54,
+    "fields": {
+        "app_label": "offer",
+        "model": "condition"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 55,
+    "fields": {
+        "app_label": "offer",
+        "model": "rangeproductfileupload"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 56,
+    "fields": {
+        "app_label": "offer",
+        "model": "rangeproduct"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 57,
+    "fields": {
+        "app_label": "offer",
+        "model": "countcondition"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 58,
+    "fields": {
+        "app_label": "offer",
+        "model": "absolutediscountbenefit"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 59,
+    "fields": {
+        "app_label": "offer",
+        "model": "shippingabsolutediscountbenefit"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 60,
+    "fields": {
+        "app_label": "offer",
+        "model": "percentagediscountbenefit"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 61,
+    "fields": {
+        "app_label": "offer",
+        "model": "multibuydiscountbenefit"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 62,
+    "fields": {
+        "app_label": "offer",
+        "model": "valuecondition"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 63,
+    "fields": {
+        "app_label": "offer",
+        "model": "shippingbenefit"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 64,
+    "fields": {
+        "app_label": "offer",
+        "model": "shippingpercentagediscountbenefit"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 65,
+    "fields": {
+        "app_label": "offer",
+        "model": "fixedpricebenefit"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 66,
+    "fields": {
+        "app_label": "offer",
+        "model": "shippingfixedpricebenefit"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 67,
+    "fields": {
+        "app_label": "offer",
+        "model": "coveragecondition"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 68,
+    "fields": {
+        "app_label": "order",
+        "model": "paymenteventquantity"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 69,
+    "fields": {
+        "app_label": "order",
+        "model": "communicationevent"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 70,
+    "fields": {
+        "app_label": "order",
+        "model": "orderdiscount"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 71,
+    "fields": {
+        "app_label": "order",
+        "model": "shippingeventquantity"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 72,
+    "fields": {
+        "app_label": "order",
+        "model": "lineprice"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 73,
+    "fields": {
+        "app_label": "order",
+        "model": "paymentevent"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 74,
+    "fields": {
+        "app_label": "order",
+        "model": "billingaddress"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 75,
+    "fields": {
+        "app_label": "order",
+        "model": "shippingeventtype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 76,
+    "fields": {
+        "app_label": "order",
+        "model": "shippingevent"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 77,
+    "fields": {
+        "app_label": "order",
+        "model": "lineattribute"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 78,
+    "fields": {
+        "app_label": "order",
+        "model": "shippingaddress"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 79,
+    "fields": {
+        "app_label": "order",
+        "model": "ordernote"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 80,
+    "fields": {
+        "app_label": "order",
+        "model": "paymenteventtype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 81,
+    "fields": {
+        "app_label": "order",
+        "model": "order"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 82,
+    "fields": {
+        "app_label": "order",
+        "model": "line"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 83,
+    "fields": {
+        "app_label": "customer",
+        "model": "productalert"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 84,
+    "fields": {
+        "app_label": "customer",
+        "model": "email"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 85,
+    "fields": {
+        "app_label": "customer",
+        "model": "notification"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 86,
+    "fields": {
+        "app_label": "customer",
+        "model": "communicationeventtype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 87,
+    "fields": {
+        "app_label": "promotions",
+        "model": "singleproduct"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 88,
+    "fields": {
+        "app_label": "promotions",
+        "model": "handpickedproductlist"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 89,
+    "fields": {
+        "app_label": "promotions",
+        "model": "image"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 90,
+    "fields": {
+        "app_label": "promotions",
+        "model": "rawhtml"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 91,
+    "fields": {
+        "app_label": "promotions",
+        "model": "keywordpromotion"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 92,
+    "fields": {
+        "app_label": "promotions",
+        "model": "multiimage"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 93,
+    "fields": {
+        "app_label": "promotions",
+        "model": "tabbedblock"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 94,
+    "fields": {
+        "app_label": "promotions",
+        "model": "automaticproductlist"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 95,
+    "fields": {
+        "app_label": "promotions",
+        "model": "orderedproductlist"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 96,
+    "fields": {
+        "app_label": "promotions",
+        "model": "orderedproduct"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 97,
+    "fields": {
+        "app_label": "promotions",
+        "model": "pagepromotion"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 98,
+    "fields": {
+        "app_label": "voucher",
+        "model": "voucherapplication"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 99,
+    "fields": {
+        "app_label": "voucher",
+        "model": "voucher"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 100,
+    "fields": {
+        "app_label": "wishlists",
+        "model": "wishlist"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 101,
+    "fields": {
+        "app_label": "wishlists",
+        "model": "line"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 102,
+    "fields": {
+        "app_label": "thumbnail",
+        "model": "kvstore"
+    }
+},
+{
+>>>>>>> d052e9f7d045385318e538a2190b0db920b22fc9
     "model": "sessions.session",
     "pk": "eemf7vnnfm3353b88eb2di7j2ga6qfah",
     "fields": {

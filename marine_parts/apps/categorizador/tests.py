@@ -46,6 +46,7 @@ class TestUnitExtraerProds(unittest.TestCase):
 
     def test_unElementoTodosNiveles_regresa(self):
         self.handler.entrada = casos.caso_nivelesCompletos_UnElemento
+<<<<<<< HEAD:marine_parts/apps/categorizador/tests.py
         resul = categorizador.extraerProds(self.handler.leer('prueba.json'))
         self.assertEqual(resul, casos.casoR_nivelesCompletos_UnElemento)
 
@@ -53,6 +54,11 @@ class TestIntegrationCrearProds(unittest.TestCase):
     pass
 
 
+=======
+        resul = categorizador.extraerCats(self.handler.leer('prueba.json'))
+        self.assertEqual(resul, casos.casoR_nivelesCompletos_UnElemento)
+
+>>>>>>> d052e9f7d045385318e538a2190b0db920b22fc9:marine_parts/apps/categorizador/tests.py
 
 if __name__ == '__main__':
     unittest.main()
