@@ -46,8 +46,12 @@ class TestUnitExtraerProds(unittest.TestCase):
 
     def test_unElementoTodosNiveles_regresa(self):
         self.handler.entrada = casos.caso_nivelesCompletos_UnElemento
-        resul = categorizador.extraerCats(self.handler.leer('prueba.json'))
+        resul = categorizador.extraerProds(self.handler.leer('prueba.json'))
         self.assertEqual(resul, casos.casoR_nivelesCompletos_UnElemento)
+
+class TestIntegrationCrearProds(unittest.TestCase):
+    pass
+
 
 
 if __name__ == '__main__':
