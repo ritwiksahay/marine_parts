@@ -32,6 +32,8 @@ urlpatterns = [
     # The Django admin is not officially supported; expect breakage.
     # Nonetheless, it's often useful for debugging.
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^search/', include('haystack.urls')),
+
 
     url(r'', include(application.urls)),
 ]
