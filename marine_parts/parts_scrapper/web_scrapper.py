@@ -909,7 +909,6 @@ def marineengine_mariner_scrapper():
                         'products': []
                     }
                     serial_range['sub_category'].append(component)
-                    print(component)
 
                     page = requests.get(
                         base_url + component['category_url']
@@ -1015,10 +1014,10 @@ def marineengine_omc_sterndrive_scrapper():
     tree = html.fromstring(page.content)
 
     xpath_selector = "/html/body/main/div[2]/table/tr[1]/td[1]/ul//li/a"
-    xcomponents_selector = "/html/body/main/div[2]/div[2]/ul//li/a"
+    xcomponents_selector = "/html/body/main/div[2]/table/tr/td/div[1]/div[2]/ul//li/a"
     xcomponents_selector2 = "/html/body/main/div[2]/div/ul//li/a"
-    xcomponent_img_selector = "/html/body/main/div[2]/p[1]/img"
-    xcomponent_parts_selector = "/html/body/main/table//tr"
+    xcomponent_img_selector = "/html/body/main/div[2]/div/p[1]/img"
+    xcomponent_parts_selector = "/html/body/main//div/table//tr"
     xproduct_details_selector = "/html/body/main/div[1]/div[1]/div[1]/div[2]/table//tr/td/p"
     xproduct_unavailable_selector = "/html/body/main/div[1]/div[1]/div[1]/div[2]/div/a"
     xproduct_img_selector = "/html/body/main/div[1]/div[1]/div[1]/div[1]/table/tr/td/a/img"
@@ -1045,8 +1044,144 @@ def marineengine_omc_sterndrive_scrapper():
         )
         tree = html.fromstring(page.content)
 
-    print(catalog)
+        for hp in tree.xpath(xpath_selector):
+            horse_power = {
+                'category_name': 'horse power/ liters',
+                'category': hp.text.replace('\n', '').replace('\t',''),
+                'category_url': hp.get('href'),
+                'sub_category': []
+            }
+            year['sub_category'].append(horse_power)
 
+            page = requests.get(
+                base_url + horse_power['category_url']
+            )
+            tree = html.fromstring(page.content)
+
+            for md in tree.xpath(xpath_selector):
+                model = {
+                    'category_name': 'model',
+                    'category': md.text.replace('\n', '').replace('\t',''),
+                    'category_url': md.get('href'),
+                    'sub_category': []
+                }
+                horse_power['sub_category'].append(model)
+
+                page = requests.get(
+                    base_url + model['category_url']
+                )
+                tree = html.fromstring(page.content)
+
+                comps = []
+                if tree.xpath(xcomponents_selector):
+                    comps = tree.xpath(xcomponents_selector)
+                elif tree.xpath(xcomponents_selector2):
+                    comps = tree.xpath(xcomponents_selector2)
+                else:
+                    print("Caso Especial OMC")
+
+                for comp in comps:
+                    component = {
+                        'category_name': 'component',
+                        'category': comp.text.replace('\n', '').replace('\t',''),
+                        'category_url': comp.get('href'),
+                        'products': []
+                    }
+                    model['sub_category'].append(component)
+
+                    page = requests.get(
+                        base_url + component['category_url']
+                    )
+                    tree = html.fromstring(page.content)
+
+                    component_image = None
+                    if(len(tree.xpath(xcomponent_img_selector)) > 0):
+                        component_image = tree.xpath(xcomponent_img_selector)[0].get('src')
+
+                    component['image'] = component_image
+
+                    diag_number = -1
+                    product = None
+                    old_product = None
+                    recomended = None
+                    print("aca" + base_url + component['category_url'])
+                    # products cycle
+                    for prod in tree.xpath(xcomponent_parts_selector):
+                        if prod.get('class') is None:
+                            name = ''
+                            link = ''
+                            if prod.xpath('td[3]/a/strong'):
+                                name = re.sub(' +', ' ', prod.xpath('td[3]/a/strong')[0].text)
+                                link = prod.xpath('td[3]/a')[0].get('href')
+                            elif prod.xpath('td[3]/p/strong/a'):
+                                name = re.sub(' +', ' ', prod.xpath('td[3]/p/strong/a')[0].text)
+                                link = prod.xpath('td[3]/p/strong/a')[0].get('href')
+
+                            if name and link:
+                                product = {
+                                    'product': name,
+                                    'product_url': link,
+                                    'diagram_number': diag_number
+                                }
+                                component['products'].append(product)
+
+                                page = requests.get(
+                                    base_url + product['product_url']
+                                )
+                                tree = html.fromstring(page.content)
+                                prod_image = None
+
+                                if(len(tree.xpath(xproduct_img_selector)) > 0):
+                                    prod_image = tree.xpath(xproduct_img_selector)[0].get('src')
+
+                                product['product_image'] = prod_image
+
+                                if tree.xpath(xproduct_unavailable_selector):
+                                    recomended = tree.xpath(xproduct_unavailable_selector)[0].get('href').replace(' ', '20%')
+
+                                # Assemble the product json object
+                                product['recomended'] = recomended
+
+                                count = 0
+                                # Price and other details from the product page
+                                for details in tree.xpath(xproduct_details_selector):
+                                    value = (etree.tostring(details).decode('utf-8').replace('\n', '').replace('\t', '')
+                                            .replace('</p>', '').replace('<strong>', '').replace('</strong>', '')
+                                            .replace('<p>', '').split('<br/>')[1].replace('&#8212;', '').replace('&#160;', ' '))
+
+                                    if value:
+                                        if count == 0:
+                                            product['list_price'] = value
+                                        elif count == 1:
+                                            product['your_price'] = value
+                                        elif count == 2:
+                                            product['part_number'] = value.split()[0]
+                                        else:
+                                            product['manufacturer'] = value
+
+                                    count += 1
+
+                                if old_product:
+                                    old_product['recomended'] = product
+
+                                old_product = product
+
+                                counter += 1
+                        else:
+                            product = None
+                            old_product = None
+                            if prod.xpath('td/span/strong'):
+                                diag_number = prod.xpath("td/span/strong")[0].text.replace('#','')
+
+                        counter += 1
+
+                        if counter > 100:
+                            print('Finishing Marine Engine OMC Sterndrive Scraping...\n')
+                            catalog['scraping_successful'] = True
+                            with open('marine_engine_omc_sterndrive-' + scrap_date + '.json', 'w') as outfile:
+                                json.dump(catalog, outfile, indent=4)
+                                pass
+                            return
 
 ########################################################
 ## MARINE PARTS EXPRESS WEB
@@ -1377,19 +1512,19 @@ if __name__ == '__main__':
     ##########################################################
     print('\nMarine Engine web scrapping.')
     print('Starting Marine Engine Mercury Scraping...')
-    #marineengine_mercury_scrapper()
+    marineengine_mercury_scrapper()
 
     print('\nStarting Marine Engine Mercruiser Scraping...')
-    #marineengine_mercruiser_scrapper()
+    marineengine_mercruiser_scrapper()
     
     print('\nStarting Marine Engine Johnson & Evinrude Scraping...')
-    #marineengine_johnson_evinrude_scrapper()
+    marineengine_johnson_evinrude_scrapper()
 
     print('\nStarting Marine Engine Force scraping...')
-    #marineengine_force_scrapper()
+    marineengine_force_scrapper()
 
     print('\nStarting Marine Engine Mariner scraping...')
-    #marineengine_mariner_scrapper()
+    marineengine_mariner_scrapper()
 
     print('\nStarting Marine Engine OMC Sterndrive scraping...')
     marineengine_omc_sterndrive_scrapper()
@@ -1399,13 +1534,16 @@ if __name__ == '__main__':
     ###########################################################
     print('\nMarine Parts Express web scrapping.')
     print('Starting Marine Express Chrysler Marine Scraping...')
-    #marinepartsexpress_chrysler_marine_scrapper()
+    marinepartsexpress_chrysler_marine_scrapper()
 
     print('\nStarting Marine Express Crusader Scraping...')
-    #marinepartsexpress_crusader_scrapper()
+    marinepartsexpress_crusader_scrapper()
 
     print('\nStarting Marine Express Volvo Penta Marine Scraping...')
-    #marinepartsexpress_volvo_penta_marine_scrapper()
+    marinepartsexpress_volvo_penta_marine_scrapper()
 
+    ##########################################################
+    ### BOATS ########################################
+    ##########################################################
 
     print('\nFinished scraping.')

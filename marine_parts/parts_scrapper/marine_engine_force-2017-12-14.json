@@ -1,0 +1,596 @@
+{
+    "categories": [
+        {
+            "category_name": "horse_power",
+            "sub_category": [
+                {
+                    "category_name": "serial range",
+                    "sub_category": [
+                        {
+                            "image": "https://www.marineengine.com/parts/mercury_marine_parts/static/img/FORCE/802562/10.gif",
+                            "category_name": "component",
+                            "category_url": "/parts/force-outboard-parts/force-trim-tilt-3575-hp-19841999/all/electrical-components-f5h219-5fh219-1-f5h271",
+                            "products": [
+                                {
+                                    "diagram_number": "1",
+                                    "your_price": "$50.00",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER87-F664449",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "87-F664449",
+                                    "recomended": null,
+                                    "product": "87-F664449 - Switch Assembly, NLA",
+                                    "list_price": "$50.00"
+                                },
+                                {
+                                    "diagram_number": "2",
+                                    "your_price": "$7.50",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MERF413420",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "F413420",
+                                    "recomended": null,
+                                    "product": "F413420 - Retainer, NLA",
+                                    "list_price": "$7.50"
+                                },
+                                {
+                                    "diagram_number": "3",
+                                    "your_price": "$1.25",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER10-F1934",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "10-F1934",
+                                    "recomended": null,
+                                    "product": "10-F1934 - Screw -ss, NLA",
+                                    "list_price": "$1.25"
+                                },
+                                {
+                                    "diagram_number": "4",
+                                    "your_price": "$3.90",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER38-F449181",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "38-F449181",
+                                    "recomended": null,
+                                    "product": "38-F449181 - Plate",
+                                    "list_price": "$3.90"
+                                },
+                                {
+                                    "diagram_number": "5",
+                                    "your_price": "$28.00",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER84-F691844",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "84-F691844",
+                                    "recomended": null,
+                                    "product": "84-F691844 - Harness Assembly, NLA",
+                                    "list_price": "$28.00"
+                                },
+                                {
+                                    "diagram_number": "6",
+                                    "your_price": "$2.40",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER11-F7009",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "11-F7009",
+                                    "recomended": null,
+                                    "product": "11-F7009 - Nut",
+                                    "list_price": "$2.40"
+                                },
+                                {
+                                    "diagram_number": "7",
+                                    "part_number": "F8011",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MERF8011&pass_title=F8011+%3A+Replaced+by+12-89302",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "recomended": {
+                                        "diagram_number": "7",
+                                        "your_price": "$1.40",
+                                        "product_image": null,
+                                        "product_url": "/newparts/part_details.php?pnum=MER12-89302",
+                                        "manufacturer": "Mercury Quicksilver",
+                                        "part_number": "12-89302",
+                                        "recomended": "/newparts/part_search.php?part_num=F8011",
+                                        "product": "12-89302 - Washer - Priced Individually",
+                                        "list_price": "$1.40"
+                                    },
+                                    "product": "F8011 - F8011 - WASHER O"
+                                },
+                                {
+                                    "diagram_number": "7",
+                                    "your_price": "$1.40",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER12-89302",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "12-89302",
+                                    "recomended": "/newparts/part_search.php?part_num=F8011",
+                                    "product": "12-89302 - Washer - Priced Individually",
+                                    "list_price": "$1.40"
+                                },
+                                {
+                                    "diagram_number": "8",
+                                    "your_price": "$2.00",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MERF660978",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "F660978",
+                                    "recomended": "/newparts/part_search.php?part_num=F8011",
+                                    "product": "F660978 - Bracket, NLA",
+                                    "list_price": "$2.00"
+                                },
+                                {
+                                    "diagram_number": "9",
+                                    "your_price": "$12.50",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MERF685948",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "F685948",
+                                    "recomended": "/newparts/part_search.php?part_num=F8011",
+                                    "product": "F685948 - Bracket, NLA",
+                                    "list_price": "$12.50"
+                                },
+                                {
+                                    "diagram_number": "10",
+                                    "your_price": "$10.00",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER84-F691908",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "84-F691908",
+                                    "recomended": "/newparts/part_search.php?part_num=F8011",
+                                    "product": "84-F691908 - Wire Assembly, NLA",
+                                    "list_price": "$10.00"
+                                },
+                                {
+                                    "diagram_number": "11",
+                                    "your_price": "$0.70",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MERF1513",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "F1513",
+                                    "recomended": {
+                                        "diagram_number": "11",
+                                        "your_price": "$2.10",
+                                        "product_image": null,
+                                        "product_url": "/newparts/part_details.php?pnum=MER11-68219",
+                                        "manufacturer": "Mercury Quicksilver",
+                                        "part_number": "11-68219",
+                                        "recomended": "/newparts/part_search.php?part_num=F8011",
+                                        "product": "11-68219 - Nut - Priced Individually",
+                                        "list_price": "$2.10"
+                                    },
+                                    "product": "F1513 - NUT SS",
+                                    "list_price": "$0.70"
+                                },
+                                {
+                                    "diagram_number": "11",
+                                    "your_price": "$2.10",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER11-68219",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "11-68219",
+                                    "recomended": "/newparts/part_search.php?part_num=F8011",
+                                    "product": "11-68219 - Nut - Priced Individually",
+                                    "list_price": "$2.10"
+                                },
+                                {
+                                    "diagram_number": "12",
+                                    "part_number": "13-F1975",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER13-F1975&pass_title=13-F1975+%3A+Replaced+by+13-26996",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "recomended": {
+                                        "diagram_number": "12",
+                                        "your_price": "$0.90",
+                                        "product_image": null,
+                                        "product_url": "/newparts/part_details.php?pnum=MER13-26996",
+                                        "manufacturer": "Mercury Quicksilver",
+                                        "part_number": "13-26996",
+                                        "recomended": "/newparts/part_search.php?part_num=13-F1975",
+                                        "product": "13-26996 - LockWasher - Priced Individually",
+                                        "list_price": "$0.90"
+                                    },
+                                    "product": "13-F1975 - 13-F1975 - LOCKWASHER (#10) O"
+                                },
+                                {
+                                    "diagram_number": "12",
+                                    "your_price": "$0.90",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER13-26996",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "13-26996",
+                                    "recomended": "/newparts/part_search.php?part_num=13-F1975",
+                                    "product": "13-26996 - LockWasher - Priced Individually",
+                                    "list_price": "$0.90"
+                                },
+                                {
+                                    "diagram_number": "13",
+                                    "part_number": "F1648",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MERF1648&pass_title=F1648+%3A+Replaced+by+10-41069",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "recomended": {
+                                        "diagram_number": "13",
+                                        "your_price": "$1.40",
+                                        "product_image": null,
+                                        "product_url": "/newparts/part_details.php?pnum=MER10-41069",
+                                        "manufacturer": "Mercury Quicksilver",
+                                        "part_number": "10-41069",
+                                        "recomended": "/newparts/part_search.php?part_num=F1648",
+                                        "product": "10-41069 - Screw",
+                                        "list_price": "$1.40"
+                                    },
+                                    "product": "F1648 - F1648 - SCREW (#10 - 24 x O"
+                                },
+                                {
+                                    "diagram_number": "13",
+                                    "your_price": "$1.40",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER10-41069",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "10-41069",
+                                    "recomended": "/newparts/part_search.php?part_num=F1648",
+                                    "product": "10-41069 - Screw",
+                                    "list_price": "$1.40"
+                                },
+                                {
+                                    "diagram_number": "14",
+                                    "your_price": "$4.00",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MERF662874",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "F662874",
+                                    "recomended": "/newparts/part_search.php?part_num=F1648",
+                                    "product": "F662874 - Connector, NLA",
+                                    "list_price": "$4.00"
+                                },
+                                {
+                                    "diagram_number": "15",
+                                    "your_price": "$10.50",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER84-F662636",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "84-F662636",
+                                    "recomended": "/newparts/part_search.php?part_num=F1648",
+                                    "product": "84-F662636 - Wire Assembly, NLA",
+                                    "list_price": "$10.50"
+                                },
+                                {
+                                    "diagram_number": "16",
+                                    "your_price": "$10.00",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER84-F662908",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "84-F662908",
+                                    "recomended": "/newparts/part_search.php?part_num=F1648",
+                                    "product": "84-F662908 - Wire Assembly, NLA",
+                                    "list_price": "$10.00"
+                                },
+                                {
+                                    "diagram_number": "17",
+                                    "part_number": "10-F1822",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER10-F1822&pass_title=10-F1822+%3A+Replaced+by+10-28782",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "recomended": {
+                                        "diagram_number": "17",
+                                        "your_price": "$1.18",
+                                        "product_image": null,
+                                        "product_url": "/newparts/part_details.php?pnum=MER10-28782",
+                                        "manufacturer": "Mercury Quicksilver",
+                                        "part_number": "10-28782",
+                                        "recomended": "/newparts/part_search.php?part_num=10-F1822",
+                                        "product": "10-28782 - Screw - Priced Individually",
+                                        "list_price": "<span class=\"strike\">$2.10</span>"
+                                    },
+                                    "product": "10-F1822 - 10-F1822 - SCREW (.312-18 x O"
+                                },
+                                {
+                                    "diagram_number": "17",
+                                    "your_price": "$1.18",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER10-28782",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "10-28782",
+                                    "recomended": "/newparts/part_search.php?part_num=10-F1822",
+                                    "product": "10-28782 - Screw - Priced Individually",
+                                    "list_price": "<span class=\"strike\">$2.10</span>"
+                                },
+                                {
+                                    "diagram_number": "18",
+                                    "part_number": "F8096",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MERF8096&pass_title=F8096+%3A+Replaced+by+13-53166",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "recomended": {
+                                        "diagram_number": "18",
+                                        "your_price": "$1.40",
+                                        "product_image": null,
+                                        "product_url": "/newparts/part_details.php?pnum=MER13-53166",
+                                        "manufacturer": "Mercury Quicksilver",
+                                        "part_number": "13-53166",
+                                        "recomended": "/newparts/part_search.php?part_num=F8096",
+                                        "product": "13-53166 - LockWasher - Priced Individually",
+                                        "list_price": "$1.40"
+                                    },
+                                    "product": "F8096 - F8096 - LOCKWASHER (.312) O"
+                                },
+                                {
+                                    "diagram_number": "18",
+                                    "your_price": "$1.40",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER13-53166",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "13-53166",
+                                    "recomended": "/newparts/part_search.php?part_num=F8096",
+                                    "product": "13-53166 - LockWasher - Priced Individually",
+                                    "list_price": "$1.40"
+                                },
+                                {
+                                    "diagram_number": "19",
+                                    "part_number": "FA663744",
+                                    "product_image": "/parts/images/mercury/FA663744.jpg",
+                                    "product_url": "/newparts/part_details.php?pnum=MERFA663744&pass_title=FA663744+%3A",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "recomended": "/newparts/part_search.php?part_num=FA663744",
+                                    "product": "FA663744 - WIRE KIT O NLA"
+                                },
+                                {
+                                    "diagram_number": "20",
+                                    "your_price": "$24.57",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER87-F660917",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "87-F660917",
+                                    "recomended": {
+                                        "diagram_number": "20",
+                                        "your_price": "$30.41",
+                                        "product_image": null,
+                                        "product_url": "/newparts/part_details.php?pnum=MER87-803632T",
+                                        "manufacturer": "Mercury Quicksilver",
+                                        "part_number": "87-803632T",
+                                        "recomended": {
+                                            "diagram_number": "20",
+                                            "your_price": "$28.68",
+                                            "product_image": "/parts/images/hg/arc/SW295.jpg",
+                                            "product_url": "/newparts/part_details.php?pnum=ARCSW295",
+                                            "manufacturer": "Arco Marine",
+                                            "part_number": "SW295",
+                                            "recomended": {
+                                                "diagram_number": "20",
+                                                "your_price": "$16.10",
+                                                "product_image": "/parts/images/hg/arc/R040.jpg",
+                                                "product_url": "/newparts/part_details.php?pnum=ARCR040",
+                                                "manufacturer": "Arco Marine",
+                                                "part_number": "R040",
+                                                "recomended": "/newparts/part_search.php?part_num=FA663744",
+                                                "product": "R040 - Relay, 876040-7",
+                                                "list_price": "<span class=\"strike\">$18.95</span>"
+                                            },
+                                            "product": "SW295 - Solenoid",
+                                            "list_price": "<span class=\"strike\">$32.95</span>"
+                                        },
+                                        "product": "87-803632T - Relay",
+                                        "list_price": "$30.41"
+                                    },
+                                    "product": "87-F660917 - Relay",
+                                    "list_price": "$24.57"
+                                },
+                                {
+                                    "diagram_number": "20",
+                                    "your_price": "$30.41",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER87-803632T",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "87-803632T",
+                                    "recomended": {
+                                        "diagram_number": "20",
+                                        "your_price": "$28.68",
+                                        "product_image": "/parts/images/hg/arc/SW295.jpg",
+                                        "product_url": "/newparts/part_details.php?pnum=ARCSW295",
+                                        "manufacturer": "Arco Marine",
+                                        "part_number": "SW295",
+                                        "recomended": {
+                                            "diagram_number": "20",
+                                            "your_price": "$16.10",
+                                            "product_image": "/parts/images/hg/arc/R040.jpg",
+                                            "product_url": "/newparts/part_details.php?pnum=ARCR040",
+                                            "manufacturer": "Arco Marine",
+                                            "part_number": "R040",
+                                            "recomended": "/newparts/part_search.php?part_num=FA663744",
+                                            "product": "R040 - Relay, 876040-7",
+                                            "list_price": "<span class=\"strike\">$18.95</span>"
+                                        },
+                                        "product": "SW295 - Solenoid",
+                                        "list_price": "<span class=\"strike\">$32.95</span>"
+                                    },
+                                    "product": "87-803632T - Relay",
+                                    "list_price": "$30.41"
+                                },
+                                {
+                                    "diagram_number": "20",
+                                    "your_price": "$28.68",
+                                    "product_image": "/parts/images/hg/arc/SW295.jpg",
+                                    "product_url": "/newparts/part_details.php?pnum=ARCSW295",
+                                    "manufacturer": "Arco Marine",
+                                    "part_number": "SW295",
+                                    "recomended": {
+                                        "diagram_number": "20",
+                                        "your_price": "$16.10",
+                                        "product_image": "/parts/images/hg/arc/R040.jpg",
+                                        "product_url": "/newparts/part_details.php?pnum=ARCR040",
+                                        "manufacturer": "Arco Marine",
+                                        "part_number": "R040",
+                                        "recomended": "/newparts/part_search.php?part_num=FA663744",
+                                        "product": "R040 - Relay, 876040-7",
+                                        "list_price": "<span class=\"strike\">$18.95</span>"
+                                    },
+                                    "product": "SW295 - Solenoid",
+                                    "list_price": "<span class=\"strike\">$32.95</span>"
+                                },
+                                {
+                                    "diagram_number": "20",
+                                    "your_price": "$16.10",
+                                    "product_image": "/parts/images/hg/arc/R040.jpg",
+                                    "product_url": "/newparts/part_details.php?pnum=ARCR040",
+                                    "manufacturer": "Arco Marine",
+                                    "part_number": "R040",
+                                    "recomended": "/newparts/part_search.php?part_num=FA663744",
+                                    "product": "R040 - Relay, 876040-7",
+                                    "list_price": "<span class=\"strike\">$18.95</span>"
+                                },
+                                {
+                                    "diagram_number": "21",
+                                    "your_price": "$12.50",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER88-F510460",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "88-F510460",
+                                    "recomended": "/newparts/part_search.php?part_num=FA663744",
+                                    "product": "88-F510460 - Circuit Breaker",
+                                    "list_price": "$12.50"
+                                },
+                                {
+                                    "diagram_number": "22",
+                                    "your_price": "$8.75",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MERF91446-2",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "F91446-2",
+                                    "recomended": "/newparts/part_search.php?part_num=FA663744",
+                                    "product": "F91446-2 - Bracket, NLA",
+                                    "list_price": "$8.75"
+                                },
+                                {
+                                    "diagram_number": "23",
+                                    "part_number": "84-F664636",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER84-F664636&pass_title=84-F664636+%3A+Replaced+by+84-819117A+1",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "recomended": {
+                                        "diagram_number": "23",
+                                        "your_price": "$4.00",
+                                        "product_image": null,
+                                        "product_url": "/newparts/part_details.php?pnum=MER84-819117A+1",
+                                        "manufacturer": "Mercury Quicksilver",
+                                        "part_number": "84-819117A",
+                                        "recomended": "/newparts/part_search.php?part_num=84-F664636",
+                                        "product": "84-819117A 1 - Wire Assembly",
+                                        "list_price": "$4.00"
+                                    },
+                                    "product": "84-F664636 - 84-F664636 - WIRE ASSEMBLY O"
+                                },
+                                {
+                                    "diagram_number": "23",
+                                    "your_price": "$4.00",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER84-819117A+1",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "84-819117A",
+                                    "recomended": "/newparts/part_search.php?part_num=84-F664636",
+                                    "product": "84-819117A 1 - Wire Assembly",
+                                    "list_price": "$4.00"
+                                }
+                            ],
+                            "category": "Electrical Components (F5H219 / 5fh219-1 & F5H271) "
+                        },
+                        {
+                            "image": "https://www.marineengine.com/parts/mercury_marine_parts/static/img/FORCE/802562/17.gif",
+                            "category_name": "component",
+                            "category_url": "/parts/force-outboard-parts/force-trim-tilt-3575-hp-19841999/all/pump-motor-assembly-819479a1",
+                            "products": [
+                                {
+                                    "diagram_number": "_",
+                                    "part_number": "819479A",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER819479A+1&pass_title=819479A+1+%3A",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "recomended": {
+                                        "diagram_number": "_",
+                                        "your_price": "$316.19",
+                                        "product_image": "/parts/images/hg/sie/18-6777.jpg",
+                                        "product_url": "/newparts/part_details.php?pnum=SIE18-6777",
+                                        "manufacturer": "Sierra Marine",
+                                        "part_number": "18-6777",
+                                        "recomended": {
+                                            "diagram_number": "_",
+                                            "your_price": "$302.09",
+                                            "product_image": "/parts/images/hg/arc/6276.jpg",
+                                            "product_url": "/newparts/part_details.php?pnum=ARC6276",
+                                            "manufacturer": "Arco Marine",
+                                            "part_number": "6276",
+                                            "recomended": "/newparts/part_search.php?part_num=819479A20%1",
+                                            "product": "6276 - Tilt Trim Motor, 809885A1, A2",
+                                            "list_price": "<span class=\"strike\">$341.95</span>"
+                                        },
+                                        "product": "18-6777 - Tilt & Trim Motor",
+                                        "list_price": "<span class=\"strike\">$371.12</span>"
+                                    },
+                                    "product": "819479A 1 - PUMP/MOTOR ASSEMB O NLA"
+                                },
+                                {
+                                    "diagram_number": "_",
+                                    "your_price": "$316.19",
+                                    "product_image": "/parts/images/hg/sie/18-6777.jpg",
+                                    "product_url": "/newparts/part_details.php?pnum=SIE18-6777",
+                                    "manufacturer": "Sierra Marine",
+                                    "part_number": "18-6777",
+                                    "recomended": {
+                                        "diagram_number": "_",
+                                        "your_price": "$302.09",
+                                        "product_image": "/parts/images/hg/arc/6276.jpg",
+                                        "product_url": "/newparts/part_details.php?pnum=ARC6276",
+                                        "manufacturer": "Arco Marine",
+                                        "part_number": "6276",
+                                        "recomended": "/newparts/part_search.php?part_num=819479A20%1",
+                                        "product": "6276 - Tilt Trim Motor, 809885A1, A2",
+                                        "list_price": "<span class=\"strike\">$341.95</span>"
+                                    },
+                                    "product": "18-6777 - Tilt & Trim Motor",
+                                    "list_price": "<span class=\"strike\">$371.12</span>"
+                                },
+                                {
+                                    "diagram_number": "_",
+                                    "your_price": "$302.09",
+                                    "product_image": "/parts/images/hg/arc/6276.jpg",
+                                    "product_url": "/newparts/part_details.php?pnum=ARC6276",
+                                    "manufacturer": "Arco Marine",
+                                    "part_number": "6276",
+                                    "recomended": "/newparts/part_search.php?part_num=819479A20%1",
+                                    "product": "6276 - Tilt Trim Motor, 809885A1, A2",
+                                    "list_price": "<span class=\"strike\">$341.95</span>"
+                                },
+                                {
+                                    "diagram_number": "1",
+                                    "part_number": "823084",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER823084&pass_title=823084+%3A",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "recomended": "/newparts/part_search.php?part_num=823084",
+                                    "product": "823084 - PUMP KIT O NLA"
+                                },
+                                {
+                                    "diagram_number": "2",
+                                    "your_price": "$220.00",
+                                    "product_image": null,
+                                    "product_url": "/newparts/part_details.php?pnum=MER823083",
+                                    "manufacturer": "Mercury Quicksilver",
+                                    "part_number": "823083",
+                                    "recomended": "/newparts/part_search.php?part_num=823084",
+                                    "product": "823083 - Manifold Kit",
+                                    "list_price": "$220.00"
+                                }
+                            ],
+                            "category": "Pump / Motor Assembly (819479A1) "
+                        }
+                    ],
+                    "category_url": "/parts/force-outboard-parts/force-trim-tilt-3575-hp-19841999/all",
+                    "category": "All Serial Numbers"
+                }
+            ],
+            "category_url": "/parts/force-outboard-parts/force-trim-tilt-3575-hp-19841999",
+            "category": "Force Trim & Tilt 35-75 HP (1984-1999) "
+        }
+    ],
+    "scraping_successful": true,
+    "scraped_date": "2017-12-14"
+}
