@@ -9,79 +9,6 @@ from datetime import date
 from logging.handlers import RotatingFileHandler
 
 
-''' Not in use
-def boatsnet_manufacturers(base_url):
-    page = requests.get(
-        base_url
-    )
-    tree = html.fromstring(page.content)
-    xpath_selector = """/html/body/div[7]/div[1]/div[2]/div/div/div/div/div/div[2]/div/div[1]//
-        *[contains(@class,"manufacturers-thumbs")]/div/div/div/a"""
-
-    return tree.xpath(xpath_selector)
-
-
-def boats_yamaha_scrapper(base_url, scrap_url):
-    page = requests.get(
-        scrap_url
-    )
-    tree = html.fromstring(page.content)
-    xpath_selector = "/html/body/div[7]/div/div/div[2]/div[2]/div/div[2]//div/a"
-    xpath_years_selector = "/html/body/div[7]/div/div/div[2]/div[2]/div[2]//*[contains(@class, 'year-link-container')]/a"
-    # The same selector as the components
-    xpath_hp_selector = "/html/body/div[7]/div/div/div[2]/div[2]/div[2]//*[contains(@class, 'column-result')]/a"
-
-    # Get elemnts of manufaturer
-    for elem in tree.xpath(xpath_selector):
-        src = elem.get('href')
-        print(src)
-        page = requests.get(
-            base_url + src
-        )
-        years_tree = html.fromstring(page.content)
-        # Get element years
-        for year in years_tree.xpath(xpath_years_selector):
-            year_src = (year.get('href'), year.text)
-            print(year_src)
-            page = requests.get(
-                base_url + year_src[0]
-            )
-            hp_tree = html.fromstring(page.content)
-            # Get different Horse power
-            for hp in hp_tree.xpath(xpath_hp_selector):
-                hp_src = hp.get('href')
-                print(hp_src)
-                page = requests.get(
-                    base_url + hp_src
-                )
-                component_tree = html.fromstring(page.content)
-                # Get components
-                for component in component_tree.xpath(xpath_hp_selector):
-                    component_src = (component.get('href'), component.text)
-                    print(component_src)
-
-
-# Scrap categories, years, models and parts from http://www.boats.net/
-def boatsnet_scrapper():
-    base_url = 'http://www.boats.net'
-
-    manufacturers = boatsnet_manufacturers(base_url)
-
-    # Scrap each manufacturer in a custom way
-    for manufacturer in manufacturers:
-        img = manufacturer.xpath('img')[0]
-        provider = img.get('alt').split()[1]
-        img_src = manufacturer.xpath('img')[0].get('src')
-
-        print(provider)
-        print(img_src)
-
-        if provider == "Yamaha":
-            provider_src = base_url + '/parts/search/' + provider + 'parts.html'
-            boats_yamaha_scrapper(base_url, provider_src)
-'''
-
-
 ##################################################################
 ## MARINE ENGINE WEB
 ##################################################################
@@ -129,7 +56,7 @@ def marineengine_mercury_scrapper():
 
         for hp in tree.xpath(xcategory_selector):
             horse_power = {
-                'category_name': 'horse_power',
+                'category_name': 'horse power',
                 'category': re.sub(r'[\n\t]+', '', hp.text),
                 'category_url': hp.get('href'),
                 'sub_category': []
@@ -314,7 +241,7 @@ def marineengine_johnson_evinrude_scrapper():
             # Horse power cycle
             for hp in tree.xpath(xyears_selector):
                 horse_power = {
-                    'category_name': 'horse_power',
+                    'category_name': 'horse power',
                     'category': hp.text,
                     'category_url': hp.get('href'),
                     'sub_category': []
@@ -689,7 +616,7 @@ def marineengine_force_scrapper():
     # Categorys on johnson_evinrude
     for hp in tree.xpath(xpath_selector):
         horse_power = {
-            'category_name': 'horse_power',
+            'category_name': 'horse power',
             'category': hp.text.replace('\n', '').replace('\t', ''),
             'category_url': hp.get('href'),
             'sub_category': []
@@ -1503,6 +1430,137 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                     counter += 1
 
 
+##################################################################
+## BOATS NET
+'''
+Yamaha 
+
+
+Honda Marine
+http://www.boats.net/parts/search/Honda/Outboard%20Engine/parts.html
+
+Suzuki Marine
+http://www.boats.net/parts/search/Suzuki/Outboard/parts.html
+'''
+##################################################################
+def boatsnet_yamaha_scrapper():
+    # Marineengine base url
+    base_url = 'http://www.boats.net'
+    # Categorys scraping
+    page = requests.get(
+        base_url + '/parts/search/Yamaha/Outboard/parts.html'
+    )
+    tree = html.fromstring(page.content)
+
+    xpath_selector = "//*[@class='year-link-container']/a"
+    xhp_selector = "//*[@id='parts-surl-model']/div[position()>1]//div"
+    xcomponents_selector = "//*[@id='parts-surl-component']/div[position()>1]/div/a"
+    ximg_selector = "//*[@id='product-image']"
+    xproduct_selector = "//*[@id='component-list']/div/div/div[2]/ul//li/div"
+    xproduct_img_selector = "//*[@id='main-product-image']/div[2]/ul/li[1]/a/img"
+
+    scrap_date = str(date.today()).replace(' ', '')
+    catalog = {
+        'categories': [],
+        'scraped_date': scrap_date,
+        'scraping_successful': False,
+    }
+
+    counter = 0
+    # Categorys on johnson_evinrude
+    for yr in tree.xpath(xpath_selector):
+        year = {
+            'category_name': 'years',
+            'category': yr.text,
+            'category_url': yr.get('href'),
+            'sub_category': []
+        }
+        catalog['categories'].append(year)
+        # Horse Power scraping
+        page = requests.get(
+            base_url + year['category_url']
+        )
+        tree = html.fromstring(page.content)
+
+        for hp in tree.xpath(xhp_selector):
+            if 'ResultHP' in hp.get('class'):
+                horse_power = {
+                    'category_name': 'horse power',
+                    'category': re.sub(r'[\n\t]+', '', hp.xpath('b')[0].text),
+                    'category_url': hp.xpath('b')[0].get('href'),
+                    'sub_category': []
+                }
+                year['sub_category'].append(horse_power)
+            elif 'result' in hp.get('class'):
+                model = {
+                    'category_name': 'model',
+                    'category': re.sub(r'[\n\t]+', '', hp.xpath('a')[0].text),
+                    'category_url': hp.xpath('a')[0].get('href'),
+                    'sub_category': []
+                }
+                horse_power['sub_category'].append(model)
+                page = requests.get(
+                    base_url + model['category_url']
+                )
+                tree = html.fromstring(page.content)
+
+                for comp in tree.xpath(xcomponents_selector):
+                    component = {
+                        'category_name': 'component',
+                        'category': comp.text,
+                        'category_url': comp.get('href'),
+                        'products': []
+                    }
+                    model['sub_category'].append(component)
+
+                    # Products scraping
+                    page = requests.get(
+                        base_url + component['category_url']
+                    )
+                    #print("component " + component['component_url'])
+
+                    tree = html.fromstring(page.content)
+                    image = None
+                    a = etree.tostring(tree.xpath('//*[@id="diagram"]')[0])
+                    z = re.search(r"xlink:href\", *\"[^\"]*\"", a.decode()).group(0).split(',')
+
+                    if len(z)> 1:
+                        image = re.sub(r'[\ \"]', '', z[1])
+                    
+                    component['image'] = image
+                    count = 0
+                    for prod in tree.xpath(xproduct_selector):
+                        if count == 0:
+                            product = {
+                                "diagram_number": re.sub(r'[\n\t]', '', prod.text),
+                            }
+                            component['products'].append(product)
+                        elif count == 1:
+                            product['product'] = prod.xpath('h2/a')[0].text
+                            product['product_url'] = prod.xpath('h2/a')[0].get('href')
+                            product['part_number'] = prod.xpath('p/a')[0].text
+                        elif count == 2:
+                            product['list_price'] = prod.xpath('div[1]')[0].text
+                            product['your_price'] = prod.xpath('div[2]')[0].text
+                            product['manufacturer'] = "Yamaha"
+                            product['image'] = None
+                            product['recomended'] = None
+                        elif count == 3:
+                            count = -1
+
+                        count += 1
+                        counter += 1
+                        if counter > 100:
+                            catalog['scraping_successful'] = True
+                            print('Finishing Boats Net Yamaha Scraping...\n')
+                            with open('boats_net_yamaha-' + scrap_date + '.json', 'w') as outfile:
+                                json.dump(catalog, outfile, indent=4)
+                                pass
+                            return
+            else:
+                print('Caso especial Yamaha Boats Net.')
+
+
 if __name__ == '__main__':
     print('Started scraping.')
     print('Ignoring some manuals...')
@@ -1512,38 +1570,46 @@ if __name__ == '__main__':
     ##########################################################
     print('\nMarine Engine web scrapping.')
     print('Starting Marine Engine Mercury Scraping...')
-    marineengine_mercury_scrapper()
+    #marineengine_mercury_scrapper()
 
     print('\nStarting Marine Engine Mercruiser Scraping...')
-    marineengine_mercruiser_scrapper()
+    #marineengine_mercruiser_scrapper()
     
     print('\nStarting Marine Engine Johnson & Evinrude Scraping...')
-    marineengine_johnson_evinrude_scrapper()
+    #marineengine_johnson_evinrude_scrapper()
 
     print('\nStarting Marine Engine Force scraping...')
-    marineengine_force_scrapper()
+    #marineengine_force_scrapper()
 
     print('\nStarting Marine Engine Mariner scraping...')
-    marineengine_mariner_scrapper()
+    #marineengine_mariner_scrapper()
 
     print('\nStarting Marine Engine OMC Sterndrive scraping...')
-    marineengine_omc_sterndrive_scrapper()
+    #marineengine_omc_sterndrive_scrapper()
+
+    print('\nFinished Marine Engine Scraping')
 
     ###########################################################
     ### MARINE EXPRESS ########################################
     ###########################################################
     print('\nMarine Parts Express web scrapping.')
     print('Starting Marine Express Chrysler Marine Scraping...')
-    marinepartsexpress_chrysler_marine_scrapper()
+    #marinepartsexpress_chrysler_marine_scrapper()
 
     print('\nStarting Marine Express Crusader Scraping...')
-    marinepartsexpress_crusader_scrapper()
+    #marinepartsexpress_crusader_scrapper()
 
     print('\nStarting Marine Express Volvo Penta Marine Scraping...')
-    marinepartsexpress_volvo_penta_marine_scrapper()
+    #marinepartsexpress_volvo_penta_marine_scrapper()
+
+    print('\nFinished Marine Parts Express Scraping')
 
     ##########################################################
-    ### BOATS ########################################
+    ### BOATS NET  ###########################################
     ##########################################################
+    print('\nBoats Net scrapping.')
+    print('Starting Boats Net Yamaha Scraping...')
+    boatsnet_yamaha_scrapper()
 
+    print('\nFinished Boats Net Scraping')
     print('\nFinished scraping.')
