@@ -4,8 +4,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from django.conf.urls import url
 
-from haystack.views import SearchView
+from haystack.views import FacetedSearchView, SearchView
 
 urlpatterns = [
-    url(r'^$', SearchView(), name='haystack_search'),
+    url(r'^$', FacetedSearchView(), name='haystack_search'),
 ]
