@@ -38,3 +38,7 @@ Light Gray: #e6e6e6;
 form{
     margin-bottom: 0px;
 }
+
+#language_selector select {
+    width: 135px;
+}

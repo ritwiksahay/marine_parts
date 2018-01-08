@@ -1,6 +1,6 @@
 # encoding: utf-8
-
 from __future__ import absolute_import, division, print_function, unicode_literals
+import json
 
 from django.conf import settings
 from django.core.paginator import InvalidPage, Paginator
@@ -9,6 +9,8 @@ from django.shortcuts import render
 
 from haystack.forms import FacetedSearchForm, ModelSearchForm
 from haystack.query import EmptySearchQuerySet
+
+from oscar.apps.catalogue.models import Category
 
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
@@ -122,7 +124,14 @@ class SearchView(object):
 
         Must return a dictionary.
         """
-        return {}
+        args = ','.join(self.request.GET.getlist('var'))
+        print(args)
+        categories = self.categories_json()
+        extra_context = {
+            'categories_json': categories,
+            'url_args': args
+        }
+        return extra_context
 
     def get_context(self):
         (paginator, page) = self.build_page()
@@ -150,6 +159,32 @@ class SearchView(object):
         context = self.get_context()
 
         return render(self.request, self.template, context)
+
+    def categories_json(self):
+        forest = {'trees': []}
+
+        for root in Category.get_root_nodes():
+            stack1 = []
+            stack2 = []
+            salida = {}
+            stack1.append(root)
+            stack2.append((salida, None))
+
+            while stack1:
+                child = stack1.pop()
+                h, p = stack2.pop()
+                h['id'] = child.id
+                h['name'] = child.name
+                h['children'] = []
+
+                if p:
+                    p['children'].append(h.copy())
+
+                for childs in child.get_children():
+                    stack1.append(childs)
+                    stack2.append(({}, h))
+            forest['trees'].append(salida)
+        return json.dumps(forest)
 
 
 def search_view_factory(view_class=SearchView, *args, **kwargs):

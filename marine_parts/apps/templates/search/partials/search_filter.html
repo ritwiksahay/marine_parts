@@ -4,9 +4,8 @@
 <h3 class="filter-title text-center">
     {% trans "Refine Search"|upper %}
 </h3>
-<form method="get" action="{% url 'search:search' %}" class="filter-form form-horizontal col-lg-12 col-md-12">
-
-    <div class="form-group text-center">
+<form method="get" action="{% url 'search:search' %}" class="filter-form form-horizontal col-lg-12 col-md-12" id="categories_form">
+    <div class="form-group text-center" id="search_field">
         {% render_field search_form.q label='' placeholder='Keywords or part number' class+="search-field" %}
     </div>
     <div class="form-group text-center">
@@ -15,7 +14,3 @@
         </button>
     </div>
 </form>
-
-<script>
-    
-</script>

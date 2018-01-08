@@ -64,7 +64,7 @@
             <div>
                 <ol class="row">
                     {% for result in page.object_list %}
-                        <li class="col-xs-6 col-sm-4 col-md-3 col-lg-3">{% render_product result.object %}</li>
+                        <li class="col-xs-6 col-sm-4 col-md-4 col-lg-4">{% render_product result.object %}</li>
                     {% endfor %}
                 </ol>
                 {% include "partials/pagination.html" with page_obj=page %}
@@ -78,3 +78,81 @@
     {{ block.super }}
     oscar.search.init();
 {% endblock %}
+
+{% block extrascripts %}
+    <script>
+        var results = [];
+        var index = 0;
+        var params = '{{url_args}}'.split(',');
+        var categories = jQuery.parseJSON('{{categories_json|safe}}');
+        categories = categories['trees'];
+        
+        /*Initial form values*/
+        var append_value = '<div class="form-group text-center"><select class="form-control" name="var" id="var"><option value="0">-- {% trans "Select Category" %} --</option>';
+        
+        $.each(categories, function(key, value){
+            init_search_form(value, '#categories_form');
+        });
+        
+        append_value += '</select></div>';
+        $('#categories_form').prepend(
+            append_value
+        );
+
+        /*Function to initialize the form*/
+        function init_search_form(value){
+            append_value += '<option value="'+ value['id'] + '"';
+            
+            if($.inArray(value['id'].toString(), params) >= 0){
+                append_value +='selected >' + value['name'] + '</option>';
+            }
+            else
+            {
+                append_value +='>' + value['name'] + '</option>';
+            }
+        }
+
+        /*Searchs for the selected values in the tree*/
+        function search(dictionary, values){
+            $.each(dictionary, function(key, value){
+                if (values[index] == value['id']){
+                    index++;
+                    results.push([value['id'], value['name'], value['children']]);
+                    search(value['children'], values);
+                }
+            });
+            return results
+        }
+
+        /*Generates the select fields dinamically*/
+        function generate_fields(values){
+
+            for(var i=0; i < values.length; i++){
+                var append_value = '<div class="form-group text-center"><select class="form-control" name="var" id="var"><option value="0">-- {% trans "Select Category" %} --</option>';
+                children = values[i][2];
+
+                if(!$.isEmptyObject(children))
+                {
+                    for(var j=0; j < children.length; j++){
+                        if($.inArray(children[j].id.toString(), params) >= 0)
+                        {
+                            append_value += '<option value="' + children[j].id + '" selected>' + children[j].name + '</option>';
+                        }
+                        else
+                        {
+                            append_value += '<option value="' + children[j].id + '">' + children[j].name + '</option>';
+                        }
+                    }
+                    append_value += '</select></div>';
+                    $('#search_field').before(append_value);
+                }
+            }
+        }
+
+        /*Instructions to catch the results*/    
+        results = search(categories, params);
+        if(results!=''){
+            generate_fields(results);
+        }
+    </script>
+{% endblock extrascripts %}
