@@ -33,6 +33,10 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+FIXTURES_DIRS = (
+    'marine_parts.apps.users.fixtures',
+)
+
 THIRD_PARTY_APPS = [
     'bootstrap_admin',
     'safedelete',
