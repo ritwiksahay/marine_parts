@@ -100,9 +100,21 @@ AUTHENTICATION_BACKENDS = (
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://127.0.0.1:8983/solr/prueba_parts',
+        'ADMIN_URL': 'http://127.0.0.1:8983/solr/',
+        'INCLUDE_SPELLING': True,
     },
 }
+
+OSCAR_SEARCH_FACETS = {
+    'fields': OrderedDict([
+    ]),
+    'queries': OrderedDict([
+
+    ]),
+}
+
 
 TEMPLATES = [
     {
@@ -121,6 +133,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
                 # Oscar templates
+                'haystack.context_processors.categories_json',
                 'oscar.apps.search.context_processors.search_form',
                 'oscar.apps.promotions.context_processors.promotions',
                 'oscar.apps.checkout.context_processors.checkout',
@@ -140,13 +153,12 @@ WSGI_APPLICATION = 'marine_parts.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'marine_parts_db',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
         'PORT': '',
-        'ATOMIC_REQUESTS': True,
     }
 }
 
@@ -214,7 +226,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = location('static/')
+STATIC_ROOT = location('../static/')
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -224,4 +236,4 @@ STATICFILES_DIRS = (
 )
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = location('media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, '../media/')

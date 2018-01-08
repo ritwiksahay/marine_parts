@@ -1,0 +1,25 @@
+{
+    "categories": [
+        {
+            "category": "category1",
+            "horse_powers": [
+                {
+                    "horse_power": "HP1 ",
+                    "serial_ranges": [
+                        {
+                            "serial_range": "serial1",
+                            "components": [
+                                {
+                                    "component": "component1",
+                                },
+                                {
+                                    "component": "component2",
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

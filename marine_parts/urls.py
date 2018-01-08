@@ -38,16 +38,15 @@ urlpatterns = [
     ),
     # The Django admin is not officially supported; expect breakage.
     # Nonetheless, it's often useful for debugging.
-    url(
-        r'^admin/',
-        include(admin.site.urls)
-    ),
 
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^search/', include('haystack.urls')),
     url(
         r'^',
         include(application.urls)
     ),
 ]
 
-urlpatterns = urlpatterns + static(
+urlpatterns += static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
