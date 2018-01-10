@@ -34,6 +34,11 @@ Light Gray: #e6e6e6;
     src: url('fonts/neo-latina.ttf');
 }
 
+@font-face{
+    font-family: 'Ico Moon';
+    src: url('fonts/icomoon.ttf');
+}
+
 /*General styles*/
 form{
     margin-bottom: 0px;
@@ -41,4 +46,46 @@ form{
 
 #language_selector select {
     width: 135px;
+}
+
+/*Custom Bootstrap*/
+.col-xs-5ths,
+.col-sm-5ths,
+.col-md-5ths,
+.col-lg-5ths {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.col-xs-5ths {
+    width: 20%;
+    float: left;
+}
+
+@media (min-width: 768px) {
+    .col-sm-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-md-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-lg-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
 }

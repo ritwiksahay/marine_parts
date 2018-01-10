@@ -45,7 +45,7 @@ THIRD_PARTY_APPS = [
 
 SYSTEM_APPS = [
     'marine_parts.apps.users',
-    'marine_parts.apps.authorize'
+    'marine_parts.apps.authorize',
 ]
 
 DJANGO_APPS = [
@@ -60,10 +60,16 @@ DJANGO_APPS = [
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + SYSTEM_APPS \
-    + get_core_apps()
+    + get_core_apps([
+        'marine_parts.apps.promotions',
+    ])
 
 AUTH_USER_MODEL = 'users.User'
 
+"""
+Oscar shop settings
+"""
+OSCAR_SHOP_NAME = 'Marine Parts'
 
 # Order processing
 OSCAR_INITIAL_ORDER_STATUS = 'Pending'
@@ -73,7 +79,6 @@ OSCAR_ORDER_STATUS_PIPELINE = {
     'Being processed': ('Processed', 'Cancelled',),
     'Cancelled': (),
 }
-
 
 SITE_ID = 1
 
@@ -133,7 +138,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
                 # Oscar templates
-                'haystack.context_processors.categories_json',
                 'oscar.apps.search.context_processors.search_form',
                 'oscar.apps.promotions.context_processors.promotions',
                 'oscar.apps.checkout.context_processors.checkout',
@@ -161,7 +165,6 @@ DATABASES = {
         'PORT': '',
     }
 }
-
 
 # Google Ads
 ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  #OPTIONAL-DEFAULT TO None

@@ -1,0 +1,101 @@
+/*
+Header style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #274164;
+Light Blue: #25ACCB;
+Light Gray: #e6e6e6;
+
+*/
+
+.page_inner{
+    padding: 0px;
+    background-color: #e6e6e6 !important;
+}
+
+.brands{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.brands-title{
+    font-family: 'Magneto';
+    font-size: 40px;
+    color: #FFFFFF;
+}
+
+.best-sellers{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-left: 0px;
+    margin-right: 0px;
+    font-family: 'Gotham Bold';
+    border-bottom: 1.8px solid #274164;
+    background-color: #FFFFFF;
+}
+
+.best-sellers-title{
+    font-family: 'Magneto';
+    font-size: 36px;
+    color: #274164;
+}
+
+.best-sellers div div .row .category{
+    padding-left: 35px;
+    padding-right: 35px;
+}
+
+.best-sellers div div .row .bordered{
+    border-left: 1px solid #25ACCB;
+}
+
+.categories{
+    padding-top: 15px;
+    margin-left: 0px;
+    margin-right: 0px;
+    font-family: 'Gotham Bold';
+    color: #274164;
+}
+
+.categories-title{
+    font-family: 'Magneto';
+    font-size: 36px;
+    color: #274164;
+}
+
+.categories div .row div.category{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top: 1px solid #274164;
+}
+
+.categories div .row div.bordered{
+    border-right: 1px solid #274164;
+}
+
+.categories div .row div img.category-icon{
+    width: 42px;
+    display: inline-block;
+}
+
+.categories div .row div a:hover{
+    color: #274164;
+}
+
+.categories div .row div a{
+    color: #274164;
+    text-decoration: none;
+}
+
+.categories div .row div a p{
+    display: inline-block;
+    width: 75%;
+    text-align: center;
+}

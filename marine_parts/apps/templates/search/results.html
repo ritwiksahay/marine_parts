@@ -9,10 +9,6 @@
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
 {% endblock extrastyles %}
 
-{% block title %}
-    "{{ query }}" | {{ block.super }}
-{% endblock %}
-
 {% block column_left %}
     {% include 'search/partials/search_filter.html' with name=data.name items=data.results %}
 {% endblock %}
@@ -48,7 +44,7 @@
             -->
         {% else %}
             <p>
-                {% trans "Found <strong>0</strong> results." %}
+                {% trans "Found" %} <strong>0</strong> {% trans "results" %}.
                 {% if suggestion %}
                     {% url 'search:search' as search_url %}
                     {% blocktrans %}
