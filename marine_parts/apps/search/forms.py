@@ -29,7 +29,17 @@ for facet in settings.OSCAR_SEARCH_FACETS['queries'].values():
     VALID_FACET_QUERIES[field_name].extend(queries)
 
 
-class SearchForm(FacetedSearchForm):
+class BrowseCategoryForm(FacetedSearchForm):
+    """
+    Variant of SearchForm that returns all products (instead of none) if no
+    query is specified.
+    """
+
+    def no_query_found(self):
+        return self.searchqueryset
+
+
+class SearchForm(BrowseCategoryForm):
     """
     In Haystack, the search form is used for interpreting
     and sub-filtering the SQS.
@@ -93,8 +103,10 @@ class SearchForm(FacetedSearchForm):
         selected_multi_facets = defaultdict(list)
 
         for facet_kv in self.selected_facets:
+
             if ":" not in facet_kv:
                 continue
+
             field_name, value = facet_kv.split(':', 1)
 
             # Validate query facets as they as passed unescaped to Solr
@@ -116,19 +128,24 @@ class SearchForm(FacetedSearchForm):
 
         # We need to process each facet to ensure that the field name and the
         # value are quoted correctly and separately:
+
         for field, values in self.selected_multi_facets.items():
             if not values:
                 continue
+
             if field in VALID_FACET_QUERIES:
+
                 # Query facet - don't wrap value in speech marks and don't
                 # clean value. Query values should have been validated by this
                 # point and so we don't need to escape them.
                 sqs = sqs.narrow(u'%s:(%s)' % (
                     field, " OR ".join(values)))
             else:
+
                 # Field facet - clean and quote the values
                 clean_values = [
                     '"%s"' % sqs.query.clean(val) for val in values]
+
                 sqs = sqs.narrow(u'%s:(%s)' % (
                     field, " OR ".join(clean_values)))
 
@@ -139,13 +156,3 @@ class SearchForm(FacetedSearchForm):
                 sqs = sqs.order_by(sort_field)
 
         return sqs
-
-
-class BrowseCategoryForm(SearchForm):
-    """
-    Variant of SearchForm that returns all products (instead of none) if no
-    query is specified.
-    """
-
-    def no_query_found(self):
-        return self.searchqueryset

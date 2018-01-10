@@ -168,7 +168,7 @@ class SearchHandler(object):
     def get_facet_munger(self):
         return FacetMunger(
             self.full_path,
-            self.search_form.selected_multi_facets,
+            {},
             self.results.facet_counts())
 
     def get_search_context_data(self, context_object_name=None):
