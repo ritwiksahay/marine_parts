@@ -1,1 +1,1 @@
-default_app_config = 'oscar.apps.search.config.SearchConfig'
+default_app_config = 'marine_parts.apps.search.config.SearchConfig'

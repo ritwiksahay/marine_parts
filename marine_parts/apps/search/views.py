@@ -59,7 +59,8 @@ class FacetedSearchView(views.FacetedSearchView):
 
         # Pass list of selected facets so they can be included in the sorting
         # form.
-        extra['selected_facets'] = self.request.GET.getlist('selected_facets')
+
+        extra['selected_facets'] = self.request.GET.getlist('var')
 
         return extra
 

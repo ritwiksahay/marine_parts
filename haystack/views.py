@@ -125,7 +125,6 @@ class SearchView(object):
         Must return a dictionary.
         """
         args = ','.join(self.request.GET.getlist('var'))
-        print(args)
         categories = self.categories_json()
         extra_context = {
             'categories_json': categories,
@@ -174,7 +173,8 @@ class SearchView(object):
                 child = stack1.pop()
                 h, p = stack2.pop()
                 h['id'] = child.id
-                h['name'] = child.name
+                h['name'] = child.name,
+                h['full_name'] = child.full_name,
                 h['children'] = []
 
                 if p:
@@ -207,7 +207,11 @@ class FacetedSearchView(SearchView):
 
         # This way the form can always receive a list containing zero or more
         # facet expressions:
-        form_kwargs['selected_facets'] = self.request.GET.getlist("selected_facets")
+        vars_list = self.request.GET.getlist("var");
+
+        vars_list = [var for var in vars_list if var != '0']
+
+        form_kwargs['selected_facets'] = vars_list[-1:]
 
         return super(FacetedSearchView, self).build_form(form_kwargs)
 

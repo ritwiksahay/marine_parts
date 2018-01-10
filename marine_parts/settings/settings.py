@@ -45,11 +45,12 @@ THIRD_PARTY_APPS = [
     'django_countries',
     'widget_tweaks',
     'ads',
+    'marine_parts.apps.search',
 ]
 
 SYSTEM_APPS = [
     'marine_parts.apps.users',
-    'marine_parts.apps.authorize'
+    'marine_parts.apps.authorize',
 ]
 
 DJANGO_APPS = [
@@ -108,9 +109,9 @@ HAYSTACK_CONNECTIONS = {
         'URL': 'http://127.0.0.1:8983/solr/prueba_parts',
         'ADMIN_URL': 'http://127.0.0.1:8983/solr/',
         'INCLUDE_SPELLING': True,
+        'EXCLUDED_INDEXES': ['oscar.apps.search.search_indexes.ProductIndex'],
     },
 }
-
 OSCAR_SEARCH_FACETS = {
     'fields': OrderedDict([
     ]),
