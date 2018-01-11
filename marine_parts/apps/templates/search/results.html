@@ -35,11 +35,7 @@
                     Found <strong>{{ num_results }}</strong> results, showing <strong>{{ start }}</strong> to <strong>{{ end }}</strong>.
                 {% endblocktrans %}
             {% else %}
-                {% blocktrans count num_results=paginator.count %}
-                    Found <strong>{{ num_results }}</strong> result.
-                {% plural %}
-                    Found <strong>{{ num_results }}</strong> results.
-                {% endblocktrans %}
+                {% blocktrans with num_results=paginator.count %}Found <strong>{{ num_results }}</strong> results.{% endblocktrans %}
             {% endif %}
             <!--
             <div class="pull-right">

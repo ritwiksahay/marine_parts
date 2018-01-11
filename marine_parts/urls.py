@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.conf.urls import include, url
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from oscar.app import application
 from marine_parts.apps.authorize import views
@@ -41,11 +42,14 @@ urlpatterns = [
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^search/', include('haystack.urls')),
-    url(
-        r'^',
-        include(application.urls)
-    ),
 ]
+
+# Prefix Oscar URLs with language codes
+urlpatterns += i18n_patterns(
+    # Oscar's normal URLs
+    url(r'^', application.urls),
+)
+
 
 urlpatterns += static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT)
