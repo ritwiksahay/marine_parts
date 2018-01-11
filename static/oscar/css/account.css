@@ -4,14 +4,14 @@ Marine Parts Colors:
 
 Deep Blue: #11274F;
 Mid Blue: #0d4a6c;
-Light Blue: #25ACCB;
+Light Blue: #04a0d3;
 Light Gray: #e6e6e6;
 
 */
 
 /*Breadcrum*/
 .breadcrumb{
-    background-color: #25ACCB;
+    background-color: #04a0d3;
     border-radius: 0px;
 }
 
@@ -37,13 +37,13 @@ Light Gray: #e6e6e6;
 }
 
 .nav-pills li.active a{
-    background-color: #25ACCB;
+    background-color: #04a0d3;
     border-radius: 0px;
 }
 
 /*Page header*/
 .page-header{
-    border-bottom: 1px solid #25ACCB;
+    border-bottom: 1px solid #04a0d3;
 }
 
 .page-header h1{

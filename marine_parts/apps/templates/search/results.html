@@ -7,6 +7,7 @@
 
 {% block extrastyles %}
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/search/customer-service.css" %}" />
 {% endblock extrastyles %}
 
 {% block column_left %}
@@ -67,8 +68,11 @@
             </div>
         </section>
     {% endif %}
-    {% include "partials/customer_service.html" %}
 {% endblock %}
+
+{% block bottom %}
+    {% include "partials/customer_service.html" %}
+{% endblock bottom %}
 
 {% block onbodyload %}
     {{ block.super }}

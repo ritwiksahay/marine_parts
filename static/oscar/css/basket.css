@@ -4,7 +4,7 @@ Marine Parts Colors:
 
 Deep Blue: #11274F;
 Mid Blue: #0d4a6c;
-Light Blue: #25ACCB;
+Light Blue: #04a0d3;
 Light Gray: #e6e6e6;
 
 */
@@ -65,7 +65,7 @@ Light Gray: #e6e6e6;
 
 .basket-items div p.price_color,
 .basket-items div p.availability{
-    color: #25ACCB;
+    color: #04a0d3;
 }
 
 .basket-items div .checkout-quantity div .quantity{
@@ -103,13 +103,13 @@ Light Gray: #e6e6e6;
 .table-condensed tr th.total,
 .table-condensed tr td.total{
     background-color: #FFFFFF !important;
-    border-bottom: 1px solid #25ACCB;
-    border-top: 1px solid #25ACCB;
-    color: #25ACCB;
+    border-bottom: 1px solid #04a0d3;
+    border-top: 1px solid #04a0d3;
+    color: #04a0d3;
 }
 
 .table-condensed tr td.total .price_color{
-    color: #25ACCB;
+    color: #04a0d3;
 }
 
 .checkout-button a{
