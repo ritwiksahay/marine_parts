@@ -21,44 +21,44 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
                 <a href="#">
                     <img class="img-responsive" src="{% static 'img/brands/volvo-penta.png'%}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
                 <a href="#">
                     <img class="img-responsive" src="{% static 'img/brands/evinrude.png'%}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
                 <a href="#">
                     <img class="img-responsive" src="{% static 'img/brands/crusader.png'%}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
                 <a href="#">
-                    <img class="img-responsive" src="{% static 'img/brands/mercury.png'%}" alt="">
+                    <img class="img-responsive" src="{% static 'img/brands/mercury-logo.png'%}" alt="">
                 </a>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
                 <a href="#">
-                    <img class="img-responsive" src="{% static 'img/brands/mercruiser.png'%}" alt="">
+                    <img class="img-responsive" src="{% static 'img/brands/mercruiser-logo.png'%}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
                 <a href="#">
                     <img class="img-responsive" src="{% static 'img/brands/chrysler.png'%}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
                 <a href="#">
                     <img class="img-responsive" src="{% static 'img/brands/suzuki.png'%}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
                 <a href="#">
                     <img class="img-responsive" src="{% static 'img/brands/yamaha.png'%}" alt="">
                 </a>
@@ -80,7 +80,7 @@
                 {%for best_seller in best_sellers%}
                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 category {%if not forloop.first%}bordered{%endif%}">
                         <a href="{{best_seller.get_absolute_url}}">
-                            <img class="img-responsive" src="{{ best_seller.image.url }}" alt="">
+                            <img class="img-responsive" src="{{ best_seller.image.url }}" alt="{{ best_seller.name }}">
                             <p class="text-center">
                                 {{best_seller.name|upper}}
                             </p>
@@ -103,7 +103,7 @@
         <div class="row">
             {% for category in categories %}
                 <div class="category {%if not forloop.counter|divisibleby:5%} bordered {%endif%} col-lg-5ths col-md-5ths col-sm-3 col-xs-3">
-                    <a href="#">
+                    <a href="{{category.get_absolute_url}}">
                         <img class="img-responsive category-icon" src="{%if category.image%}{{ category.image.url }}{%endif%}" alt="{{category.name}}">
                         <p class="">
                             {{category.name}}

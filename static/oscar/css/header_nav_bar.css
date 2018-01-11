@@ -3,7 +3,7 @@ Header style sheet file
 Marine Parts Colors:
 
 Deep Blue: #11274F;
-Mid Blue: #274164;
+Mid Blue: #0d4a6c;
 Light Blue: #25ACCB;
 Light Gray: #e6e6e6;
 
@@ -24,7 +24,7 @@ Light Gray: #e6e6e6;
 
 .logo-brand .brand{
     border-right-style: solid;
-    border-right-color: #274164;
+    border-right-color: #0d4a6c;
     border-right-width: 2px;
     padding-right: 15px;
     padding-top: 0px;
@@ -44,7 +44,7 @@ Light Gray: #e6e6e6;
 
 .header .navbar-nav a{
     font-family: "Gotham Book";
-    color: #274164;
+    color: #0d4a6c;
     font-size: 18px;
 }
 

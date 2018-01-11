@@ -3,7 +3,7 @@ Header style sheet file
 Marine Parts Colors:
 
 Deep Blue: #11274F;
-Mid Blue: #274164;
+Mid Blue: #0d4a6c;
 Light Blue: #25ACCB;
 Light Gray: #e6e6e6;
 
@@ -15,18 +15,24 @@ Light Gray: #e6e6e6;
 }
 
 .brands{
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     padding-left: 30px;
     padding-right: 30px;
     margin-left: 0px;
     margin-right: 0px;
+    background-image: url('img/brands-home.jpg')
 }
 
 .brands-title{
     font-family: 'Magneto';
     font-size: 40px;
     color: #FFFFFF;
+    margin-bottom: 0px;
+}
+
+.brands div .row .brand{
+    padding: 12px 25px 12px 25px;
 }
 
 .best-sellers{
@@ -37,14 +43,14 @@ Light Gray: #e6e6e6;
     margin-left: 0px;
     margin-right: 0px;
     font-family: 'Gotham Bold';
-    border-bottom: 1.8px solid #274164;
+    border-bottom: 1.8px solid #0d4a6c;
     background-color: #FFFFFF;
 }
 
 .best-sellers-title{
     font-family: 'Magneto';
     font-size: 36px;
-    color: #274164;
+    color: #0d4a6c;
 }
 
 .best-sellers div div .row .category{
@@ -61,23 +67,23 @@ Light Gray: #e6e6e6;
     margin-left: 0px;
     margin-right: 0px;
     font-family: 'Gotham Bold';
-    color: #274164;
+    color: #0d4a6c;
 }
 
 .categories-title{
     font-family: 'Magneto';
     font-size: 36px;
-    color: #274164;
+    color: #0d4a6c;
 }
 
 .categories div .row div.category{
     padding-top: 15px;
     padding-bottom: 15px;
-    border-top: 1px solid #274164;
+    border-top: 1px solid #0d4a6c;
 }
 
 .categories div .row div.bordered{
-    border-right: 1px solid #274164;
+    border-right: 1px solid #0d4a6c;
 }
 
 .categories div .row div img.category-icon{
@@ -86,11 +92,11 @@ Light Gray: #e6e6e6;
 }
 
 .categories div .row div a:hover{
-    color: #274164;
+    color: #0d4a6c;
 }
 
 .categories div .row div a{
-    color: #274164;
+    color: #0d4a6c;
     text-decoration: none;
 }
 

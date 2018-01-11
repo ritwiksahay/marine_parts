@@ -92,19 +92,21 @@
                             {% if num_unread_notifications > 0 %}
                                 {# If user has new notifications - we change account link to go to inbox #}
                                 <a href="{% url 'customer:notifications-inbox' %}">
-                                    <i class="icon-user"></i>
+                                    <span class="icon icon-user"></span>
                                     <span class="label label-important">{{ num_unread_notifications }}</span>
                                 </a>
                             {% else %}
-                                <a href="{% url 'customer:summary' %}"><i class="icon-user"></i></a>
+                                <a href="{% url 'customer:summary' %}">
+                                    <span class="icon icon-user"></span>
+                                </a>
                             {% endif %}
                         {% else %}
                             <a id="login_link" href="{% url 'customer:login' %}">
-                                <i class="icon-user"></i>
+                                <span class="icon icon-user"></span>
                             </a>
                         {% endif %}
                         <a href="{% url 'basket:summary' %}">
-                            <i class="icon-shopping-cart"></i>
+                            <span class="icon icon-cart"></span>
                             {% if not request.basket.is_empty %}
                                 {{request.basket.num_items}}
                             {% endif %}

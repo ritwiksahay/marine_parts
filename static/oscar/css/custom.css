@@ -3,7 +3,7 @@ Custom style sheet file
 Marine Parts Colors:
 
 Deep Blue: #11274F;
-Mid Blue: #274164;
+Mid Blue: #0d4a6c;
 Light Blue: #25ACCB;
 Light Gray: #e6e6e6;
 
@@ -21,8 +21,8 @@ Light Gray: #e6e6e6;
 
 .btn-danger{
     color: #25ACCB;
-    background-color: #274164;
-    border-color: #274164;
+    background-color: #0d4a6c;
+    border-color: #0d4a6c;
 }
 
 .table-bordered{

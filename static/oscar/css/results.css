@@ -3,7 +3,7 @@ Header style sheet file
 Marine Parts Colors:
 
 Deep Blue: #11274F;
-Mid Blue: #274164;
+Mid Blue: #0d4a6c;
 Light Blue: #25ACCB;
 Light Gray: #E6E6E6;
 
@@ -11,7 +11,7 @@ Light Gray: #E6E6E6;
 
 .filter-title{
     font-family: 'Gotham Bold';
-    color: #274164;
+    color: #0d4a6c;
 }
 
 .page_inner{
@@ -29,7 +29,7 @@ Light Gray: #E6E6E6;
 }
 
 .page_inner div .content{
-    background-color: #274164;
+    background-color: #0d4a6c;
     color: #FFFFFF;
 }
 
