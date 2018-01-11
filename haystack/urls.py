@@ -6,6 +6,13 @@ from django.conf.urls import url
 
 from haystack.views import SearchView
 
+from marine_parts.apps.search.views import FacetedSearchView
+from marine_parts.apps.search.forms import SearchForm
+
+from haystack.query import SearchQuerySet
+
 urlpatterns = [
-    url(r'^$', SearchView(), name='haystack_search'),
+    url(r'^$', FacetedSearchView(form_class=SearchForm), name='haystack_search'),
+
 ]
+
