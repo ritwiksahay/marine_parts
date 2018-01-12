@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-import requests
-import json
-import re
-import copy
+import requests, json, re, copy, os
 
+from urllib import parse
 from lxml import html, etree
 from datetime import date
 from logging.handlers import RotatingFileHandler
@@ -99,12 +97,17 @@ def marineengine_mercury_scrapper():
                     #print("component " + component['component_url'])
 
                     tree = html.fromstring(page.content)
-                    image = None
+                    component_image = None
 
                     if(len(tree.xpath(ximg_selector)) > 0):
-                        image = tree.xpath(ximg_selector)[0].get('src')
+                        component_image = tree.xpath(ximg_selector)[0].get('src')
+
+                    if component_image:
+                        r = requests.get(component_image, stream=True)
+                        save_downloaded_file('img/marine_engine/mercury/'+ component_image.split('/')[-1], r)
+                        component_image = 'img/marine_engine/mercury/'+ component_image.split('/')[-1]
                     
-                    component['image'] = image
+                    component['image'] = component_image
 
                     # products cycle
                     diag_number = -1
@@ -130,6 +133,13 @@ def marineengine_mercury_scrapper():
 
                             if(len(tree.xpath(xproduct_img_selector)) > 0):
                                 prod_image = tree.xpath(xproduct_img_selector)[0].get('src')
+
+                            if prod_image and 'noimage' not in prod_image:
+                                r = requests.get(base_url + prod_image, stream=True)
+                                save_downloaded_file('img/marine_engine/mercury/'+ prod_image.split('/')[-1], r)
+                                prod_image = 'img/marine_engine/mercury/'+ prod_image.split('/')[-1]
+                            else:
+                                prod_image = None
 
                             product['product_image'] = prod_image
 
@@ -285,6 +295,11 @@ def marineengine_johnson_evinrude_scrapper():
                         if(len(tree.xpath(xcomponent_img_selector)) > 0):
                             component_image = tree.xpath(xcomponent_img_selector)[0].get('src')
 
+                        if component_image:
+                            r = requests.get(base_url + component_image, stream=True)
+                            save_downloaded_file('img/marine_engine/j&e/'+ component_image.split('/')[-1], r)
+                            component_image = 'img/marine_engine/j&e/'+ component_image.split('/')[-1]
+
                         component['image'] = component_image
 
                         diag_number = -1
@@ -321,6 +336,13 @@ def marineengine_johnson_evinrude_scrapper():
 
                                     if(len(tree.xpath(xproduct_img_selector)) > 0):
                                         prod_image = tree.xpath(xproduct_img_selector)[0].get('src')
+
+                                    if prod_image and 'noimage' not in prod_image:
+                                        r = requests.get(base_url + prod_image, stream=True)
+                                        save_downloaded_file('img/marine_engine/j&e/'+ prod_image.split('/')[-1], r)
+                                        prod_image = 'img/marine_engine/j&e/'+ prod_image.split('/')[-1]
+                                    else:
+                                        prod_image = None
 
                                     product['product_image'] = prod_image
 
@@ -503,6 +525,11 @@ def marineengine_mercruiser_scrapper():
                     if(len(tree.xpath(xcomponent_img_selector)) > 0):
                         component_image = tree.xpath(xcomponent_img_selector)[0].get('src')
 
+                    if component_image:
+                        r = requests.get(component_image, stream=True)
+                        save_downloaded_file('img/marine_engine/mercruiser/'+ component_image.split('/')[-1], r)
+                        component_image = 'img/marine_engine/mercruiser/'+ component_image.split('/')[-1]
+
                     component['image'] = component_image
 
                     diag_number = -1
@@ -537,6 +564,13 @@ def marineengine_mercruiser_scrapper():
 
                                 if(len(tree.xpath(xproduct_img_selector)) > 0):
                                     prod_image = tree.xpath(xproduct_img_selector)[0].get('src')
+
+                                if prod_image and 'noimage' not in prod_image:
+                                    r = requests.get(base_url + prod_image, stream=True)
+                                    save_downloaded_file('img/marine_engine/mercruiser/'+ prod_image.split('/')[-1], r)
+                                    prod_image = 'img/marine_engine/mercruiser/'+ prod_image.split('/')[-1]
+                                else:
+                                    prod_image = None
 
                                 product['product_image'] = prod_image
 
@@ -667,6 +701,11 @@ def marineengine_force_scrapper():
                 if(len(tree.xpath(xcomponent_img_selector)) > 0):
                     component_image = tree.xpath(xcomponent_img_selector)[0].get('src')
 
+                if component_image:
+                    r = requests.get(component_image, stream=True)
+                    save_downloaded_file('img/marine_engine/force/'+ component_image.split('/')[-1], r)
+                    component_image = 'img/marine_engine/force/'+ component_image.split('/')[-1]
+
                 component['image'] = component_image
 
                 diag_number = -1
@@ -701,6 +740,13 @@ def marineengine_force_scrapper():
 
                             if(len(tree.xpath(xproduct_img_selector)) > 0):
                                 prod_image = tree.xpath(xproduct_img_selector)[0].get('src')
+
+                            if prod_image and 'noimage' not in prod_image:
+                                r = requests.get(base_url + prod_image, stream=True)
+                                save_downloaded_file('img/marine_engine/force/'+ prod_image.split('/')[-1], r)
+                                prod_image = 'img/marine_engine/force/'+ prod_image.split('/')[-1]
+                            else:
+                                prod_image = None
 
                             product['product_image'] = prod_image
 
@@ -845,6 +891,11 @@ def marineengine_mariner_scrapper():
                     if(len(tree.xpath(xcomponent_img_selector)) > 0):
                         component_image = tree.xpath(xcomponent_img_selector)[0].get('src')
 
+                    if component_image:
+                        r = requests.get(component_image, stream=True)
+                        save_downloaded_file('img/marine_engine/mariner/'+ component_image.split('/')[-1], r)
+                        component_image = 'img/marine_engine/mariner/'+ component_image.split('/')[-1]
+
                     component['image'] = component_image
 
                     diag_number = -1
@@ -879,6 +930,13 @@ def marineengine_mariner_scrapper():
 
                                 if(len(tree.xpath(xproduct_img_selector)) > 0):
                                     prod_image = tree.xpath(xproduct_img_selector)[0].get('src')
+
+                                if prod_image and 'noimage' not in prod_image:
+                                    r = requests.get(base_url + prod_image, stream=True)
+                                    save_downloaded_file('img/marine_engine/mariner/'+ prod_image.split('/')[-1], r)
+                                    prod_image = 'img/marine_engine/mariner/'+ prod_image.split('/')[-1]
+                                else:
+                                    prod_image = None
 
                                 product['product_image'] = prod_image
 
@@ -1024,13 +1082,17 @@ def marineengine_omc_sterndrive_scrapper():
                     if(len(tree.xpath(xcomponent_img_selector)) > 0):
                         component_image = tree.xpath(xcomponent_img_selector)[0].get('src')
 
+                    if component_image:
+                        r = requests.get(base_url + component_image, stream=True)
+                        save_downloaded_file('img/marine_engine/omc/'+ component_image.split('/')[-1], r)
+                        component_image = 'img/marine_engine/omc/'+ component_image.split('/')[-1]
+
                     component['image'] = component_image
 
                     diag_number = -1
                     product = None
                     old_product = None
                     recomended = None
-                    print("aca" + base_url + component['category_url'])
                     # products cycle
                     for prod in tree.xpath(xcomponent_parts_selector):
                         if prod.get('class') is None:
@@ -1059,6 +1121,13 @@ def marineengine_omc_sterndrive_scrapper():
 
                                 if(len(tree.xpath(xproduct_img_selector)) > 0):
                                     prod_image = tree.xpath(xproduct_img_selector)[0].get('src')
+
+                                if prod_image and 'noimage' not in prod_image:
+                                    r = requests.get(base_url + prod_image, stream=True)
+                                    save_downloaded_file('img/marine_engine/omc/'+ prod_image.split('/')[-1], r)
+                                    prod_image = 'img/marine_engine/omc/'+ prod_image.split('/')[-1]
+                                else:
+                                    prod_image = None
 
                                 product['product_image'] = prod_image
 
@@ -1182,6 +1251,11 @@ def marinepartsexpress_chrysler_marine_scrapper():
                     if(len(tree2.xpath(xcomponent_img_selector)) > 0):
                         component_image = tree2.xpath(xcomponent_img_selector)[0].get('src')
 
+                    if component_image:
+                        r = requests.get(base_url + component_image, stream=True)
+                        save_downloaded_file('img/marine_express/chrysler/'+ component_image.split('/')[-1], r)
+                        component_image = 'img/marine_express/chrysler/'+ component_image.split('/')[-1]
+
                     component['image'] = component_image
 
                     for prod in tree2.xpath(xproduct_selector):
@@ -1262,6 +1336,7 @@ def marinepartsexpress_chrysler_marine_scrapper():
 
 def marinepartsexpress_crusader_scrapper():
     base_url = 'http://www.marinepartsexpress.com/crusaderschem.html'
+    man_url = 'http://www.marinepartsexpress.com/'
     # Categorys scraping
     page = requests.get(
         base_url
@@ -1289,6 +1364,12 @@ def marinepartsexpress_crusader_scrapper():
         }
         catalog['categories'].append(manual)
 
+        if manual['manual_url']:
+            print(man_url + manual['manual_url'].replace(' ', '%20'))
+            r = requests.get(man_url + manual['manual_url'].replace(' ', '%20'), stream=True)
+            save_downloaded_file('manuals/marine_express/crusader/'+ manual['manual_url'].split('/')[-1], r)
+            manual['manual_url'] = 'manuals/marine_express/crusader/'+ manual['manual_url'].split('/')[-1]
+
     for item in tree.xpath(xpath_selector):
         present = False
         manual = {
@@ -1305,6 +1386,11 @@ def marinepartsexpress_crusader_scrapper():
 
         if not present:
             catalog['categories'].append(manual)
+            if manual['manual_url']:
+                print(man_url + manual['manual_url'].replace(' ', '%20'))
+                r = requests.get(man_url + manual['manual_url'].replace(' ', '%20'), stream=True)
+                save_downloaded_file('manuals/marine_express/crusader/'+ manual['manual_url'].split('/')[-1], r)
+                manual['manual_url'] = 'manuals/marine_express/crusader/'+ manual['manual_url'].split('/')[-1]
 
     catalog['scraping_successful'] = True
     print('Finishing Marine Parts Express Crusader Manuals Scraping...\n')
@@ -1346,6 +1432,8 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
         page = requests.get(
             base_url + category['category_url']
         )
+
+        print(base_url + category['category_url'])
         tree = html.fromstring(page.content)
         # models cycle
         for mod in tree.xpath(xmodel_selector):
@@ -1365,7 +1453,6 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                 # components cycle
                 for comp in tree.xpath(xmodel_selector):
                     if not tree.xpath(xpdf_selector):
-                        print(comp.get('href'))
                         component = {
                             'category_name': 'component',
                             'category': comp.xpath('strong')[0].text,
@@ -1377,10 +1464,10 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                         page = requests.get(
                             base_url + component['category_url']
                         )
-                        tree = html.fromstring(page.content)
+                        tree2 = html.fromstring(page.content)
                         # Items cycle
-                        for item in tree.xpath(xmodel_selector):
-                            if not tree.xpath(xpdf_selector):
+                        for item in tree2.xpath(xmodel_selector):
+                            if not tree2.xpath(xpdf_selector):
                                 it = {
                                     'category_name': 'item',
                                     'category': item.xpath('strong')[0].text,
@@ -1390,7 +1477,8 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                                 component['sub_category'].append(component)
                                 print("ANOTHER LEVEL NEEDED")
                             else:
-                                for man in tree.xpath(xpdf_selector):
+                                print('pdf 1')
+                                for man in tree2.xpath(xpdf_selector):
                                     manual = {
                                         'category_name': 'manual',
                                         'products': man.xpath('strong')[0].text,
@@ -1398,8 +1486,16 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                                         'image': None,
                                     }
                                     component['sub_category'].append(manual)
+
+                                    if manual['manual_url']:
+                                        url = manual['manual_url'].replace("viewer.php?pdf=", "").split("&breadcrumb")[0]
+                                        url = parse.unquote(url).replace('+', '%20')
+                                        r = requests.get(url, stream=True)
+                                        save_downloaded_file('manuals/marine_express/volvo/'+ url.split('/')[-1], r)
+                                        manual['manual_url'] = 'manuals/marine_express/volvo/'+ url.split('/')[-1]
                     else:  
                         for man in tree.xpath(xpdf_selector):
+                            print('pdf 2 ')
                             manual = {
                                 'category_name': 'manual',
                                 'products': man.xpath('strong')[0].text,
@@ -1408,7 +1504,15 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                             }
                             model['sub_category'].append(manual)
 
-                    counter += 1
+                            if manual['manual_url']:
+                                url = manual['manual_url'].replace("viewer.php?pdf=", "").split("&breadcrumb")[0]
+                                url = parse.unquote(url).replace('+', '%20')
+                                r = requests.get(url, stream=True)
+                                save_downloaded_file('manuals/marine_express/volvo/'+ url.split('/')[-1], r)
+                                manual['manual_url'] = 'manuals/marine_express/volvo/'+ url.split('/')[-1]
+
+                            counter += 1
+
                     if counter > 15:
                         catalog['scraping_successful'] = True
                         print('Finishing Marine Parts Express Volvo Penta Marine Manuals Scraping...\n')
@@ -1426,6 +1530,14 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                         'image': None,
                     }
                     category['sub_category'].append(manual)
+
+                    if manual['manual_url']:
+                        url = manual['manual_url'].replace("viewer.php?pdf=", "").split("&breadcrumb")[0]
+                        url = parse.unquote(url).replace('+', '%20')
+                        r = requests.get(url, stream=True)
+                        save_downloaded_file('manuals/marine_express/volvo/'+ url.split('/')[-1], r)
+                        manual['manual_url'] = 'manuals/marine_express/volvo/'+ url.split('/')[-1]
+
                     counter += 1
 
 
@@ -1525,6 +1637,9 @@ def boatsnet_yamaha_scrapper():
 
                     if len(z)> 1:
                         image = re.sub(r'[\ \"]', '', z[1])
+                        r = requests.get('http:' + image, stream=True)
+                        save_downloaded_file('img/boats_net/yamaha/'+ image.split('/')[-1], r)
+                        image = 'img/boats_net/yamaha/'+ image.split('/')[-1]
                     
                     component['image'] = image
                     count = 0
@@ -1562,6 +1677,11 @@ def boatsnet_yamaha_scrapper():
                                 image = tree.xpath(xproduct_img_selector)[0].get('src')
                             elif tree.xpath(xproduct_img_selector2):
                                 image = tree.xpath(xproduct_img_selector2)[0].get('src')
+
+                            if image:
+                                r = requests.get('http:' + image, stream=True)
+                                save_downloaded_file('img/boats_net/yamaha/'+ image.split('/')[-1], r)
+                                image = 'img/boats_net/yamaha/'+ image.split('/')[-1]
 
                             product['list_price'] = prod.xpath('div[1]')[0].text
 
@@ -1675,6 +1795,9 @@ def boatsnet_honda_marine_scrapper():
 
                     if len(z)> 1:
                         image = re.sub(r'[\ \"]', '', z[1])
+                        r = requests.get('http:' + image, stream=True)
+                        save_downloaded_file('img/boats_net/honda/'+ image.split('/')[-1], r)
+                        image = 'img/boats_net/honda/'+ image.split('/')[-1]
                     
                     component['image'] = image
                     count = 0
@@ -1712,6 +1835,11 @@ def boatsnet_honda_marine_scrapper():
                                 image = tree.xpath(xproduct_img_selector)[0].get('src')
                             elif tree.xpath(xproduct_img_selector2):
                                 image = tree.xpath(xproduct_img_selector2)[0].get('src')
+
+                            if image:
+                                r = requests.get('http:' + image, stream=True)
+                                save_downloaded_file('img/boats_net/honda/'+ image.split('/')[-1], r)
+                                image = 'img/boats_net/honda/'+ image.split('/')[-1]
 
                             product['list_price'] = prod.xpath('div[1]')[0].text
 
@@ -1824,6 +1952,9 @@ def boatsnet_suzuki_marine_scrapper():
 
                     if len(z)> 1:
                         image = re.sub(r'[\ \"]', '', z[1])
+                        r = requests.get('http:' + image, stream=True)
+                        save_downloaded_file('img/boats_net/suzuki/'+ image.split('/')[-1], r)
+                        image = 'img/boats_net/suzuki/'+ image.split('/')[-1]
                     
                     component['image'] = image
                     count = 0
@@ -1866,6 +1997,11 @@ def boatsnet_suzuki_marine_scrapper():
                             elif tree.xpath(xproduct_img_selector2):
                                 image = tree.xpath(xproduct_img_selector2)[0].get('src')
 
+                            if image:
+                                r = requests.get('http:' + image, stream=True)
+                                save_downloaded_file('img/boats_net/suzuki/' + image.split('/')[-1], r)
+                                image = 'img/boats_net/suzuki/' + image.split('/')[-1]
+
                             product['list_price'] = prod.xpath('div[1]')[0].text
 
                             # If theres another price
@@ -1889,7 +2025,74 @@ def boatsnet_suzuki_marine_scrapper():
             else:
                 print('Caso especial Suzuki Marine Boats Net.')
 
+
+def save_downloaded_file(path, r):
+    if r.status_code == 200:
+        with open(path, 'wb') as f:
+            for chunk in r:
+                f.write(chunk)
+
+
 if __name__ == '__main__':
+    # Create needed directories
+    if not os.path.exists('img'):
+        os.makedirs('img')
+    if not os.path.exists('manuals'):
+        os.makedirs('manuals')
+
+    ###############################################
+    # Marine Engine Directories and sub-directories
+    if not os.path.exists('img/marine_engine'):
+        os.makedirs('img/marine_engine')
+
+    # Subdirs
+    if not os.path.exists('img/marine_engine/mercury'):
+        os.makedirs('img/marine_engine/mercury')
+    if not os.path.exists('img/marine_engine/mercruiser'):
+        os.makedirs('img/marine_engine/mercruiser')
+    if not os.path.exists('img/marine_engine/j&e'):
+        os.makedirs('img/marine_engine/j&e')
+    if not os.path.exists('img/marine_engine/force'):
+        os.makedirs('img/marine_engine/force')
+    if not os.path.exists('img/marine_engine/mariner'):
+        os.makedirs('img/marine_engine/mariner')
+    if not os.path.exists('img/marine_engine/omc'):
+        os.makedirs('img/marine_engine/omc')
+
+    ################################################
+    # Marine Express Directories and sub-directories
+    if not os.path.exists('img/marine_express'):
+        os.makedirs('img/marine_express')
+    if not os.path.exists('manuals/marine_express'):
+        os.makedirs('manuals/marine_express')
+
+    # Subdirs
+    if not os.path.exists('img/marine_express/chrysler'):
+        os.makedirs('img/marine_express/chrysler')
+    if not os.path.exists('img/marine_express/crusader'):
+        os.makedirs('img/marine_express/crusader')
+    if not os.path.exists('manuals/marine_express/crusader'):
+        os.makedirs('manuals/marine_express/crusader')
+    if not os.path.exists('img/marine_express/volvo'):
+        os.makedirs('img/marine_express/volvo')
+    if not os.path.exists('manuals/marine_express/volvo'):
+        os.makedirs('manuals/marine_express/volvo')
+
+    ############################################
+    # Boats Net Directories and sub-directories
+    if not os.path.exists('img/boats_net'):
+        os.makedirs('img/boats_net')
+
+    # Subdirs
+    if not os.path.exists('img/boats_net/yamaha'):
+        os.makedirs('img/boats_net/yamaha')
+    if not os.path.exists('img/boats_net/honda'):
+        os.makedirs('img/boats_net/honda')
+    if not os.path.exists('img/boats_net/suzuki'):
+        os.makedirs('img/boats_net/suzuki')
+
+    ############################################
+    # Start the actual Scrapping
     print('Started scraping.')
     print('Ignoring some manuals...')
 
@@ -1928,7 +2131,7 @@ if __name__ == '__main__':
     #marinepartsexpress_crusader_scrapper()
 
     print('Starting Marine Express Volvo Penta Marine Scraping...')
-    #marinepartsexpress_volvo_penta_marine_scrapper()
+    marinepartsexpress_volvo_penta_marine_scrapper()
 
     print('Finished Marine Parts Express Scraping')
 
@@ -1943,7 +2146,7 @@ if __name__ == '__main__':
     #boatsnet_honda_marine_scrapper()
 
     print('Starting Boats Net Suzuki Marine Scraping...')
-    boatsnet_suzuki_marine_scrapper()
+    #boatsnet_suzuki_marine_scrapper()
 
     print('\nFinished Boats Net Scraping')
     print('\nFinished scraping.')
