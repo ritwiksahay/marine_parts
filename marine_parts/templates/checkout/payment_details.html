@@ -160,17 +160,8 @@
 			</tr>
 		</table>
 
-		<div id="generate-token">
-			<table>
-				<tr>
-					<td></td>
-					<td><button type="submit">Pay now</button></td>
-				</tr>
-			</table>
-		</div>
-
 	</form>
-  <form method="post" name="continue-form"
+  <form method="post" id="continue-form" name="continue-form"
         class="form-horizontal" role="form">
         {% csrf_token %}
         <input type="hidden" id="payment-method" name="payment-method" value="" />

@@ -45,11 +45,10 @@ def execPaymentPayeezyLive(order_number, payload, headers):
 def execPaymentPayeezy(url, order_number, headers, payload):
     # Charge the token requested
     response = requests.post(url, json=payload, headers=headers)
-    # Check errors
-    # print('Response: ' + str(response.status_code))
     response_json = response.json()
+    # Check errors
     if response.status_code >= 400:
-        #print("Transaction status: " + response_json['transaction_status'])
+        # print("Transaction status: " + response_json['transaction_status'])
         # for x in response_json['Error']['messages']:
         #     print(x['code'] + " " + x['description'])
         return (False, None)

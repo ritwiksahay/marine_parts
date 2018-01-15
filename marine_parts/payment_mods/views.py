@@ -8,7 +8,6 @@ from authorizenet import apicontractsv1
 from authorizenet.apicontrollers import createTransactionController
 
 from marine_parts.payment_mods.libPayeezy import setup_params_request, execPaymentPayeezySandbox, execPaymentPayeezyLive
-import pdb
 
 class PaymentDetailsView(views.PaymentDetailsView):
     """
@@ -106,7 +105,7 @@ class PaymentDetailsView(views.PaymentDetailsView):
         # When it's deployed, comment this line and uncoment the next line
         isSucess, reference = execPaymentPayeezySandbox(order_number, headers, payload)
         #isSucess, reference = execPaymentPayeezyLive(order_number, headers, payload)
-        pdb.set_trace()
+
         if isSucess:
             # Record payment source and event
             self.recordPayment('Payeezy', total, reference)
