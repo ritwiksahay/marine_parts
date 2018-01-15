@@ -15,14 +15,14 @@ Light Gray: #e6e6e6;
 }
 
 .btn-primary{
-    background-color: #04a0d3;
-    border-color: #04a0d3;
+    background-color: #04a0d3 !important;
+    border-color: #04a0d3 !important;
 }
 
 .btn-danger{
-    color: #04a0d3;
-    background-color: #0d4a6c;
-    border-color: #0d4a6c;
+    color: #04a0d3 !important;
+    background-color: #0d4a6c !important;
+    border-color: #0d4a6c !important;
 }
 
 .table-bordered{
