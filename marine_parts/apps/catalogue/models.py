@@ -1,84 +1,33 @@
-"""
-Vanilla product models
-"""
-from oscar.apps.catalogue.abstract_models import *  # noqa
-from oscar.core.loading import is_model_registered
+"""Override of Oscar's Catalogue app Models."""
 
-__all__ = ['ProductAttributesContainer']
+from django.db import models
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
-
-if not is_model_registered('catalogue', 'ProductClass'):
-    class ProductClass(AbstractProductClass):
-        pass
-
-    __all__.append('ProductClass')
+from oscar.apps.catalogue.abstract_models import AbstractCategory
 
 
-if not is_model_registered('catalogue', 'Category'):
-    class Category(AbstractCategory):
-        pass
+class Category(AbstractCategory):
+    """Override of Category Model."""
 
-    __all__.append('Category')
+    diagram_image = models.ImageField(
+        _('Diagram'),
+        upload_to='categories',
+        blank=True,
+        null=True,
+        max_length=255,
+        help_text=_("Parts Diagram. Only upload a diagram image if "
+                    "you are creating a Leaf Category (Component).")
+    )
 
+    # def clean(self):
+    #    """Override Category Validation Method."""
+    # When adding a new category, the parent cannot have a diagram image
+    #    super(Category, self).clean()
+    #    if self.get_parent().diagram_image:
+    #        raise ValidationError(
+    #            _("Cannot add a child to a leaf category."
+    #              "Delete diagram image in the parent first.")
+    #        )
 
-if not is_model_registered('catalogue', 'ProductCategory'):
-    class ProductCategory(AbstractProductCategory):
-        pass
-
-    __all__.append('ProductCategory')
-
-
-if not is_model_registered('catalogue', 'Product'):
-    class Product(AbstractProduct):
-        pass
-
-    __all__.append('Product')
-
-
-if not is_model_registered('catalogue', 'ProductRecommendation'):
-    class ProductRecommendation(AbstractProductRecommendation):
-        pass
-
-    __all__.append('ProductRecommendation')
-
-
-if not is_model_registered('catalogue', 'ProductAttribute'):
-    class ProductAttribute(AbstractProductAttribute):
-        pass
-
-    __all__.append('ProductAttribute')
-
-
-if not is_model_registered('catalogue', 'ProductAttributeValue'):
-    class ProductAttributeValue(AbstractProductAttributeValue):
-        pass
-
-    __all__.append('ProductAttributeValue')
-
-
-if not is_model_registered('catalogue', 'AttributeOptionGroup'):
-    class AttributeOptionGroup(AbstractAttributeOptionGroup):
-        pass
-
-    __all__.append('AttributeOptionGroup')
-
-
-if not is_model_registered('catalogue', 'AttributeOption'):
-    class AttributeOption(AbstractAttributeOption):
-        pass
-
-    __all__.append('AttributeOption')
-
-
-if not is_model_registered('catalogue', 'Option'):
-    class Option(AbstractOption):
-        pass
-
-    __all__.append('Option')
-
-
-if not is_model_registered('catalogue', 'ProductImage'):
-    class ProductImage(AbstractProductImage):
-        pass
-
-    __all__.append('ProductImage')
+from oscar.apps.catalogue.models import *  # noqa isort:skip
