@@ -47,7 +47,7 @@ THIRD_PARTIES_APP = [
 
 SYSTEM_APPS = [
     'marine_parts.users',
-    'marine_parts.authorize'
+    'marine_parts.payment_mods'
 ]
 
 DJANGO_APPS = [
@@ -97,6 +97,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'marine_parts.urls'
+
+# Disable when there is real email service available
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
 
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.EmailBackend',

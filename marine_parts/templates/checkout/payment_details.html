@@ -96,6 +96,7 @@
 	<h2>Payeezy First Data</h2>
   <form method="post" name="payment-info-form" id="payment-info-form"
         class="form-horizontal" role="form">
+        {% csrf_token %}
         <input type="hidden" class="form-control" name="payment-method" value="payeezy">
 		<h4 style="color: red">
 			<span id="payment-errors"></span>
@@ -109,45 +110,6 @@
 		<div id="someHiddenDiv" style="display: none; color: red">Requesting
 			Payeezy token...</div>
 		<table>
-			<tr>
-				<td align="right">API Key :</td>
-				<td><input type="text" name="apikey" id="apikey"
-					value="y6pWAJNyJyjGv66IsVuWnklkKUPFbb0a" /></td>
-			</tr>
-			<tr>
-				<td align="right">API Secret :</td>
-				<td><input type="text" name="apisecret" id="apisecret"
-					value="86fbae7030253af3cd15faef2a1f4b67353e41fb6799f576b5093ae52901e6f7" />
-				</td>
-			</tr>
-			<tr>
-				<td align="right">JS Security Key :</td>
-				<td><input type="text" name="js_security_key"
-					id="js_security_key"
-					value="js-6125e57ce5c46e10087a545b9e9d7354c23e1a1670d9e9c7" /></td>
-			</tr>
-			<tr>
-				<td align="right">Merchant Token :</td>
-				<td><input type="text" name="token" id="token"
-					value="fdoa-a480ce8951daa73262734cf102641994c1e55e7cdf4c02b6" /></td>
-			</tr>
-			<tr>
-				<td align="right">Auth :</td>
-				<td><select name="auth" id="auth" payeezy-data="auth">
-						<option value="true">true</option>
-						<option value="false">false</option>
-				</select></td>
-			</tr>
-			<tr>
-				<td align="right">TA Token :</td>
-				<td><input type="text" name="ta_token" id="ta_token"
-					payeezy-data="ta_token" value="NOIW" /></td>
-			</tr>
-			<tr>
-				<td align="right">Currency :</td>
-				<td><input type="text" name="currency" id="currency"
-					payeezy-data="currency" value="USD" /></td>
-			</tr>
 			<tr>
 				<td align="right">Card Type :</td>
 				<td><select payeezy-data="card_type">
@@ -196,46 +158,6 @@
 						<option value="21">2021</option>
 				</select></td>
 			</tr>
-			<tr>
-				<td align="right">City :</td>
-				<td><input type="text" payeezy-data="city"
-					value="St. Louis" /></td>
-			</tr>
-			<tr>
-				<td align="right">Country :</td>
-				<td><input type="text" payeezy-data="country"
-					value="US" /></td>
-			</tr>
-			<tr>
-				<td align="right">Email :</td>
-				<td><input type="text" payeezy-data="email"
-					value="abc@abc.com" /></td>
-			</tr>
-			<tr>
-				<td align="right">Phone Type :</td>
-				<td><input type="text" payeezy-data="type"
-					value="home" /></td>
-			</tr>
-			<tr>
-				<td align="right">Phone Number :</td>
-				<td><input type="text" payeezy-data="number"
-					value="212-515-1212" /></td>
-			</tr>
-			<tr>
-				<td align="right">Street :</td>
-				<td><input type="text" payeezy-data="street"
-					value="12115 LACKLAND" /></td>
-			</tr>
-			<tr>
-				<td align="right">State Province :</td>
-				<td><input type="text" payeezy-data="state_province"
-					value="MO" /></td>
-			</tr>
-			<tr>
-				<td align="right">Postal Code :</td>
-				<td><input type="text" payeezy-data="zip_postal_code"
-					value="63146" /></td>
-			</tr>
 		</table>
 
 		<div id="generate-token">
@@ -251,7 +173,8 @@
   <form method="post" name="continue-form"
         class="form-horizontal" role="form">
         {% csrf_token %}
-        <input id="token_chk" name="token_chk" type="hidden" value="" >
+        <input type="hidden" id="payment-method" name="payment-method" value="" />
+        <input type="hidden" id="token_chk" name="token_chk" value="" />
 	  	<input type="hidden" id="cardholder_name" name="cardholder_name" value="xyz" />
 	  	<input type="hidden" id="card_type" name="card_type" value="" />
 	  	<input type="hidden" id="exp_date" name="exp_date" value="" />

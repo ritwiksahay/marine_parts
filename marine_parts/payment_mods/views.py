@@ -3,17 +3,16 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from oscar.apps.checkout import views
 from oscar.apps.payment import forms, models, exceptions
-import time
 
 from authorizenet import apicontractsv1
 from authorizenet.apicontrollers import createTransactionController
-import requests
-from marine_parts.authorize import constants
 
+from marine_parts.payment_mods.libPayeezy import setup_params_request, execPaymentPayeezySandbox, execPaymentPayeezyLive
+import pdb
 
 class PaymentDetailsView(views.PaymentDetailsView):
     """
-    Vista de pago para el introducir, manejar y procesar los pagos por
+    Vista de pago para introducir, manejar y procesar los pagos por
     Authorize.net y Payeezy first data
     """
 
@@ -33,17 +32,18 @@ class PaymentDetailsView(views.PaymentDetailsView):
             exp_date = request.POST['exp_date']
             if token and card_type and cardholder_name and exp_date:
                 # Render preview with bankcard and billing address details hidden
+
                 return self.render_preview(request, token=token, card_type=card_type
                                            , cardholder_name=cardholder_name, exp_date=exp_date, payment_method=payment_m)
             else:
-                return self.render_payment_details(requests)
+                return self.render_payment_details(request)
         else:
             token = request.POST['dataValue']
             descriptor = request.POST['dataDescriptor']
             if token and descriptor:
                 return self.render_preview(request, token=token, payment_method=payment_m, descriptor=descriptor )
             else:
-                return self.render_payment_details(requests)
+                return self.render_payment_details(request)
 
 
     def do_place_order(self, request):
@@ -51,12 +51,13 @@ class PaymentDetailsView(views.PaymentDetailsView):
         # with.
         submission = self.build_submission()
         submission['payment_kwargs']['payment-method'] = request.POST['payment-method']
-        if  request.POST['payment-method'] == 'payeezy':
+        if request.POST['payment-method'] == 'payeezy':
             token = request.POST['token_chk']
             card_type = request.POST['card_type']
             cardholder_name = request.POST['cardholder_name']
             exp_date = request.POST['exp_date']
             if token and card_type and cardholder_name and exp_date:
+
                 submission['payment_kwargs']['token_chk'] = token
                 submission['payment_kwargs']['cardholder_name'] = cardholder_name
                 submission['payment_kwargs']['card_type'] = card_type
@@ -87,40 +88,31 @@ class PaymentDetailsView(views.PaymentDetailsView):
         # Payeezy payment
         #
         if kwargs['payment-method'] == 'payeezy':
-            constants.payload['amount'] = str(total.incl_tax)
-            constants.payload['token']['token_data']['type'] = kwargs['card_type']
-            constants.payload['token']['token_data']['value'] = kwargs['token_chk']
-            constants.payload['token']['token_data']['cardholder_name'] = kwargs['cardholder_name']
-            constants.payload['token']['token_data']['exp_date'] = kwargs['exp_date']
-            self.execPaymentPayeezy(order_number, total)
-
+            self.execPayeezy(order_number, total, kwargs)
         else:
             #
             # Authorize.net payment
             #
             self.create_an_accept_payment_transaction(order_number
-                  , kwargs['token_chk'], kwargs['descriptor'], total )
+                                                      , kwargs['token_chk'], kwargs['descriptor'], total )
 
-    def execPaymentPayeezy(self, order_number, total, payload):
-        # Charge the token requested
-        response = requests.post(constants.url_payeezy_sandbox, json=constants.payload, headers=constants.headers)
-        # Check errors
-        #print('Response: ' + str(response.status_code))
-        response_json = response.json()
-        if response.status_code >= 400:
-            # print("Transaction status: " + response_json['transaction_status'])
-            #print(response_json)
-            #for x in response_json['Error']['messages']:
-                #print(x['code'] + " " + x['description'])
-            raise exceptions.UnableToTakePayment
-        else:
-            # Notify payment event if there is success
-            reference = "Transaction ID: %s\nBank response code: %s\n, Bank message: %s\n" \
-                        % (
-                        response_json['transaction_id'], response_json['bank_resp_code'], response_json['bank_message'])
+    def execPayeezy(self, order_number, total, tk_card):
 
+        headers, payload = setup_params_request(str(total.incl_tax), tk_card['card_type']
+                                                , tk_card['token_chk']
+                                                , tk_card['cardholder_name']
+                                                , tk_card['exp_date'])
+
+        # When it's deployed, comment this line and uncoment the next line
+        isSucess, reference = execPaymentPayeezySandbox(order_number, headers, payload)
+        #isSucess, reference = execPaymentPayeezyLive(order_number, headers, payload)
+        pdb.set_trace()
+        if isSucess:
             # Record payment source and event
             self.recordPayment('Payeezy', total, reference)
+        else:
+            raise exceptions.UnableToTakePayment
+
 
     def recordPayment(self, name, total, reference):
         source_type, is_created = models.SourceType.objects.get_or_create(name=name)
@@ -130,7 +122,7 @@ class PaymentDetailsView(views.PaymentDetailsView):
             currency=total.currency,
             reference=reference)
         self.add_payment_source(source)
-        # Note that payment events don’t distinguish between different sources.
+        # Note that payment events don't distinguish between different sources.
         self.add_payment_event(name, total.incl_tax, reference)
 
 

@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.conf.urls import include, url
 from oscar.app import application
 
-from marine_parts.authorize import views
+from marine_parts.payment_mods import views
 
 
 urlpatterns = [
