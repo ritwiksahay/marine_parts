@@ -3,10 +3,17 @@
 {% load currency_filters %}
 {% load thumbnail %}
 {% load product_tags %}
+{% load purchase_info_tags %}
+{% load basket_tags %}
 {% load i18n %}
 
+
 {% block extrastyles %}
+    {% if component %}
+    <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results_parts.css" %}" />
+    {% else %}
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
+    {% endif %}
 {% endblock extrastyles %}
 
 {% block title %}
@@ -21,6 +28,7 @@
     
     {% if component %}
         {{component.name | upper}}
+        <hr>
     {% else %}
         {% trans "Results"|upper %}
     {% endif %}
@@ -30,6 +38,80 @@
 
 {% block content %}
     {% if component %}
+        <div class="col-md-6">
+            <div class="thumbnail">
+                    <div>
+                        {% thumbnail component.diagram_image "800x600" upscale=False as thumb %}
+                        <img src="{{ thumb.url }}" alt="{{ component.name }}" width="{{ thumb.x }}" height="{{ thumb.y }}" class="img-responsive"/>
+                        {% empty %}
+                        <img src="{% static 'img/logo/isotipo.png' %}" alt="{{ component.name }}" class="img-responsive"/>
+                        {% endthumbnail %}
+                    </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+                {% if page.object_list %}
+                    <table class="table text-center">
+                        <thead>
+                            <th>
+                                Nº
+                            </th>
+                            <th>
+                                Part Nº
+                            </th>
+                            <th>
+                                {% trans "Title" %}
+                            </th>
+                            <th>
+                                {% trans "Price (excl. tax)" %}
+                            </th>
+                            <th>
+                                
+                            </th>
+                        </thead>
+                        <tbody>
+                            {% for result in page.object_list %}
+                            {% with product=result.object %}
+                            <tr>
+                                <td><span class="diagram_number">{{ product.attr.DN }}</span></td>
+                                <td>{{ product.attr.PN }}</td>
+                                <td><a href="{{ product.get_absolute_url }}">{{ product.get_title }}</a></td>
+                                {% purchase_info_for_product request product as session %}
+                                <td>{% if session.price.exists %}
+                                        {% if session.price.excl_tax == 0 %}
+                                            <p class="price_color">{% trans "Free" %}</p>
+                                        {% elif session.price.is_tax_known %}
+                                            <p class="price_color">{{ session.price.incl_tax|currency:session.price.currency }}</p>
+                                        {% else %}
+                                            <p class="price_color">{{ session.price.excl_tax|currency:session.price.currency }}</p>
+                                        {% endif %}
+                                    {% else %}
+                                        <p class="price_color">&nbsp;</p>
+                                    {% endif %}
+                                </td>
+                                <td>{% if session.availability.is_available_to_buy %}
+                                    {% basket_form request product 'single' as basket_form %}
+                                    <form action="{% url 'basket:add' pk=product.pk %}" method="post">
+                                        {% csrf_token %}
+                                        {{ basket_form.as_p }}
+                                        <button type="submit" class="btn btn-primary btn-block" data-loading-text="{% trans 'Adding...' %}"><i class="icon-shopping-cart"></i></button>
+                                    </form>
+                                {% else %}
+                                    <span class="btn btn-default btn-block disabled"><i class="icon-shopping-cart"></i></span>
+                                {% endif %}
+                                </td>
+                            </tr>
+                            {% endwith %}
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                    {% include "partials/pagination.html" with page_obj=page %}
+                {% endif %}
+        </div>
+
+        
+
 
     {% else %}
         <form method="get" action="." class="form-horizontal">

@@ -20,6 +20,13 @@ Light Gray: #E6E6E6;
 
 .page-header{
     font-family: 'Gotham Bold';
+    background-color: #274164;
+    color: #ffffff;
+    padding: 30px 15px 5px 15px;
+}
+
+.page-header hr {
+	margin: 10px 0;
 }
 
 .page_inner div .sidebar,
@@ -29,8 +36,9 @@ Light Gray: #E6E6E6;
 }
 
 .page_inner div .content{
-    background-color: #274164;
-    color: #FFFFFF;
+    background-color: #FFFFFF;
+    color: #274164;
+    padding: 0;
 }
 
 .page_inner div .sidebar form div select{
@@ -63,4 +71,26 @@ Light Gray: #E6E6E6;
 .page_inner div .sidebar {
     border-right: 2px solid #eee;
     border-bottom: 2px solid #eee;
+}
+
+/* Part's table */
+
+table.table thead th {
+	text-align: center;
+	text-transform: uppercase;
+}
+
+table.table tbody td,
+table.table thead th
+ {
+	vertical-align: middle;
+}
+
+table.table tbody td p{
+	margin: 0;
+}
+
+table thead {
+	background-color: #274164;
+	color: #ffffff;
 }
