@@ -22,7 +22,10 @@ para realizar los pagos. Esta cadena de pago se ejecuta en el checkout del porta
 ########################################################################################################################
 
 Para habilitar las pasarelas en modo producción:
-    - Payeezy: usar la función execPaymentPayeezyLive con los datos apropiados
+    - Registrar al mercader en el portal de Payeezy. Obtener tu transarmor y su ta_token. Se edita el script js
+     paymentHandler.js. (Más info: https://github.com/payeezy/payeezy_js/raw/master/guide/payeezy_js07012015.pdf)
+    - Payeezy: usar la función execPaymentPayeezyLive con los datos apropiados.
+
 
 Para usar la pasarela se utiliza el siguiente pesudocódigo a modo de ilustración:
      def ejecPayeezy(order_number, amount, card_type, token_chk, cardholder_name, exp_date):
