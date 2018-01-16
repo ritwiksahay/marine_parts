@@ -25,22 +25,22 @@ class PaymentDetailsView(views.PaymentDetailsView):
 
         payment_m = request.POST['payment-method']
         if  payment_m == 'payeezy':
-            token = request.POST['token_chk']
+            token_chk = request.POST['token_chk']
             card_type = request.POST['card_type']
             cardholder_name = request.POST['cardholder_name']
             exp_date = request.POST['exp_date']
-            if token and card_type and cardholder_name and exp_date:
+            if token_chk and card_type and cardholder_name and exp_date:
                 # Render preview with bankcard and billing address details hidden
 
-                return self.render_preview(request, token=token, card_type=card_type
-                                           , cardholder_name=cardholder_name, exp_date=exp_date, payment_method=payment_m)
+                return self.render_preview(request, token_chk=token_chk, card_type=card_type
+                           , cardholder_name=cardholder_name, exp_date=exp_date, payment_method=payment_m)
             else:
                 return self.render_payment_details(request)
         else:
             token = request.POST['dataValue']
             descriptor = request.POST['dataDescriptor']
             if token and descriptor:
-                return self.render_preview(request, token=token, payment_method=payment_m, descriptor=descriptor )
+                return self.render_preview(request, token=token, payment_method=payment_m, descriptor=descriptor)
             else:
                 return self.render_payment_details(request)
 
@@ -49,28 +49,25 @@ class PaymentDetailsView(views.PaymentDetailsView):
         # Helper method to check that the hidden forms wasn't tinkered
         # with.
         submission = self.build_submission()
-        submission['payment_kwargs']['payment-method'] = request.POST['payment-method']
+        submission['payment_kwargs']['payment_method'] = request.POST['payment-method']
         if request.POST['payment-method'] == 'payeezy':
             token = request.POST['token_chk']
             card_type = request.POST['card_type']
             cardholder_name = request.POST['cardholder_name']
             exp_date = request.POST['exp_date']
-            if token and card_type and cardholder_name and exp_date:
-
-                submission['payment_kwargs']['token_chk'] = token
-                submission['payment_kwargs']['cardholder_name'] = cardholder_name
-                submission['payment_kwargs']['card_type'] = card_type
-                submission['payment_kwargs']['exp_date'] = exp_date
-            else:
+            submission['payment_kwargs']['token_chk'] = token
+            submission['payment_kwargs']['cardholder_name'] = cardholder_name
+            submission['payment_kwargs']['card_type'] = card_type
+            submission['payment_kwargs']['exp_date'] = exp_date
+            if not (token and card_type and cardholder_name and exp_date):
                 messages.error(request, "Invalid submission")
                 return HttpResponseRedirect(reverse('checkout:payment-details'))
         else:
             token = request.POST['dataValue']
             descriptor = request.POST['dataDescriptor']
-            if token and descriptor:
-                submission['payment_kwargs']['token_chk'] = token
-                submission['payment_kwargs']['descriptor'] = descriptor
-            else:
+            submission['payment_kwargs']['token_chk'] = token
+            submission['payment_kwargs']['descriptor'] = descriptor
+            if not (token and descriptor):
                 messages.error(request, "Invalid submission")
                 return HttpResponseRedirect(reverse('checkout:payment-details'))
 
@@ -86,7 +83,8 @@ class PaymentDetailsView(views.PaymentDetailsView):
         #
         # Payeezy payment
         #
-        if kwargs['payment-method'] == 'payeezy':
+        import pdb; pdb.set_trace()
+        if kwargs['payment_method'] == 'payeezy':
             self.execPayeezy(order_number, total, kwargs)
         else:
             #

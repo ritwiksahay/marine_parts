@@ -107,8 +107,7 @@
 		<h4 style="color: blue">
 			<span id="response_note"></span>
 		</h4>
-		<div id="someHiddenDiv" style="display: none; color: red">Requesting
-			Payeezy token...</div>
+		<div id="someHiddenDiv" style="display: none; color: red">Please, wait a moment...</div>
 		<table>
 			<tr>
 				<td align="right">Card Type :</td>
@@ -164,11 +163,11 @@
   <form method="post" id="continue-form" name="continue-form"
         class="form-horizontal" role="form">
         {% csrf_token %}
-        <input type="hidden" id="payment-method" name="payment-method" value="" />
-        <input type="hidden" id="token_chk" name="token_chk" value="" />
-	  	<input type="hidden" id="cardholder_name" name="cardholder_name" value="xyz" />
-	  	<input type="hidden" id="card_type" name="card_type" value="" />
-	  	<input type="hidden" id="exp_date" name="exp_date" value="" />
+        <input type="hidden" id="payment-method" name="payment-method" value="{{ payment_method }}" />
+        <input type="hidden" id="token_chk" name="token_chk" value="{{ token_chk }}" />
+	  	<input type="hidden" id="cardholder_name" name="cardholder_name" value="{{ cardholder_name }}" />
+	  	<input type="hidden" id="card_type" name="card_type" value="{{ card_type }}" />
+	  	<input type="hidden" id="exp_date" name="exp_date" value="{{ exp_date }}" />
         <div class="form-group">
             <div class="row">
                 <div class="col-sm-3">

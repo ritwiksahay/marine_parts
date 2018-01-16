@@ -25,7 +25,7 @@
     <form method="post" action="{% url 'checkout:preview' %}" id="place_order_form">
         {% csrf_token %}
         <input type="hidden" name="action" value="place_order" />
-        <input type="hidden" name="token_chk" value="{{ token }}" />
+        <input type="hidden" name="token_chk" value="{{ token_chk }}" />
         <input type="hidden" name="descriptor" value="{{ descriptor }}" />
         <input type="hidden" name="cardholder_name" value="{{ cardholder_name }}" />
 	  	<input type="hidden" name="card_type" value="{{ card_type }}" />
