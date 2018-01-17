@@ -5,6 +5,7 @@
 {% load product_tags %}
 {% load purchase_info_tags %}
 {% load basket_tags %}
+{% load sorting_tags %}
 {% load i18n %}
 
 
@@ -38,18 +39,21 @@
 
 {% block content %}
     {% if component %}
-        <div class="col-md-6">
+        <div class="col-xs-12 col-md-6">
             <div class="thumbnail">
                     <div>
-                        {% thumbnail component.diagram_image "800x600" upscale=False as thumb %}
-                        <img src="{{ thumb.url }}" alt="{{ component.name }}" width="{{ thumb.x }}" height="{{ thumb.y }}" class="img-responsive"/>
-                        {% empty %}
-                        <img src="{% static 'img/logo/isotipo.png' %}" alt="{{ component.name }}" class="img-responsive"/>
-                        {% endthumbnail %}
+                       
+                       {% if component.diagram_image %} 
+                            <img id="diagram_img" src="{{ component.diagram_image.url }}" data-zoom-image="{{ component.diagram_image.url }}" alt="{{ component.name }}" class="img-responsive"/>
+                       {% else %}
+                            <img src="{% static 'img/logo/isotipo.png' %}" alt="{{ component.name }}" class="img-responsive"/>
+                       {% endif %}
                     </div>
+                    <p class="text-center"><small>{% trans "(Scroll over the image to zoom in or zoom out)" %}</small></p>
             </div>
+
         </div>
-        <div class="col-md-6">
+        <div class="col-xs-12 col-md-6">
                 {% if page.object_list %}
                     <table class="table text-center">
                         <thead>
@@ -165,13 +169,38 @@
 
 
 
+
+{% block scripts %}
+    {{ block.super }}
+
+    {% if component %}
+        <script src="{% static 'js/jquery.elevateZoom-3.0.8.min.js' %}"></script>
+    {% endif %}
+
+{% endblock %}
+
+
 {% block onbodyload %}
     {{ block.super }}
     oscar.search.init();
+
+    {% if component %}
+        /* Enable Zoom to diagram parts image */  
+        $("#diagram_img").elevateZoom(
+            {
+                responsive: true,
+                easing: true,
+                scrollZoom: true,
+                zoomType: "inner",
+                cursor: "crosshair",
+                zoomSizeMode:'image'
+            }
+        );
+    {% endif %}
 {% endblock %}
 
 {% block extrascripts %}
-    <script>
+    <script>    
         var results = [];
         var index = 0;
         var params = '{{url_args}}'.split(',');

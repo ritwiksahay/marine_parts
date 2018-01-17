@@ -19,7 +19,7 @@ Light Gray: #E6E6E6;
 }
 
 .page-header{
-    font-family: 'Gotham Bold';
+    font-family: 'Gotham Bold' !important;
     background-color: #274164;
     color: #ffffff;
     padding: 30px 15px 5px 15px;
@@ -91,6 +91,20 @@ table.table tbody td p{
 }
 
 table thead {
+    font-family: 'Gotham Bold' !important;
 	background-color: #274164;
 	color: #ffffff;
+}
+
+span.diagram_number {
+    border: 2px solid #274164;
+    border-radius: 40px;
+    padding: 0px 8px;
+    font-size: 2rem;
+    font-weight: bolder;
+}
+
+/* thumbnail styles */
+.thumbnail p {
+    margin: 5px;
 }
