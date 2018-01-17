@@ -41,6 +41,7 @@
                 {% block header %}
                     <div class="page-header action">
                         <h1>{% block headertext %}{% endblock %}</h1>
+                        <h3>{% block secondheadertext %}{% endblock %}</h3>
                     </div>
                 {% endblock %}
                 {% include "partials/alert_messages.html" %}
@@ -58,6 +59,9 @@
                     {# Div exists for AJAX updates to entire content section #}
                     <div id="content_inner">{% block content %}{% endblock %}</div>
                 </div>
+                {% block bottom %}
+                    
+                {% endblock bottom %}
             </div>
         </div>
     {% endblock %}
