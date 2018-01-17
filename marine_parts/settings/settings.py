@@ -67,6 +67,7 @@ DJANGO_APPS = [
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + SYSTEM_APPS \
     + get_core_apps([
         'marine_parts.apps.promotions',
+        'marine_parts.apps.customer',
     ])
 
 AUTH_USER_MODEL = 'users.User'
