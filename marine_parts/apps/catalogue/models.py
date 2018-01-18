@@ -1,8 +1,10 @@
 """Override of Oscar's Catalogue app Models."""
 
+from urllib import pathname2url as to_url
+
 from django.db import models
-from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 
 from oscar.apps.catalogue.abstract_models import AbstractCategory
 
@@ -19,6 +21,14 @@ class Category(AbstractCategory):
         help_text=_("Parts Diagram. Only upload a diagram image if "
                     "you are creating a Leaf Category (Component).")
     )
+
+    def get_absolute_url(self):
+        """Building the url that points to the search of the category."""
+        url = reverse('search:search') + '?var=category:'
+        url += '&var=category:' \
+            .join([to_url(c.full_name) for c in self.get_ancestors_and_self()])
+
+        return url
 
     # def clean(self):
     #    """Override Category Validation Method."""
