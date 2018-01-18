@@ -10,7 +10,7 @@ Light Gray: #E6E6E6;
 */
 
 .filter-title{
-    font-family: 'Gotham Bold';
+    font-family: 'Gotham Bold' !important;
     color: #0d4a6c;
 }
 
@@ -19,7 +19,7 @@ Light Gray: #E6E6E6;
 }
 
 .page-header{
-    font-family: 'Gotham Bold';
+    font-family: 'Gotham Bold' !important;
 }
 
 .page_inner div .sidebar,
@@ -58,4 +58,9 @@ Light Gray: #E6E6E6;
     font-family: 'Gotham Bold';
     font-size: 16px;
     height: 40px;
+}
+
+.page_inner div .sidebar {
+    border-right: 2px solid #eee;
+    border-bottom: 2px solid #eee;
 }

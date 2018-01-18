@@ -1,4 +1,4 @@
-from oscar.apps.catalogue.models import Category
+from marine_parts.apps.catalogue.models import Category
 from django.core.urlresolvers import reverse
 from django.views.generic import RedirectView, TemplateView
 

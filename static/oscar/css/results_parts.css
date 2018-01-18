@@ -1,0 +1,105 @@
+/*
+Header style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #E6E6E6;
+
+*/
+
+.filter-title{
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+}
+
+.page_inner{
+    padding: 0px 15px;
+}
+
+.page-header{
+    font-family: 'Gotham Bold' !important;
+    background-color: #0d4a6c;
+    color: #ffffff;
+    padding: 30px 15px 5px 15px;
+}
+
+.page-header hr {
+	margin: 10px 0;
+}
+
+.page_inner div .sidebar,
+.page_inner div .content{
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.page_inner div .content{
+    background-color: #FFFFFF;
+    color: #0d4a6c;
+    padding: 0;
+}
+
+.page_inner div .sidebar form div select{
+    width: 90%;
+    float: none;
+    display: inline-block;
+    background-color: #E6E6E6;
+    font-family: 'Gotham Book';
+    font-size: 16px;
+    height: 40px;
+}
+
+.page_inner div .sidebar form div .search-field{
+    width: 90%;
+    float: none;
+    display: inline-block;
+    background-color: #E6E6E6;
+    font-family: 'Gotham Book';
+    font-size: 16px;
+    height: 40px;
+}
+
+.page_inner div .sidebar form div .search-button{
+    float: none;
+    font-family: 'Gotham Bold';
+    font-size: 16px;
+    height: 40px;
+}
+
+.page_inner div .sidebar {
+    border-right: 2px solid #eee;
+    border-bottom: 2px solid #eee;
+}
+
+/* Part's table */
+
+table.table tbody td,
+table.table thead th
+ {
+	vertical-align: middle;
+}
+
+table.table tbody td p{
+	margin: 0;
+}
+
+table thead {
+    font-family: 'Gotham Bold' !important;
+	background-color: #0d4a6c;
+	color: #ffffff;
+}
+
+span.diagram_number {
+    border: 2px solid #0d4a6c;
+    border-radius: 40px;
+    padding: 0px 8px;
+    font-size: 2rem;
+    font-weight: bolder;
+}
+
+/* thumbnail styles */
+.thumbnail p {
+    margin: 5px;
+}

@@ -3,11 +3,19 @@
 {% load currency_filters %}
 {% load thumbnail %}
 {% load product_tags %}
+{% load purchase_info_tags %}
+{% load basket_tags %}
+{% load sorting_tags %}
 {% load i18n %}
 
+
 {% block extrastyles %}
-    <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/search/customer-service.css" %}" />
+    {% if component %}
+        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results_parts.css" %}" />
+    {% else %}
+        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
+    {% endif %}
+        <link rel="stylesheet" type="text/css" href="{% static "css/search/customer-service.css" %}" />
 {% endblock extrastyles %}
 
 {% block column_left %}
@@ -15,58 +23,145 @@
 {% endblock %}
 
 {% block headertext %}
-    {% trans "Results"|upper %}
+    
+    {% if component %}
+        {{component.name | upper}}
+        <hr>
+    {% else %}
+        {% trans "Results"|upper %}
+    {% endif %}
 {% endblock %}
 
+
+
 {% block content %}
-    <form method="get" action="." class="form-horizontal">
-        {# Render other search params as hidden inputs #}
-        {% for value in selected_facets %}
-            <input type="hidden" name="selected_facets" value="{{ value }}" />
-        {% endfor %}
-        <input type="hidden" name="q" value="{{ search_form.q.value }}" />
-
-        {% if paginator.count %}
-            {% if paginator.num_pages > 1 %}
-                {% blocktrans with start=page.start_index end=page.end_index num_results=paginator.count %}
-                    Found <strong>{{ num_results }}</strong> results, showing <strong>{{ start }}</strong> to <strong>{{ end }}</strong>.
-                {% endblocktrans %}
-            {% else %}
-                {% blocktrans count num_results=paginator.count %}
-                    Found <strong>{{ num_results }}</strong> result.
-                {% plural %}
-                    Found <strong>{{ num_results }}</strong> results.
-                {% endblocktrans %}
-            {% endif %}
-            <!--
-            <div class="pull-right">
-                {# {% include "partials/form_field.html" with field=search_form.sort_by %} #}
+    {% if component %}
+        <div class="col-xs-12 col-md-6">
+            <div class="thumbnail">
+                    <div>
+                       {% if component.diagram_image %} 
+                            <img id="diagram_img" src="{{ component.diagram_image.url }}" data-zoom-image="{{ component.diagram_image.url }}" alt="{{ component.name }}" class="img-responsive"/>
+                       {% else %}
+                            <img src="{% static 'img/logo/isotipo.png' %}" alt="{{ component.name }}" class="img-responsive"/>
+                       {% endif %}
+                    </div>
+                    <p class="text-center"><small>{% trans "(Scroll over the image to zoom in or zoom out)" %}</small></p>
             </div>
-            -->
-        {% else %}
-            <p>
-                {% trans "Found" %} <strong>0</strong> {% trans "results" %}.
-                {% if suggestion %}
-                    {% url 'search:search' as search_url %}
-                    {% blocktrans %}
-                        Did you mean <a href="{{ search_url }}?q={{ suggestion }}">"{{ suggestion }}"</a>?
-                    {% endblocktrans %}
-                {% endif %}
-            </p>
-        {% endif %}
-    </form>
+        </div>
+        <div class="col-xs-12 col-md-6">
+            {% if page.object_list %}
+                <table class="table text-center">
+                    <thead>
+                        <th class="text-center text-uppercase">
+                            Nº
+                        </th>
+                        <th class="text-center text-uppercase">
+                            Part Nº
+                        </th>
+                        <th class="text-center text-uppercase">
+                            {% trans "Title" %}
+                        </th>
+                        <th class="text-center text-uppercase">
+                            {% trans "Price (excl. tax)" %}
+                        </th>
+                        <th>
+                            
+                        </th>
+                    </thead>
+                    <tbody>
+                        {% for result in page.object_list %}
+                        {% with product=result.object %}
+                        <tr>
+                            <td><span class="diagram_number">{{ product.attr.DN }}</span></td>
+                            <td>{{ product.attr.PN }}</td>
+                            <td><a href="{{ product.get_absolute_url }}">{{ product.get_title }}</a></td>
+                            {% purchase_info_for_product request product as session %}
+                            <td>{% if session.price.exists %}
+                                    {% if session.price.excl_tax == 0 %}
+                                        <p class="price_color">{% trans "Free" %}</p>
+                                    {% elif session.price.is_tax_known %}
+                                        <p class="price_color">{{ session.price.incl_tax|currency:session.price.currency }}</p>
+                                    {% else %}
+                                        <p class="price_color">{{ session.price.excl_tax|currency:session.price.currency }}</p>
+                                    {% endif %}
+                                {% else %}
+                                    <p class="price_color">&nbsp;</p>
+                                {% endif %}
+                            </td>
+                            <td>{% if session.availability.is_available_to_buy %}
+                                {% basket_form request product 'single' as basket_form %}
+                                <form action="{% url 'basket:add' pk=product.pk %}" method="post">
+                                    {% csrf_token %}
+                                    {{ basket_form.as_p }}
+                                    <button type="submit" class="btn btn-primary btn-block" data-loading-text="{% trans 'Adding...' %}">Add</button>
+                                </form>
+                            {% else %}
+                                <span class="btn btn-default btn-block disabled"><i class="icon-shopping-cart"></i></span>
+                            {% endif %}
+                            </td>
+                        </tr>
+                        {% endwith %}
+                        {% endfor %}
+                    </tbody>
 
-    {% if page.object_list %}
-        <section>
-            <div>
-                <ol class="row">
-                    {% for result in page.object_list %}
-                        <li class="col-xs-6 col-sm-4 col-md-4 col-lg-4">{% render_product result.object %}</li>
-                    {% endfor %}
-                </ol>
+                </table>
                 {% include "partials/pagination.html" with page_obj=page %}
-            </div>
-        </section>
+            {% endif %}
+        </div>
+    {% else %}
+        <form method="get" action="." class="form-horizontal">
+            {# Render other search params as hidden inputs #}
+            {% for value in selected_facets %}
+                <input type="hidden" name="selected_facets" value="{{ value }}" />
+            {% endfor %}
+            <input type="hidden" name="q" value="{{ search_form.q.value }}" />
+
+            {% if paginator.count %}
+                {% if paginator.num_pages > 1 %}
+                    {% blocktrans with start=page.start_index end=page.end_index num_results=paginator.count %}
+                        Found <strong>{{ num_results }}</strong> results, showing <strong>{{ start }}</strong> to <strong>{{ end }}</strong>.
+                    {% endblocktrans %}
+                {% else %}
+                    {% blocktrans with num_results=paginator.count %}Found <strong>{{ num_results }}</strong> results.{% endblocktrans %}
+                {% endif %}
+                <!--
+                <div class="pull-right">
+                    {# {% include "partials/form_field.html" with field=search_form.sort_by %} #}
+                </div>
+                -->
+            {% else %}
+                <p>
+                    {% trans "Found <strong>0</strong> results." %}
+                    {% if suggestion %}
+                        {% url 'search:search' as search_url %}
+                        {% blocktrans %}
+                            Did you mean <a href="{{ search_url }}?q={{ suggestion }}">"{{ suggestion }}"</a>?
+                        {% endblocktrans %}
+                    {% endif %}
+                </p>
+            {% endif %}
+        </form>
+
+        {% if page.object_list %}
+            <section>
+                <div>
+                    <ol class="row">
+                        {% for result in page.object_list %}
+                            <li class="col-xs-6 col-sm-4 col-md-4 col-lg-4">{% render_product result.object %}</li>
+                        {% endfor %}
+                    </ol>
+                    {% include "partials/pagination.html" with page_obj=page %}
+                </div>
+            </section>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+
+    {% if component %}
+        <script src="{% static 'js/jquery.elevateZoom-3.0.8.min.js' %}"></script>
     {% endif %}
 {% endblock %}
 
@@ -77,10 +172,24 @@
 {% block onbodyload %}
     {{ block.super }}
     oscar.search.init();
+
+    {% if component %}
+        /* Enable Zoom to diagram parts image */  
+        $("#diagram_img").elevateZoom(
+            {
+                responsive: true,
+                easing: true,
+                scrollZoom: true,
+                zoomType: "inner",
+                cursor: "crosshair",
+                zoomSizeMode:'image'
+            }
+        );
+    {% endif %}
 {% endblock %}
 
 {% block extrascripts %}
-    <script>
+    <script>    
         var results = [];
         var index = 0;
         var params = '{{url_args}}'.split(',');

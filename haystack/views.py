@@ -10,7 +10,7 @@ from django.shortcuts import render
 from haystack.forms import FacetedSearchForm, ModelSearchForm
 from haystack.query import EmptySearchQuerySet
 
-from oscar.apps.catalogue.models import Category
+from marine_parts.apps.catalogue.models import Category
 
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 

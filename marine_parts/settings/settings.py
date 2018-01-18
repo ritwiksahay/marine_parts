@@ -45,7 +45,6 @@ THIRD_PARTY_APPS = [
     'django_countries',
     'widget_tweaks',
     'ads',
-    'marine_parts.apps.search',
 ]
 
 SYSTEM_APPS = [
@@ -69,6 +68,9 @@ INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + SYSTEM_APPS \
         'marine_parts.apps.customer',
         'marine_parts.apps.promotions',
         'marine_parts.apps.customer',
+        'marine_parts.apps.catalogue',
+        'marine_parts.apps.search',
+        'marine_parts.apps.dashboard.catalogue',
     ])
 
 AUTH_USER_MODEL = 'users.User'
@@ -97,6 +99,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # Allow languages to be selected
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.http.ConditionalGetMiddleware',
 
     'oscar.apps.basket.middleware.BasketMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
@@ -224,6 +230,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+# Includes all languages that have >50% coverage in Transifex
+# Taken from Django's default setting for LANGUAGES
+gettext_noop = lambda s: s
+LANGUAGES = (
+    ('en-us', gettext_noop('American English')),
+    ('es', gettext_noop('Spanish')),
+    ('fr', gettext_noop('French')),
+
+)
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -250,4 +266,17 @@ STATICFILES_DIRS = (
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '../media/')
 
+LOCALE_PATHS = [
+    os.path.join('static', 'locale'),
+]
+
 OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'email@email.com'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

@@ -4,13 +4,15 @@ from oscar.core.loading import get_class, get_model
 
 from . import signals
 
+from marine_parts.apps.catalogue.models import Category
+
 Product = get_model('catalogue', 'Product')
 FacetMunger = get_class('search.facets', 'FacetMunger')
 
 
 class FacetedSearchView(views.FacetedSearchView):
     """
-    A modified version of Haystack's FacetedSearchView
+    A modified version of Haystack's FacetedSearchView.
 
     Note that facets are configured when the ``SearchQuerySet`` is initialised.
     This takes place in the search application class.
@@ -61,6 +63,20 @@ class FacetedSearchView(views.FacetedSearchView):
         # form.
 
         extra['selected_facets'] = self.request.GET.getlist('var')
+
+        # Obtain the Component name and, retrieve it
+        # check if it is a compoenent and pass it to context
+        component = None
+        vars_list = self.request.GET.getlist("var")
+
+        vars_list = [var for var in vars_list if var != '0']
+        if len(vars_list) > 0:
+            category_name = vars_list[-1][9:].split(' > ')[-1]
+            category = Category.objects.get(name=category_name)
+            # Check if the category is a leaf (Component)
+            if not category.has_children():
+                component = category
+        extra['component'] = component
 
         return extra
 
