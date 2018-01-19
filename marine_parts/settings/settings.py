@@ -152,10 +152,11 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 # Oscar templates
                 'oscar.apps.search.context_processors.search_form',
-                'oscar.apps.promotions.context_processors.promotions',
                 'oscar.apps.checkout.context_processors.checkout',
                 'oscar.apps.customer.notifications.context_processors.notifications',
                 'oscar.core.context_processors.metadata',
+
+                'marine_parts.apps.promotions.context_processors.promotions',
             ],
         },
     },

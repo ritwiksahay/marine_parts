@@ -65,4 +65,8 @@ Light Gray: #e6e6e6;
 
 .header .navbar-nav div.search-bar form div button{
     height: 40px;
+    background-color: #0d4a6c;
+    color: #ffffff;
+    line-height: 30px;
+    font-size: 1.7rem;
 }

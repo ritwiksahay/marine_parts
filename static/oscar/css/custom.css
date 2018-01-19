@@ -43,3 +43,9 @@ Light Gray: #e6e6e6;
 .form-control{
     border-radius: 0px;
 }
+
+.rounded {
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+}

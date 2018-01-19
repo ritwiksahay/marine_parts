@@ -1,3 +1,5 @@
+"""Override of Oscar's Promotions Views."""
+
 from marine_parts.apps.catalogue.models import Category
 from django.core.urlresolvers import reverse
 from django.views.generic import RedirectView, TemplateView
@@ -10,19 +12,10 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         """Retrieve the diferent kinds of categories and pass it to context."""
-        if 'brands' not in kwargs:
-            brands = Category.objects.get(slug='brands')
-            kwargs['brands'] = brands.get_children()
-
         if 'best_sellers' not in kwargs:
             best_sellers = Category.objects.get(slug='best-sellers')
             kwargs['best_sellers'] = best_sellers.get_children()
 
-        if 'categories' not in kwargs:
-            categories = Category.objects.get(slug='categories')
-            kwargs['categories'] = categories.get_children()
-
-        print(kwargs)
         return kwargs
 
 
@@ -33,6 +26,7 @@ class RecordClickView(RedirectView):
     model = None
 
     def get_redirect_url(self, **kwargs):
+        """Get the address to go after the user clicks on the page."""
         try:
             prom = self.model.objects.get(pk=kwargs['pk'])
         except self.model.DoesNotExist:
