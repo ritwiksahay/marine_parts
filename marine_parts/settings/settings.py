@@ -64,7 +64,8 @@ DJANGO_APPS = [
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + SYSTEM_APPS \
-    + get_core_apps(['marine_parts.apps.search',])
+    + get_core_apps(['marine_parts.apps.search', 'marine_parts.apps.catalogue',
+                     'marine_parts.apps.dashboard.catalogue'])
 
 AUTH_USER_MODEL = 'users.User'
 

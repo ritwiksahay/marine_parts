@@ -1,84 +1,35 @@
 """
 Vanilla product models
 """
-from oscar.apps.catalogue.abstract_models import *  # noqa
-from oscar.core.loading import is_model_registered
 
-__all__ = ['ProductAttributesContainer']
-
-
-if not is_model_registered('catalogue', 'ProductClass'):
-    class ProductClass(AbstractProductClass):
-        pass
-
-    __all__.append('ProductClass')
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+from oscar.apps.catalogue import abstract_models
+from marine_parts.apps.catalogue.abstract_models import  AbstractReplacementProduct
 
 
-if not is_model_registered('catalogue', 'Category'):
-    class Category(AbstractCategory):
-        pass
-
-    __all__.append('Category')
-
-
-if not is_model_registered('catalogue', 'ProductCategory'):
-    class ProductCategory(AbstractProductCategory):
-        pass
-
-    __all__.append('ProductCategory')
+#@python_2_unicode_compatible
+class Product(abstract_models.AbstractProduct):
+    replacement_products = models.ManyToManyField(
+        'Product', through='ReplacementProduct', blank=True,
+        related_name='replacements',
+        verbose_name=_("Replacement products"),
+        through_fields=('primary', 'replacement'),
+        help_text=_("These are products that are designated to replace "
+                    "main product."))
 
 
-if not is_model_registered('catalogue', 'Product'):
-    class Product(AbstractProduct):
-        pass
-
-    __all__.append('Product')
-
-
-if not is_model_registered('catalogue', 'ProductRecommendation'):
-    class ProductRecommendation(AbstractProductRecommendation):
-        pass
-
-    __all__.append('ProductRecommendation')
+    recommended_products = models.ManyToManyField(
+        'Product', through='ProductRecommendation', blank=True,
+        related_name='recommendations',
+        verbose_name=_("Recommended products"),
+        through_fields=('primary', 'recommendation'),
+        help_text=_("These are products that are recommended to accompany the "
+                    "main product."))
 
 
-if not is_model_registered('catalogue', 'ProductAttribute'):
-    class ProductAttribute(AbstractProductAttribute):
-        pass
+#if not is_model_registered('catalogue.', 'ReplacementProduct'):
+class ReplacementProduct(AbstractReplacementProduct):
+    pass
 
-    __all__.append('ProductAttribute')
-
-
-if not is_model_registered('catalogue', 'ProductAttributeValue'):
-    class ProductAttributeValue(AbstractProductAttributeValue):
-        pass
-
-    __all__.append('ProductAttributeValue')
-
-
-if not is_model_registered('catalogue', 'AttributeOptionGroup'):
-    class AttributeOptionGroup(AbstractAttributeOptionGroup):
-        pass
-
-    __all__.append('AttributeOptionGroup')
-
-
-if not is_model_registered('catalogue', 'AttributeOption'):
-    class AttributeOption(AbstractAttributeOption):
-        pass
-
-    __all__.append('AttributeOption')
-
-
-if not is_model_registered('catalogue', 'Option'):
-    class Option(AbstractOption):
-        pass
-
-    __all__.append('Option')
-
-
-if not is_model_registered('catalogue', 'ProductImage'):
-    class ProductImage(AbstractProductImage):
-        pass
-
-    __all__.append('ProductImage')
+from oscar.apps.catalogue.models import *
