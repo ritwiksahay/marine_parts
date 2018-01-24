@@ -50,7 +50,7 @@ class DBAccess(DBHandler):
         return product_class
 
     def asign_prod_replacement(self, p_origin, p_asign):
-        ReplacementProduct.objects.create(primary=p_origin, replacement=p_asign)
+        ReplacementProduct.objects.create(primary=p_asign, replacement=p_origin)
 
     def obt_crea_atributos_prods(self, product_class):
         manufacturer, _ = ProductAttribute.objects.get_or_create(
