@@ -60,7 +60,7 @@ class DBAccess(DBHandler):
         diag_number, _ = ProductAttribute.objects.get_or_create(
             product_class=product_class, name='Diagram number', code='DN', required=True, type=ProductAttribute.TEXT)
 
-        return (manufacturer, part_number, diag_number)
+        return (part_number, manufacturer, diag_number)
 
     def crearProds(self, p, cat, product_class, part_number, manufacturer, diag_number):
         item = Product()
@@ -132,7 +132,7 @@ def obtNombres(hijo):
         return ''
 
 def extraerProds(json_categorias):
-    return extraerProds_aux(json_categorias, DBHandler())
+    return extraerProds_aux(json_categorias, DBAccess())
 
 def extraerProds_aux(json_categorias, db):
     pila = list()
@@ -204,10 +204,7 @@ def imprimirCate(categorias):
     for cat in categorias:
         print(cat)
 
-if __name__ == '__main__':
+def ejec_cargador(caminoArch):
     fh = FileHandler()
-    arbolCategorias = json.load(fh.leer(sys.argv[1]))
-    nro = extraerProds(arbolCategorias)
-    print('Nro de registros nuevos: ', nro)
-    #imprimirCate(aNotJerarquica(categorias))
+    return extraerProds(fh.leer(caminoArch))
 

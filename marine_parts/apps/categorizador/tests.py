@@ -1,4 +1,3 @@
-#import unittest
 import django.test as unittest
 import casos_prueba as casos
 import categorizador
@@ -49,6 +48,7 @@ class MockDB(categorizador.DBHandler):
 
     def crearProds(self, p, cat, product_class, part_number, manufacturer, diag_number):
         self.nro_prod += 1
+
 
 class TestUnitExtraerCats(unittest.TestCase):
     def setUp(self):
@@ -135,13 +135,13 @@ class TestNavProds(unittest.TestCase):
         self.assertEqual(3, nro_recom)
 
     def test_variosProductosDosRecomendadosRepetidosAnidados_return6(self):
-            nro_recom = categorizador.navProds(
-                casos.caso_variosProductosDosConRecomendadosAnidados['products'],
-                "Prueba", StubDBHandler())
-            self.assertEqual(6, nro_recom)
+        nro_recom = categorizador.navProds(
+            casos.caso_variosProductosDosConRecomendadosAnidados['products'],
+            "Prueba", StubDBHandler())
+        self.assertEqual(6, nro_recom)
 
 
-class TestIntegrationIO_navProds(unittest.TestCase):
+class TestIntegrationIO_extraerProds(unittest.TestCase):
     def setUp(self):
         self.entrada = categorizador.FileHandler().leer('marine_parts/apps/categorizador/'
                                                         'marine_engine_johnson_evinrude-2018-01-12.json')
@@ -163,5 +163,3 @@ class TestIntegrationDB_NavProds(unittest.TestCase):
         self.assertEqual(6, nro_recom)
 
 
-if __name__ == '__main__':
-    unittest.main()
