@@ -1,9 +1,11 @@
 {% extends "checkout/checkout.html" %}
+{% load staticfiles %}
 {% load i18n %}
 
 {% block title %}
     {% trans "Shipping address" %} | {{ block.super }}
 {% endblock %}
+
 
 {% block checkout_nav %}
     {% include 'checkout/nav.html' with step=1 %}
@@ -15,7 +17,7 @@
 
 {% block shipping_address %}
 <div class="col-sm-12">
-    <div class="sub-header">
+    <div class="sub-header-1">
         <h2>{% trans "Where should we ship to?" %}</h2>
     </div>
     {% if user.is_authenticated %}
@@ -68,7 +70,7 @@
     {% endif %}
 
     {% block new_address_form %}
-        <div class="well">
+        <div class="well form-wrapper">
             <form action="{% url 'checkout:shipping-address' %}" method="post" id="new_shipping_address" class="form form-horizontal">
                 {% csrf_token %}
                 {% include "partials/form_fields.html" with form=form style='horizontal' %}

@@ -10,7 +10,7 @@
 
 
 {% block extrastyles %}
-    {% if component %}
+    {% if component and component.diagram_image %}
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results_parts.css" %}" />
     {% else %}
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
@@ -24,7 +24,7 @@
 
 {% block headertext %}
     
-    {% if component %}
+    {% if component and component.diagram_image %}
         {{component.name | upper}}
         <hr>
     {% else %}
@@ -35,7 +35,7 @@
 
 
 {% block content %}
-    {% if component %}
+    {% if component and component.diagram_image %}
         <div class="col-xs-12 col-md-6">
             <div class="thumbnail">
                     <div>
@@ -173,7 +173,7 @@
     {{ block.super }}
     oscar.search.init();
 
-    {% if component %}
+    {% if component and component.diagram_image %}
         /* Enable Zoom to diagram parts image */  
         $("#diagram_img").elevateZoom(
             {

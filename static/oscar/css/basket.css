@@ -108,10 +108,19 @@ Light Gray: #e6e6e6;
     color: #04a0d3;
 }
 
-.table-condensed tr td.total .price_color{
+.checkout-button a{
+    font-family: 'Gotham Bold';
+}
+
+
+#basket_totals th small {
     color: #04a0d3;
 }
 
-.checkout-button a{
-    font-family: 'Gotham Bold';
+.total h3.price_color {
+    font-family: "Gotham Bold";
+}
+
+.basket-items .price_color {
+    font-family: "Gotham Book";
 }

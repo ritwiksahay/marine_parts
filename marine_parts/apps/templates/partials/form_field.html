@@ -29,8 +29,15 @@
                                 {{ field.label|safe }}
                                 {% render_field field class+="form-control" %}
                             </label>
+
                         {% else %}
-                            {% render_field field class+="form-control" %}
+                            {% if field.widget_type == 'Select' %}
+                            <div class="select-wrapper">
+                                {% render_field field class+="form-control" %}
+                            </div>
+                            {% else %}
+                                {% render_field field class+="form-control" placeholder=field.name %}
+                            {% endif %}
                         {% endif %}
                     {% endblock %}
 

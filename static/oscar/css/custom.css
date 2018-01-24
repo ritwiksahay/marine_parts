@@ -9,6 +9,10 @@ Light Gray: #e6e6e6;
 
 */
 
+a {
+    color: #04a0d3;
+}
+
 .btn{
     border-radius: 0px;
     font-family: 'Gotham Book';
@@ -48,4 +52,12 @@ Light Gray: #e6e6e6;
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     border-radius: 20px;
+}
+
+.bg-mid-blue {
+    background-color: #0d4a6c;
+}
+
+.sub-header {
+    border-bottom: 2px solid #0d4a6c;
 }

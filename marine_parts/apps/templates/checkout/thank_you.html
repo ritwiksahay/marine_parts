@@ -14,6 +14,11 @@
     {% include 'checkout/nav.html' with step=5 %}
 {% endblock %}
 
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "oscar/css/checkout.css" %}" />
+{% endblock %}
+
 {% block checkout_title %}
     {% blocktrans with number=order.number %}
         Order {{ number }}: confirmation
@@ -145,7 +150,9 @@
                     </p>
                 </div>
                 <div class="col-sm-1 align-center">
-                    {{ line.quantity }}
+                    <p class="price_color">
+                        {{ line.quantity }}
+                    </p>
                 </div>
                 <div class="col-sm-2 align-right">
                     <p class="price_color">
@@ -196,7 +203,7 @@
                                         <th class="total align-right">{{ order.basket_total_incl_tax|currency:order.currency }}</th>
                                     </tr>
                                 {% else %}
-                                    <tr class="basket-items">
+                                    <tr>
                                         <th class="total">{% trans "Basket total" %}</th>
                                         <th class="total align-right">
                                             {% if show_tax_separately %}
@@ -219,8 +226,8 @@
                                 <th colspan="2"><h3>{% trans "Shipping" %}</h3></th>
                             </tr>
                             <tr>
-                                <td>{% trans "Shipping method" %}</td>
-                                <td class="align-right">{{ order.shipping_method }}</td>
+                                <td class="total">{% trans "Shipping method" %}</td>
+                                <td class="total align-right">{{ order.shipping_method }}</td>
                             </tr>
                             {% if order.has_shipping_discounts %}
                                 <tr>
@@ -286,7 +293,7 @@
                                 <th colspan="2">&nbsp;</th>
                             </tr>
                             <tr>
-                                <td class="total"><h3>{% trans "Order total" %}</h3></td>
+                                <th class="total"><h3>{% trans "Order total" %}</h3></th>
                                 <td class="total align-right"><h3 class="price_color">{{ order.total_incl_tax|currency:order.currency }}</h3></td>
                             </tr>
                         {% endblock order_total %}
