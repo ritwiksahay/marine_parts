@@ -1,3 +1,5 @@
+
+
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -11,6 +13,8 @@ from django_tables2 import SingleTableMixin, SingleTableView
 
 from oscar.core.loading import get_classes, get_model
 from oscar.views.generic import ObjectLookupView
+
+from marine_parts.apps.dashboard.catalogue.formsets import ProductReplacementFormSet
 
 (ProductForm,
  ProductClassSelectForm,
@@ -194,12 +198,14 @@ class ProductCreateUpdateView(generic.UpdateView):
     image_formset = ProductImageFormSet
     recommendations_formset = ProductRecommendationFormSet
     stockrecord_formset = StockRecordFormSet
+    replacement_formset = ProductReplacementFormSet
 
     def __init__(self, *args, **kwargs):
         super(ProductCreateUpdateView, self).__init__(*args, **kwargs)
         self.formsets = {'category_formset': self.category_formset,
                          'image_formset': self.image_formset,
                          'recommended_formset': self.recommendations_formset,
+                        'replacement_formset': self.replacement_formset,
                          'stockrecord_formset': self.stockrecord_formset}
 
     def dispatch(self, request, *args, **kwargs):

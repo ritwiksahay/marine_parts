@@ -71,8 +71,13 @@ class FacetedSearchView(views.FacetedSearchView):
 
         vars_list = [var for var in vars_list if var != '0']
         if len(vars_list) > 0:
-            category_name = vars_list[-1][9:].split(' > ')[-1]
-            category = Category.objects.get(name=category_name)
+            category_full_name = vars_list[-1][9:]
+            category = None
+            for cat in Category.objects.all():
+                if cat.full_name == category_full_name:
+                    category = cat
+                    break
+
             # Check if the category is a leaf (Component)
             if not category.has_children():
                 component = category

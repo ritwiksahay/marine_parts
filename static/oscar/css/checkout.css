@@ -109,11 +109,11 @@ form .form-group .row{
 	content: "\f078";
 	font-family: "FontAwesome";
 	position: absolute;
-	right: 11px;
-	top: 6px;
+	right: 10px;
+	top: 7px;
 	background-color: transparent;
 	color: #0d4a6c;
-	font-size: 16px;
+	font-size: 1.3rem;
 }
 
 

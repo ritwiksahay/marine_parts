@@ -1,11 +1,15 @@
 """Override of Oscar's Dashboard Catalogue Forms."""
 
+from django import forms
+
 from django.forms import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from oscar.apps.dashboard.catalogue import forms as base_form
+from oscar.apps.dashboard.catalogue.widgets import ProductSelect
 
 from marine_parts.apps.catalogue.models import Category
+from marine_parts.apps.catalogue.models import ReplacementProduct
 
 
 class CategoryForm(base_form.CategoryForm):
@@ -53,3 +57,13 @@ class CategoryForm(base_form.CategoryForm):
             parent.save()
         instance.save()
         return instance
+
+
+class ProductReplacementForm(forms.ModelForm):
+
+    class Meta:
+        model = ReplacementProduct
+        fields = ['primary', 'replacement', 'order']
+        widgets = {
+            'replacement': ProductSelect,
+        }
