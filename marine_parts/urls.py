@@ -1,4 +1,4 @@
-"""frobshop URL Configuration
+"""Marine Parts URL Configuration.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
@@ -19,23 +19,12 @@ from django.conf.urls import include, url
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from oscar.app import application
-from marine_parts.apps.authorize import views
 
 
 urlpatterns = [
     url(
         r'^i18n/',
         include('django.conf.urls.i18n')
-    ),
-    url(
-        r'^checkout/payment-details/',
-        views.PaymentDetailsView.as_view(),
-        name='payment-details'
-    ),
-    url(
-        r'^checkout/preview/',
-        views.PaymentDetailsView.as_view(),
-        name='payment-details'
     ),
     # The Django admin is not officially supported; expect breakage.
     # Nonetheless, it's often useful for debugging.

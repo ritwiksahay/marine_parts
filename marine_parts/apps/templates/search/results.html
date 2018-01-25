@@ -10,7 +10,7 @@
 
 
 {% block extrastyles %}
-    {% if component %}
+    {% if component and component.diagram_image %}
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results_parts.css" %}" />
     {% else %}
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
@@ -24,7 +24,7 @@
 
 {% block headertext %}
     
-    {% if component %}
+    {% if component and component.diagram_image %}
         {{component.name | upper}}
         <hr>
     {% else %}
@@ -35,7 +35,7 @@
 
 
 {% block content %}
-    {% if component %}
+    {% if component and component.diagram_image %}
         <div class="col-xs-12 col-md-6">
             <div class="thumbnail">
                     <div>
@@ -173,7 +173,7 @@
     {{ block.super }}
     oscar.search.init();
 
-    {% if component %}
+    {% if component and component.diagram_image %}
         /* Enable Zoom to diagram parts image */  
         $("#diagram_img").elevateZoom(
             {
@@ -189,111 +189,122 @@
 {% endblock %}
 
 {% block extrascripts %}
-    <script>    
-        var results = [];
-        var index = 0;
-        var params = '{{url_args}}'.split(',');
-        var categories = jQuery.parseJSON('{{categories_json|safe}}');
+    <script>
 
-        categories = categories['trees'];
+        $(document).ready(function(){
 
-        
-        /*Initial form values*/
-        var append_value = '<div class="form-group text-center"><select class="form-control" name="var" id="var"><option value="0">-- {% trans "Select Category" %} --</option>';
-        
-        $.each(categories, function(key, value){
-            init_search_form(value, '#categories_form');
-        });
-        
-        append_value += '</select></div>';
-        $('#categories_form').prepend(
-            append_value
-        );
+            var results = [];
+            var index = 0;
+            var params = '{{url_args}}'.split(',');
+            var categories = jQuery.parseJSON('{{categories_json|safe}}');
 
-        /*Function to initialize the form*/
-        function init_search_form(value){
-            append_value += '<option value="category:'+ value['full_name'] + '"';
+            categories = categories['trees'];
 
-            if($.inArray("category:" + escapeHtml(value['full_name'].toString()), params) >= 0){
-                append_value +='selected >' + value['name'] + '</option>';
-            }
-            else
-            {
-                append_value +='>' + value['name'] + '</option>';
-            }
-        }
-
-        /*Searchs for the selected values in the tree*/
-        function search(dictionary, values){
-            $.each(dictionary, function(key, value){
-                if (values[index] !== undefined) {
-                    
-                    if (unescapeHtml(values[index].split(":").pop()) == value['full_name'][0]){
-
-                        index++;
-                        results.push([value['id'], value['name'], value['children']]);
-                        search(value['children'], values);
-                    }
-                }
-                
+            
+            /*Initial form values*/
+            var append_value = '<div class="form-group text-center rounded category-select"><select class="form-control rounded" name="var" id="var"><option value="0">-- {% trans "Select Category" %} --</option>';
+            
+            $.each(categories, function(key, value){
+                init_search_form(value, '#categories_form');
             });
-            return results
-        }
+            
+            append_value += '</select><i class="icon-chevron-down"></i></div>';
+            $('#categories_form').prepend(
+                append_value
+            );
 
-        /*Generates the select fields dinamically*/
-        function generate_fields(values){
+            /*Function to initialize the form*/
+            function init_search_form(value){
+                append_value += '<option value="category:'+ value['full_name'] + '"';
 
-            for(var i=0; i < values.length; i++){
-                var append_value = '<div class="form-group text-center"><select class="form-control" name="var" id="var"><option value="0">-- {% trans "Select Category" %} --</option>';
-                children = values[i][2];
-
-                if(!$.isEmptyObject(children))
+                if($.inArray("category:" + escapeHtml(value['full_name'].toString()), params) >= 0){
+                    append_value +='selected >' + value['name'] + '</option>';
+                }
+                else
                 {
-                    for(var j=0; j < children.length; j++){
-                        if($.inArray("category:" + escapeHtml(children[j].full_name.toString()), params) >= 0)
-                        {
-                            append_value += '<option value="category:' + children[j].full_name + '" selected>' + children[j].name + '</option>';
-                        }
-                        else
-                        {
-                            append_value += '<option value="category:' + children[j].full_name + '">' + children[j].name + '</option>';
-                        }
-                    }
-                    append_value += '</select></div>';
-                    $('#search_field').before(append_value);
+                    append_value +='>' + value['name'] + '</option>';
                 }
             }
-        }
 
-        /*Instructions to catch the results*/    
-        results = search(categories, params);
-        if(results!=''){
-            generate_fields(results);
-        }
+            /*Searchs for the selected values in the tree*/
+            function search(dictionary, values){
+                $.each(dictionary, function(key, value){
+                    if (values[index] !== undefined) {
+                        
+                        if (unescapeHtml(values[index].split(":").pop()) == value['full_name'][0]){
+
+                            index++;
+                            results.push([value['id'], value['name'], value['children']]);
+                            search(value['children'], values);
+                        }
+                    }
+                    
+                });
+                return results
+            }
+
+            /*Generates the select fields dinamically*/
+            function generate_fields(values){
+
+                for(var i=0; i < values.length; i++){
+                    var append_value = '<div class="form-group text-center rounded category-select"><i class="icon-chevron-down"></i><select class="form-control rounded" name="var" id="var"><option value="0">--{% trans "Select Category" %}--</option>';
+                    children = values[i][2];
+
+                    if(!$.isEmptyObject(children))
+                    {
+                        for(var j=0; j < children.length; j++){
+                            if($.inArray("category:" + escapeHtml(children[j].full_name.toString()), params) >= 0)
+                            {
+                                append_value += '<option value="category:' + children[j].full_name + '" selected>' + children[j].name + '</option>';
+                            }
+                            else
+                            {
+                                append_value += '<option value="category:' + children[j].full_name + '">' + children[j].name + '</option>';
+                            }
+                        }
+                        append_value += '</select><i class="icon-chevron-down"></i></div>';
+                        $('#search_field').before(append_value);
+                    }
+                }
+            }
+
+            /*Instructions to catch the results*/    
+            results = search(categories, params);
+            if(results!=''){
+                generate_fields(results);
+            }
 
 
-        /* Converts html text to plain text */
-        function unescapeHtml(str){   
-            var map = {amp: '&', lt: '<', le: '≤', gt: '>', ge: '≥', quot: '"', '#039': "'"} 
-            return str.replace(/&([^;]+);/g, (m, c) => map[c]|| '') 
-        }
+            /* Converts html text to plain text */
+            function unescapeHtml(str){   
+                var map = {amp: '&', lt: '<', le: '≤', gt: '>', ge: '≥', quot: '"', '#039': "'"} 
+                return str.replace(/&([^;]+);/g, (m, c) => map[c]|| '') 
+            }
 
 
-        /* Converts plain text to html text */
-        function escapeHtml(str){   
-            var map = { '&': '&amp;', '<': '&lt;', '≤': '&le;', '>': '&gt;', '≥': '&ge;', '"': '&quot;', "'": '#039'};
-            return str.replace(/([&<≤>≥'"]+)/g, (m, c) => map[c] || '');
-        }
+            /* Converts plain text to html text */
+            function escapeHtml(str){   
+                var map = { '&': '&amp;', '<': '&lt;', '≤': '&le;', '>': '&gt;', '≥': '&ge;', '"': '&quot;', "'": '#039'};
+                return str.replace(/([&<≤>≥'"]+)/g, (m, c) => map[c] || '');
+            }
 
 
-        /* When an category select widget is changed, its children must be cleared */
-        $("select[name='var']").on('change', function(){
+            /* When an category select widget is changed, its children must be cleared */
+            $("select[name='var']").on('change', function(){
 
-            $.each($(this).parent().nextUntil('#search_field'), function(key, elem){
-                elem.remove();
+                $.each($(this).parent().nextUntil('#search_field'), function(key, elem){
+                    elem.remove();
+                });
+
+            });
+
+
+            /* When the user changes the category in one of the search category fields then 
+               the search form is submitted automatically */
+            $('select[name="var"]').on('change', function(){
+                $('#categories_form').submit();
             });
 
         });
-
     </script>
 {% endblock extrascripts %}

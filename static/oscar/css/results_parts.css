@@ -103,3 +103,44 @@ span.diagram_number {
 .thumbnail p {
     margin: 5px;
 }
+
+
+/* Search By Categories form styles */
+
+#categories_form select[name='var'] {
+    text-align: center;
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;       /* remove default arrow */
+    background: transparent;
+    outline: none;
+    border: none;
+    color: white;
+    font-family: 'Gotham Book';
+    width: 100%;
+    z-index: 1;
+    padding: 0;
+    cursor: pointer;
+    padding-inline-end: 32px;
+    padding-inline-start: 27px;
+    position: relative;
+
+}
+
+#categories_form .form-group.category-select {
+    position: relative;
+    cursor: pointer;
+    position: relative;
+    background-color: #0d4a6c;
+    color: white;
+    display: block;
+}
+
+
+#categories_form .form-group > i.icon-chevron-down {
+    position: absolute;
+    right: 11px;
+    font-size: 1.7rem;
+    color: #ffffff;
+    top: 10px;
+}

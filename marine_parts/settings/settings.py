@@ -45,11 +45,11 @@ THIRD_PARTY_APPS = [
     'django_countries',
     'widget_tweaks',
     'ads',
+    'sslserver',
 ]
 
 SYSTEM_APPS = [
     'marine_parts.apps.users',
-    'marine_parts.apps.authorize',
 ]
 
 DJANGO_APPS = [
@@ -65,12 +65,13 @@ DJANGO_APPS = [
 
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + SYSTEM_APPS \
     + get_core_apps([
-        'marine_parts.apps.customer',
-        'marine_parts.apps.promotions',
-        'marine_parts.apps.customer',
         'marine_parts.apps.catalogue',
-        'marine_parts.apps.search',
+        'marine_parts.apps.checkout',
+        'marine_parts.apps.customer',
         'marine_parts.apps.dashboard.catalogue',
+        'marine_parts.apps.promotions',
+        'marine_parts.apps.search',
+        'marine_parts.apps.shipping',
     ])
 
 AUTH_USER_MODEL = 'users.User'
@@ -88,6 +89,12 @@ OSCAR_ORDER_STATUS_PIPELINE = {
     'Being processed': ('Processed', 'Cancelled',),
     'Cancelled': (),
 }
+
+
+# Oscar display setting
+OSCAR_SHOP_NAME = 'Marine parts'
+OSCAR_DEFAULT_CURRENCY = 'USD'
+OSCAR_SHOP_TAGLINE = 'Marine parts - Best Shop'
 
 SITE_ID = 1
 
@@ -109,6 +116,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'marine_parts.urls'
+
+# Disable when there is real email service available
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
 
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.EmailBackend',
@@ -152,10 +164,11 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 # Oscar templates
                 'oscar.apps.search.context_processors.search_form',
-                'oscar.apps.promotions.context_processors.promotions',
                 'oscar.apps.checkout.context_processors.checkout',
                 'oscar.apps.customer.notifications.context_processors.notifications',
                 'oscar.core.context_processors.metadata',
+
+                'marine_parts.apps.promotions.context_processors.promotions',
             ],
         },
     },
@@ -277,6 +290,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'email@email.com'
-EMAIL_HOST_PASSWORD = 'password'
+EMAIL_HOST_USER = 'franpad8@gmail.com'
+EMAIL_HOST_PASSWORD = 'Man08utd20*'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
