@@ -56,6 +56,7 @@ dfn {
 h1 {
   font-size: 2em;
   margin: 0.67em 0;
+  font-family: 'Gotham Book' !important;
 }
 mark {
   background: #ff0;
@@ -219,6 +220,7 @@ th {
   h3 {
     orphans: 3;
     widows: 3;
+    font-family: 'Gotham Book' !important;
   }
   h2,
   h3 {

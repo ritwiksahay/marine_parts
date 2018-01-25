@@ -47,9 +47,10 @@ class SearchForm(BrowseCategoryForm):
     # Use a tabindex of 1 so that users can hit tab on any page and it will
     # focus on the search widget.
     q = forms.CharField(
-        required=False, label=_('Search'),
+        required=False,
+        label=_('Keywords or part number'),
         widget=SearchInput({
-            "placeholder": _('Search'),
+            "placeholder": _('Keywords or part number'),
             "tabindex": "1",
             "class": "form-control"
         }))
