@@ -37,6 +37,19 @@ FIXTURES_DIRS = (
     'marine_parts.apps.users.fixtures',
 )
 
+OSCAR_DASHBOARD_NAVIGATION += [
+    {
+        'label': 'Shipping',
+        'icon': 'fa fa-ship',
+        'children' : [
+            {
+                'label': 'Shipping Methods',
+                'url_name': 'dashboard:shipping-method-list'
+            }
+        ]
+    }
+]
+
 THIRD_PARTY_APPS = [
     'bootstrap_admin',
     'safedelete',
@@ -64,7 +77,7 @@ DJANGO_APPS = [
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + SYSTEM_APPS \
-    + get_core_apps(['marine_parts.apps.search', 'marine_parts.apps.catalogue',
+    + get_core_apps(['marine_parts.apps.search', 'marine_parts.apps.catalogue', 'marine_parts.apps.shipping',
                      'marine_parts.apps.dashboard.catalogue'])
 
 AUTH_USER_MODEL = 'users.User'
