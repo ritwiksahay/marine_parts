@@ -40,7 +40,7 @@ FIXTURES_DIRS = (
 OSCAR_DASHBOARD_NAVIGATION += [
     {
         'label': 'Shipping',
-        'icon': 'fa fa-ship',
+        'icon': 'icon-map-marker',
         'children' : [
             {
                 'label': 'Shipping Methods',
