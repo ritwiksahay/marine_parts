@@ -120,13 +120,10 @@ ROOT_URLCONF = 'marine_parts.urls'
 # Disable when there is real email service available
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-
-
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-
 
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -187,8 +184,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'marine_parts_db',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'USER': 'mp_user',
+        'PASSWORD': '@mP19451#',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -291,5 +288,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'parts@marineparts.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = 'M@rine0470'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
