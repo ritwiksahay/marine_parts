@@ -43,7 +43,7 @@
                         </small>
                     {% endif %}
                 </div>
-                <div class="col-sm-1">
+                <div class="col-sm-1 price_color">
                     {% shipping_charge method basket as charge %}
                     {% if charge.is_tax_known %}
                         {{ charge.incl_tax|currency:basket.currency }}

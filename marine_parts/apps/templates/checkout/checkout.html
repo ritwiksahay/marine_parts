@@ -13,6 +13,11 @@
     {% include 'checkout/nav.html' %}
 {% endblock %}
 
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "oscar/css/checkout.css" %}" />
+{% endblock %}
+
 {% block content %}
 
     {% if error %}
@@ -106,9 +111,9 @@
         </div>
         <div class="basket-title">
             <div class="row">
-                <p class="col-sm-9 h4">{% trans "Item" %}</p>
-                <p class="col-sm-1 h4 align-center">{% trans "Quantity" %}</p>
-                <p class="col-sm-2 h4 align-right">{% trans "Total" %}</p>
+                <p class="col-sm-9 h3">{% trans "Item" %}</p>
+                <p class="col-sm-1 h3 align-center">{% trans "Quantity" %}</p>
+                <p class="col-sm-2 h3 align-right">{% trans "Total" %}</p>
             </div>
         </div>
         {% for line in basket.all_lines %}
@@ -129,7 +134,9 @@
                         <span class="availability {{ session.availability.code }}">{{ session.availability.message }}</span>
                     </div>
                     <div class="col-sm-1 align-center">
-                        {{ line.quantity }}
+                        <p class="price_color">
+                            {{ line.quantity }}
+                        </p>
                     </div>
                     <div class="col-sm-2 align-right">
                         <p class="price_color">

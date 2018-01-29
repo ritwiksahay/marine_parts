@@ -44,20 +44,20 @@
                     <a href="{% url 'customer:notifications-inbox' %}">
                         {% trans "Account" %}
                         <span class="label label-important">{{ num_unread_notifications }}</span>
-                        <i class="icon-user"></i>
+                        <span class="icon icon-user"></span>
                     </a>
                 </div>
                 <div class="col-lg-2 col-md-1 text-center">
                     <a href="{% url 'basket:summary' %}">
                         {% trans "Basket" %}
-                        <i class="icon-shopping-cart"></i>
+                        <span class="icon icon-cart"></span>
                         {% if not request.basket.is_empty %}
                             {{request.basket.num_items}}
                         {% endif %}
                     </a>
                 </div>
                 <div class="col-lg-1 col-md-1 text-center">
-                    <a href="">
+                    <a href="/accounts/contact/">
                         {% trans "Contact"%}
                     </a>
                 </div>

@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block extrastyles %}
+    <link rel="stylesheet" href="{% static 'css/contact/customer_contact.css' %}">
+{% endblock extrastyles %}
+
+{% block secondheadertext %}
+    {% trans "Contact us"|upper %}
+{% endblock secondheadertext %}
+
+{% block content %}
+    <form action="." method="post" class="form">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {% render_field field class="form-control" placeholder=field.help_text%}
+            </div>
+        {% endfor %}
+        <button class="btn btn-primary text-uppercase send">
+            {% trans "Send" %}
+        </button>
+    </form>
+{% endblock content %}
+
+{% block bottom %}
+<br>
+<div class="container-fluid contact-image">
+    <div class="row">
+        <img class="img-responsive" src="{% static 'img/contact.jpg' %}" alt="contact">
+    </div>
+</div>
+{% endblock bottom %}

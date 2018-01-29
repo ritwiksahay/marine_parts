@@ -3,15 +3,15 @@ Header style sheet file
 Marine Parts Colors:
 
 Deep Blue: #11274F;
-Mid Blue: #274164;
-Light Blue: #25ACCB;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
 Light Gray: #E6E6E6;
 
 */
 
 .filter-title{
-    font-family: 'Gotham Bold';
-    color: #274164;
+    font-family: 'Gotham Bold' !important;
+    color: #0d4a6c;
 }
 
 .page_inner{
@@ -19,17 +19,17 @@ Light Gray: #E6E6E6;
 }
 
 .page-header{
-    font-family: 'Gotham Bold';
+    font-family: 'Gotham Bold' !important;
 }
 
 .page_inner div .sidebar,
 .page_inner div .content{
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
 .page_inner div .content{
-    background-color: #274164;
+    background-color: #0d4a6c;
     color: #FFFFFF;
 }
 
@@ -58,4 +58,48 @@ Light Gray: #E6E6E6;
     font-family: 'Gotham Bold';
     font-size: 16px;
     height: 40px;
+}
+
+.page_inner div .sidebar {
+    border-right: 2px solid #eee;
+    border-bottom: 2px solid #eee;
+}
+
+/* Search By Categories form styles */
+
+#categories_form select[name='var'] {
+    text-align: center;
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;       /* remove default arrow */
+    background: transparent;
+    outline: none;
+    border: none;
+    color: white;
+    font-family: 'Gotham Book';
+    width: 100%;
+    z-index: 1;
+    padding: 0;
+    cursor: pointer;
+    padding-inline-end: 32px;
+    padding-inline-start: 27px;
+    position: relative;
+
+}
+
+#categories_form .form-group.category-select {
+    position: relative;
+    cursor: pointer;
+    position: relative;
+    background-color: #0d4a6c;
+    color: white;
+    display: block;
+}
+
+#categories_form .form-group > i.icon-chevron-down {
+    position: absolute;
+    right: 13px;
+    font-size: 1.3rem;
+    color: #ffffff;
+    top: 12px;
 }

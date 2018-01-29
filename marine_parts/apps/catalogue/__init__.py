@@ -1,1 +1,1 @@
-default_app_config = 'oscar.apps.catalogue.config.CatalogueConfig'
+default_app_config = 'marine_parts.apps.catalogue.config.CatalogueConfig'

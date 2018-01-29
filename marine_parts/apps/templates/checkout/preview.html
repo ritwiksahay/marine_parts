@@ -7,7 +7,7 @@
     <div class="sub-header">
         <h2>{% trans "Payment" %}</h2>
     </div>
-    <div class="well well-success">
+    <div>
         <p>{% blocktrans with amount=order_total.incl_tax|currency %}<strong>{{ amount }}</strong> will be debited from your bankcard.{% endblocktrans %}</p>
         <div class="alert-actions">
             <a href="{% url 'checkout:payment-details' %}" class="btn">{% trans "Change payment details" %}</a>
@@ -25,8 +25,12 @@
     <form method="post" action="{% url 'checkout:preview' %}" id="place_order_form">
         {% csrf_token %}
         <input type="hidden" name="action" value="place_order" />
-        <input type="hidden" name="card-number" value="{{ cardNumber}}" />
-        <input type="hidden" name="cvv" value="{{ cvv }}" />
+        <input type="hidden" name="token_chk" value="{{ token_chk }}" />
+        <input type="hidden" name="descriptor" value="{{ descriptor }}" />
+        <input type="hidden" name="cardholder_name" value="{{ cardholder_name }}" />
+	  	<input type="hidden" name="card_type" value="{{ card_type }}" />
+	  	<input type="hidden" name="exp_date" value="{{ exp_date }}" />
+        <input type="hidden" name="payment-method" value="{{ payment_method }}">
 
         {% comment %}
             When submitting sensitive data on the payment details page (eg a bankcard)

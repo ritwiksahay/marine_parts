@@ -6,7 +6,7 @@
 </h3>
 <form method="get" action="{% url 'search:search' %}" class="filter-form form-horizontal col-lg-12 col-md-12" id="categories_form">
     <div class="form-group text-center" id="search_field">
-        {% render_field search_form.q label='' placeholder='Keywords or part number' class+="search-field" %}
+        {% render_field search_form.q label='' placeholder=field.placeholder class+="search-field" %}
     </div>
     <div class="form-group text-center">
         <button type="submit" class="search-button btn btn-primary col-sm-8">

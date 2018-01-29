@@ -1,84 +1,70 @@
-"""
-Vanilla product models
-"""
-from oscar.apps.catalogue.abstract_models import *  # noqa
-from oscar.core.loading import is_model_registered
+"""Override of Oscar's Catalogue app Models."""
 
-__all__ = ['ProductAttributesContainer']
+from urllib import pathname2url as to_url
 
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 
-if not is_model_registered('catalogue', 'ProductClass'):
-    class ProductClass(AbstractProductClass):
-        pass
+from oscar.apps.catalogue import abstract_models
+from oscar.apps.catalogue.abstract_models import AbstractCategory
 
-    __all__.append('ProductClass')
+from marine_parts.apps.catalogue.abstract_models import  AbstractReplacementProduct
 
 
-if not is_model_registered('catalogue', 'Category'):
-    class Category(AbstractCategory):
-        pass
+class Category(AbstractCategory):
+    """Override of Category Model."""
 
-    __all__.append('Category')
+    diagram_image = models.ImageField(
+        _('Diagram'),
+        upload_to='categories',
+        blank=True,
+        null=True,
+        max_length=255,
+        help_text=_("Parts Diagram. Only upload a diagram image if "
+                    "you are creating a Leaf Category (Component).")
+    )
 
+    def get_absolute_url(self):
+        """Building the url that points to the search of the category."""
+        url = reverse('search:search') + '?var=category:'
+        url += '&var=category:' \
+            .join([to_url(c.full_name) for c in self.get_ancestors_and_self()])
 
-if not is_model_registered('catalogue', 'ProductCategory'):
-    class ProductCategory(AbstractProductCategory):
-        pass
+        return url
 
-    __all__.append('ProductCategory')
-
-
-if not is_model_registered('catalogue', 'Product'):
-    class Product(AbstractProduct):
-        pass
-
-    __all__.append('Product')
-
-
-if not is_model_registered('catalogue', 'ProductRecommendation'):
-    class ProductRecommendation(AbstractProductRecommendation):
-        pass
-
-    __all__.append('ProductRecommendation')
-
-
-if not is_model_registered('catalogue', 'ProductAttribute'):
-    class ProductAttribute(AbstractProductAttribute):
-        pass
-
-    __all__.append('ProductAttribute')
+    # def clean(self):
+    #    """Override Category Validation Method."""
+    # When adding a new category, the parent cannot have a diagram image
+    #    super(Category, self).clean()
+    #    if self.get_parent().diagram_image:
+    #        raise ValidationError(
+    #            _("Cannot add a child to a leaf category."
+    #              "Delete diagram image in the parent first.")
+    #        )
 
 
-if not is_model_registered('catalogue', 'ProductAttributeValue'):
-    class ProductAttributeValue(AbstractProductAttributeValue):
-        pass
+# @python_2_unicode_compatible
+class Product(abstract_models.AbstractProduct):
+    replacement_products = models.ManyToManyField(
+        'Product', through='ReplacementProduct', blank=True,
+        related_name='replacements',
+        verbose_name=_("Replacement products"),
+        through_fields=('primary', 'replacement'),
+        help_text=_("These are products that are designated to replace "
+                    "main product."))
 
-    __all__.append('ProductAttributeValue')
-
-
-if not is_model_registered('catalogue', 'AttributeOptionGroup'):
-    class AttributeOptionGroup(AbstractAttributeOptionGroup):
-        pass
-
-    __all__.append('AttributeOptionGroup')
-
-
-if not is_model_registered('catalogue', 'AttributeOption'):
-    class AttributeOption(AbstractAttributeOption):
-        pass
-
-    __all__.append('AttributeOption')
+    recommended_products = models.ManyToManyField(
+        'Product', through='ProductRecommendation', blank=True,
+        related_name='recommendations',
+        verbose_name=_("Recommended products"),
+        through_fields=('primary', 'recommendation'),
+        help_text=_("These are products that are recommended to accompany the "
+                    "main product."))
 
 
-if not is_model_registered('catalogue', 'Option'):
-    class Option(AbstractOption):
-        pass
+# if not is_model_registered('catalogue.', 'ReplacementProduct'):
+class ReplacementProduct(AbstractReplacementProduct):
+    pass
 
-    __all__.append('Option')
-
-
-if not is_model_registered('catalogue', 'ProductImage'):
-    class ProductImage(AbstractProductImage):
-        pass
-
-    __all__.append('ProductImage')
+from oscar.apps.catalogue.models import *  # noqa isort:skip
