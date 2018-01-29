@@ -1,11 +1,13 @@
+
 from django import forms
 from django.core import exceptions
 from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
-
 from oscar.core.loading import get_classes, get_model
 
-Product = get_model('catalogue', 'Product')
+from marine_parts.apps.catalogue.models import Product, ReplacementProduct
+from marine_parts.apps.dashboard.catalogue.forms import ProductReplacementForm
+
 ProductClass = get_model('catalogue', 'ProductClass')
 ProductAttribute = get_model('catalogue', 'ProductAttribute')
 Category = get_model('catalogue', 'Category')
@@ -29,6 +31,16 @@ ProductRecommendation = get_model('catalogue', 'ProductRecommendation')
 
 BaseStockRecordFormSet = inlineformset_factory(
     Product, StockRecord, form=StockRecordForm, extra=1)
+
+BaseProductRecommendationFormSet = inlineformset_factory(
+    Product, ReplacementProduct, form=ProductReplacementForm,
+    extra=5, fk_name="replacement")
+
+
+class ProductReplacementFormSet(BaseProductRecommendationFormSet):
+
+    def __init__(self, product_class, user, *args, **kwargs):
+        super(ProductReplacementFormSet, self).__init__(*args, **kwargs)
 
 
 class StockRecordFormSet(BaseStockRecordFormSet):
@@ -118,9 +130,9 @@ class ProductCategoryFormSet(BaseProductCategoryFormSet):
         num_categories = 0
         for i in range(0, self.total_form_count()):
             form = self.forms[i]
-            if (hasattr(form, 'cleaned_data')
-                    and form.cleaned_data.get('category', None)
-                    and not form.cleaned_data.get('DELETE', False)):
+            if (hasattr(form, 'cleaned_data') and
+                    form.cleaned_data.get('category', None) and
+                    not form.cleaned_data.get('DELETE', False)):
                 num_categories += 1
         return num_categories
 
