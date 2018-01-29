@@ -71,11 +71,12 @@
                     <tbody>
                         {% for result in page.object_list %}
                         {% with product=result.object %}
-                        <tr>
+                        {% purchase_info_for_product request product as session %}
+                        <tr {% if session.availability.is_available_to_buy %}{% else %}style="background-color: #ccc;"{% endif %}>
                             <td><span class="diagram_number">{{ product.attr.DN }}</span></td>
                             <td>{{ product.attr.PN }}</td>
                             <td><a href="{{ product.get_absolute_url }}">{{ product.get_title }}</a></td>
-                            {% purchase_info_for_product request product as session %}
+                            
                             <td>{% if session.price.exists %}
                                     {% if session.price.excl_tax == 0 %}
                                         <p class="price_color">{% trans "Free" %}</p>
