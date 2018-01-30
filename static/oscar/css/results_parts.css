@@ -112,7 +112,7 @@ span.diagram_number {
     -webkit-appearance: none; 
     -moz-appearance: none;
     appearance: none;       /* remove default arrow */
-    background: transparent;
+    background: #0d4a6c;
     outline: none;
     border: none;
     color: white;
@@ -124,7 +124,12 @@ span.diagram_number {
     padding-inline-end: 32px;
     padding-inline-start: 27px;
     position: relative;
+    text-align-last: center;
 
+}
+
+#categories_form select[name='var'] option {
+    background: #0d4a6c;
 }
 
 #categories_form .form-group.category-select {
@@ -143,4 +148,5 @@ span.diagram_number {
     font-size: 1.7rem;
     color: #ffffff;
     top: 10px;
+    z-index: 1;
 }
