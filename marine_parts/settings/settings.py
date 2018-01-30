@@ -29,7 +29,7 @@ SECRET_KEY = 'cs)qm+=(yp=uvrkdam@vteo-giw_(4%4rdqmpq=b0otx9u*1*w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['34.226.121.167']
 
 
 # Application definition
@@ -120,19 +120,17 @@ ROOT_URLCONF = 'marine_parts.urls'
 # Disable when there is real email service available
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-
-
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
-
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://127.0.0.1:8983/solr/prueba_parts',
-        'ADMIN_URL': 'http://127.0.0.1:8983/solr/',
+        'URL': 'http://localhost:8983/solr/marine_parts',
+        'ADMIN_URL': 'http://localhost:8983/solr/',
+	'TIMEOUT': 60 * 5,
         'INCLUDE_SPELLING': True,
         'EXCLUDED_INDEXES': ['oscar.apps.search.search_indexes.ProductIndex'],
     },
@@ -187,25 +185,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'marine_parts_db',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'USER': 'mp_user',
+        'PASSWORD': '@mP19451#',
         'HOST': 'localhost',
         'PORT': '',
     }
 }
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': 'db.sqlite3',
-#         'USER': '',
-#         'PASSWORD': '',
-#         'HOST': '',
-#         'PORT': '',
-#         'ATOMIC_REQUESTS': True,
-#     }
-# }
 
 # Google Ads
 ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  #OPTIONAL-DEFAULT TO None
@@ -280,13 +265,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = location('../static/')
+STATIC_ROOT = location('/home/ubuntu/marine-parts/static')
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
 STATICFILES_DIRS = (
-    os.path.join('static/'),
+
 )
 
 MEDIA_URL = '/media/'
@@ -304,5 +291,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'parts@marineparts.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = 'M@rine0470'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

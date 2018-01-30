@@ -1,0 +1,107 @@
+/*
+Header style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+.page_inner{
+    padding: 0px;
+    background-color: #e6e6e6 !important;
+}
+
+.brands{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-left: 0px;
+    margin-right: 0px;
+    background-image: url('../img/brands-home.jpg')
+}
+
+.brands-title{
+    font-family: 'Magneto';
+    font-size: 40px;
+    color: #FFFFFF;
+    margin-bottom: 0px;
+}
+
+.brands div .row .brand{
+    padding: 12px 25px 12px 25px;
+}
+
+.best-sellers{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-left: 0px;
+    margin-right: 0px;
+    font-family: 'Gotham Bold';
+    border-bottom: 1.8px solid #0d4a6c;
+    background-color: #FFFFFF;
+}
+
+.best-sellers-title{
+    font-family: 'Magneto';
+    font-size: 36px;
+    color: #0d4a6c;
+}
+
+.best-sellers div div .row .category{
+    padding-left: 35px;
+    padding-right: 35px;
+}
+
+.best-sellers div div .row .bordered{
+    border-left: 1px solid #04a0d3;
+}
+
+.categories{
+    padding-top: 15px;
+    margin-left: 0px;
+    margin-right: 0px;
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+}
+
+.categories-title{
+    font-family: 'Magneto';
+    font-size: 36px;
+    color: #0d4a6c;
+}
+
+.categories div .row div.category{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top: 1px solid #0d4a6c;
+}
+
+.categories div .row div.bordered{
+    border-right: 1px solid #0d4a6c;
+}
+
+.categories div .row div img.category-icon{
+    width: 42px;
+    display: inline-block;
+}
+
+.categories div .row div a:hover{
+    color: #0d4a6c;
+}
+
+.categories div .row div a{
+    color: #0d4a6c;
+    text-decoration: none;
+}
+
+.categories div .row div a p{
+    display: inline-block;
+    width: 75%;
+    text-align: center;
+}

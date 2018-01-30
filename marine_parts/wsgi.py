@@ -1,5 +1,5 @@
 """
-WSGI config for frobshop project.
+WSGI config for marine parts project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
