@@ -37,6 +37,20 @@ FIXTURES_DIRS = (
     'marine_parts.apps.users.fixtures',
 )
 
+OSCAR_DASHBOARD_NAVIGATION += [
+    {
+        'label': 'Shipping',
+        'icon': 'icon-map-marker',
+        'children' : [
+            {
+                'label': 'Shipping Methods',
+                'url_name': 'dashboard:shipping-method-list'
+            }
+        ]
+    }
+]
+
+
 THIRD_PARTY_APPS = [
     'bootstrap_admin',
     'safedelete',
