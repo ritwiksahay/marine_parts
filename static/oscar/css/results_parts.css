@@ -92,11 +92,14 @@ table thead {
 }
 
 span.diagram_number {
-    border: 2px solid #0d4a6c;
-    border-radius: 40px;
-    padding: 3px 5px;
-    font-size: 1.7rem;
+    border: 2px solid white;
+    border-radius: 20px;
+    padding: 10px 6px;
+    font-size: 1.5rem;
     font-weight: bolder;
+    color: inherit;
+    position: relative;
+    top: 25px;
 }
 
 /* thumbnail styles */
@@ -112,7 +115,7 @@ span.diagram_number {
     -webkit-appearance: none; 
     -moz-appearance: none;
     appearance: none;       /* remove default arrow */
-    background: transparent;
+    background: #0d4a6c;
     outline: none;
     border: none;
     color: white;
@@ -124,7 +127,12 @@ span.diagram_number {
     padding-inline-end: 32px;
     padding-inline-start: 27px;
     position: relative;
+    text-align-last: center;
 
+}
+
+#categories_form select[name='var'] option {
+    background: #0d4a6c;
 }
 
 #categories_form .form-group.category-select {
@@ -143,4 +151,15 @@ span.diagram_number {
     font-size: 1.7rem;
     color: #ffffff;
     top: 10px;
+    z-index: 1;
+}
+
+.table tr.component_header {
+    background-color: #04a0d3;
+    color: white;
+    font-family: "Gotham Bold";
+}
+
+.table tr.component_header a {
+    color: white;
 }
