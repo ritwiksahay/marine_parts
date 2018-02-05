@@ -50,6 +50,7 @@ THIRD_PARTY_APPS = [
 
 SYSTEM_APPS = [
     'marine_parts.apps.users',
+    'marine_parts.apps.dashboard.bulk_price_updater'
 ]
 
 DJANGO_APPS = [
@@ -68,6 +69,7 @@ INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + SYSTEM_APPS \
         'marine_parts.apps.catalogue',
         'marine_parts.apps.checkout',
         'marine_parts.apps.customer',
+        'marine_parts.apps.dashboard',
         'marine_parts.apps.dashboard.catalogue',
         'marine_parts.apps.promotions',
         'marine_parts.apps.search',
@@ -90,9 +92,28 @@ OSCAR_ORDER_STATUS_PIPELINE = {
     'Cancelled': (),
 }
 
+# Add updater
+OSCAR_DASHBOARD_NAVIGATION += [
+    {
+        'label': 'Shipping',
+        'icon': 'icon-map-marker',
+        'children' : [
+            {
+                'label': 'Shipping Methods',
+                'url_name': 'dashboard:shipping-method-list'
+            }
+        ]
+    },
+    {
+        'label': 'Bulk price update',
+        'icon': 'icon-map-marker',
+        'url_name' : 'dashboard:bulk-price-updater-index',
+        #'access_fn': lambda user, url_name, url_args, url_kwargs: user.is_staff
+    }
+]
+
 
 # Oscar display setting
-OSCAR_SHOP_NAME = 'Marine parts'
 OSCAR_DEFAULT_CURRENCY = 'USD'
 OSCAR_SHOP_TAGLINE = 'Marine parts - Best Shop'
 
@@ -183,29 +204,29 @@ WSGI_APPLICATION = 'marine_parts.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'marine_parts_db',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': 'db.sqlite3',
-#         'USER': '',
-#         'PASSWORD': '',
-#         'HOST': '',
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'marine_parts_db',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'localhost',
 #         'PORT': '',
-#         'ATOMIC_REQUESTS': True,
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+        'ATOMIC_REQUESTS': True,
+    }
+}
 
 # Google Ads
 ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  #OPTIONAL-DEFAULT TO None
