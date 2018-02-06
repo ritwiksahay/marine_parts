@@ -56,29 +56,33 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 search-bar">
                         {% include "partials/search.html" %}
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-2 text-center">
+                    <div class="col-lg-2 col-md-2 col-sm-2 text-center user-cart">
                         {% if user.is_authenticated %}
                             {% if num_unread_notifications > 0 %}
                                 {# If user has new notifications - we change account link to go to inbox #}
-                                <a href="{% url 'customer:notifications-inbox' %}">
+                                <a href="{% url 'customer:notifications-inbox' %}" class="user">
                                     <span class="icon icon-user"></span>
                                     <span class="label label-important">{{ num_unread_notifications }}</span>
                                 </a>
                             {% else %}
-                                <a href="{% url 'customer:summary' %}">
+                                <a href="{% url 'customer:summary' %}" class="user">
                                     <span class="icon icon-user"></span>
                                 </a>
                             {% endif %}
                         {% else %}
-                            <a id="login_link" href="{% url 'customer:login' %}">
+                            <a id="login_link" href="{% url 'customer:login' %}" class="user">
                                 <span class="icon icon-user"></span>
                             </a>
                         {% endif %}
-                        <a href="{% url 'basket:summary' %}">
+                        <a href="{% url 'basket:summary' %}" class="basket">
                             <span class="icon icon-cart"></span>
-                            {% if not request.basket.is_empty %}
-                                {{request.basket.num_items}}
-                            {% endif %}
+                            <span class="rounded">
+                                {% if not request.basket.is_empty %}
+                                    {{request.basket.num_items}}
+                                {%else%}
+                                    0
+                                {% endif %}
+                            </span>
                         </a>
                     </div>
                 </div>
