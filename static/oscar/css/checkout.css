@@ -77,6 +77,8 @@ form .form-group .row{
 }
 
 .page_inner form select {
+	min-width: 100px;
+    text-align-last: center;
  	text-align: center;
     -webkit-appearance: none; 
     -moz-appearance: none;
