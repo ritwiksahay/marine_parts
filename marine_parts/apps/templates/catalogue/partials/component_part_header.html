@@ -1,9 +1,7 @@
+{% load component_filters %}
 {% load i18n %}
 
-
 <tr class="component_header">
-    <td><div style="min-height: 70px;"><span class="diagram_number">{{ product.attr.DN }}</span></div></td>
-    <td colspan="2">{{ product.attr.PN }}</td>
-    <td colspan="2"><a href="{{ product.get_absolute_url }}">{{ product.get_title }}</a></td>
+    <td><span class="diagram_number">{{ product.attr.DN }}</span></div></td>
+    <td colspan="4" style="text-align: left;"><a href="{{ product.get_absolute_url }}" >{{ product.get_title | strip_part_number }}</a></td>
 </tr>
-

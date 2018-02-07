@@ -94,12 +94,10 @@ table thead {
 span.diagram_number {
     border: 2px solid white;
     border-radius: 20px;
-    padding: 10px 6px;
-    font-size: 1.5rem;
+    padding: 6px 4px;
+    font-size: 1.4rem;
     font-weight: bolder;
     color: inherit;
-    position: relative;
-    top: 25px;
 }
 
 /* thumbnail styles */
@@ -162,4 +160,13 @@ span.diagram_number {
 
 .table tr.component_header a {
     color: white;
+}
+
+.highlighted {
+    color: yellow;
+}
+
+.deprecated, .deprecated:hover {
+    color: #04a0d3;
+    text-decoration: none;
 }

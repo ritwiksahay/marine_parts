@@ -1,16 +1,14 @@
 {% load basket_tags %}
+{% load component_filters %}
 {% load component_tags %}
 {% load currency_filters %}
 {% load purchase_info_tags %}
 {% load i18n %}
 
-
+{% with replacements=product.replacement_products.all %}
 
 <tr>
-    <td colspan="1" style="min-height: 50px;">{{ product.attr.PN }}</td>
-    <td colspan="3" scope="colgroup"><a href="{{ product.get_absolute_url }}">{{ product.get_title }}</a></td>
-
-{% with replacements=product.replacement_products.all %}
+    <td colspan="4" scope="colgroup"><a {% if replacements %} class="deprecated" {% else %}href="{{ product.get_absolute_url }}"{% endif %}>{{ product.get_title | strip_part_number }}</a></td>
 
     {% if session.availability.is_available_to_buy %}
         <td colspan="1">

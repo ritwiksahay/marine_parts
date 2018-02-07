@@ -108,3 +108,7 @@ Light Gray: #E6E6E6;
     color: #ffffff;
     top: 12px;
 }
+
+.highlighted {
+    color: yellow;
+}

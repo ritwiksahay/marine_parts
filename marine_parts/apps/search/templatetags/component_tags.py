@@ -1,4 +1,4 @@
-"""."""
+"""Template tags for component view."""
 
 from django import template
 from django.template.loader import select_template
@@ -10,15 +10,16 @@ register = template.Library()
 
 @register.filter
 def to_replacement_tree(products):
-    """."""
+    """Retrieve all the parts to show in the component view."""
     # get a list of the products's ids
     products_ids = [p.pk for p in products]
 
-    replacements = [rp.replacement.pk for rp in
-                    ReplacementProduct.objects.all()]
+    replacements = ReplacementProduct.objects \
+        .values_list('replacement', flat=True)
 
-    # get
+    # get replaced products
     replacement_products = ReplacementProduct.objects \
+        .select_related('primary') \
         .filter(primary__pk__in=products_ids) \
         .exclude(primary__pk__in=replacements) \
         .distinct()
@@ -29,9 +30,10 @@ def to_replacement_tree(products):
     # any other product
     result_products = result_products + \
         [p.object for p in products if
-         len(p.object.replacements.all()) == 0 and
-         len(p.object.replacement_products.all()) == 0]
+         p.object.replacements.count() == 0 and
+         p.object.replacement_products.count() == 0]
 
+    # sort the result list by diagram number
     result_products = sorted(result_products, key=get_key)
 
     return result_products
@@ -45,11 +47,7 @@ def get_key(p):
 
 @register.simple_tag(takes_context=True)
 def render_component_part(context, product, session):
-    """
-    Render a product snippet as you would see in a browsing display.
-
-    This templatetag looks for different templates depending on the
-    """
+    """Render a component part."""
     if not product:
         # Search index is returning products that don't exist in the
         # database...
@@ -67,13 +65,7 @@ def render_component_part(context, product, session):
 
 @register.simple_tag(takes_context=True)
 def render_component_part_header(context, product, session):
-    """
-    Render a product snippet as you would see in a browsing display.
-
-    This templatetag looks for different templates depending on the UPC and
-    product class of the passed product.  This allows alternative templates to
-    be used for different product classes.
-    """
+    """Render a component part header."""
     if not product:
         # Search index is returning products that don't exist in the
         # database...
