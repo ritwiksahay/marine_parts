@@ -45,15 +45,39 @@ Light Gray: #e6e6e6;
 .header .navbar-nav a{
     font-family: "Gotham Book";
     color: #0d4a6c;
-    font-size: 18px;
 }
 
 .header .navbar-nav div.text-center{
     margin-top: 2.5%;
+    font-size: 18px;
 }
 
-.header .navbar-nav div.search-bar{
-    margin-top: 1.5%;
+.header .navbar-nav div h4{
+    margin-bottom: 0px;
+    font-family: 'Gotham Book';
+    color: #0d4a6c;
+    font-size: 18px;
+}
+
+.header .navbar-nav div.user-cart a:hover{
+    text-decoration: none;
+}
+
+.header .navbar-nav div.user-cart .user{
+    font-size: 20px;
+}
+
+.header .navbar-nav div.user-cart .basket{
+    font-size: 18px;
+}
+
+.header .navbar-nav div.user-cart .basket .rounded{
+    width: 30px;
+    height: 21px;
+    color: #e6e6e6;
+    background-color: #0d4a6c; 
+    display: inline-block;
+    font-size: 18px;
 }
 
 .header .navbar-nav div.search-bar form div .search-form{
