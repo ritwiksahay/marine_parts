@@ -38,32 +38,63 @@ Light Gray: #e6e6e6;
 .best-sellers{
     padding-top: 15px;
     padding-bottom: 15px;
-    padding-left: 30px;
-    padding-right: 30px;
     margin-left: 0px;
     margin-right: 0px;
     font-family: 'Gotham Bold';
-    border-bottom: 1.8px solid #0d4a6c;
-    background-color: #FFFFFF;
+}
+
+.best-sellers > div{
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .best-sellers-title{
     font-family: 'Magneto';
     font-size: 36px;
     color: #0d4a6c;
+    margin-bottom: 5px;
 }
 
-.best-sellers div div .row .category{
-    padding-left: 35px;
-    padding-right: 35px;
+.best-sellers-title .canvas {
+    display: inline-block;
+    height: 25px;
+}
+
+.best-sellers-title .pixel{
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin: 0 12px;
+    background-color: #bababa;
+}
+
+
+.best-sellers div div.row .col-centered{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.best-sellers div div .row{
+    padding-left: 34px;
+    padding-right: 34px;
 }
 
 .best-sellers div div .row .bordered{
     border-left: 1px solid #04a0d3;
 }
 
+.best-sellers div div .row .category a img{
+    max-height: 175px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.best-sellers div div .row .category a p{
+    margin-bottom: 0px;
+}
+
 .categories{
-    padding-top: 15px;
+    padding-top: 0px;
     margin-left: 0px;
     margin-right: 0px;
     font-family: 'Gotham Bold';
@@ -104,4 +135,5 @@ Light Gray: #e6e6e6;
     display: inline-block;
     width: 75%;
     text-align: center;
+    margin-bottom: 10px;
 }

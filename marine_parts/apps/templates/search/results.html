@@ -1,13 +1,14 @@
 {% extends "layout_2_col.html" %}
-{% load staticfiles %}
+
+{% load basket_tags %}
+{% load component_tags %}
 {% load currency_filters %}
-{% load thumbnail %}
+{% load i18n %}
 {% load product_tags %}
 {% load purchase_info_tags %}
-{% load basket_tags %}
 {% load sorting_tags %}
-{% load component_tags %}
-{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
 
 
 {% block extrastyles %}
@@ -24,7 +25,6 @@
 {% endblock %}
 
 {% block headertext %}
-    
     {% if component and component.diagram_image %}
         {{component.name | upper}}
         <hr>
@@ -34,10 +34,9 @@
 {% endblock %}
 
 
-
 {% block content %}
     {% if component and component.diagram_image %}
-        <div class="col-xs-12 col-md-6">
+        <div class="col-xs-12 col-md-7">
             <div class="thumbnail">
                     <div>
                        {% if component.diagram_image %} 
@@ -49,21 +48,10 @@
                     <p class="text-center">{% trans "(Scroll over the image to zoom in or zoom out)" %}</p>
             </div>
         </div>
-        <div class="col-xs-12 col-md-6" style="overflow-y: scroll;height: 1000px;">
+        <div class="col-xs-12 col-md-5" style="overflow-y: scroll;height: 1000px;">
             {% if page.object_list %}
                 <table class="table text-center" style="table-layout: fixed;">
-                    <!--
-                    <thead>
-                        <th class="text-center text-uppercase">
-                            Diagram Nº
-                        </th>
-                        <th colspan="2" class="text-center text-uppercase">
-                            Part Nº
-                        </th>
-                        <th colspan="2" class="text-center text-uppercase">
-                            {% trans "Title" %}
-                        </th>
-                    </thead> -->
+
                     <tbody>
                         {% with results=page.object_list|to_replacement_tree %}
                             {% for product in results  %}

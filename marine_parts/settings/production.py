@@ -29,7 +29,7 @@ SECRET_KEY = 'cs)qm+=(yp=uvrkdam@vteo-giw_(4%4rdqmpq=b0otx9u*1*w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['34.226.121.167']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -49,6 +49,7 @@ OSCAR_DASHBOARD_NAVIGATION += [
         ]
     }
 ]
+
 
 THIRD_PARTY_APPS = [
     'bootstrap_admin',
@@ -141,9 +142,8 @@ AUTHENTICATION_BACKENDS = (
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://localhost:8983/solr/marine_parts',
-        'ADMIN_URL': 'http://localhost:8983/solr/',
-	'TIMEOUT': 60 * 5,
+        'URL': 'http://127.0.0.1:8983/solr/prueba_parts',
+        'ADMIN_URL': 'http://127.0.0.1:8983/solr/',
         'INCLUDE_SPELLING': True,
         'EXCLUDED_INDEXES': ['oscar.apps.search.search_indexes.ProductIndex'],
     },
@@ -278,15 +278,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = location('/home/ubuntu/marine-parts/static')
-
+STATIC_ROOT = location('../static/')
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-
 STATICFILES_DIRS = (
-
+    os.path.join('static/'),
 )
 
 MEDIA_URL = '/media/'
