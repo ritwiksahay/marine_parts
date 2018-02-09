@@ -1,6 +1,7 @@
 __pycache__/
 cache/
 haystack/
+logs/
 *.log
 *.pyc
 *.sqlite3
