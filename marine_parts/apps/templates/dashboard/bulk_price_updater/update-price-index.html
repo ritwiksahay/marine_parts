@@ -24,5 +24,9 @@
 
 
 {% block dashboard_content %}
-
+    <form action="{% url 'dashboard:bulk-price-updater-review' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Upload" />
+    </form>
 {% endblock %}

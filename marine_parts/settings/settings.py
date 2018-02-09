@@ -112,6 +112,9 @@ OSCAR_DASHBOARD_NAVIGATION += [
     }
 ]
 
+FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
+                        "django_excel.TemporaryExcelFileUploadHandler")
+
 
 # Oscar display setting
 OSCAR_DEFAULT_CURRENCY = 'USD'

@@ -1,19 +1,35 @@
-from oscar.apps.partner.models import StockRecord
+from oscar.apps.partner.models import StockRecord, Partner
+from marine_parts.apps.catalogue.models import Product
 from decimal import Decimal as D
 
+class DBHandler:
 
-def get_sr_part_numbers():
-    return StockRecord.objects.filter(product__upc='')
+    def update_by_part_number(self, pn, partner_name, price_excl_tax, retail_price, cost_price):
+        p = Product.objects.get(attribute_values__value_text=pn)
+        pp = Partner.objects.get(name=partner_name)
+        _, created = StockRecord.objects.get_or_create(product=p, partner=pp,
+                 defaults={'price_excl_tax' : price_excl_tax
+                            , 'retail_price': retail_price
+                            , 'cost_price' : cost_price
+                           })
+        return created
 
-def get_sr_partner_sku(stats, sku):
-    return StockRecord.objects.filter(partner__sku=sku)
 
+def updater(ls_st_rec, db):
+    stats = {
+        'created': 0,
+        'updated': 0,
+        'total': 0
+    }
 
-def updater(stats, ls_st_rec, change_func):
     for p in ls_st_rec:
-        stats['updated'] += 1
-        change_func(p)
-        p.save()
+        if db.update_by_part_number(p[''],):
+            stats['updated'] += 1
+        else:
+            stats['created'] += 1
+
+    stats['total'] = stats['created'] + stats['updated']
+    return stats
 
 
 def update_by_percent(percent):
@@ -27,12 +43,5 @@ def update_by_fixed_price(new_price):
         p.price_excl_tax = new_price
     return apply
 
-def execUpdater(sku,fun_updater):
-    stats = {
-                'not_found' : 0,
-                'updated' : 0,
-                'total' : 0
-            }
-
-    updater(stats, get_sr_partner_sku(stats, sku), fun_updater)
-
+def execUpdater(ls):
+    return updater(ls, DBHandler())

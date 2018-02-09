@@ -11,7 +11,8 @@ class BulkPriceUpdaterApplication(DashboardApplication):
 
     def get_urls(self):
         urls = [
-            url(r'^$', views.BulkUpdaterView.as_view(), name='bulk-price-updater-index'),
+            url(r'^$', views.UploadFileView.as_view(), name='bulk-price-updater-index'),
+            url(r'review/$', views.ReviewUpdater.as_view(), name='bulk-price-updater-review')
 
         ]
         return self.post_process_urls(urls)
