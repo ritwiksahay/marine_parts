@@ -94,7 +94,7 @@ def marineengine_mercury_scrapper():
                     page = requests.get(
                         base_url + component['category_url']
                     )
-                    #print("component " + component['component_url'])
+                    print("category " + component['category_url'])
 
                     tree = html.fromstring(page.content)
                     component_image = None
@@ -106,7 +106,7 @@ def marineengine_mercury_scrapper():
                         r = requests.get(component_image, stream=True)
                         save_downloaded_file('img/marine_engine/mercury/'+ component_image.split('/')[-1], r)
                         component_image = 'img/marine_engine/mercury/'+ component_image.split('/')[-1]
-                    
+
                     component['image'] = component_image
 
                     # products cycle
@@ -116,13 +116,23 @@ def marineengine_mercury_scrapper():
                     recomended = None
                     for prod in tree.xpath(xproduct_selector):
                         if prod.get('class') is None:
+                            try:
+                                title = prod.xpath('td[3]/a/strong')[0].text
+                            except IndexError:
+                                title = prod.xpath('td[3]/p/strong/a')[0].text
+
+                            try:
+                                url = prod.xpath('td[3]/a')[0].get('href')
+                            except IndexError:
+                                url = prod.xpath('td[3]/p/strong/a')[0].get('href')
+
                             product = {
-                                'product': re.sub(' +', ' ', prod.xpath('td[3]/a/strong')[0].text),
-                                'product_url': prod.xpath('td[3]/a')[0].get('href'),
+                                'product': re.sub(' +', ' ', title),
+                                'product_url': url,
                                 'diagram_number': diag_number
                             }
                             component['products'].append(product)
-                            #print(product)
+                            print(product)
 
                             # Product details scraping
                             page = requests.get(
@@ -179,14 +189,12 @@ def marineengine_mercury_scrapper():
                             old_product = None
                             diag_number = prod.xpath("td[1]/span/strong")[0].text.replace('#','')
 
-                        if counter > 100:
-                            print('Finishing Marine Engine Mercury Scraping...\n')
-                            catalog['scraping_successful'] = True
-                            with open('marine_engine_mercury-' + scrap_date + '.json', 'w') as outfile:
-                                json.dump(catalog, outfile, indent=4)
-                                pass
+    print('Finishing Marine Engine Mercury Scraping...\n')
+    catalog['scraping_successful'] = True
+    with open('marine_engine_mercury-' + scrap_date + '.json', 'a') as outfile:
+        json.dump(catalog, outfile, indent=4)
+        pass
 
-                            return
 
 
 def marineengine_johnson_evinrude_scrapper():
@@ -2168,7 +2176,7 @@ if __name__ == '__main__':
     ##########################################################
     print('\n# Marine Engine web scrapping.')
     print('Starting Marine Engine Mercury Scraping...')
-    #marineengine_mercury_scrapper()
+    marineengine_mercury_scrapper()
 
     print('Starting Marine Engine Mercruiser Scraping...')
     #marineengine_mercruiser_scrapper()
@@ -2198,7 +2206,7 @@ if __name__ == '__main__':
     #marinepartsexpress_crusader_scrapper()
 
     print('Starting Marine Express Volvo Penta Marine Scraping...')
-    marinepartsexpress_volvo_penta_marine_scrapper()
+    #marinepartsexpress_volvo_penta_marine_scrapper()
 
     print('Finished Marine Parts Express Scraping')
 
