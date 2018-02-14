@@ -1,0 +1,618 @@
+{
+    "scraping_successful": true,
+    "categories": [
+        {
+            "category_name": "year",
+            "sub_category": [
+                {
+                    "category_name": "horse power/ liters",
+                    "sub_category": [
+                        {
+                            "category_name": "model",
+                            "sub_category": [
+                                {
+                                    "products": [
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3857622&pass_title=3857622+%3A+++KIT+AY%2C",
+                                            "diagram_number": "1 ",
+                                            "product": "3857622 - L/P 144.97",
+                                            "recomended": "/newparts/part_search.php?part_num=3857622",
+                                            "part_number": "3857622"
+                                        },
+                                        {
+                                            "product_image": "img/marine_engine/omc/3851972.jpg",
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3851972&pass_title=3851972+%3A+++ELECTRONIC+UNIT",
+                                            "diagram_number": "2 ",
+                                            "product": "3851972 - L/P 139.13",
+                                            "recomended": "/newparts/part_search.php?part_num=3851972",
+                                            "part_number": "3851972"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3852158&pass_title=3852158+%3A+Replaced+by+0320107",
+                                            "diagram_number": "3 ",
+                                            "product": "3852158",
+                                            "recomended": {
+                                                "your_price": "$0.24",
+                                                "product_image": "img/marine_engine/omc/0320107.jpg",
+                                                "manufacturer": "Evinrude Johnson OMC",
+                                                "product_url": "/newparts/part_details.php?pnum=OMC0320107",
+                                                "diagram_number": "3 ",
+                                                "product": "0320107 - Tie Strap",
+                                                "list_price": "$0.24",
+                                                "recomended": "/newparts/part_search.php?part_num=3852158",
+                                                "part_number": "0320107"
+                                            },
+                                            "part_number": "3852158"
+                                        },
+                                        {
+                                            "your_price": "$0.24",
+                                            "product_image": "img/marine_engine/omc/0320107.jpg",
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC0320107",
+                                            "diagram_number": "3 ",
+                                            "product": "0320107 - Tie Strap",
+                                            "list_price": "$0.24",
+                                            "recomended": "/newparts/part_search.php?part_num=3852158",
+                                            "part_number": "0320107"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "&#151;",
+                                            "product_url": "/newparts/part_details.php?pnum=VOL3856632&pass_title=3856632+%3A",
+                                            "diagram_number": "4 ",
+                                            "product": "VOL3856632 - ->3587790 SMALL PARTS K",
+                                            "recomended": {
+                                                "product_image": null,
+                                                "manufacturer": "&#151;",
+                                                "product_url": "/newparts/part_details.php?pnum=VOL3587790&pass_title=3587790+%3A",
+                                                "diagram_number": "4 ",
+                                                "product": "VOL3587790 - KIT",
+                                                "recomended": "/newparts/part_search.php?part_num=3587790",
+                                                "part_number": "3587790"
+                                            },
+                                            "part_number": "3856632"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "&#151;",
+                                            "product_url": "/newparts/part_details.php?pnum=VOL3587790&pass_title=3587790+%3A",
+                                            "diagram_number": "4 ",
+                                            "product": "VOL3587790 - KIT",
+                                            "recomended": "/newparts/part_search.php?part_num=3587790",
+                                            "part_number": "3587790"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "&#151;",
+                                            "product_url": "/newparts/part_details.php?pnum=VOL3857676&pass_title=3857676+%3A",
+                                            "diagram_number": "5 ",
+                                            "product": "VOL3857676 - ->3862337 SENSOR",
+                                            "recomended": {
+                                                "product_image": null,
+                                                "manufacturer": "&#151;",
+                                                "product_url": "/newparts/part_details.php?pnum=VOL3862337&pass_title=3862337+%3A",
+                                                "diagram_number": "5 ",
+                                                "product": "VOL3862337 - SENSOR",
+                                                "recomended": "/newparts/part_search.php?part_num=3862337",
+                                                "part_number": "3862337"
+                                            },
+                                            "part_number": "3857676"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "&#151;",
+                                            "product_url": "/newparts/part_details.php?pnum=VOL3862337&pass_title=3862337+%3A",
+                                            "diagram_number": "5 ",
+                                            "product": "VOL3862337 - SENSOR",
+                                            "recomended": "/newparts/part_search.php?part_num=3862337",
+                                            "part_number": "3862337"
+                                        },
+                                        {
+                                            "your_price": "$24.89",
+                                            "product_image": null,
+                                            "manufacturer": "&#151;",
+                                            "product_url": "/newparts/part_details.php?pnum=VOL3855793",
+                                            "diagram_number": "6 ",
+                                            "product": "3855793 - Wire Harness, Volvo",
+                                            "list_price": "$24.89",
+                                            "recomended": "/newparts/part_search.php?part_num=3862337",
+                                            "part_number": "3855793"
+                                        }
+                                    ],
+                                    "category_name": "component",
+                                    "category": "Active Corrosion Kit",
+                                    "image": "img/marine_engine/omc/57030.gif",
+                                    "category_url": "/parts/omc-parts/omc-boat-parts.php?year=1998&hp=8.2&model=82FCPBYC&manufacturer=OMC+stern+drive&section=Active+Corrosion+Kit"
+                                },
+                                {
+                                    "products": [
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3856600&pass_title=3856600+%3A+Replaced+by+3860171",
+                                            "diagram_number": "3856600 ",
+                                            "product": "3856600",
+                                            "recomended": {
+                                                "product_image": null,
+                                                "manufacturer": "Evinrude Johnson OMC",
+                                                "product_url": "/newparts/part_details.php?pnum=OMC3860171&pass_title=3860171+%3A+Replaced+by+3857561",
+                                                "diagram_number": "3856600 ",
+                                                "product": "3860171",
+                                                "recomended": {
+                                                    "product_image": null,
+                                                    "manufacturer": "Evinrude Johnson OMC",
+                                                    "product_url": "/newparts/part_details.php?pnum=OMC3857561&pass_title=3857561+%3A++Alternator+-+Stern+Drive%3Cbr+%2F%3E%0D%0AFord+EFI+%281993-94%29%2C+GM+EFI+%281995-98%29+1993-1998",
+                                                    "diagram_number": "3856600 ",
+                                                    "product": "3857561 - L/P 480.99",
+                                                    "recomended": {
+                                                        "your_price": "$266.56",
+                                                        "product_image": "img/marine_engine/omc/18-6261.jpg",
+                                                        "manufacturer": "Sierra Marine",
+                                                        "product_url": "/newparts/part_details.php?pnum=SIE18-6261",
+                                                        "diagram_number": "3856600 ",
+                                                        "product": "18-6261 - Alternator, I/O",
+                                                        "list_price": "<span class=\"strike\">$312.88</span>",
+                                                        "recomended": {
+                                                            "your_price": "$203.16",
+                                                            "product_image": "img/marine_engine/omc/60125.jpg",
+                                                            "manufacturer": "Arco Marine",
+                                                            "product_url": "/newparts/part_details.php?pnum=ARC60125",
+                                                            "diagram_number": "3856600 ",
+                                                            "product": "60125 - Alternator, 55AMP",
+                                                            "list_price": "<span class=\"strike\">$231.95</span>",
+                                                            "recomended": {
+                                                                "your_price": "$240.93",
+                                                                "product_image": "img/marine_engine/omc/60070.jpg",
+                                                                "manufacturer": "Arco Marine",
+                                                                "product_url": "/newparts/part_details.php?pnum=ARC60070",
+                                                                "diagram_number": "3856600 ",
+                                                                "product": "60070 - Alternator, 3857561, 65AMP",
+                                                                "list_price": "<span class=\"strike\">$272.95</span>",
+                                                                "recomended": "/newparts/part_search.php?part_num=3857561",
+                                                                "part_number": "60070"
+                                                            },
+                                                            "part_number": "60125"
+                                                        },
+                                                        "part_number": "18-6261"
+                                                    },
+                                                    "part_number": "3857561"
+                                                },
+                                                "part_number": "3860171"
+                                            },
+                                            "part_number": "3856600"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3860171&pass_title=3860171+%3A+Replaced+by+3857561",
+                                            "diagram_number": "3856600 ",
+                                            "product": "3860171",
+                                            "recomended": {
+                                                "product_image": null,
+                                                "manufacturer": "Evinrude Johnson OMC",
+                                                "product_url": "/newparts/part_details.php?pnum=OMC3857561&pass_title=3857561+%3A++Alternator+-+Stern+Drive%3Cbr+%2F%3E%0D%0AFord+EFI+%281993-94%29%2C+GM+EFI+%281995-98%29+1993-1998",
+                                                "diagram_number": "3856600 ",
+                                                "product": "3857561 - L/P 480.99",
+                                                "recomended": {
+                                                    "your_price": "$266.56",
+                                                    "product_image": "img/marine_engine/omc/18-6261.jpg",
+                                                    "manufacturer": "Sierra Marine",
+                                                    "product_url": "/newparts/part_details.php?pnum=SIE18-6261",
+                                                    "diagram_number": "3856600 ",
+                                                    "product": "18-6261 - Alternator, I/O",
+                                                    "list_price": "<span class=\"strike\">$312.88</span>",
+                                                    "recomended": {
+                                                        "your_price": "$203.16",
+                                                        "product_image": "img/marine_engine/omc/60125.jpg",
+                                                        "manufacturer": "Arco Marine",
+                                                        "product_url": "/newparts/part_details.php?pnum=ARC60125",
+                                                        "diagram_number": "3856600 ",
+                                                        "product": "60125 - Alternator, 55AMP",
+                                                        "list_price": "<span class=\"strike\">$231.95</span>",
+                                                        "recomended": {
+                                                            "your_price": "$240.93",
+                                                            "product_image": "img/marine_engine/omc/60070.jpg",
+                                                            "manufacturer": "Arco Marine",
+                                                            "product_url": "/newparts/part_details.php?pnum=ARC60070",
+                                                            "diagram_number": "3856600 ",
+                                                            "product": "60070 - Alternator, 3857561, 65AMP",
+                                                            "list_price": "<span class=\"strike\">$272.95</span>",
+                                                            "recomended": "/newparts/part_search.php?part_num=3857561",
+                                                            "part_number": "60070"
+                                                        },
+                                                        "part_number": "60125"
+                                                    },
+                                                    "part_number": "18-6261"
+                                                },
+                                                "part_number": "3857561"
+                                            },
+                                            "part_number": "3860171"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3857561&pass_title=3857561+%3A++Alternator+-+Stern+Drive%3Cbr+%2F%3E%0D%0AFord+EFI+%281993-94%29%2C+GM+EFI+%281995-98%29+1993-1998",
+                                            "diagram_number": "3856600 ",
+                                            "product": "3857561 - L/P 480.99",
+                                            "recomended": {
+                                                "your_price": "$266.56",
+                                                "product_image": "img/marine_engine/omc/18-6261.jpg",
+                                                "manufacturer": "Sierra Marine",
+                                                "product_url": "/newparts/part_details.php?pnum=SIE18-6261",
+                                                "diagram_number": "3856600 ",
+                                                "product": "18-6261 - Alternator, I/O",
+                                                "list_price": "<span class=\"strike\">$312.88</span>",
+                                                "recomended": {
+                                                    "your_price": "$203.16",
+                                                    "product_image": "img/marine_engine/omc/60125.jpg",
+                                                    "manufacturer": "Arco Marine",
+                                                    "product_url": "/newparts/part_details.php?pnum=ARC60125",
+                                                    "diagram_number": "3856600 ",
+                                                    "product": "60125 - Alternator, 55AMP",
+                                                    "list_price": "<span class=\"strike\">$231.95</span>",
+                                                    "recomended": {
+                                                        "your_price": "$240.93",
+                                                        "product_image": "img/marine_engine/omc/60070.jpg",
+                                                        "manufacturer": "Arco Marine",
+                                                        "product_url": "/newparts/part_details.php?pnum=ARC60070",
+                                                        "diagram_number": "3856600 ",
+                                                        "product": "60070 - Alternator, 3857561, 65AMP",
+                                                        "list_price": "<span class=\"strike\">$272.95</span>",
+                                                        "recomended": "/newparts/part_search.php?part_num=3857561",
+                                                        "part_number": "60070"
+                                                    },
+                                                    "part_number": "60125"
+                                                },
+                                                "part_number": "18-6261"
+                                            },
+                                            "part_number": "3857561"
+                                        },
+                                        {
+                                            "your_price": "$266.56",
+                                            "product_image": "img/marine_engine/omc/18-6261.jpg",
+                                            "manufacturer": "Sierra Marine",
+                                            "product_url": "/newparts/part_details.php?pnum=SIE18-6261",
+                                            "diagram_number": "3856600 ",
+                                            "product": "18-6261 - Alternator, I/O",
+                                            "list_price": "<span class=\"strike\">$312.88</span>",
+                                            "recomended": {
+                                                "your_price": "$203.16",
+                                                "product_image": "img/marine_engine/omc/60125.jpg",
+                                                "manufacturer": "Arco Marine",
+                                                "product_url": "/newparts/part_details.php?pnum=ARC60125",
+                                                "diagram_number": "3856600 ",
+                                                "product": "60125 - Alternator, 55AMP",
+                                                "list_price": "<span class=\"strike\">$231.95</span>",
+                                                "recomended": {
+                                                    "your_price": "$240.93",
+                                                    "product_image": "img/marine_engine/omc/60070.jpg",
+                                                    "manufacturer": "Arco Marine",
+                                                    "product_url": "/newparts/part_details.php?pnum=ARC60070",
+                                                    "diagram_number": "3856600 ",
+                                                    "product": "60070 - Alternator, 3857561, 65AMP",
+                                                    "list_price": "<span class=\"strike\">$272.95</span>",
+                                                    "recomended": "/newparts/part_search.php?part_num=3857561",
+                                                    "part_number": "60070"
+                                                },
+                                                "part_number": "60125"
+                                            },
+                                            "part_number": "18-6261"
+                                        },
+                                        {
+                                            "your_price": "$203.16",
+                                            "product_image": "img/marine_engine/omc/60125.jpg",
+                                            "manufacturer": "Arco Marine",
+                                            "product_url": "/newparts/part_details.php?pnum=ARC60125",
+                                            "diagram_number": "3856600 ",
+                                            "product": "60125 - Alternator, 55AMP",
+                                            "list_price": "<span class=\"strike\">$231.95</span>",
+                                            "recomended": {
+                                                "your_price": "$240.93",
+                                                "product_image": "img/marine_engine/omc/60070.jpg",
+                                                "manufacturer": "Arco Marine",
+                                                "product_url": "/newparts/part_details.php?pnum=ARC60070",
+                                                "diagram_number": "3856600 ",
+                                                "product": "60070 - Alternator, 3857561, 65AMP",
+                                                "list_price": "<span class=\"strike\">$272.95</span>",
+                                                "recomended": "/newparts/part_search.php?part_num=3857561",
+                                                "part_number": "60070"
+                                            },
+                                            "part_number": "60125"
+                                        },
+                                        {
+                                            "your_price": "$240.93",
+                                            "product_image": "img/marine_engine/omc/60070.jpg",
+                                            "manufacturer": "Arco Marine",
+                                            "product_url": "/newparts/part_details.php?pnum=ARC60070",
+                                            "diagram_number": "3856600 ",
+                                            "product": "60070 - Alternator, 3857561, 65AMP",
+                                            "list_price": "<span class=\"strike\">$272.95</span>",
+                                            "recomended": "/newparts/part_search.php?part_num=3857561",
+                                            "part_number": "60070"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3857060&pass_title=3857060+%3A+++BRACKET%2CV-NLA",
+                                            "diagram_number": "1 ",
+                                            "product": "3857060 - L/P 47.75",
+                                            "recomended": "/newparts/part_search.php?part_num=3857060",
+                                            "part_number": "3857060"
+                                        },
+                                        {
+                                            "your_price": "$15.00",
+                                            "product_image": "img/marine_engine/omc/3857062.jpg",
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3857062",
+                                            "diagram_number": "2 ",
+                                            "product": "3857062 - Rotor Assembly",
+                                            "list_price": "$15.00",
+                                            "recomended": "/newparts/part_search.php?part_num=3857060",
+                                            "part_number": "3857062"
+                                        },
+                                        {
+                                            "product_image": "img/marine_engine/omc/3857063.jpg",
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3857063&pass_title=3857063+%3A+++STATOR%2CV-NLA",
+                                            "diagram_number": "3 ",
+                                            "product": "3857063 - L/P 76.63",
+                                            "recomended": "/newparts/part_search.php?part_num=3857063",
+                                            "part_number": "3857063"
+                                        },
+                                        {
+                                            "your_price": "$6.00",
+                                            "product_image": "img/marine_engine/omc/3857064.jpg",
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3857064",
+                                            "diagram_number": "4 ",
+                                            "product": "3857064 - Bracket",
+                                            "list_price": "$6.00",
+                                            "recomended": "/newparts/part_search.php?part_num=3857063",
+                                            "part_number": "3857064"
+                                        },
+                                        {
+                                            "product_image": "img/marine_engine/omc/3857059.jpg",
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3857059&pass_title=3857059+%3A",
+                                            "diagram_number": "5 ",
+                                            "product": "3857059 - L/P 6.18",
+                                            "recomended": "/newparts/part_search.php?part_num=3857059",
+                                            "part_number": "3857059"
+                                        },
+                                        {
+                                            "your_price": "$9.09",
+                                            "product_image": "img/marine_engine/omc/3857058.jpg",
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3857058",
+                                            "diagram_number": "6 ",
+                                            "product": "3857058 - Pulley",
+                                            "list_price": "$9.09",
+                                            "recomended": "/newparts/part_search.php?part_num=3857059",
+                                            "part_number": "3857058"
+                                        },
+                                        {
+                                            "your_price": "$6.00",
+                                            "product_image": "img/marine_engine/omc/3857061.jpg",
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3857061",
+                                            "diagram_number": "7 ",
+                                            "product": "3857061 - Bearing",
+                                            "list_price": "$6.00",
+                                            "recomended": "/newparts/part_search.php?part_num=3857059",
+                                            "part_number": "3857061"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3857065&pass_title=3857065+%3A+++ADAPTER+KIT",
+                                            "diagram_number": "11 ",
+                                            "product": "3857065 - L/P 48.66",
+                                            "recomended": "/newparts/part_search.php?part_num=3857065",
+                                            "part_number": "3857065"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3857067&pass_title=3857067+%3A+Replaced+by+3858879",
+                                            "diagram_number": "14 ",
+                                            "product": "3857067",
+                                            "recomended": {
+                                                "product_image": null,
+                                                "manufacturer": "Evinrude Johnson OMC",
+                                                "product_url": "/newparts/part_details.php?pnum=OMC3858879&pass_title=3858879+%3A+++N%2FA+13+++L%2FP+++83.30",
+                                                "diagram_number": "14 ",
+                                                "product": "3858879 - L/P 83.30",
+                                                "recomended": "/newparts/part_search.php?part_num=3858879",
+                                                "part_number": "3858879"
+                                            },
+                                            "part_number": "3857067"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3858879&pass_title=3858879+%3A+++N%2FA+13+++L%2FP+++83.30",
+                                            "diagram_number": "14 ",
+                                            "product": "3858879 - L/P 83.30",
+                                            "recomended": "/newparts/part_search.php?part_num=3858879",
+                                            "part_number": "3858879"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "&#151;",
+                                            "product_url": "/newparts/part_details.php?pnum=VOL3857068&pass_title=3857068+%3A",
+                                            "diagram_number": "18 ",
+                                            "product": "VOL3857068 - ADAPTER KIT",
+                                            "recomended": "/newparts/part_search.php?part_num=3857068",
+                                            "part_number": "3857068"
+                                        },
+                                        {
+                                            "your_price": "$6.50",
+                                            "product_image": "img/marine_engine/omc/3857066.jpg",
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3857066",
+                                            "diagram_number": "19 ",
+                                            "product": "3857066 - Condenser",
+                                            "list_price": "$6.50",
+                                            "recomended": "/newparts/part_search.php?part_num=3857068",
+                                            "part_number": "3857066"
+                                        },
+                                        {
+                                            "your_price": "$24.00",
+                                            "product_image": "img/marine_engine/omc/3854572.jpg",
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3854572",
+                                            "diagram_number": "29 ",
+                                            "product": "3854572 - Alternator Brace",
+                                            "list_price": "$24.00",
+                                            "recomended": "/newparts/part_search.php?part_num=3857068",
+                                            "part_number": "3854572"
+                                        },
+                                        {
+                                            "your_price": "$5.59",
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3853391",
+                                            "diagram_number": "30 ",
+                                            "product": "3853391 - Screw",
+                                            "list_price": "$5.59",
+                                            "recomended": "/newparts/part_search.php?part_num=3857068",
+                                            "part_number": "3853391"
+                                        },
+                                        {
+                                            "your_price": "$90.00",
+                                            "product_image": "img/marine_engine/omc/3854642.jpg",
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3854642",
+                                            "diagram_number": "31 ",
+                                            "product": "3854642 - Bracket & Bushing Assembly",
+                                            "list_price": "$90.00",
+                                            "recomended": "/newparts/part_search.php?part_num=3857068",
+                                            "part_number": "3854642"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3852051&pass_title=3852051+%3A+Replaced+by+0305496",
+                                            "diagram_number": "32 ",
+                                            "product": "3852051",
+                                            "recomended": {
+                                                "your_price": "$2.00",
+                                                "product_image": null,
+                                                "manufacturer": "Evinrude Johnson OMC",
+                                                "product_url": "/newparts/part_details.php?pnum=OMC0305496",
+                                                "diagram_number": "32 ",
+                                                "product": "0305496 - Nut",
+                                                "list_price": "$2.00",
+                                                "recomended": "/newparts/part_search.php?part_num=3852051",
+                                                "part_number": "0305496"
+                                            },
+                                            "part_number": "3852051"
+                                        },
+                                        {
+                                            "your_price": "$2.00",
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC0305496",
+                                            "diagram_number": "32 ",
+                                            "product": "0305496 - Nut",
+                                            "list_price": "$2.00",
+                                            "recomended": "/newparts/part_search.php?part_num=3852051",
+                                            "part_number": "0305496"
+                                        },
+                                        {
+                                            "your_price": "$0.49",
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3852058",
+                                            "diagram_number": "33 ",
+                                            "product": "3852058 - Washer",
+                                            "list_price": "$0.49",
+                                            "recomended": {
+                                                "your_price": "$2.94",
+                                                "product_image": null,
+                                                "manufacturer": "Evinrude Johnson OMC",
+                                                "product_url": "/newparts/part_details.php?pnum=OMC0306405",
+                                                "diagram_number": "33 ",
+                                                "product": "0306405 - Washer",
+                                                "list_price": "<span class=\"strike\">$5.59</span>",
+                                                "recomended": "/newparts/part_search.php?part_num=3852051",
+                                                "part_number": "0306405"
+                                            },
+                                            "part_number": "3852058"
+                                        },
+                                        {
+                                            "your_price": "$2.94",
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC0306405",
+                                            "diagram_number": "33 ",
+                                            "product": "0306405 - Washer",
+                                            "list_price": "<span class=\"strike\">$5.59</span>",
+                                            "recomended": "/newparts/part_search.php?part_num=3852051",
+                                            "part_number": "0306405"
+                                        },
+                                        {
+                                            "product_image": "img/marine_engine/omc/3854387.jpg",
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3854387&pass_title=3854387+%3A+++PART",
+                                            "diagram_number": "34 ",
+                                            "product": "3854387 - L/P 19.13",
+                                            "recomended": "/newparts/part_search.php?part_num=3854387",
+                                            "part_number": "3854387"
+                                        },
+                                        {
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC3852054&pass_title=3852054+%3A+Replaced+by+0306283",
+                                            "diagram_number": "35 ",
+                                            "product": "3852054",
+                                            "recomended": {
+                                                "your_price": "$10.29",
+                                                "product_image": null,
+                                                "manufacturer": "Evinrude Johnson OMC",
+                                                "product_url": "/newparts/part_details.php?pnum=OMC0306283",
+                                                "diagram_number": "35 ",
+                                                "product": "0306283 - Brace to Alternator Washer",
+                                                "list_price": "$10.29",
+                                                "recomended": "/newparts/part_search.php?part_num=3852054",
+                                                "part_number": "0306283"
+                                            },
+                                            "part_number": "3852054"
+                                        },
+                                        {
+                                            "your_price": "$10.29",
+                                            "product_image": null,
+                                            "manufacturer": "Evinrude Johnson OMC",
+                                            "product_url": "/newparts/part_details.php?pnum=OMC0306283",
+                                            "diagram_number": "35 ",
+                                            "product": "0306283 - Brace to Alternator Washer",
+                                            "list_price": "$10.29",
+                                            "recomended": "/newparts/part_search.php?part_num=3852054",
+                                            "part_number": "0306283"
+                                        }
+                                    ],
+                                    "category_name": "component",
+                                    "category": "Alternator",
+                                    "image": "img/marine_engine/omc/57031.gif",
+                                    "category_url": "/parts/omc-parts/omc-boat-parts.php?year=1998&hp=8.2&model=82FCPBYC&manufacturer=OMC+stern+drive&section=Alternator"
+                                }
+                            ],
+                            "category": "Model 82FCPBYC",
+                            "category_url": "/parts/omc-parts/omc-boat-parts.php?year=1998&hp=8.2&model=82FCPBYC"
+                        }
+                    ],
+                    "category": "8.2 L",
+                    "category_url": "/parts/omc-parts/omc-boat-parts.php?year=1998&hp=8.2"
+                }
+            ],
+            "category": "1998",
+            "category_url": "/parts/omc-parts/omc-boat-parts.php?year=1998"
+        }
+    ],
+    "scraped_date": "2018-01-12"
+}
