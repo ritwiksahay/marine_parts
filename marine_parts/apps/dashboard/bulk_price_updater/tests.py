@@ -1,4 +1,4 @@
-from price_updater import DBHandler, updater, logger
+from price_updater import DBHandler, updater, config_logger_prod
 import django.test as test
 from oscar.apps.partner.models import StockRecord, Partner
 from marine_parts.apps.catalogue.models import Product, ProductClass, ProductAttribute
@@ -8,21 +8,23 @@ from decimal import Decimal as D
 
 class StubDB(DBHandler):
     created = False
-    throwExc = False
+    throw_does_not_exists = False
+    throw_mult_objs = False
 
     def update_by_part_number(self, part_number, price_excl_tax, price_retail, cost_price):
-        if self.throwExc:
-                raise Product.DoesNotExist
+        if self.throw_does_not_exists:
+            raise Product.DoesNotExist
+        if self.throw_mult_objs:
+            raise Product.MultipleObjectsReturned
         return (None, self.created)
 
 
 # Test data
-
 test_data = \
     [
         {
             'IMMFGC' : 'A/P',
-            'IMITMC' : '4721',
+            'IMITMC' : '1',
             'IMDESC' : 'PACKING-TEFLON 3/16X',
             'IMSUOM' : 'EA',
             'List' : '27.13',
@@ -31,7 +33,7 @@ test_data = \
         },
         {
             'IMMFGC': 'A/P',
-            'IMITMC': '4723',
+            'IMITMC': '2',
             'IMDESC': 'PACKING-TEFLON 5/16X	',
             'IMSUOM': 'EA',
             'List': '12.43',
@@ -40,7 +42,7 @@ test_data = \
         },
         {
             'IMMFGC' : 'A/P',
-            'IMITMC' : '4725',
+            'IMITMC' : '3',
             'IMDESC' : 'PACKING-TEFLON 1/2X3',
             'IMSUOM' :'EA',
             'List' : '79.43',
@@ -49,7 +51,7 @@ test_data = \
         },
         {
             'IMMFGC': 'ABA',
-            'IMITMC': '13302',
+            'IMITMC': '4',
             'IMDESC': 'RUBBER LINED CLAMP',
             'IMSUOM': 'EA',
             'List': '1.8',
@@ -83,21 +85,50 @@ test_data_Wrong_keys = \
 
 class TestUpdater(test.TestCase):
 
+    def setUp(self):
+        self.st = StubDB()
+        self.log_buf, self.handler = config_logger_prod(False)
+
     def test_createAllProducts_returns6(self):
-        st = StubDB()
-        st.created = True
-        stats = updater(test_data, st)
+        self.st.created = True
+        stats = updater(test_data, self.st)
         self.assertEqual(stats['created'], 4)
 
     def test_updateAllProducts_return6(self):
         stats = updater(test_data, StubDB())
         self.assertEqual(stats['updated'], 4)
 
-    def test_NotFoundProduct_return_(self):
-        st = StubDB()
-        st.throwExc = True
-        stats = updater(test_data, st)
-        self.assertEqual(stats['not_found'], 1)
+    def test_NotFoundProduct_returnTrue(self):
+        self.st.throw_does_not_exists = True
+        stats = updater(test_data, self.st)
+        self.assertEqual(stats['not_found'], 4)
+
+    def test_MultiplesProductNotFound_returnsTrue(self):
+        self.st.throw_mult_objs = True
+        stats = updater(test_data, self.st)
+        self.assertEqual(stats['not_found'], 4)
+
+    def test_LogReportProductNotFound_returnTrue(self):
+        self.st.throw_does_not_exists = True
+        updater(test_data, self.st)
+        #self.handler.flush()
+        self.assertEqual(self.log_buf.getvalue(),
+            "WARNING - Product with part number 1 does not exists. Skipping update.\n"
+            "WARNING - Product with part number 2 does not exists. Skipping update.\n"
+            "WARNING - Product with part number 3 does not exists. Skipping update.\n"
+            "WARNING - Product with part number 4 does not exists. Skipping update.\n"
+                         )
+
+    def test_LogReportMultiplesProductFound_returnTrue(self):
+        self.st.throw_mult_objs = True
+        updater(test_data, self.st)
+        #self.handler.flush()
+        self.assertEqual(self.log_buf.getvalue(),
+             'WARNING - Multiple Products with part number 1. Skipping update for those products.\n'
+             'WARNING - Multiple Products with part number 2. Skipping update for those products.\n'
+             'WARNING - Multiple Products with part number 3. Skipping update for those products.\n'
+             'WARNING - Multiple Products with part number 4. Skipping update for those products.\n'
+                         )
 
 
 
@@ -163,7 +194,6 @@ class TestIntegrationUpdatePartNumber(test.TestCase):
 
     # def test_productDoesntFound_raiseException(self):
     #     self.assertRaises(Product.DoesNotExist,self.db.update_by_part_number, self.p3_invalid)
-
 
 
 class IntegrationTestUpdater(test.TestCase):

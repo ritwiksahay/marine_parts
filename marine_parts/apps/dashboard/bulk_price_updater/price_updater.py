@@ -8,25 +8,23 @@ import StringIO
 
 logger = logging.getLogger(__name__)
 
-
-
-
-def config_logger_prod():
-    logging.raiseExceptions = False
-    logger.setLevel(logging.ERROR)
+def config_logger_prod(with_dates = True):
 
     st = StringIO.StringIO()
     ch = logging.StreamHandler(st)
-    ch.setLevel(logging.ERROR)
     # create formatter
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    if with_dates:
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    else:
+        formatter = logging.Formatter('%(levelname)s - %(message)s')
 
     # add formatter to ch
     ch.setFormatter(formatter)
 
-    # add ch to logger
+    logger.raiseExceptions = False
+    logger.setLevel(logging.INFO)
     logger.addHandler(ch)
-    return st
+    return st, ch
 
 class DBHandler:
 
@@ -41,6 +39,7 @@ class DBHandler:
         # Search by part_number
         pp = Partner.objects.get(name='Acme')
         pro = Product.objects.get(attribute_values__value_text=part_number)
+
         return StockRecord.objects.update_or_create(product=pro, partner=pp,
              defaults={
                         'price_excl_tax' : price_excl_tax
@@ -78,6 +77,10 @@ def updater(ls_st_rec, db):
             logger.warning('Product with part number %s does not exists. Skipping update.' % part_number)
             stats['not_found'] += 1
             continue
+        except Product.MultipleObjectsReturned:
+            logger.warning('Multiple Products with part number %s. Skipping update for those products.' % part_number)
+            stats['not_found'] += 1
+            continue
 
         if created:
             stats['created'] += 1
@@ -100,5 +103,8 @@ def update_by_fixed_price(new_price):
     return apply
 
 def execUpdater(ls):
-    st = config_logger_prod()
-    return (updater(ls, DBHandler()), st.getvalue())
+    st, h = config_logger_prod()
+    stats = updater(ls, DBHandler())
+    h.flush()
+    st.flush()
+    return (stats, st.getvalue())
