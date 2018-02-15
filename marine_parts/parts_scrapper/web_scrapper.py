@@ -1,21 +1,39 @@
 # -*- coding: utf-8 -*-
-import requests, json, re, copy, os
+
+import requests
+import json
+import re
+import copy
+import os
 
 from urllib import parse
 from lxml import html, etree
 from datetime import date
-from logging.handlers import RotatingFileHandler
+# from logging.handlers import RotatingFileHandler
+
+MARINE_ENGINE_BASE_URL = 'https://www.marineengine.com'
+
+
+def request_get(path, stream=False):
+    """Execute a GET request and returns contents."""
+    try:
+        return requests.get(path, stream=stream)
+    except Exception as e:
+        print(e)
 
 
 ##################################################################
-## MARINE ENGINE WEB
+# MARINE ENGINE WEB ##############################################
 ##################################################################
+
+
 def marineengine_mercury_scrapper():
+    """Scrapper for Marine Engine Parts."""
     # Marineengine base url
-    base_url = 'https://www.marineengine.com'
+    global MARINE_ENGINE_BASE_URL
     # Categorys scraping
-    page = requests.get(
-        base_url + '/parts/mercury-outboard/index.php'
+    page = request_get(
+        MARINE_ENGINE_BASE_URL + '/parts/mercury-outboard/index.php'
     )
     tree = html.fromstring(page.content)
     # The selectors goes here so they dont recreate on every cicle
@@ -24,19 +42,23 @@ def marineengine_mercury_scrapper():
     xcomponents_selector = "/html/body/main/div[2]/div[2]/ul//li/a"
     ximg_selector = "/html/body/main/div[2]/p[1]/img"
     xproduct_selector = "/html/body/main/table//tr"
-    xproduct_details_selector = "/html/body/main/div[1]/div[1]/div[1]/div[2]/table//tr/td/p"
-    xproduct_unavailable_selector = "/html/body/main/div[1]/div[1]/div[1]/div[2]/div/a"
-    xproduct_img_selector = "/html/body/main/div[1]/div[1]/div[1]/div[1]/p/img"
+    xproduct_details_selector = ("/html/body/main/div[1]/div[1]"
+                                 "/div[1]/div[2]/table//tr/td/p")
+    xproduct_unavailable_selector = ("/html/body/main/div[1]/div[1]"
+                                     "/div[1]/div[2]/div/a")
+    # xproduct_img_selector = ("/html/body/main/div[1]/div[1]"
+    #                           "/div[1]/div[1]/p/img")
 
     scrap_date = str(date.today()).replace(' ', '')
     catalog = {
         'categories': [],
         'scraped_date': scrap_date,
-        'scraping_successful': False, 
+        'scraping_successful': False,
     }
-    # Just for debug purposes
-    counter = 1
-    for cat in tree.xpath(xpath_selector):
+
+    for cat in tree.xpath(xpath_selector)[0:1]:
+        if not os.path.exists('marine_engine/mercury/' + cat.text):
+            os.makedirs('marine_engine/mercury/' + cat.text)
         category = {
             'category_name': 'category',
             'category': cat.text,
@@ -46,23 +68,25 @@ def marineengine_mercury_scrapper():
         catalog['categories'].append(category)
 
         # Horse Power scraping
-        page = requests.get(
-            base_url + category['category_url']
+        page = request_get(
+            MARINE_ENGINE_BASE_URL + category['category_url']
         )
         tree = html.fromstring(page.content)
 
         for hp in tree.xpath(xcategory_selector):
+            cat_name = re.sub(r'[\n\t]+', '', hp.text)
+            print("'%s' starting...\n" % cat_name)
             horse_power = {
                 'category_name': 'horse power',
-                'category': re.sub(r'[\n\t]+', '', hp.text),
+                'category': cat_name,
                 'category_url': hp.get('href'),
                 'sub_category': []
             }
             category['sub_category'].append(horse_power)
 
             # Serial Range scraping
-            page = requests.get(
-                base_url + horse_power['category_url']
+            page = request_get(
+                MARINE_ENGINE_BASE_URL + horse_power['category_url']
             )
             tree = html.fromstring(page.content)
 
@@ -76,8 +100,8 @@ def marineengine_mercury_scrapper():
                 horse_power['sub_category'].append(serial_range)
 
                 # Component scraping
-                page = requests.get(
-                    base_url + serial_range['category_url']
+                page = request_get(
+                    MARINE_ENGINE_BASE_URL + serial_range['category_url']
                 )
                 tree = html.fromstring(page.content)
 
@@ -88,24 +112,32 @@ def marineengine_mercury_scrapper():
                         'category_url': comp.get('href'),
                         'products': []
                     }
+
+                    print("Scrapping component '%s' \n\turl: %s"
+                          % (component['category'], component['category_url']))
+
                     serial_range['sub_category'].append(component)
 
                     # Products scraping
-                    page = requests.get(
-                        base_url + component['category_url']
+                    page = request_get(
+                        MARINE_ENGINE_BASE_URL + component['category_url']
                     )
-                    print("category " + component['category_url'])
 
                     tree = html.fromstring(page.content)
+
                     component_image = None
 
                     if(len(tree.xpath(ximg_selector)) > 0):
-                        component_image = tree.xpath(ximg_selector)[0].get('src')
+                        component_image = tree.xpath(ximg_selector)[0] \
+                            .get('src')
 
                     if component_image:
-                        r = requests.get(component_image, stream=True)
-                        save_downloaded_file('img/marine_engine/mercury/'+ component_image.split('/')[-1], r)
-                        component_image = 'img/marine_engine/mercury/'+ component_image.split('/')[-1]
+                        r = request_get(component_image, stream=True)
+                        save_downloaded_file(
+                            'img/marine_engine/mercury/' +
+                            component_image.split('/')[-1], r)
+                        component_image = 'img/marine_engine/mercury/' + \
+                            component_image.split('/')[-1]
 
                     component['image'] = component_image
 
@@ -124,7 +156,8 @@ def marineengine_mercury_scrapper():
                             try:
                                 url = prod.xpath('td[3]/a')[0].get('href')
                             except IndexError:
-                                url = prod.xpath('td[3]/p/strong/a')[0].get('href')
+                                url = prod.xpath('td[3]/p/strong/a')[0] \
+                                    .get('href')
 
                             product = {
                                 'product': re.sub(' +', ' ', title),
@@ -132,39 +165,60 @@ def marineengine_mercury_scrapper():
                                 'diagram_number': diag_number
                             }
                             component['products'].append(product)
-                            print(product)
+                            # print(product)
 
                             # Product details scraping
-                            page = requests.get(
-                                base_url + product['product_url']
+                            page = request_get(
+                                MARINE_ENGINE_BASE_URL + product['product_url']
                             )
                             tree = html.fromstring(page.content)
+
+                            """ Deshabilitamos la descarga de imagenes
                             prod_image = None
 
                             if(len(tree.xpath(xproduct_img_selector)) > 0):
-                                prod_image = tree.xpath(xproduct_img_selector)[0].get('src')
+                                prod_image = \
+                                tree.xpath(xproduct_img_selector)[0] \
+                                    .get('src')
 
                             if prod_image and 'noimage' not in prod_image:
-                                r = requests.get(base_url + prod_image, stream=True)
-                                save_downloaded_file('img/marine_engine/mercury/'+ prod_image.split('/')[-1], r)
-                                prod_image = 'img/marine_engine/mercury/'+ prod_image.split('/')[-1]
+                                r = requests.get(base_url + prod_image,
+                                                 stream=True)
+                                save_downloaded_file(
+                                    'img/marine_engine/mercury/' +
+                                    prod_image.split('/')[-1], r)
+                                prod_image = 'img/marine_engine/mercury/' + \
+                                    prod_image.split('/')[-1]
                             else:
                                 prod_image = None
 
                             product['product_image'] = prod_image
+                            """
 
                             if tree.xpath(xproduct_unavailable_selector):
-                                recomended = tree.xpath(xproduct_unavailable_selector)[0].get('href').replace(' ', '20%')
+                                recomended = tree.xpath(
+                                    xproduct_unavailable_selector)[0] \
+                                    .get('href') \
+                                    .replace(' ', '20%')
 
                             # Assemble the product json object
                             product['recomended'] = recomended
 
                             count = 0
                             # Price and other details from the product page
-                            for details in tree.xpath(xproduct_details_selector):
-                                value = (etree.tostring(details).decode('utf-8').replace('\n', '').replace('\t', '')
-                                        .replace('</p>', '').replace('<strong>', '').replace('</strong>', '')
-                                        .replace('<p>', '').split('<br/>')[1].replace('&#8212;', '').replace('&#160;', ' '))
+                            for details in tree.xpath(
+                                    xproduct_details_selector):
+                                value = \
+                                    etree.tostring(details) \
+                                    .decode('utf-8') \
+                                    .replace('\n', '') \
+                                    .replace('\t', '') \
+                                    .replace('</p>', '') \
+                                    .replace('<strong>', '') \
+                                    .replace('</strong>', '') \
+                                    .replace('<p>', '').split('<br/>')[1] \
+                                    .replace('&#8212;', '') \
+                                    .replace('&#160;', ' ')
 
                                 if value:
                                     if count == 0:
@@ -182,20 +236,25 @@ def marineengine_mercury_scrapper():
                                 old_product['recomended'] = product
 
                             old_product = product
-
-                            counter += 1
                         else:
                             product = None
                             old_product = None
-                            diag_number = prod.xpath("td[1]/span/strong")[0].text.replace('#','')
+                            diag_number = prod.xpath("td[1]/span/strong")[0] \
+                                .text.replace('#', '')
 
-    print('Finishing Marine Engine Mercury Scraping...\n')
-    catalog['scraping_successful'] = True
-    with open('marine_engine_mercury-' + scrap_date + '.json', 'a') as outfile:
-        json.dump(catalog, outfile, indent=4)
-        pass
+            print("\n'%s' done...\n" % cat_name)
+            output_file_path = 'marine_engine/mercury/' + \
+                cat.text + '/' + re.sub(r'/', r'\\', cat_name) + \
+                '-' + scrap_date + '.json'
+            create_output_file(catalog, output_file_path)
 
 
+def create_output_file(data, path):
+    """."""
+    data['scraping_successful'] = True
+    with open(path, 'w') as outfile:
+        json.dump(data, outfile, indent=4)
+    data['sub_category'] = []
 
 def marineengine_johnson_evinrude_scrapper():
     # Marineengine base url
@@ -2119,8 +2178,13 @@ if __name__ == '__main__':
     # Marine Engine Directories and sub-directories
     if not os.path.exists('img/marine_engine'):
         os.makedirs('img/marine_engine')
+    if not os.path.exists('./marine_engine'):
+        os.makedirs('./marine_engine')
 
     # Subdirs
+    if not os.path.exists('marine_engine/mercury'):
+        os.makedirs('marine_engine/mercury/')
+
     if not os.path.exists('img/marine_engine/mercury'):
         os.makedirs('img/marine_engine/mercury')
     if not os.path.exists('img/marine_engine/mercruiser'):
