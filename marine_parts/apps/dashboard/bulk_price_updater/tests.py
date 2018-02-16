@@ -3,6 +3,10 @@ import django.test as test
 from oscar.apps.partner.models import StockRecord, Partner
 from marine_parts.apps.catalogue.models import Product, ProductClass, ProductAttribute
 from decimal import Decimal as D
+from marine_parts.apps.users.models import User
+from django.urls import reverse
+from views import ReviewUpdater, UploadFileView
+from forms import UploadFileForm
 
 # Fakes
 
@@ -124,10 +128,10 @@ class TestUpdater(test.TestCase):
         updater(test_data, self.st)
         #self.handler.flush()
         self.assertEqual(self.log_buf.getvalue(),
-             'WARNING - Multiple Products with part number 1. Skipping update for those products.\n'
-             'WARNING - Multiple Products with part number 2. Skipping update for those products.\n'
-             'WARNING - Multiple Products with part number 3. Skipping update for those products.\n'
-             'WARNING - Multiple Products with part number 4. Skipping update for those products.\n'
+             'WARNING - Multiple Products with part number 1. Skipping update for those ones.\n'
+             'WARNING - Multiple Products with part number 2. Skipping update for those ones.\n'
+             'WARNING - Multiple Products with part number 3. Skipping update for those ones.\n'
+             'WARNING - Multiple Products with part number 4. Skipping update for those ones.\n'
                          )
 
 
@@ -198,3 +202,54 @@ class TestIntegrationUpdatePartNumber(test.TestCase):
 
 class IntegrationTestUpdater(test.TestCase):
     pass
+
+
+class ReviewUpdaterClientTests(test.TestCase):
+    fixtures = ['metadata.json']
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_superuser('dleones@ubicutus.com', '12qw')
+        cls.session_review = { 'stats' : { 'not_found' : 0, 'updated' : 0, 'created' : 0}, 'log' : 'test_log'}
+
+    def setUp(self):
+        self.factory = test.RequestFactory()
+
+
+    def test_GETBulkPriceUpdaterIndex_returns200(self):
+        request = self.factory.get(reverse('dashboard:bulk-price-updater-index'))
+        request.user = self.user
+
+        response = UploadFileView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_GETBulkPriceUpdaterReview_returns200(self):
+        request = self.factory.get(reverse('dashboard:bulk-price-updater-review'))
+        request.session = self.session_review
+        request.user = self.user
+
+        response = ReviewUpdater.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name[0], 'dashboard/bulk_price_updater/update-price-review.html')
+        self.assertContains(response,
+            """<tr>
+                <td>Not found</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Updated</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Created</td>
+                <td>0</td>
+            </tr>""")
+
+    def test_GETUploadFileView_returnsTrue(self):
+        # Autheticate user first
+        self.client.post('/en-us/dashboard/login/', {'username': 'dleones@ubicutus.com', 'password': '12qw'}, follow=True)
+        page = self.client.get(reverse('dashboard:bulk-price-updater-index'))
+
+        self.assertEqual(page.status_code, 200)
+        self.assertTemplateUsed(page, 'dashboard/bulk_price_updater/update-price-index.html')
+        #self.assertQuerysetEqual(page.context_data['form'], '<UploadFileForm bound=False, valid=False, fields=(file)>')

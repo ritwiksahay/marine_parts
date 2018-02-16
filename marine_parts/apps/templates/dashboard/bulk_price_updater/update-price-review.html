@@ -40,5 +40,17 @@
                 <td>{{ stats.created }}</td>
             </tr>
         {% endif %}
+
     </table>
+
+    <table class="table table-striped table-bordered">
+        <caption><i class="icon-reorder icon-large"></i>({{ log|length }}) {% trans "Operational message"%}{{ log|pluralize }}</caption>
+        {% for lo in log %}
+            <tr>
+                <td>{{ lo }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
 {% endblock %}

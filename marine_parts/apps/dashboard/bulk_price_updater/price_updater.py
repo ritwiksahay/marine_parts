@@ -37,7 +37,7 @@ class DBHandler:
         #import pdb; pdb.set_trace()
         # Idea: When is None, it raises an exception and log the error.
         # Search by part_number
-        pp = Partner.objects.get(name='Acme')
+        pp = Partner.objects.get(name='NewPrice')
         pro = Product.objects.get(attribute_values__value_text=part_number)
 
         return StockRecord.objects.update_or_create(product=pro, partner=pp,
@@ -78,9 +78,10 @@ def updater(ls_st_rec, db):
             stats['not_found'] += 1
             continue
         except Product.MultipleObjectsReturned:
-            logger.warning('Multiple Products with part number %s. Skipping update for those products.' % part_number)
+            logger.warning('Multiple Products with part number %s. Skipping update for those ones.' % part_number)
             stats['not_found'] += 1
             continue
+        # Handle Partner not found
 
         if created:
             stats['created'] += 1

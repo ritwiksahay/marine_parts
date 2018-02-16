@@ -17,7 +17,8 @@ class UploadFileView(FormView):
     def post(self, request, *args, **kwargs):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            request.session['stats'] = execUpdater(request.FILES['file'].get_records())
+            request.session['stats'], \
+                request.session['log'] = execUpdater(request.FILES['file'].get_records())
             return super(UploadFileView, self).form_valid(form)
         else:
             return super(UploadFileView, self).form_invalid(form)
@@ -26,22 +27,8 @@ class UploadFileView(FormView):
 class ReviewUpdater(TemplateView):
     template_name = 'dashboard/bulk_price_updater/update-price-review.html'
 
-    def get(self, request, *args, **kwargs):
-        p = super(ReviewUpdater, self).get(request, *args, **kwargs)
-        p.context_data['stats'] = request.session['stats']
-        return p
-
-    # def get_template_names(self):
-    #     if self.request.user.is_staff:
-    #         return [
-    #     else:
-    #         return ['dashboard/index_nonstaff.html', 'dashboard/index.html']
-
-    # def form_valid(self, form):
-    #     process_file()
-    #     return super(ReviewUpdater, self).form_valid(form)
-
-    # def get_context_data(self, **kwargs):
-    #     context = super(ReviewUpdater, self).get_context_data(**kwargs)
-    #     context['stats'] = self.request.session['stats']
-    #     return context
+    def get_context_data(self, **kwargs):
+        context_data = super(ReviewUpdater, self).get_context_data(**kwargs)
+        context_data['stats'] = self.request.session['stats']
+        context_data['log'] = self.request.session['log'].strip().split('\n')
+        return context_data
