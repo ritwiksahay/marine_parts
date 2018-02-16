@@ -21,45 +21,53 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
                 <a href="{% url 'search:search' %}?var=category:Brands">
+                    <span class="helper"></span>
                     <img class="img-responsive" src="{% static 'img/brands/volvo-penta.png'%}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
                 <a href="{% url 'search:search' %}?var=category:Brands&var=category:Brands > Johnson Evinrude Outboard">
+                    <span class="helper"></span>
                     <img class="img-responsive" src="{% static 'img/brands/evinrude.png'%}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
                 <a href="{% url 'search:search' %}?var=category:Brands">
+                    <span class="helper"></span>
                     <img class="img-responsive" src="{% static 'img/brands/crusader.png'%}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
                 <a href="{% url 'search:search' %}?var=category:Brands">
+                    <span class="helper"></span>
                     <img class="img-responsive" src="{% static 'img/brands/mercury.png'%}" alt="">
                 </a>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
                 <a href="{% url 'search:search' %}?var=category:Brands">
+                    <span class="helper"></span>
                     <img class="img-responsive" src="{% static 'img/brands/mercruiser.png'%}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
                 <a href="{% url 'search:search' %}?var=category:Brands">
+                    <span class="helper"></span>
                     <img class="img-responsive" src="{% static 'img/brands/chrysler.png'%}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
                 <a href="{% url 'search:search' %}?var=category:Brands">
+                    <span class="helper"></span>
                     <img class="img-responsive" src="{% static 'img/brands/suzuki.png'%}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 brand">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
                 <a href="{% url 'search:search' %}?var=category:Brands">
+                    <span class="helper"></span>
                     <img class="img-responsive" src="{% static 'img/brands/yamaha.png'%}" alt="">
                 </a>
             </div>
@@ -72,25 +80,25 @@
             <div class="col-lg-12 col-md-8 col-sm-12 col-xs-12 col-centered">
                 <h1 class="best-sellers-title text-center">
                     <div class="canvas">
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-xs"></div>
+                        <div class="pixel hidden-xs"></div>
+                        <div class="pixel hidden-xs"></div>
                     </div>
                     {% trans "Shop best sellers" %}
                     <div class="canvas">
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
-                        <div class="pixel"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-xs"></div>
+                        <div class="pixel hidden-xs"></div>
+                        <div class="pixel hidden-xs"></div>
                     </div>
                 </h1>
             </div>
@@ -99,7 +107,7 @@
             <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 col-centered">
                 <div class="row">
                     {%for best_seller in best_sellers%}
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 category {%if not forloop.first%}bordered{%endif%}">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 category {%if not forloop.first%}bordered{%endif%}">
                             <a href="{{best_seller.get_absolute_url}}">
                                 <img class="img-responsive" src="{{ best_seller.image.url }}" alt="{{ best_seller.name }}">
                                 <p class="text-center">
@@ -117,10 +125,10 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="row">
             {% for category in categories %}
-                <div class="category {%if not forloop.counter|divisibleby:5%} bordered {%endif%} col-lg-5ths col-md-5ths col-sm-3 col-xs-3">
+                <div class="category {%if not forloop.counter|divisibleby:5%} bordered {%endif%} col-lg-5ths col-md-5ths col-sm-5ths col-xs-6">
                     <a href="{{category.get_absolute_url}}">
                         <img class="img-responsive category-icon" src="{%if category.image%}{{ category.image.url }}{%endif%}" alt="{{category.name}}">
-                        <p class="">
+                        <p class="category_name">
                             {{category.name}}
                         </p>
                     </a>
