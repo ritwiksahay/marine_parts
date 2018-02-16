@@ -24,6 +24,14 @@
     {% include 'search/partials/search_filter.html' with name=data.name items=data.results %}
 {% endblock %}
 
+{% block top_banner %}
+    {% block top_banner_title %}
+        <h2 class="text-center top_banner_title">
+            {% trans "Search and Results" %}
+        </h2>
+    {% endblock top_banner_title %}
+{% endblock top_banner %}
+
 {% block headertext %}
     {% if component and component.diagram_image %}
         {{component.name | upper}}
@@ -32,7 +40,6 @@
         {% trans "Results"|upper %}
     {% endif %}
 {% endblock %}
-
 
 {% block content %}
     {% if component and component.diagram_image %}

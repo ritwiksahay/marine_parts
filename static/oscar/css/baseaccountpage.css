@@ -28,3 +28,13 @@ label, p, li{
 .sidebar .nav-pills li a{
     color: #0d4a6c;
 }
+
+.page-banner .top_banner_title{
+    font-family: 'Magneto';
+    font-size: 40px;
+    color: #fff;
+    margin-bottom: 0px;
+    padding: 62px 0px;
+    background-image: url('../../img/banners/banner-profile.png');
+    background-position: center center; 
+}

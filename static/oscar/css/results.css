@@ -22,6 +22,16 @@ Light Gray: #E6E6E6;
     font-family: 'Gotham Bold' !important;
 }
 
+.page-banner .top_banner_title{
+    font-family: 'Magneto';
+    font-size: 40px;
+    color: #fff;
+    margin-bottom: 0px;
+    padding: 62px 0px;
+    background-image: url('../../img/banners/banner-search.png');
+    background-position: center center; 
+}
+
 .page_inner div .sidebar,
 .page_inner div .content{
     padding-top: 15px;
