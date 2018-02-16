@@ -21,7 +21,8 @@ Light Gray: #e6e6e6;
     padding-right: 30px;
     margin-left: 0px;
     margin-right: 0px;
-    background-image: url('../img/brands-home.jpg')
+    background-image: url('../img/brands-home.jpg');
+    background-position: center;
 }
 
 .brands-title{

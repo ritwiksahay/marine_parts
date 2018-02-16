@@ -48,7 +48,7 @@ Light Gray: #e6e6e6;
 }
 
 .header .navbar-nav div.text-center{
-    margin-top: 2.5%;
+    margin-top: 2%;
     font-size: 18px;
 }
 
@@ -80,8 +80,11 @@ Light Gray: #e6e6e6;
     font-size: 18px;
 }
 
+.header .navbar-nav hr{
+    border-top: 1px solid #0d4a6c;
+}
+
 .header .navbar-nav div.search-bar form div .search-form{
-    max-width: 92%;
     font-family: 'Gotham Book';
     font-size: 16px;
     height: 40px;

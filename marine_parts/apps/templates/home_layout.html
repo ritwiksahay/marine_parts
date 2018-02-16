@@ -12,6 +12,7 @@
         <link rel="stylesheet/less" type="text/css" href="{% static "oscar/less/styles.less" %}" />
     {% else %}
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/styles.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/responsive.css" %}" />
     {% endif %}
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/header_nav_bar.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/footer_nav_bar.css" %}" />
@@ -42,7 +43,7 @@
             </div>
         </div>
     {% endblock %}
-    <div class="container-fluid">
+    <div class="container-fluid hidden-xs">
         {% block ads %}
             
         {% endblock ads %}

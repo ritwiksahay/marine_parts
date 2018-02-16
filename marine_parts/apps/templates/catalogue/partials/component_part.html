@@ -12,30 +12,27 @@
 
     {% if session.availability.is_available_to_buy %}
         <td colspan="1">
-                {% if session.price.exists %}
-                    {% if session.price.excl_tax == 0 %}
-                        <p class="price_color">{% trans "Free" %}</p>
-                    {% elif session.price.is_tax_known %}
-                        <p class="price_color">{{ session.price.incl_tax|currency:session.price.currency }}</p>
-                    {% else %}
-                        <p class="price_color">{{ session.price.excl_tax|currency:session.price.currency }}</p>
-                    {% endif %}
+            {% if session.price.exists %}
+                {% if session.price.excl_tax == 0 %}
+                    <p class="price_color">{% trans "Free" %}</p>
+                {% elif session.price.is_tax_known %}
+                    <p class="price_color">{{ session.price.incl_tax|currency:session.price.currency }}</p>
                 {% else %}
-                    <p class="price_color">&nbsp;</p>
+                    <p class="price_color">{{ session.price.excl_tax|currency:session.price.currency }}</p>
                 {% endif %}
+            {% else %}
+                <p class="price_color">&nbsp;</p>
+            {% endif %}
 
-                {% basket_form request product 'single' as basket_form %}
-                <form action="{% url 'basket:add' pk=product.pk %}" method="post">
-                    {% csrf_token %}
-                    {{ basket_form.as_p }}
-                    <button type="submit" class="btn btn-primary btn-block" data-loading-text="{% trans 'Adding...' %}">Add</button>
-                </form>
+            {% basket_form request product 'single' as basket_form %}
+            <form action="{% url 'basket:add' pk=product.pk %}" method="post">
+                {% csrf_token %}
+                {{ basket_form.as_p }}
+                <button type="submit" class="btn btn-primary btn-block" data-loading-text="{% trans 'Adding...' %}">Add</button>
+            </form>
         </td>
     </tr>
-        
-
     {% else %}
-
         <td colspan="1">
             {% if replacements %}
                 <span>Replaced by <i class="glyphicon glyphicon-arrow-down"></i></span>
@@ -44,17 +41,12 @@
             {% endif %}
         </td>
     </tr>
-
-
     {% endif %}
 
-
     {% if replacements %}
-      
         {% for replacement in  replacements%}
             {% purchase_info_for_product request replacement as replacement_session %}
             {% render_component_part replacement replacement_session %}
         {% endfor %}
     {% endif %}
-
 {% endwith %}

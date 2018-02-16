@@ -44,16 +44,18 @@
                     {% purchase_info_for_line request line as session %}
                     <div class="basket-items">
                         <div class="row">
-                            <div class="col-sm-2">
-                                {{ form.id }}
-                                {% with image=product.primary_image %}
-                                    {% thumbnail image.original "100x100" upscale=False as thumb %}
-                                        <a href="{{ product.get_absolute_url }}">
-                                            <img class="thumbnail" src="{{ thumb.url }}" alt="{{ product.get_title }}"/>
-                                        </a>
-                                    {% endthumbnail %}
-                                {% endwith %}
-                            </div>
+                            {% with image=product.primary_image %}
+                                {%if image.original %}
+                                    {{ form.id }}
+                                    <div class="col-sm-2">
+                                        {% thumbnail image.original "100x100" upscale=False as thumb %}
+                                            <a href="{{ product.get_absolute_url }}">
+                                                <img class="thumbnail" src="{{ thumb.url }}" alt="{{ product.get_title }}"/>
+                                            </a>
+                                        {% endthumbnail %}
+                                    </div>
+                                {%endif%}
+                            {% endwith %}
                             <div class="col-sm-4">
                                 <h3><a href="{{ product.get_absolute_url }}">{{ line.description }}</a></h3>
                                 <p class="availability {{ session.availability.code }}">{{ session.availability.message }}</p>

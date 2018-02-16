@@ -41,7 +41,7 @@ OSCAR_DASHBOARD_NAVIGATION += [
     {
         'label': 'Shipping',
         'icon': 'icon-map-marker',
-        'children' : [
+        'children': [
             {
                 'label': 'Shipping Methods',
                 'url_name': 'dashboard:shipping-method-list'

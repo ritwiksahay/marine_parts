@@ -16,20 +16,11 @@ Light Gray: #e6e6e6;
     padding: 15px 15px;
 }
 
-.footer .footer_links .nav div.text-center{
-    margin-top: 3%;
-}
-
-.footer .footer_links .nav div.language-bar{
-    margin-top: 2.25%;
-}
-
 .footer .footer_links .nav div.language-bar form select{
     font-family: 'Gotham Book';
     color: #fff;
     background-color: #0d4a6c;
     height: 40px;
-    border: 0px;
     font-size: 16px;
     -webkit-appearance:none;
     -moz-appearance:none;
@@ -43,7 +34,6 @@ Light Gray: #e6e6e6;
     color: #fff;
     position: absolute;
     pointer-events: none;
-    right: 65px;
     top: 10px;
 }
 

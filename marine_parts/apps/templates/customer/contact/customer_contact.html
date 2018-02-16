@@ -5,8 +5,17 @@
 {% load i18n %}
 
 {% block extrastyles %}
-    <link rel="stylesheet" href="{% static 'css/contact/customer_contact.css' %}">
+    <link rel="stylesheet" href="{% static 'oscar/css/customer_contact.css' %}">
 {% endblock extrastyles %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li>
+        <a href="{{ homepage_url }}">{% trans 'Home' %}</a>
+    </li>
+    <li class="active">{% trans 'Contact us' %}</li>
+</ul>
+{% endblock %}
 
 {% block secondheadertext %}
     {% trans "Contact us"|upper %}
@@ -20,17 +29,16 @@
                 {% render_field field class="form-control" placeholder=field.help_text%}
             </div>
         {% endfor %}
-        <button class="btn btn-primary text-uppercase send">
+        <button class="btn btn-primary btn-lg text-uppercase send">
             {% trans "Send" %}
         </button>
     </form>
 {% endblock content %}
 
-{% block bottom %}
-<br>
+{% block bottom_banner %}
 <div class="container-fluid contact-image">
     <div class="row">
         <img class="img-responsive" src="{% static 'img/contact.jpg' %}" alt="contact">
     </div>
 </div>
-{% endblock bottom %}
+{% endblock bottom_banner %}

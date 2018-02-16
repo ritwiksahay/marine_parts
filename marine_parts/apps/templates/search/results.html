@@ -106,7 +106,7 @@
                 <div>
                     <ol class="row">
                         {% for result in page.object_list %}
-                            <li class="col-xs-6 col-sm-4 col-md-4 col-lg-4">{% render_product result.object %}</li>
+                            <li class="col-xs-12 col-sm-6 col-md-4 col-lg-4">{% render_product result.object %}</li>
                         {% endfor %}
                     </ol>
                     {% include "partials/pagination.html" with page_obj=page %}
