@@ -30,5 +30,10 @@ class ReviewUpdater(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super(ReviewUpdater, self).get_context_data(**kwargs)
         context_data['stats'] = self.request.session['stats']
-        context_data['log'] = self.request.session['log'].strip().split('\n')
+        log = self.request.session['log'].strip().split('\n')
+        if '' in log:
+            context_data['log'] = list()
+        else:
+            context_data['log'] = log
+
         return context_data

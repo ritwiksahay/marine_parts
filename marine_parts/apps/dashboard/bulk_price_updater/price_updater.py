@@ -1,9 +1,8 @@
 from oscar.apps.partner.models import StockRecord, Partner
 from marine_parts.apps.catalogue.models import Product
-from decimal import Decimal as D
+from decimal import Decimal, InvalidOperation
 import logging
 import StringIO
-
 
 
 logger = logging.getLogger(__name__)
@@ -27,11 +26,6 @@ def config_logger_prod(with_dates = True):
     return st, ch
 
 class DBHandler:
-
-    # Manejo de excepciones en caso:
-    # - KeyError: Esto puede mitigarse con get
-    # - Product and Partner doesn't exists. Check API for get function
-    # - Update_or_Create
 
     def update_by_part_number(self, part_number, price_excl_tax, price_retail, cost_price):
         #import pdb; pdb.set_trace()
@@ -59,17 +53,14 @@ def updater(ls_st_rec, db):
 
     for p in ls_st_rec:
         part_number = p['IMITMC']
-        price_retail = D(p['List'])
-        cost_price = D(p['Dealer'])
-        price_excl_tax = D(p['Your Price'])
-
-        # try:
-        # except KeyError as ke:
-        #     logger.error('Wrong header: %s. Unable to continue.'
-        #          'Use the following headers: IMITMC, List, Dealer and Your Price' % ke.message)
-        #     return stats
-        # except TypeError:
-        #     logger.warning('Wrong value. Using default value')
+        try:
+            price_retail = Decimal(p['List'])
+            cost_price = Decimal(p['Dealer'])
+            price_excl_tax = Decimal(p['Your Price'])
+        except (TypeError, InvalidOperation):
+            logger.warning('Wrong value. Skipping product with part number %s' % part_number)
+            stats['not_found'] += 1
+            continue
 
         try:
             _ , created = db.update_by_part_number(part_number, price_excl_tax, price_retail, cost_price)
@@ -81,7 +72,8 @@ def updater(ls_st_rec, db):
             logger.warning('Multiple Products with part number %s. Skipping update for those ones.' % part_number)
             stats['not_found'] += 1
             continue
-        # Handle Partner not found
+        # except Partner.DoesNotExist:
+        #     logger.error('Partner does not exists. )
 
         if created:
             stats['created'] += 1
@@ -103,9 +95,18 @@ def update_by_fixed_price(new_price):
         p.price_excl_tax = new_price
     return apply
 
+
 def execUpdater(ls):
     st, h = config_logger_prod()
-    stats = updater(ls, DBHandler())
+    stats = dict()
+
+    try:
+        stats = updater(ls, DBHandler())
+    except KeyError as ke:
+        logger.error('Wrong header: %s. Unable to continue.'
+             'Use the following headers: IMITMC, List, Dealer and Your Price' % ke.message)
+
     h.flush()
     st.flush()
+
     return (stats, st.getvalue())

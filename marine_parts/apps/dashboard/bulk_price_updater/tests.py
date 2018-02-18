@@ -68,21 +68,31 @@ test_data_Wrong_keys = \
     [
         {
             'IMMFGC' : 'A/P',
-            'IMITMC' : 'Not found',
+            'error' : '1',
             'IMDESC' : 'PACKING-TEFLON 3/16X',
             'IMSUOM' : 'EA',
             'List' : '27.13',
             'Dealer': '23.26',
             'Your Price' : '23.26'
         },
+    ]
+
+
+test_data_bad_prices = \
+    [
         {
             'IMMFGC': 'ABA',
-            'IMITMC': '13302',
+            'IMITMC': '1',
             'IMDESC': 'RUBBER LINED CLAMP',
             'IMSUOM': 'EA',
-            'List': '1.8',
-            'Dealer': '0.83',
-            'Your Price': '0.68'
+            'List': None,
+        },
+        {
+            'IMMFGC': 'ABA',
+            'IMITMC': '2',
+            'IMDESC': 'RUBBER LINED CLAMP',
+            'IMSUOM': 'EA',
+            'List': 'dasd'
         }
     ]
 
@@ -93,26 +103,35 @@ class TestUpdater(test.TestCase):
         self.st = StubDB()
         self.log_buf, self.handler = config_logger_prod(False)
 
-    def test_createAllProducts_returns6(self):
+    def test_productListEmpty_return0(self):
+        stats = updater([], self.st)
+        self.assertEqual(stats['total'], 0)
+        self.assertEqual(self.log_buf.getvalue(),'')
+
+    def test_createAllProducts_created4(self):
         self.st.created = True
         stats = updater(test_data, self.st)
         self.assertEqual(stats['created'], 4)
+        self.assertEqual(stats['total'], 4)
 
-    def test_updateAllProducts_return6(self):
-        stats = updater(test_data, StubDB())
+    def test_updateAllProducts_updated4(self):
+        stats = updater(test_data, self.st)
         self.assertEqual(stats['updated'], 4)
+        self.assertEqual(stats['total'], 4)
 
-    def test_NotFoundProduct_returnTrue(self):
+    def test_NotFoundProduct_notfound4(self):
         self.st.throw_does_not_exists = True
         stats = updater(test_data, self.st)
         self.assertEqual(stats['not_found'], 4)
+        self.assertEqual(stats['total'], 4)
 
-    def test_MultiplesProductNotFound_returnsTrue(self):
+    def test_MultiplesProductNotFound_returns4(self):
         self.st.throw_mult_objs = True
         stats = updater(test_data, self.st)
         self.assertEqual(stats['not_found'], 4)
+        self.assertEqual(stats['total'], 4)
 
-    def test_LogReportProductNotFound_returnTrue(self):
+    def test_LogReportProductNotFound_returnLog(self):
         self.st.throw_does_not_exists = True
         updater(test_data, self.st)
         #self.handler.flush()
@@ -123,7 +142,7 @@ class TestUpdater(test.TestCase):
             "WARNING - Product with part number 4 does not exists. Skipping update.\n"
                          )
 
-    def test_LogReportMultiplesProductFound_returnTrue(self):
+    def test_LogReportMultiplesProductFound_returnLog(self):
         self.st.throw_mult_objs = True
         updater(test_data, self.st)
         #self.handler.flush()
@@ -134,6 +153,24 @@ class TestUpdater(test.TestCase):
              'WARNING - Multiple Products with part number 4. Skipping update for those ones.\n'
                          )
 
+    def test_WrongHeadersWithLogReport_raiseKeyError(self):
+        self.assertRaises(KeyError, updater, test_data_Wrong_keys, self.st)
+        # self.assertEqual(self.log_buf.getvalue(),
+        #                  'Wrong header: error. Unable to continue.'
+        #                  'Use the following headers: IMITMC, List, Dealer and Your Price\n'
+        #                  )
+
+    def test_WrongValuePrices_return2(self):
+        stats = updater(test_data_bad_prices, self.st)
+        self.assertEqual(stats['not_found'], 2)
+        self.assertEqual(stats['total'], 2)
+
+    def test_WrongValuePrices_returnLog(self):
+        stats = updater(test_data_bad_prices, self.st)
+        self.assertEqual(self.log_buf.getvalue(),
+                         'WARNING - Wrong value. Skipping product with part number 1\n'
+                         'WARNING - Wrong value. Skipping product with part number 2\n'
+                         )
 
 
 class TestIntegrationUpdatePartNumber(test.TestCase):
@@ -148,19 +185,9 @@ class TestIntegrationUpdatePartNumber(test.TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.pc = ProductClass.objects.create(name='Subcomponent')
-        cls.partner = Partner.objects.create(name='Acme')
+        cls.partner = Partner.objects.create(name='NewPrice')
         cls.part_number = ProductAttribute.objects.create(
             product_class=cls.pc, name='Part number', code='PN', required=True, type=ProductAttribute.TEXT)
-
-        cls.p3_invalid = {
-            'IMMFGC': 'ABA',
-            'IMITMC': 'not found',
-            'IMDESC': 'RUBBER LINED CLAMP',
-            'IMSUOM': 'EA',
-            'wrong_key_List': '1.8',
-            'wrong_key_Dealer': '0.83',
-            'wrong_key_Price': '0.68'
-        }
 
     def setUp(self):
         self.create_prod('PACKING-TEFLON 3/16X', True, '4721')
@@ -188,20 +215,13 @@ class TestIntegrationUpdatePartNumber(test.TestCase):
 
         self.db = DBHandler()
 
-    def test_updateProductWithStock_returnsFalse(self):
+    def test_updateProductWithStock_returnsTrue(self):
         sr1, _ = self.db.update_by_part_number(self.p1['IMITMC'], self.p1['Your Price'], self.p1['List'], self.p1['Dealer'])
         self.assertEqual(sr1.price_excl_tax, D('23.26'))
 
     def test_updateProductWithoutStock_returnsTrue(self):
         sr2, _ = self.db.update_by_part_number(self.p2['IMITMC'], self.p2['Your Price'], self.p2['List'], self.p2['Dealer'])
         self.assertEqual(sr2.price_excl_tax, D('0.68'))
-
-    # def test_productDoesntFound_raiseException(self):
-    #     self.assertRaises(Product.DoesNotExist,self.db.update_by_part_number, self.p3_invalid)
-
-
-class IntegrationTestUpdater(test.TestCase):
-    pass
 
 
 class ReviewUpdaterClientTests(test.TestCase):
@@ -210,7 +230,11 @@ class ReviewUpdaterClientTests(test.TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create_superuser('dleones@ubicutus.com', '12qw')
-        cls.session_review = { 'stats' : { 'not_found' : 0, 'updated' : 0, 'created' : 0}, 'log' : 'test_log'}
+        cls.session_review_file_empty = {'stats' : {'not_found' : 0, 'updated' : 0, 'created' : 0, 'total' : 0}, 'log' : ''}
+        cls.session_review_sucessful = {'stats': {'not_found': 0, 'updated': 4, 'created': 4, 'total' : 8}, 'log': ''}
+        cls.session_review_key_error = { 'stats' : {}, 'log': 'ERROR - Wrong header: bad_key. Unable to continue.'
+             'Use the following headers: IMITMC, List, Dealer and Your Price'}
+        cls.user_login =  {'username': 'dleones@ubicutus.com', 'password': '12qw'}
 
     def setUp(self):
         self.factory = test.RequestFactory()
@@ -223,9 +247,9 @@ class ReviewUpdaterClientTests(test.TestCase):
         response = UploadFileView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
-    def test_GETBulkPriceUpdaterReview_returns200(self):
+    def test_GETBulkPriceUpdaterReviewFileEmpty_returnStats0(self):
         request = self.factory.get(reverse('dashboard:bulk-price-updater-review'))
-        request.session = self.session_review
+        request.session = self.session_review_file_empty
         request.user = self.user
 
         response = ReviewUpdater.as_view()(request)
@@ -243,13 +267,61 @@ class ReviewUpdaterClientTests(test.TestCase):
             <tr>
                 <td>Created</td>
                 <td>0</td>
+            </tr>
+            <tr>
+                <td>Total</td>
+                <td>0</td>
             </tr>""")
+        self.assertContains(response,
+            '<caption><i class="icon-reorder icon-large"></i>(0) Operational messages</caption>')
+
+    def test_GETBulkPriceUpdaterReviewBadFileFormat_returnsLogError(self):
+        request = self.factory.get(reverse('dashboard:bulk-price-updater-review'))
+        request.session = self.session_review_key_error
+        request.user = self.user
+
+        response = ReviewUpdater.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name[0], 'dashboard/bulk_price_updater/update-price-review.html')
+        self.assertContains(response,
+            'ERROR - Wrong header: bad_key. Unable to continue.Use the following headers: IMITMC, List, Dealer and Your Price')
+        self.assertContains(response,
+            '<caption><i class="icon-reorder icon-large"></i> Stock records summary </caption>\n        \n    </table>')
+        self.assertContains(response,
+                            '<caption><i class="icon-reorder icon-large"></i>(1) Operational message</caption>')
+
+    def test_GETBulkPriceUpdaterReviewSucessful_returns(self):
+        request = self.factory.get(reverse('dashboard:bulk-price-updater-review'))
+        request.session = self.session_review_sucessful
+        request.user = self.user
+
+        response = ReviewUpdater.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name[0], 'dashboard/bulk_price_updater/update-price-review.html')
+        self.assertContains(response,
+            """<tr>
+                <td>Not found</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Updated</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>Created</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>Total</td>
+                <td>8</td>
+            </tr>""")
+        self.assertContains(response,
+            '<caption><i class="icon-reorder icon-large"></i>(0) Operational messages</caption>\n        \n    </table>')
 
     def test_GETUploadFileView_returnsTrue(self):
         # Autheticate user first
-        self.client.post('/en-us/dashboard/login/', {'username': 'dleones@ubicutus.com', 'password': '12qw'}, follow=True)
+        self.client.post('/en-us/dashboard/login/', data=self.user_login, follow=True)
         page = self.client.get(reverse('dashboard:bulk-price-updater-index'))
 
         self.assertEqual(page.status_code, 200)
         self.assertTemplateUsed(page, 'dashboard/bulk_price_updater/update-price-index.html')
-        #self.assertQuerysetEqual(page.context_data['form'], '<UploadFileForm bound=False, valid=False, fields=(file)>')
