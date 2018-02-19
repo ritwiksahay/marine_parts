@@ -26,7 +26,13 @@
 {% block dashboard_content %}
     <form action="{% url 'dashboard:bulk-price-updater-index' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Upload" />
+        {% include 'partials/form_fields.html' with form=form %}
+        {# {{ form }} #}
+         <div class="control-group">
+            <div class="controls">
+                <button class="btn btn-lg btn-primary" type="submit" data-loading-text="{% trans 'Uploading...' %}">Submit</button>
+                 or <a href="{% url 'dashboard:index' %}">Cancel</a>
+            </div>
+         </div>
     </form>
 {% endblock %}

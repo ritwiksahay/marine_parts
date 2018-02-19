@@ -26,20 +26,22 @@ def config_logger_prod(with_dates = True):
     return st, ch
 
 class DBHandler:
+    def __init__(self, partner, percent):
+        self.partner = partner
+        self.percent = percent / Decimal(100)
 
     def update_by_part_number(self, part_number, price_excl_tax, price_retail, cost_price):
-        #import pdb; pdb.set_trace()
-        # Idea: When is None, it raises an exception and log the error.
         # Search by part_number
-        pp = Partner.objects.get(name='NewPrice')
         pro = Product.objects.get(attribute_values__value_text=part_number)
-
-        return StockRecord.objects.update_or_create(product=pro, partner=pp,
+        return StockRecord.objects.update_or_create(product=pro, partner=self.partner,
              defaults={
-                        'price_excl_tax' : price_excl_tax
-                        , 'price_retail': price_retail
+                        'price_excl_tax' : self.adjust_by_percent(price_excl_tax)
+                        , 'price_retail':  price_retail
                         , 'cost_price' : cost_price
                        })
+
+    def adjust_by_percent(self, price):
+        return (price * self.percent) + price
 
 
 # This function must use Atomic Transactions for avoiding to damage DB when an exception raises
@@ -84,24 +86,12 @@ def updater(ls_st_rec, db):
     return stats
 
 
-def update_by_percent(percent):
-    def apply(p):
-        p.price_excl_tax += (p.price_excl_tax * percent)
-    return apply
-
-
-def update_by_fixed_price(new_price):
-    def apply(p):
-        p.price_excl_tax = new_price
-    return apply
-
-
-def execUpdater(ls):
+def execUpdater(ls, partner, percent):
     st, h = config_logger_prod()
     stats = dict()
 
     try:
-        stats = updater(ls, DBHandler())
+        stats = updater(ls, DBHandler(partner, percent))
     except KeyError as ke:
         logger.error('Wrong header: %s. Unable to continue.'
              'Use the following headers: IMITMC, List, Dealer and Your Price' % ke.message)

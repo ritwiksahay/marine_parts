@@ -6,7 +6,8 @@ from decimal import Decimal as D
 from marine_parts.apps.users.models import User
 from django.urls import reverse
 from views import ReviewUpdater, UploadFileView
-from forms import UploadFileForm
+from forms import UploadFileForm, ExtFileField
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 # Fakes
 
@@ -100,7 +101,7 @@ test_data_bad_prices = \
 class TestUpdater(test.TestCase):
 
     def setUp(self):
-        self.st = StubDB()
+        self.st = StubDB('Test', D('30.00'))
         self.log_buf, self.handler = config_logger_prod(False)
 
     def test_productListEmpty_return0(self):
@@ -173,6 +174,24 @@ class TestUpdater(test.TestCase):
                          )
 
 
+class TestUAdjustPercent(test.TestCase):
+
+    def test_increase_amount_returnsTrue(self):
+        db = DBHandler('test', D(30.00))
+        new_value = db.adjust_by_percent(D(55.00))
+        self.assertEqual(new_value, D(71.50))
+
+    def test_zero_amount_returnsTrue(self):
+        db = DBHandler('test', D(0))
+        new_value = db.adjust_by_percent(D(55.00))
+        self.assertEqual(new_value, D(55))
+
+    def test_decrease_amount_returnsTrue(self):
+        db = DBHandler('test', D(-30))
+        new_value = db.adjust_by_percent(D(55.00))
+        self.assertEqual(new_value, D(38.50))
+
+
 class TestIntegrationUpdatePartNumber(test.TestCase):
     # Auxiliar method
     def create_prod(self, title, hasStock, part_number):
@@ -200,7 +219,7 @@ class TestIntegrationUpdatePartNumber(test.TestCase):
             'IMSUOM' : 'EA',
             'List' : D('27.13'),
             'Dealer': D('23.26'),
-            'Your Price' : D('23.26')
+            'Your Price' : D('25.00')
         }
 
         self.p2 =      {
@@ -210,18 +229,48 @@ class TestIntegrationUpdatePartNumber(test.TestCase):
             'IMSUOM': 'EA',
             'List': D('1.8'),
             'Dealer': D('0.83'),
-            'Your Price': D('0.68')
+            'Your Price': D('55.00')
         }
 
-        self.db = DBHandler()
+        self.db = DBHandler(self.partner, D(0))
 
     def test_updateProductWithStock_returnsTrue(self):
         sr1, _ = self.db.update_by_part_number(self.p1['IMITMC'], self.p1['Your Price'], self.p1['List'], self.p1['Dealer'])
-        self.assertEqual(sr1.price_excl_tax, D('23.26'))
+        self.assertEqual(sr1.price_excl_tax, D(25.00))
 
     def test_updateProductWithoutStock_returnsTrue(self):
         sr2, _ = self.db.update_by_part_number(self.p2['IMITMC'], self.p2['Your Price'], self.p2['List'], self.p2['Dealer'])
-        self.assertEqual(sr2.price_excl_tax, D('0.68'))
+        self.assertEqual(sr2.price_excl_tax, D(55.00))
+
+    def test_updateProductWithoutStockWithIncrease_returnsTrue(self):
+        db = DBHandler(self.partner, D(30))
+        sr2, _ = db.update_by_part_number(self.p2['IMITMC'], self.p2['Your Price'], self.p2['List'], self.p2['Dealer'])
+        self.assertEqual(sr2.price_excl_tax, D(71.50))
+
+    def test_updateProductWithStockWithIncrease_returnsTrue(self):
+        db = DBHandler(self.partner, D(30))
+        sr1, _ = db.update_by_part_number(self.p1['IMITMC'], self.p1['Your Price'], self.p1['List'],
+                                               self.p1['Dealer'])
+        self.assertEqual(sr1.price_excl_tax, D(32.50))
+
+
+
+class TestUploadFileForm(test.TestCase):
+    def setUp(self):
+        self.form = UploadFileForm()
+
+    def test_ExtFileFieldFileExtension_returnsTrue(self):
+        self.assertFieldOutput(ExtFileField,
+               { 'file' : SimpleUploadedFile('a.csv','test')
+                 #'b.xls' : SimpleUploadedFile('b.xls','test'),
+                 #'c.xlsx': SimpleUploadedFile('c.xlsx', 'test')
+                },
+               {
+                   'file': ["Not allowed filetype!"],
+                   #'b.pdf': ["Not allowed filetype!"]
+               },
+               field_kwargs={ 'ext_whitelist' :  (".xls", ".csv", '.xlsx') })
+    #def test_
 
 
 class ReviewUpdaterClientTests(test.TestCase):
@@ -238,7 +287,6 @@ class ReviewUpdaterClientTests(test.TestCase):
 
     def setUp(self):
         self.factory = test.RequestFactory()
-
 
     def test_GETBulkPriceUpdaterIndex_returns200(self):
         request = self.factory.get(reverse('dashboard:bulk-price-updater-index'))
@@ -281,12 +329,13 @@ class ReviewUpdaterClientTests(test.TestCase):
         request.user = self.user
 
         response = ReviewUpdater.as_view()(request)
-        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name[0], 'dashboard/bulk_price_updater/update-price-review.html')
         self.assertContains(response,
             'ERROR - Wrong header: bad_key. Unable to continue.Use the following headers: IMITMC, List, Dealer and Your Price')
         self.assertContains(response,
-            '<caption><i class="icon-reorder icon-large"></i> Stock records summary </caption>\n        \n    </table>')
+            '<table class="table table-striped table-bordered">'
+            '<caption><i class="icon-reorder icon-large"></i> Stock records summary </caption>\n\n</table>',
+            html=True, status_code=response.status_code)
         self.assertContains(response,
                             '<caption><i class="icon-reorder icon-large"></i>(1) Operational message</caption>')
 
@@ -296,7 +345,6 @@ class ReviewUpdaterClientTests(test.TestCase):
         request.user = self.user
 
         response = ReviewUpdater.as_view()(request)
-        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name[0], 'dashboard/bulk_price_updater/update-price-review.html')
         self.assertContains(response,
             """<tr>
@@ -314,9 +362,11 @@ class ReviewUpdaterClientTests(test.TestCase):
             <tr>
                 <td>Total</td>
                 <td>8</td>
-            </tr>""")
+            </tr>""", html=True, status_code=response.status_code)
         self.assertContains(response,
-            '<caption><i class="icon-reorder icon-large"></i>(0) Operational messages</caption>\n        \n    </table>')
+            '<caption><i class="icon-reorder icon-large"></i>(0) Operational messages</caption>\n        \n    </table>',
+                status_code=response.status_code,
+                html=True)
 
     def test_GETUploadFileView_returnsTrue(self):
         # Autheticate user first
