@@ -321,3 +321,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'parts@marineparts.com'
 EMAIL_HOST_PASSWORD = ''
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+SCRAPPER_ROOT = os.path.join(BASE_DIR, 'parts_scrapper/')

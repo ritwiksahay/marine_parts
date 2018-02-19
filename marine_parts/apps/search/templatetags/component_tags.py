@@ -41,8 +41,16 @@ def to_replacement_tree(products):
 
 def get_key(p):
     """Key to sort products by diagram number."""
-    dn = (p.attr.DN)[1:]
-    return int(dn)
+    try:
+        if p.attr.DN[0] == "#":
+            dn = int((p.attr.DN)[1:])
+        else:
+            dn = int(p.attr.DN)
+
+    except (ValueError, IndexError):
+        dn = 100000
+
+    return dn
 
 
 @register.simple_tag(takes_context=True)
