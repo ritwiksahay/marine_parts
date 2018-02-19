@@ -56,6 +56,23 @@ Light Gray: #e6e6e6;
         margin-right: auto;
     }
 
+    /*Results page*/
+    .customer-service .row .info h1{
+        font-size: 30px;
+    }
+
+    .customer-service .row .info h2{
+        font-size: 20px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 18px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 32px;
+    }
+
     /*Footer*/
     .footer .footer_links .nav div.text-center{
         margin-top: 0%;
@@ -126,6 +143,23 @@ Light Gray: #e6e6e6;
         width: 45px;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    /*Results page*/
+    .customer-service .row .info h1{
+        font-size: 30px;
+    }
+
+    .customer-service .row .info h2{
+        font-size: 20px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 18px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 32px;
     }
 
     /*Footer*/
@@ -200,6 +234,22 @@ Light Gray: #e6e6e6;
         margin-right: auto;
     }
 
+    /*Results page*/
+    .customer-service .row .info h1{
+        font-size: 30px;
+    }
+
+    .customer-service .row .info h2{
+        font-size: 20px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 18px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 32px;
+    }
 
     /*Footer*/
     .footer .footer_links .nav div.text-center{
@@ -273,6 +323,12 @@ Light Gray: #e6e6e6;
         margin-right: auto;
     }
 
+    /*Results page*/
+    .customer-service .row .info,
+    .customer-service .row .time{
+        height: 214px;
+    }
+
 
     /*Footer*/
     .footer .footer_links .nav div.text-center{
@@ -301,7 +357,6 @@ Light Gray: #e6e6e6;
     }
 
     /*Home*/
-
     .brands{
         padding-left: 30px;
         padding-right: 30px;
@@ -342,6 +397,12 @@ Light Gray: #e6e6e6;
         margin-right: auto;
     }
 
+    /*Results page*/
+    .customer-service .row .info,
+    .customer-service .row .time{
+        height: 214px;
+    }
+
     /*Footer*/
     .footer .footer_links .nav div.text-center{
         margin-top: 5%;
@@ -370,7 +431,6 @@ Light Gray: #e6e6e6;
     }
 
     /*Home*/
-
     .brands{
         padding-left: 30px;
         padding-right: 30px;
@@ -405,6 +465,28 @@ Light Gray: #e6e6e6;
         display: inline-block;
     }
 
+    /*Results page*/
+    .customer-service .row .info,
+    .customer-service .row .time{
+        height: 214px;
+    }
+
+    .customer-service .row .info h1{
+        font-size: 40px;
+    }
+
+    .customer-service .row .info h2{
+        font-size: 22px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 20px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 40px;
+    }
+
     /*Footer*/
     .footer .footer_links .nav div.text-center{
         margin-top: 5%;
@@ -424,9 +506,8 @@ Light Gray: #e6e6e6;
     }
 }
 
-/*Large devices (desktops, 992px and up)*/
-@media (min-width: 992px) and (max-width: 1199px) { 
-
+@media (min-width: 992px) and (max-width: 1060px) { 
+    
     /*Header*/
     .header .navbar-nav div.search-bar form div{
         margin-left: 10px;
@@ -471,9 +552,31 @@ Light Gray: #e6e6e6;
         font-size: 12px;
     }
 
-    .categories div .row div img.category-icon{
+    .categories div .row div img.category-icon {
         width: 38px;
         display: inline-block;
+    }    
+
+    /*Results page*/
+    .customer-service .row .info,
+    .customer-service .row .time{
+        height: 214px;
+    }
+
+    .customer-service .row .info h1{
+        font-size: 34px;
+    }
+
+    .customer-service .row .info h2{
+        font-size: 22px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 20px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 34px;
     }
 
     /*Footer*/
@@ -494,23 +597,48 @@ Light Gray: #e6e6e6;
     }
 }
 
-@media (min-width: 992px) and (max-width: 1060px) { 
-    
-    /*Home*/
-    .categories div .row div a .category_name {
-        font-size: 12px;
-    }
-
-    .categories div .row div img.category-icon {
-        width: 38px;
-        display: inline-block;
-    }
-    
-}
-
 @media (min-width: 1061px) and (max-width: 1199px) { 
     
+    /*Header*/
+    .header .navbar-nav div.search-bar form div{
+        margin-left: 10px;
+        margin-bottom: 5px;
+    }
+
+    .header .navbar-nav div.search-bar form div .search-form{
+        width: 88%;
+    }
+
     /*Home*/
+    .brands{
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .brands div .row .brand{
+        height: 110px;
+        padding: 12px 25px 12px 25px;
+    }
+
+    .best-sellers div div .row{
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .best-sellers div div .row .bordered{
+        border-left: 1px solid #04a0d3;
+    }
+
+    .best-sellers div div .row .category a img{
+        max-height: 200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .categories div .row div.bordered{
+        border-right: 1px solid #0d4a6c;
+    }
+
     .categories div .row div a .category_name {
         font-size: 14px;
     }
@@ -518,6 +646,45 @@ Light Gray: #e6e6e6;
     .categories div .row div img.category-icon {
         width: 40px;
         display: inline-block;
+    }
+
+    /*Results page*/
+    .customer-service .row .info,
+    .customer-service .row .time{
+        height: 214px;
+    }
+
+    .customer-service .row .info h1{
+        font-size: 36px;
+    }
+
+    .customer-service .row .info h2{
+        font-size: 22px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 20px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 36px;
+    }
+
+    /*Footer*/
+    .footer .footer_links .nav div.text-center{
+        margin-top: 5%;
+    }
+
+    .footer .footer_links .nav div.language-bar .form-group:after{
+        right: 30px;
+    }
+
+    .footer .footer_links .nav div.language-bar{
+        margin-top: 4.5%;
+    }
+
+    .footer .footer_links .nav div.language-bar select{
+        border:0px;
     }
     
 }
@@ -568,6 +735,24 @@ Light Gray: #e6e6e6;
     .categories div .row div img.category-icon{
         width: 42px;
         display: inline-block;
+    }
+
+    /*Results page*/
+    .customer-service .row .info,
+    .customer-service .row .time{
+        height: 214px;
+    }
+
+    .customer-service .row .info h1{
+        font-size: 40px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 40px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 24px;
     }
 
     /*Footer*/

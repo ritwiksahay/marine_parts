@@ -10,20 +10,18 @@ Light Gray: #e6e6e6;
 
 */
 .customer-service{
-    padding: 0px;
+    padding: 0px 15px;
 }
 
 .customer-service .row .info{
     background-color: #383838;
     padding-top: 15px;
     padding-bottom: 15px;
-    height: 214px;
 }
 
 .customer-service .row .info h1{
     font-family: "Magneto";
     color: #FFFFFF;
-    font-size: 40px;
     border-bottom: 2px solid;
     width: 75%;
     margin-left: auto;
@@ -47,13 +45,11 @@ Light Gray: #e6e6e6;
     background-color: #04a0d3;
     padding-top: 15px;
     padding-bottom: 15px;
-    height: 214px;
 }
 
 .customer-service .row .time h1{
     font-family: "Magneto";
     color: #FFFFFF;
-    font-size: 40px;
     border-bottom: 2px solid;
     width: 45%;
     margin-left: auto;
@@ -63,7 +59,6 @@ Light Gray: #e6e6e6;
 .customer-service .row .time h3{
     font-family: "Gotham Bold";
     color: #FFFFFF;
-    font-size: 24px;
 }
 
 .customer-service .row .time h3.hours{

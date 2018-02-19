@@ -17,7 +17,7 @@
     {% else %}
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
     {% endif %}
-        <link rel="stylesheet" type="text/css" href="{% static "css/search/customer-service.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/customer-service.css" %}" />
 {% endblock extrastyles %}
 
 {% block column_left %}
@@ -131,9 +131,9 @@
     {% endif %}
 {% endblock %}
 
-{% block bottom %}
+{% block bottom_banner %}
     {% include "partials/customer_service.html" %}
-{% endblock bottom %}
+{% endblock bottom_banner %}
 
 {% block onbodyload %}
     {{ block.super }}
