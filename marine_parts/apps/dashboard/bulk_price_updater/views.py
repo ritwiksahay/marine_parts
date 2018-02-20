@@ -26,7 +26,7 @@ class UploadFileView(FormView):
             else:
                 file = request.FILES['file'].get_records(library='pyexcel-io')
 
-            # Execeute updater
+            # Execute updater
             request.session['stats'], \
                 request.session['log'] = execUpdater(file,
                                                      form.cleaned_data['partner'],

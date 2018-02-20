@@ -32,7 +32,7 @@ class ExtFileField(forms.FileField):
         ext = os.path.splitext(filename)[1]
         ext = ext.lower()
         if ext not in self.ext_whitelist:
-            raise forms.ValidationError("Not allowed filetype!")
+            raise forms.ValidationError("Not allowed filetype")
 
 
 class UploadFileForm(forms.Form):
@@ -41,7 +41,7 @@ class UploadFileForm(forms.Form):
         help_text=_("File extension must be .xls, .xlsx or .csv"),
         required=True,
         max_length=3000,
-        ext_whitelist= ('.csv, .xls, .xlsx'))
+        ext_whitelist=('.csv', '.xls', '.xlsx'))
 
     partner = forms.ModelChoiceField(
         label=_("Update"),

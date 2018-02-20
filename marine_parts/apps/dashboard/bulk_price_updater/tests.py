@@ -8,6 +8,8 @@ from django.urls import reverse
 from views import ReviewUpdater, UploadFileView
 from forms import UploadFileForm, ExtFileField
 from django.core.files.uploadedfile import SimpleUploadedFile
+from io import BytesIO
+import pyexcel as pe
 
 # Fakes
 
@@ -96,6 +98,23 @@ test_data_bad_prices = \
             'List': 'dasd'
         }
     ]
+
+test_file = [
+    ['IMMFGC','IMITMC',	'IMDESC', 'IMSUOM', 'List', 'Dealer', 'Your Price'],
+    ['A/C', 'GF-626', 'MEMO - REFERENCE ONL', 'EA', '0', '0', '0'],
+    ['A/C', '1', 'MEMO - REFERENCE ONL', 'EA', '0', '0', '55'],
+    ['A/C', '2', 'MEMO - REFERENCE ONL', 'EA', '0', '0', '100']
+]
+
+def create_test_file(data, file_type, fake_name=False):
+    io = BytesIO()
+    sheet = pe.Sheet(data)
+    if fake_name:
+        io = sheet.save_to_memory('csv', io)
+    else:
+        io = sheet.save_to_memory(file_type, io)
+    io.name = 'test.' + file_type
+    return io
 
 
 class TestUpdater(test.TestCase):
@@ -254,23 +273,144 @@ class TestIntegrationUpdatePartNumber(test.TestCase):
         self.assertEqual(sr1.price_excl_tax, D(32.50))
 
 
-
 class TestUploadFileForm(test.TestCase):
-    def setUp(self):
-        self.form = UploadFileForm()
+    @classmethod
+    def setUpTestData(cls):
+        cls.partner = Partner.objects.create(name='NewPrice')
 
-    def test_ExtFileFieldFileExtension_returnsTrue(self):
-        self.assertFieldOutput(ExtFileField,
-               { 'file' : SimpleUploadedFile('a.csv','test')
-                 #'b.xls' : SimpleUploadedFile('b.xls','test'),
-                 #'c.xlsx': SimpleUploadedFile('c.xlsx', 'test')
-                },
-               {
-                   'file': ["Not allowed filetype!"],
-                   #'b.pdf': ["Not allowed filetype!"]
-               },
-               field_kwargs={ 'ext_whitelist' :  (".xls", ".csv", '.xlsx') })
-    #def test_
+    def setUp(self):
+        self.csv = SimpleUploadedFile('a.csv', 'contenido')
+        self.xls = SimpleUploadedFile('a.xls', 'contenido')
+        self.xlsx = SimpleUploadedFile('a.xlsx', 'contenido')
+        self.data = { 'partner' : '1', 'percent' : '0'}
+        self.file_data = {'file': ''}
+
+    # def test_ExtFileFieldFileExtension_returnsTrue(self):
+    #     self.assertFieldOutput(ExtFileField,
+    #            { 'file.csv' : SimpleUploadedFile('a.csv','test')
+    #              #'b.xls' : SimpleUploadedFile('b.xls','test'),
+    #              #'c.xlsx': SimpleUploadedFile('c.xlsx', 'test')
+    #             },
+    #            {
+    #                'file.pdf': ["Not allowed filetype!"],
+    #                #'b.pdf': ["Not allowed filetype!"]
+    #            },
+    #            field_kwargs={ 'ext_whitelist' :  (".xls", ".csv", '.xlsx') })
+
+    def test_FileExtensionCSV_returnTrue(self):
+        self.file_data['file'] = self.csv
+        form = UploadFileForm(self.data, self.file_data)
+        self.assertTrue(form.is_valid())
+
+    def test_FileExtensionXLS_returnTrue(self):
+        self.file_data['file'] = self.xls
+        form = UploadFileForm(self.data, self.file_data)
+        self.assertTrue(form.is_valid())
+
+    def test_FileExtensionXLSX_returnTrue(self):
+        self.file_data['file'] = self.xlsx
+        form = UploadFileForm(self.data, self.file_data)
+        self.assertTrue(form.is_valid())
+
+    def test_FileExtensionInValid_returnFalse(self):
+        self.file_data['file'] = SimpleUploadedFile('as.xsx', 'error')
+        form = UploadFileForm(self.data, self.file_data)
+        self.assertFalse(form.is_valid())
+
+    def test_FileFieldEmpty_returnFalse(self):
+        form = UploadFileForm(self.data, self.file_data)
+        self.assertFalse(form.is_valid())
+
+    def test_PercentEmpty_returnFalse(self):
+        self.file_data['file'] = self.csv
+        self.data['percent'] = ''
+        form = UploadFileForm(self.data, self.file_data)
+        self.assertFalse(form.is_valid())
+
+    def test_PercentNone_returnFalse(self):
+        self.file_data['file'] = self.csv
+        self.data['percent'] = None
+        form = UploadFileForm(self.data, self.file_data)
+        self.assertFalse(form.is_valid())
+
+    def test_PartnerEmpty_returnFalse(self):
+        self.file_data['file'] = self.csv
+        self.data['partner'] = ''
+        form = UploadFileForm(self.data, self.file_data)
+        self.assertFalse(form.is_valid())
+
+    def test_PartnerWrong_returnFalse(self):
+        self.file_data['file'] = self.csv
+        self.data['partner'] = '2'
+        form = UploadFileForm(self.data, self.file_data)
+        self.assertFalse(form.is_valid())
+
+
+class IndexViewTestIntegration(test.TestCase):
+    fixtures = ['metadata.json']
+
+    @classmethod
+    def setUpTestData(cls):
+        Partner.objects.create(name='NewPrice')
+        cls.user = User.objects.create_superuser('dleones@ubicutus.com', '12qw')
+        cls.user_login = {'username': 'dleones@ubicutus.com', 'password': '12qw'}
+
+        cls.xlsx = create_test_file(test_file, 'xlsx')
+        cls.xls = create_test_file(test_file, 'xls')
+        cls.csv = create_test_file(test_file, 'csv')
+        cls.invalid_file = create_test_file(test_file, 'pdf', True)
+
+    def setUp(self):
+        self.post_data = {
+            'file' : None,
+            'partner' : '1',
+            'percent' : '0.0'
+        }
+
+    def test_POSTUploadFileViewValidForm_returnsTrue(self):
+        # Autheticate user first
+        self.client.post('/en-us/dashboard/login/', data=self.user_login,
+                         follow=True)
+
+        self.post_data['file'] = self.xls
+        page = self.client.post(reverse('dashboard:bulk-price-updater-index'), data=self.post_data)
+        self.assertRedirects(page, '/en-us/dashboard/bulk_price_update/review/')
+
+
+    def test_POSTUploadFileViewInvalidFormFileEmpty_returnsTrue(self):
+        # Autheticate user first
+        self.client.post('/en-us/dashboard/login/', data=self.user_login, follow=True)
+
+        self.post_data['file'] = ''
+        page = self.client.post(reverse('dashboard:bulk-price-updater-index'), data=self.post_data)
+
+        self.assertEqual(page.status_code, 200)
+        self.assertTemplateUsed(page, 'dashboard/bulk_price_updater/update-price-index.html')
+        self.assertFormError(page, 'form', 'file', 'This field is required.')
+
+    def test_POSTUploadFileViewInvalidFormBadFile_returnsTrue(self):
+        # Autheticate user first
+        self.client.post('/en-us/dashboard/login/', data=self.user_login, follow=True)
+
+        self.post_data['file'] = self.invalid_file
+        page = self.client.post(reverse('dashboard:bulk-price-updater-index'), data=self.post_data)
+
+        self.assertEqual(page.status_code, 200)
+        self.assertTemplateUsed(page, 'dashboard/bulk_price_updater/update-price-index.html')
+        self.assertFormError(page, 'form', 'file', 'Not allowed filetype')
+
+
+    def test_POSTUploadFileViewInvalidFormPartner_returnsTrue(self):
+        # Autheticate user first
+        self.client.post('/en-us/dashboard/login/', data=self.user_login, follow=True)
+
+        self.post_data['file'] = self.xlsx
+        self.post_data['partner'] = ''
+        page = self.client.post(reverse('dashboard:bulk-price-updater-index'), data=self.post_data)
+
+        self.assertEqual(page.status_code, 200)
+        self.assertTemplateUsed(page, 'dashboard/bulk_price_updater/update-price-index.html')
+        self.assertFormError(page, 'form','partner', [u'This field is required.'])
 
 
 class ReviewUpdaterClientTests(test.TestCase):
@@ -283,17 +423,9 @@ class ReviewUpdaterClientTests(test.TestCase):
         cls.session_review_sucessful = {'stats': {'not_found': 0, 'updated': 4, 'created': 4, 'total' : 8}, 'log': ''}
         cls.session_review_key_error = { 'stats' : {}, 'log': 'ERROR - Wrong header: bad_key. Unable to continue.'
              'Use the following headers: IMITMC, List, Dealer and Your Price'}
-        cls.user_login =  {'username': 'dleones@ubicutus.com', 'password': '12qw'}
 
     def setUp(self):
         self.factory = test.RequestFactory()
-
-    def test_GETBulkPriceUpdaterIndex_returns200(self):
-        request = self.factory.get(reverse('dashboard:bulk-price-updater-index'))
-        request.user = self.user
-
-        response = UploadFileView.as_view()(request)
-        self.assertEqual(response.status_code, 200)
 
     def test_GETBulkPriceUpdaterReviewFileEmpty_returnStats0(self):
         request = self.factory.get(reverse('dashboard:bulk-price-updater-review'))
@@ -347,7 +479,9 @@ class ReviewUpdaterClientTests(test.TestCase):
         response = ReviewUpdater.as_view()(request)
         self.assertEqual(response.template_name[0], 'dashboard/bulk_price_updater/update-price-review.html')
         self.assertContains(response,
-            """<tr>
+            """
+            <table class="table table-striped table-bordered">
+                <caption><i class="icon-reorder icon-large"></i> Stock records summary </caption><tr>
                 <td>Not found</td>
                 <td>0</td>
             </tr>
@@ -362,16 +496,77 @@ class ReviewUpdaterClientTests(test.TestCase):
             <tr>
                 <td>Total</td>
                 <td>8</td>
-            </tr>""", html=True, status_code=response.status_code)
+            </tr></table>""", status_code=response.status_code, html=True)
         self.assertContains(response,
+            '<table class="table table-striped table-bordered">'
             '<caption><i class="icon-reorder icon-large"></i>(0) Operational messages</caption>\n        \n    </table>',
                 status_code=response.status_code,
                 html=True)
 
-    def test_GETUploadFileView_returnsTrue(self):
+class SystemTestingIntegration(test.TestCase):
+    fixtures = ['metadata.json']
+
+    def create_prod(self, title, hasStock, part_number):
+        p = Product.objects.create(product_class=self.pc, title=title)
+        self.part_number.save_value(p, part_number)
+        if hasStock:
+            StockRecord.objects.create(product=p, partner=self.partner
+                                       , partner_sku=title, price_excl_tax=D('0.00'), num_in_stock=1)
+
+    def setUp(self):
+        self.create_prod('PACKING-TEFLON 3/16X', True, '1')
+        self.create_prod('RUBBER LINED CLAMP', False, '2')
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.pc = ProductClass.objects.create(name='Subcomponent')
+        cls.partner = Partner.objects.create(name='NewPrice')
+        cls.part_number = ProductAttribute.objects.create(
+            product_class=cls.pc, name='Part number', code='PN', required=True, type=ProductAttribute.TEXT)
+
+        Partner.objects.create(name='NewPrice')
+        cls.user = User.objects.create_superuser('dleones@ubicutus.com', '12qw')
+        cls.user_login = {'username': 'dleones@ubicutus.com', 'password': '12qw'}
+        cls.post_data = {
+            'file' : None,
+            'partner' : '1',
+            'percent' : '0.0'
+        }
+
+        cls.xlsx = create_test_file(test_file, 'xlsx')
+        cls.xls = create_test_file(test_file, 'xls')
+        cls.csv = create_test_file(test_file, 'csv')
+        cls.invalid_file = create_test_file(test_file, 'pdf', True)
+
+    def test_POSTFileXlsx_returnsTrue(self):
         # Autheticate user first
         self.client.post('/en-us/dashboard/login/', data=self.user_login, follow=True)
-        page = self.client.get(reverse('dashboard:bulk-price-updater-index'))
+
+        self.post_data['file'] = self.xlsx
+        page = self.client.post(reverse('dashboard:bulk-price-updater-index'), data=self.post_data, follow=True)
 
         self.assertEqual(page.status_code, 200)
-        self.assertTemplateUsed(page, 'dashboard/bulk_price_updater/update-price-index.html')
+        self.assertTemplateUsed(page, 'dashboard/bulk_price_updater/update-price-review.html')
+        self.assertDictEqual(page.context_data['stats'], {'not_found' : 1, 'updated' : 1, 'created' : 1, 'total' : 3})
+
+    def test_POSTFileXls_returnsTrue(self):
+        # Autheticate user first
+        self.client.post('/en-us/dashboard/login/', data=self.user_login, follow=True)
+
+        self.post_data['file'] = self.xls
+        page = self.client.post(reverse('dashboard:bulk-price-updater-index'), data=self.post_data, follow=True)
+
+        self.assertEqual(page.status_code, 200)
+        self.assertTemplateUsed(page, 'dashboard/bulk_price_updater/update-price-review.html')
+        self.assertDictEqual(page.context_data['stats'], {'not_found' : 1, 'updated' : 1, 'created' : 1, 'total' : 3})
+
+    def test_POSTFileCsv_returnsTrue(self):
+        # Autheticate user first
+        self.client.post('/en-us/dashboard/login/', data=self.user_login, follow=True)
+
+        self.post_data['file'] = self.csv
+        page = self.client.post(reverse('dashboard:bulk-price-updater-index'), data=self.post_data, follow=True)
+
+        self.assertEqual(page.status_code, 200)
+        self.assertTemplateUsed(page, 'dashboard/bulk_price_updater/update-price-review.html')
+        self.assertDictEqual(page.context_data['stats'], {'not_found' : 1, 'updated' : 1, 'created' : 1, 'total' : 3})
