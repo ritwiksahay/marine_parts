@@ -138,37 +138,43 @@ def nav_prods(json_products, bre_cat, db_oscar, comp_img=None):
         product_class)
 
     nro_products = 0
-    recomendados = set()
+
     for p in json_products:
-        nom_prod = p.get('product')
-        if nom_prod not in recomendados:
-            prod_saved = db_oscar.crear_prods(p, cat, product_class,
-                                              part_number, manufacturer,
-                                              diag_number)
-            nro_products += crea_recomemd(prod_saved, p, recomendados, 0,
+        prod_saved = db_oscar.crear_prods(p, cat, product_class,
+                                          part_number, manufacturer,
+                                          diag_number)
+
+        if p.get('is_replaced'):
+            replacements = p.get('replacements')
+            nro_products += crea_recomemd(prod_saved, p, replacements, 0,
                                           cat, product_class, part_number,
                                           manufacturer, diag_number,
                                           db_oscar)
-            nro_products += 1
+        nro_products += 1
 
     return nro_products
 
 
-def crea_recomemd(pro_root_saved, prod, recom, nro, cat, product_class,
+def crea_recomemd(pro_root_saved, prod, replacements, nro, cat, product_class,
                   part_number, manufacturer, diag_number, db_oscar):
-    while True:
-        prod = prod.get('recomended')
-        if prod and (not isinstance(prod, types.StringTypes)):
-            nom_prod = prod.get('product')
-            if nom_prod:
-                recom.add(nom_prod)
-                prod_saved = \
-                    db_oscar.crear_prods(prod, cat, product_class, part_number,
-                                         manufacturer, diag_number)
-                db_oscar.asign_prod_replacement(pro_root_saved, prod_saved)
-                nro += 1
-        else:
-            return nro
+    """Crea los reemplazos de un producto."""
+    """Que se encuentre en el JSON en la BD del proyecto."""
+    """Devuelve el numero de productos insertados."""
+    for replacement in replacements:
+        prod_saved = \
+            db_oscar.crear_prods(replacement, cat, product_class, part_number,
+                                 manufacturer, diag_number)
+        db_oscar.asign_prod_replacement(prod_saved, pro_root_saved)
+
+        if replacement.get('is_replaced'):
+            repls = replacement['replacements']
+            nro += crea_recomemd(prod_saved, replacement, repls, 0,
+                                 cat, product_class, part_number,
+                                 manufacturer, diag_number,
+                                 db_oscar)
+        nro += 1
+
+    return nro
 ###############################################################################
 
 
