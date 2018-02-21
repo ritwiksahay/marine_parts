@@ -11,6 +11,7 @@ from lxml import html, etree
 from datetime import date
 # from logging.handlers import RotatingFileHandler
 
+FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 MARINE_ENGINE_BASE_URL = 'https://www.marineengine.com'
 
 
@@ -38,7 +39,7 @@ def request_get(path, stream=False):
 def marineengine_mercury_scrapper():
     """Scrapper for Marine Engine Mercury Parts."""
     # Marineengine base url
-    global MARINE_ENGINE_BASE_URL
+    global MARINE_ENGINE_BASE_URL, FILE_DIR
     # Categorys scraping
     page = request_get(
         MARINE_ENGINE_BASE_URL + '/parts/mercury-outboard/index.php'
@@ -52,10 +53,6 @@ def marineengine_mercury_scrapper():
     xproduct_selector = "/html/body/main/table//tr"
     xproduct_details_selector = ("/html/body/main/div[1]/div[1]"
                                  "/div[1]/div[2]/table//tr/td/p")
-    xproduct_unavailable_selector = ("/html/body/main/div[1]/div[1]"
-                                     "/div[1]/div[2]/div/a")
-    # xproduct_img_selector = ("/html/body/main/div[1]/div[1]"
-    #                           "/div[1]/div[1]/p/img")
 
     scrap_date = str(date.today()).replace(' ', '')
     catalog = {
@@ -65,8 +62,8 @@ def marineengine_mercury_scrapper():
     }
 
     for cat in tree.xpath(xpath_selector)[0:1]:
-        if not os.path.exists('marine_engine/mercury/' + cat.text):
-            os.makedirs('marine_engine/mercury/' + cat.text)
+        if not os.path.exists(FILE_DIR + '/marine_engine/mercury/' + cat.text):
+            os.makedirs(FILE_DIR + '/marine_engine/mercury/' + cat.text)
         category = {
             'category_name': 'category',
             'category': cat.text,
@@ -142,7 +139,8 @@ def marineengine_mercury_scrapper():
                     if component_image:
                         r = request_get(component_image, stream=True)
                         save_downloaded_file(
-                            'img/marine_engine/mercury/' +
+                            FILE_DIR +
+                            '/img/marine_engine/mercury/' +
                             component_image.split('/')[-1], r)
                         component_image = 'img/marine_engine/mercury/' + \
                             component_image.split('/')[-1]
@@ -168,23 +166,24 @@ def marineengine_mercury_scrapper():
 
                             product = {
                                 'product': re.sub(' +', ' ', title),
-                                'product_url': url,
                                 'diagram_number': diag_number,
                                 'replacements': []
                             }
-                            
 
-                            # Check if it's obsolete and replaced
-                            xpath = prod.xpath('td[3]/small[2]/br')
+                            # Check if it's unavailable obsolete and replaced
                             is_replaced = False
-                            if xpath is not None and xpath != []:
-                                match = xpath[0].tail.strip()
-                                is_replaced = "Replaced" in match
-                            product['is_replaced'] = is_replaced
+                            if prod.xpath('td[3]/small[1]'):
+                                product['is_available'] = False
+                                xpath = prod.xpath('td[3]/small[2]/br')
+                                if xpath is not None and xpath != []:
+                                    match = xpath[0].tail.strip()
+                                    is_replaced = "Replaced" in match
+                            else:
+                                product['is_available'] = True
 
                             # Product details scraping
                             page = request_get(
-                                MARINE_ENGINE_BASE_URL + product['product_url']
+                                MARINE_ENGINE_BASE_URL + url
                             )
                             tree = html.fromstring(page.content)
 
@@ -193,7 +192,7 @@ def marineengine_mercury_scrapper():
                             count = 0
                             # Price and other details from the product page
                             for details in tree.xpath(
-                                    xproduct_details_selector):
+                                    xproduct_details_selector)[2:]:
                                 value = \
                                     etree.tostring(details) \
                                     .decode('utf-8') \
@@ -208,10 +207,6 @@ def marineengine_mercury_scrapper():
 
                                 if value:
                                     if count == 0:
-                                        product['list_price'] = value
-                                    elif count == 1:
-                                        product['your_price'] = value
-                                    elif count == 2:
                                         product['part_number'] = value
                                     else:
                                         product['manufacturer'] = value
@@ -219,11 +214,11 @@ def marineengine_mercury_scrapper():
                                 count += 1
 
                             # we add replacements only in the replacement
-                            # list of the replaced object to avoid 
+                            # list of the replaced object to avoid
                             # duplicates inserts in DB
                             if last_replaced is None:
                                 component['products'].append(product)
-                            else:                           
+                            else:
                                 last_replaced['replacements'].append(product)
 
                             if is_replaced:
@@ -236,7 +231,7 @@ def marineengine_mercury_scrapper():
                                 .text.replace('#', '')
 
             print("\n'%s' done...\n" % cat_name)
-            output_file_path = 'marine_engine/mercury/' + \
+            output_file_path = FILE_DIR + '/marine_engine/mercury/' + \
                 cat.text + '/' + re.sub(r'/', r'\\', cat_name) + \
                 '-' + scrap_date + '.json'
             create_output_file(catalog, output_file_path)
@@ -2211,24 +2206,25 @@ def save_downloaded_file(path, r):
 
 if __name__ == '__main__':
     # Create needed directories
-    if not os.path.exists('img'):
-        os.makedirs('img')
-    if not os.path.exists('manuals'):
-        os.makedirs('manuals')
+    if not os.path.exists(FILE_DIR + '/img'):
+        os.makedirs(FILE_DIR + '/img')
+    if not os.path.exists(FILE_DIR + '/manuals'):
+        os.makedirs(FILE_DIR + '/manuals')
 
     ###############################################
     # Marine Engine Directories and sub-directories
-    if not os.path.exists('img/marine_engine'):
-        os.makedirs('img/marine_engine')
-    if not os.path.exists('./marine_engine'):
-        os.makedirs('./marine_engine')
-
+    """
+    if not os.path.exists(FILE_DIR + '/img/marine_engine'):
+        os.makedirs(FILE_DIR + '/img/marine_engine')
+    if not os.path.exists(FILE_DIR + '/./marine_engine'):
+        os.makedirs(FILE_DIR + '/./marine_engine')
+    """
     # Subdirs
-    if not os.path.exists('marine_engine/mercury'):
-        os.makedirs('marine_engine/mercury/')
+    if not os.path.exists(FILE_DIR + '/marine_engine/mercury'):
+        os.makedirs(FILE_DIR + '/marine_engine/mercury/')
+    if not os.path.exists(FILE_DIR + '/img/marine_engine/mercury'):
+        os.makedirs(FILE_DIR + '/img/marine_engine/mercury')
 
-    if not os.path.exists('img/marine_engine/mercury'):
-        os.makedirs('img/marine_engine/mercury')
     if not os.path.exists('img/marine_engine/mercruiser'):
         os.makedirs('img/marine_engine/mercruiser')
     if not os.path.exists('img/marine_engine/j&e'):
