@@ -196,17 +196,17 @@ class TestUpdater(test.TestCase):
 class TestUAdjustPercent(test.TestCase):
 
     def test_increase_amount_returnsTrue(self):
-        db = DBHandler('test', D(30.00))
+        db = DBHandler(None, D(30.00))
         new_value = db.adjust_by_percent(D(55.00))
         self.assertEqual(new_value, D(71.50))
 
     def test_zero_amount_returnsTrue(self):
-        db = DBHandler('test', D(0))
+        db = DBHandler(None, D(0))
         new_value = db.adjust_by_percent(D(55.00))
         self.assertEqual(new_value, D(55))
 
     def test_decrease_amount_returnsTrue(self):
-        db = DBHandler('test', D(-30))
+        db = DBHandler(None, D(-30))
         new_value = db.adjust_by_percent(D(55.00))
         self.assertEqual(new_value, D(38.50))
 
@@ -284,18 +284,6 @@ class TestUploadFileForm(test.TestCase):
         self.xlsx = SimpleUploadedFile('a.xlsx', 'contenido')
         self.data = { 'partner' : '1', 'percent' : '0'}
         self.file_data = {'file': ''}
-
-    # def test_ExtFileFieldFileExtension_returnsTrue(self):
-    #     self.assertFieldOutput(ExtFileField,
-    #            { 'file.csv' : SimpleUploadedFile('a.csv','test')
-    #              #'b.xls' : SimpleUploadedFile('b.xls','test'),
-    #              #'c.xlsx': SimpleUploadedFile('c.xlsx', 'test')
-    #             },
-    #            {
-    #                'file.pdf': ["Not allowed filetype!"],
-    #                #'b.pdf': ["Not allowed filetype!"]
-    #            },
-    #            field_kwargs={ 'ext_whitelist' :  (".xls", ".csv", '.xlsx') })
 
     def test_FileExtensionCSV_returnTrue(self):
         self.file_data['file'] = self.csv
@@ -421,7 +409,7 @@ class ReviewUpdaterClientTests(test.TestCase):
         cls.user = User.objects.create_superuser('dleones@ubicutus.com', '12qw')
         cls.session_review_file_empty = {'stats' : {'not_found' : 0, 'updated' : 0, 'created' : 0, 'total' : 0}, 'log' : ''}
         cls.session_review_sucessful = {'stats': {'not_found': 0, 'updated': 4, 'created': 4, 'total' : 8}, 'log': ''}
-        cls.session_review_key_error = { 'stats' : {}, 'log': 'ERROR - Wrong header: bad_key. Unable to continue.'
+        cls.session_review_key_error = { 'stats' : {}, 'log': 'ERROR - Missing header: bad_key. Unable to continue.'
              'Use the following headers: IMITMC, List, Dealer and Your Price'}
 
     def setUp(self):
@@ -436,24 +424,28 @@ class ReviewUpdaterClientTests(test.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name[0], 'dashboard/bulk_price_updater/update-price-review.html')
         self.assertContains(response,
-            """<tr>
-                <td>Not found</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>Updated</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>Created</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>Total</td>
-                <td>0</td>
-            </tr>""")
+            """
+            <table class="table table-striped table-bordered">
+                <caption><i class="icon-bar-chart icon-large"></i> Stock records summary </caption>
+                <tr>
+                    <td>Not found</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Updated</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Created</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td>0</td>
+                </tr>
+            </table>""", html=True)
         self.assertContains(response,
-            '<caption><i class="icon-reorder icon-large"></i>(0) Operational messages</caption>')
+            '<caption><i class="icon-info-sign icon-large"></i>(0) Operational messages</caption>')
 
     def test_GETBulkPriceUpdaterReviewBadFileFormat_returnsLogError(self):
         request = self.factory.get(reverse('dashboard:bulk-price-updater-review'))
@@ -463,13 +455,14 @@ class ReviewUpdaterClientTests(test.TestCase):
         response = ReviewUpdater.as_view()(request)
         self.assertEqual(response.template_name[0], 'dashboard/bulk_price_updater/update-price-review.html')
         self.assertContains(response,
-            'ERROR - Wrong header: bad_key. Unable to continue.Use the following headers: IMITMC, List, Dealer and Your Price')
+            'ERROR - Missing header: bad_key. Unable to continue.Use the following headers: IMITMC, List, Dealer and Your Price')
         self.assertContains(response,
-            '<table class="table table-striped table-bordered">'
-            '<caption><i class="icon-reorder icon-large"></i> Stock records summary </caption>\n\n</table>',
+            '''
+            <table class="table table-striped table-bordered">
+                <caption><i class="icon-bar-chart icon-large"></i> Stock records summary </caption>
+            </table>
+            ''',
             html=True, status_code=response.status_code)
-        self.assertContains(response,
-                            '<caption><i class="icon-reorder icon-large"></i>(1) Operational message</caption>')
 
     def test_GETBulkPriceUpdaterReviewSucessful_returns(self):
         request = self.factory.get(reverse('dashboard:bulk-price-updater-review'))
@@ -481,27 +474,31 @@ class ReviewUpdaterClientTests(test.TestCase):
         self.assertContains(response,
             """
             <table class="table table-striped table-bordered">
-                <caption><i class="icon-reorder icon-large"></i> Stock records summary </caption><tr>
-                <td>Not found</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>Updated</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>Created</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>Total</td>
-                <td>8</td>
-            </tr></table>""", status_code=response.status_code, html=True)
+                <caption><i class="icon-bar-chart icon-large"></i> Stock records summary</caption>
+                    <tr>
+                        <td>Not found</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Updated</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>Created</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td>8</td>
+                    </tr>
+            </table>
+            """, status_code=response.status_code, html=True)
         self.assertContains(response,
-            '<table class="table table-striped table-bordered">'
-            '<caption><i class="icon-reorder icon-large"></i>(0) Operational messages</caption>\n        \n    </table>',
-                status_code=response.status_code,
-                html=True)
+            """
+            <table class="table table-striped table-bordered">
+                <caption><i class="icon-info-sign icon-large"></i>(0) Operational messages</caption>
+            </table>
+            """, status_code=response.status_code, html=True)
 
 class SystemTestingIntegration(test.TestCase):
     fixtures = ['metadata.json']

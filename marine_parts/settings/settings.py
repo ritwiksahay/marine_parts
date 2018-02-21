@@ -93,10 +93,19 @@ OSCAR_ORDER_STATUS_PIPELINE = {
 }
 
 # Add updater
+
+OSCAR_DASHBOARD_NAVIGATION[1]['children'].append(
+    {
+        'label': 'Bulk price update',
+        'url_name' : 'dashboard:bulk-price-updater-index',
+        #'access_fn': lambda user, url_name, url_args, url_kwargs: user.is_staff
+    }
+)
+
 OSCAR_DASHBOARD_NAVIGATION += [
     {
         'label': 'Shipping',
-        'icon': 'icon-map-marker',
+        'icon': 'icon-truck',
         'children' : [
             {
                 'label': 'Shipping Methods',
@@ -104,13 +113,9 @@ OSCAR_DASHBOARD_NAVIGATION += [
             }
         ]
     },
-    {
-        'label': 'Bulk price update',
-        'icon': 'icon-map-marker',
-        'url_name' : 'dashboard:bulk-price-updater-index',
-        #'access_fn': lambda user, url_name, url_args, url_kwargs: user.is_staff
-    }
+
 ]
+
 
 FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
                         "django_excel.TemporaryExcelFileUploadHandler")

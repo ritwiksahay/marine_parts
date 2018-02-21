@@ -15,7 +15,9 @@
     - Llenado de los campos 
     
 * `IndexView`
-    - Respuesta cuando `UploadFileForm` es válido e inválido
-    - Selección del lector de acuerdo al tipo de archivo enviado.
+    - Comportamiento cuando `UploadFileForm` es válido e inválido.
+    - Detección de errores del formulario.
+    - Prueba de sistema.
 
-
+* `ReviewUpdater`
+    - Renderizado de la plantilla con los resultados.

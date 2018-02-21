@@ -93,7 +93,7 @@ def execUpdater(ls, partner, percent):
     try:
         stats = updater(ls, DBHandler(partner, percent))
     except KeyError as ke:
-        logger.error('Wrong header: %s. Unable to continue.'
+        logger.error('Missing header: %s. Unable to continue.'
              'Use the following headers: IMITMC, List, Dealer and Your Price' % ke.message)
 
     h.flush()
