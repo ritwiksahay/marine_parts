@@ -78,7 +78,7 @@ def marineengine_mercury_scrapper():
         )
         tree = html.fromstring(page.content)
 
-        for hp in tree.xpath(xcategory_selector):
+        for hp in tree.xpath(xcategory_selector)[1:2]:
             cat_name = re.sub(r'[\n\t]+', '', hp.text)
             print("'%s' starting...\n" % cat_name)
             horse_power = {
@@ -95,7 +95,7 @@ def marineengine_mercury_scrapper():
             )
             tree = html.fromstring(page.content)
 
-            for srange in tree.xpath(xcategory_selector):
+            for srange in tree.xpath(xcategory_selector)[1:2]:
                 serial_range = {
                     'category_name': 'serial_range',
                     'category': re.sub(r'[\n\t]+', '', srange.text),
@@ -110,7 +110,7 @@ def marineengine_mercury_scrapper():
                 )
                 tree = html.fromstring(page.content)
 
-                for comp in tree.xpath(xcomponents_selector):
+                for comp in tree.xpath(xcomponents_selector)[4:5]:
                     component = {
                         'category_name': 'component',
                         'category': comp.text,
@@ -166,22 +166,24 @@ def marineengine_mercury_scrapper():
 
                             product = {
                                 'product': re.sub(' +', ' ', title),
-                                'product_url': url,
                                 'diagram_number': diag_number,
                                 'replacements': []
                             }
 
-                            # Check if it's obsolete and replaced
-                            xpath = prod.xpath('td[3]/small[2]/br')
+                            # Check if it's unavailable obsolete and replaced
                             is_replaced = False
-                            if xpath is not None and xpath != []:
-                                match = xpath[0].tail.strip()
-                                is_replaced = "Replaced" in match
-                            product['is_replaced'] = is_replaced
+                            if prod.xpath('td[3]/small[1]'):
+                                product['is_available'] = False
+                                xpath = prod.xpath('td[3]/small[2]/br')
+                                if xpath is not None and xpath != []:
+                                    match = xpath[0].tail.strip()
+                                    is_replaced = "Replaced" in match
+                            else:
+                                product['is_available'] = True
 
                             # Product details scraping
                             page = request_get(
-                                MARINE_ENGINE_BASE_URL + product['product_url']
+                                MARINE_ENGINE_BASE_URL + url
                             )
                             tree = html.fromstring(page.content)
 
@@ -190,7 +192,7 @@ def marineengine_mercury_scrapper():
                             count = 0
                             # Price and other details from the product page
                             for details in tree.xpath(
-                                    xproduct_details_selector):
+                                    xproduct_details_selector)[2:]:
                                 value = \
                                     etree.tostring(details) \
                                     .decode('utf-8') \
@@ -205,10 +207,6 @@ def marineengine_mercury_scrapper():
 
                                 if value:
                                     if count == 0:
-                                        product['list_price'] = value
-                                    elif count == 1:
-                                        product['your_price'] = value
-                                    elif count == 2:
                                         product['part_number'] = value
                                     else:
                                         product['manufacturer'] = value

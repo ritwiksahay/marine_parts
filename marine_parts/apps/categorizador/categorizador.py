@@ -144,8 +144,8 @@ def nav_prods(json_products, bre_cat, db_oscar, comp_img=None):
                                           part_number, manufacturer,
                                           diag_number)
 
-        if p.get('is_replaced'):
-            replacements = p.get('replacements')
+        replacements = p.get('replacements')
+        if replacements != []:
             nro_products += crea_recomemd(prod_saved, p, replacements, 0,
                                           cat, product_class, part_number,
                                           manufacturer, diag_number,
@@ -166,8 +166,8 @@ def crea_recomemd(pro_root_saved, prod, replacements, nro, cat, product_class,
                                  manufacturer, diag_number)
         db_oscar.asign_prod_replacement(prod_saved, pro_root_saved)
 
-        if replacement.get('is_replaced'):
-            repls = replacement['replacements']
+        repls = replacement.get('replacements')
+        if repls != []:
             nro += crea_recomemd(prod_saved, replacement, repls, 0,
                                  cat, product_class, part_number,
                                  manufacturer, diag_number,
