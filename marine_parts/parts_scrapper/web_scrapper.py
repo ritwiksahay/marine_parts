@@ -53,10 +53,6 @@ def marineengine_mercury_scrapper():
     xproduct_selector = "/html/body/main/table//tr"
     xproduct_details_selector = ("/html/body/main/div[1]/div[1]"
                                  "/div[1]/div[2]/table//tr/td/p")
-    xproduct_unavailable_selector = ("/html/body/main/div[1]/div[1]"
-                                     "/div[1]/div[2]/div/a")
-    # xproduct_img_selector = ("/html/body/main/div[1]/div[1]"
-    #                           "/div[1]/div[1]/p/img")
 
     scrap_date = str(date.today()).replace(' ', '')
     catalog = {
@@ -82,7 +78,7 @@ def marineengine_mercury_scrapper():
         )
         tree = html.fromstring(page.content)
 
-        for hp in tree.xpath(xcategory_selector)[0:1]:
+        for hp in tree.xpath(xcategory_selector):
             cat_name = re.sub(r'[\n\t]+', '', hp.text)
             print("'%s' starting...\n" % cat_name)
             horse_power = {
@@ -99,7 +95,7 @@ def marineengine_mercury_scrapper():
             )
             tree = html.fromstring(page.content)
 
-            for srange in tree.xpath(xcategory_selector)[0:1]:
+            for srange in tree.xpath(xcategory_selector):
                 serial_range = {
                     'category_name': 'serial_range',
                     'category': re.sub(r'[\n\t]+', '', srange.text),
@@ -114,7 +110,7 @@ def marineengine_mercury_scrapper():
                 )
                 tree = html.fromstring(page.content)
 
-                for comp in tree.xpath(xcomponents_selector)[3:4]:
+                for comp in tree.xpath(xcomponents_selector):
                     component = {
                         'category_name': 'component',
                         'category': comp.text,
@@ -220,11 +216,11 @@ def marineengine_mercury_scrapper():
                                 count += 1
 
                             # we add replacements only in the replacement
-                            # list of the replaced object to avoid 
+                            # list of the replaced object to avoid
                             # duplicates inserts in DB
                             if last_replaced is None:
                                 component['products'].append(product)
-                            else:                           
+                            else:
                                 last_replaced['replacements'].append(product)
 
                             if is_replaced:
