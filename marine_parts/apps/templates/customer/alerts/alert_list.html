@@ -1,6 +1,13 @@
 {% extends "customer/baseaccountpage.html" %}
 {% load i18n %}
 
+{% block top_banner %}
+    {% block top_banner_title %}
+        <h2 class="text-center top_banner_title">
+            {% trans "Product Alerts" %}
+        </h2>
+    {% endblock top_banner_title %}
+{% endblock top_banner %}
 {% block tabcontent %}
     {% if not alerts %}
         <p>{% trans "You do not have any active alerts for out-of-stock products." %}</p>

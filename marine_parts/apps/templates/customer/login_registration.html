@@ -1,5 +1,9 @@
 {% extends "layout.html" %}
-{% load i18n %}
+{% load static i18n %}
+
+{% block extrastyles %}
+    <link rel="stylesheet" href="{% static 'oscar/css/login_registration.css'%}">
+{% endblock %}
 
 {% block title %}
     {% trans 'Login or register' %} | {{ block.super }}

@@ -37,18 +37,6 @@ FIXTURES_DIRS = (
     'marine_parts.apps.users.fixtures',
 )
 
-OSCAR_DASHBOARD_NAVIGATION += [
-    {
-        'label': 'Shipping',
-        'icon': 'icon-map-marker',
-        'children' : [
-            {
-                'label': 'Shipping Methods',
-                'url_name': 'dashboard:shipping-method-list'
-            }
-        ]
-    }
-]
 
 THIRD_PARTY_APPS = [
     'bootstrap_admin',
@@ -65,6 +53,7 @@ SYSTEM_APPS = [
     'marine_parts.apps.users',
     'marine_parts.parts_scrapper',
     'marine_parts.apps.authorize',
+    'marine_parts.apps.dashboard.bulk_price_updater'
 ]
 
 DJANGO_APPS = [
@@ -83,6 +72,7 @@ INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + SYSTEM_APPS \
         'marine_parts.apps.catalogue',
         'marine_parts.apps.checkout',
         'marine_parts.apps.customer',
+        'marine_parts.apps.dashboard',
         'marine_parts.apps.dashboard.catalogue',
         'marine_parts.apps.promotions',
         'marine_parts.apps.search',
@@ -105,9 +95,36 @@ OSCAR_ORDER_STATUS_PIPELINE = {
     'Cancelled': (),
 }
 
+# Add updater
+
+OSCAR_DASHBOARD_NAVIGATION[1]['children'].append(
+    {
+        'label': 'Bulk price update',
+        'url_name' : 'dashboard:bulk-price-updater-index',
+        #'access_fn': lambda user, url_name, url_args, url_kwargs: user.is_staff
+    }
+)
+
+OSCAR_DASHBOARD_NAVIGATION += [
+    {
+        'label': 'Shipping',
+        'icon': 'icon-truck',
+        'children' : [
+            {
+                'label': 'Shipping Methods',
+                'url_name': 'dashboard:shipping-method-list'
+            }
+        ]
+    },
+
+]
+
+
+FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
+                        "django_excel.TemporaryExcelFileUploadHandler")
+
 
 # Oscar display setting
-OSCAR_SHOP_NAME = 'Marine parts'
 OSCAR_DEFAULT_CURRENCY = 'USD'
 OSCAR_SHOP_TAGLINE = 'Marine parts - Best Shop'
 
@@ -308,3 +325,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'parts@marineparts.com'
 EMAIL_HOST_PASSWORD = 'M@rine0470'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+SCRAPPER_ROOT = os.path.join(BASE_DIR, 'parts_scrapper/')

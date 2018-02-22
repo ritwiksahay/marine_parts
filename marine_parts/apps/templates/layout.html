@@ -12,6 +12,7 @@
         <link rel="stylesheet/less" type="text/css" href="{% static "oscar/less/styles.less" %}" />
     {% else %}
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/styles.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/responsive.css" %}" />
     {% endif %}
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/header_nav_bar.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/footer_nav_bar.css" %}" />
@@ -36,6 +37,11 @@
     {# Main content of page - other layout templates may override this block #}
     {% block content_wrapper %}
         <div class="container-fluid page">
+            <div class="page-banner">
+                {% block top_banner %}
+                    
+                {% endblock top_banner %}
+            </div>
             <div class="page_inner">
                 {% block breadcrumbs %}{% endblock %}
                 {% block header %}
@@ -59,10 +65,10 @@
                     {# Div exists for AJAX updates to entire content section #}
                     <div id="content_inner">{% block content %}{% endblock %}</div>
                 </div>
-                {% block bottom %}
-                    
-                {% endblock bottom %}
             </div>
+            {% block bottom_banner %}
+                
+            {% endblock bottom_banner %}
         </div>
     {% endblock %}
     {% include "partials/footer.html" %}

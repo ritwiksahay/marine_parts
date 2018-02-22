@@ -9,7 +9,8 @@ from django.core.urlresolvers import reverse
 from oscar.apps.catalogue import abstract_models
 from oscar.apps.catalogue.abstract_models import AbstractCategory
 
-from marine_parts.apps.catalogue.abstract_models import  AbstractReplacementProduct
+from marine_parts.apps.catalogue.abstract_models \
+    import AbstractReplacementProduct
 
 
 class Category(AbstractCategory):
@@ -46,6 +47,8 @@ class Category(AbstractCategory):
 
 # @python_2_unicode_compatible
 class Product(abstract_models.AbstractProduct):
+    """Override to include replacement and recommended products."""
+
     replacement_products = models.ManyToManyField(
         'Product', through='ReplacementProduct', blank=True,
         related_name='replacements',

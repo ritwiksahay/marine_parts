@@ -1,4 +1,4 @@
-{% extends "layout_2_col.html" %}
+{% extends "layout_3_col.html" %}
 
 {% load basket_tags %}
 {% load component_tags %}
@@ -17,12 +17,23 @@
     {% else %}
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
     {% endif %}
-        <link rel="stylesheet" type="text/css" href="{% static "css/search/customer-service.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/customer-service.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/basket.css" %}" />
 {% endblock extrastyles %}
 
+{% comment %}
 {% block column_left %}
     {% include 'search/partials/search_filter.html' with name=data.name items=data.results %}
 {% endblock %}
+{% endcomment %}
+
+{% block top_banner %}
+    {% block top_banner_title %}
+        <h2 class="text-center top_banner_title">
+            {% trans "Search and Results" %}
+        </h2>
+    {% endblock top_banner_title %}
+{% endblock top_banner %}
 
 {% block headertext %}
     {% if component and component.diagram_image %}
@@ -33,10 +44,23 @@
     {% endif %}
 {% endblock %}
 
+{% block pre-content %}
+
+    <div class="col-xs-12 col-sm-12">
+        <div class="col-xs-offset-3 col-xs-6">
+            {% include 'search/partials/search_filter.html' with name=data.name items=data.results %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block column_left %}
+    {% include 'basket/partials/basket_quick.html' with name=data.name items=data.results %}
+{% endblock %}
 
 {% block content %}
     {% if component and component.diagram_image %}
-        <div class="col-xs-12 col-md-7">
+        <div class="col-xs-12 col-md-8">
             <div class="thumbnail">
                     <div>
                        {% if component.diagram_image %} 
@@ -48,9 +72,9 @@
                     <p class="text-center">{% trans "(Scroll over the image to zoom in or zoom out)" %}</p>
             </div>
         </div>
-        <div class="col-xs-12 col-md-5" style="overflow-y: scroll;height: 1000px;">
+        <div class="col-xs-12 col-md-4" style="overflow-y: scroll;height: 1000px;font-size: 12px;">
             {% if page.object_list %}
-                <table class="table text-center" style="table-layout: fixed;">
+                <table id="part-table" class="table text-center" style="table-layout: fixed;">
 
                     <tbody>
                         {% with results=page.object_list|to_replacement_tree %}
@@ -68,7 +92,7 @@
             {% endif %}
         </div>
     {% else %}
-        <form method="get" action="." class="form-horizontal">
+        <form id="num_results_form" method="get" action="." class="form-horizontal">
             {# Render other search params as hidden inputs #}
             {% for value in selected_facets %}
                 <input type="hidden" name="selected_facets" value="{{ value }}" />
@@ -102,11 +126,11 @@
         </form>
 
         {% if page.object_list %}
-            <section>
+            <section id="results">
                 <div>
                     <ol class="row">
                         {% for result in page.object_list %}
-                            <li class="col-xs-6 col-sm-4 col-md-4 col-lg-4">{% render_product result.object %}</li>
+                            <li class="col-xs-6 col-sm-4 col-md-4 col-lg-3">{% render_product result.object %}</li>
                         {% endfor %}
                     </ol>
                     {% include "partials/pagination.html" with page_obj=page %}
@@ -124,13 +148,18 @@
     {% endif %}
 {% endblock %}
 
-{% block bottom %}
+{% block bottom_banner %}
     {% include "partials/customer_service.html" %}
-{% endblock bottom %}
+{% endblock bottom_banner %}
 
 {% block onbodyload %}
     {{ block.super }}
     oscar.search.init();
+    {# We pass in the URL to send AJAX requests to #}
+    var options = {
+        'basketURL': '{% url 'basket:summary' %}'
+    };
+    oscar.basket.init(options);
 
     {% if component and component.diagram_image %}
         /* Enable Zoom to diagram parts image */  
@@ -145,12 +174,13 @@
             }
         );
     {% endif %}
+
 {% endblock %}
 
 {% block extrascripts %}
     <script>
 
-        $(document).ready(function(){
+        $(document).ready(function() {
 
             var results = [];
             var index = 0;
@@ -264,6 +294,23 @@
                 $('#categories_form').submit();
             });
 
+
+            /* When the user scrolls down, the basket in the sidebar will 
+             follow */
+            var threshold = $('.basket-wrapper').offset().top;
+            $(window).scroll(function(){
+                var scrollT = $(window).scrollTop();
+                if(scrollT > threshold) {
+                    $(".basket-wrapper").css({
+                       'top': (scrollT - threshold + 5) + 'px' 
+                    });
+                } else {
+                    $(".basket-wrapper").css('top', '0');
+                }
+            });
+
         });
     </script>
+
+
 {% endblock extrascripts %}
