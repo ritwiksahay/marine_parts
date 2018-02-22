@@ -37,19 +37,6 @@ FIXTURES_DIRS = (
     'marine_parts.apps.users.fixtures',
 )
 
-OSCAR_DASHBOARD_NAVIGATION += [
-    {
-        'label': 'Shipping',
-        'icon': 'icon-map-marker',
-        'children': [
-            {
-                'label': 'Shipping Methods',
-                'url_name': 'dashboard:shipping-method-list'
-            }
-        ]
-    }
-]
-
 THIRD_PARTY_APPS = [
     'bootstrap_admin',
     'safedelete',
@@ -112,8 +99,8 @@ OSCAR_ORDER_STATUS_PIPELINE = {
 OSCAR_DASHBOARD_NAVIGATION[1]['children'].append(
     {
         'label': 'Bulk price update',
-        'url_name' : 'dashboard:bulk-price-updater-index',
-        #'access_fn': lambda user, url_name, url_args, url_kwargs: user.is_staff
+        'url_name': 'dashboard:bulk-price-updater-index',
+        # 'access_fn': lambda user, url_name, url_args, url_kwargs: user.is_staff
     }
 )
 
@@ -121,7 +108,7 @@ OSCAR_DASHBOARD_NAVIGATION += [
     {
         'label': 'Shipping',
         'icon': 'icon-truck',
-        'children' : [
+        'children': [
             {
                 'label': 'Shipping Methods',
                 'url_name': 'dashboard:shipping-method-list'
@@ -163,7 +150,6 @@ ROOT_URLCONF = 'marine_parts.urls'
 
 # Disable when there is real email service available
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 
 
 AUTHENTICATION_BACKENDS = (
