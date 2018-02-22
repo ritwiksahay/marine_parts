@@ -63,6 +63,8 @@ THIRD_PARTY_APPS = [
 
 SYSTEM_APPS = [
     'marine_parts.apps.users',
+    'marine_parts.parts_scrapper',
+    'marine_parts.apps.authorize',
 ]
 
 DJANGO_APPS = [
@@ -319,3 +321,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'parts@marineparts.com'
 EMAIL_HOST_PASSWORD = ''
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+SCRAPPER_ROOT = os.path.join(BASE_DIR, 'parts_scrapper/')

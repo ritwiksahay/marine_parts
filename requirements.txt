@@ -24,6 +24,7 @@ django-widget-tweaks==1.4.1
 django-wkhtmltopdf==3.1.0
 factory-boy==2.9.2
 Faker==0.8.6
+idna==2.6
 funcsigs==1.0.2
 idna==2.6
 ipaddress==1.0.18
@@ -40,6 +41,7 @@ pycountry==17.9.23
 pysolr==3.6.0
 python-dateutil==2.6.1
 pytz==2017.3
+requests==2.18.4
 PyXB==1.2.5
 requests==2.18.4
 six==1.11.0
