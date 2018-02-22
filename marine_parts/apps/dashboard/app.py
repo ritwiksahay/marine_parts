@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -27,6 +27,7 @@ class DashboardApplication(BaseDashboardApplication):
     vouchers_app = get_class('dashboard.vouchers.app', 'application')
     comms_app = get_class('dashboard.communications.app', 'application')
     shipping_app = get_class('dashboard.shipping.app', 'application')
+    bulk_price_update = get_class('marine_parts.apps.dashboard.bulk_price_updater.app', 'application')
 
     def get_urls(self):
         urls = [
@@ -44,6 +45,7 @@ class DashboardApplication(BaseDashboardApplication):
             url(r'^vouchers/', self.vouchers_app.urls),
             url(r'^comms/', self.comms_app.urls),
             url(r'^shipping/', self.shipping_app.urls),
+            url(r'^bulk_price_update/', self.bulk_price_update.urls),
 
             url(r'^login/$', auth_views.login, {
                 'template_name': 'dashboard/login.html',
