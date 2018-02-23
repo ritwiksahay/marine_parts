@@ -432,5 +432,52 @@
             "slug": "chairs-tables",
             "diagram_image": ""
         }
+    },
+    {
+        "model": "catalogue.productclass",
+        "pk": 1,
+        "fields": {
+            "name": "Subcomponent",
+            "slug": "subcomponent",
+            "requires_shipping": true,
+            "track_stock": true,
+            "options": []
+        }
+    },
+    {
+        "model": "catalogue.productattribute",
+        "pk": 1,
+        "fields": {
+            "product_class": 1,
+            "name": "Manufacturer",
+            "code": "M",
+            "type": "text",
+            "option_group": null,
+            "required": true
+        }
+    },
+    {
+        "model": "catalogue.productattribute",
+        "pk": 2,
+        "fields": {
+            "product_class": 1,
+            "name": "Part number",
+            "code": "PN",
+            "type": "text",
+            "option_group": null,
+            "required": true
+        }
+    },
+    {
+        "model": "catalogue.productattribute",
+        "pk": 3,
+        "fields": {
+            "product_class": 1,
+            "name": "Diagram number",
+            "code": "DN",
+            "type": "text",
+            "option_group": null,
+            "required": true
+        }
     }
 ]
