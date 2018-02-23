@@ -21,56 +21,14 @@
             </div>
         </div>
         <div class="row">
+            {%for brand in brands%}
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
-                <a href="{% url 'search:search' %}?var=category:Brands">
+                <a href="{{brand.get_absolute_url}}">
                     <span class="helper"></span>
-                    <img class="img-responsive" src="{% static 'img/brands/volvo-penta.png'%}" alt="">
+                    <img class="img-responsive" src="{{brand.image.url}}" alt="">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
-                <a href="{% url 'search:search' %}?var=category:Brands&var=category:Brands > Johnson Evinrude Outboard">
-                    <span class="helper"></span>
-                    <img class="img-responsive" src="{% static 'img/brands/evinrude.png'%}" alt="">
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
-                <a href="{% url 'search:search' %}?var=category:Brands">
-                    <span class="helper"></span>
-                    <img class="img-responsive" src="{% static 'img/brands/crusader.png'%}" alt="">
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
-                <a href="{% url 'search:search' %}?var=category:Brands">
-                    <span class="helper"></span>
-                    <img class="img-responsive" src="{% static 'img/brands/mercury.png'%}" alt="">
-                </a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
-                <a href="{% url 'search:search' %}?var=category:Brands">
-                    <span class="helper"></span>
-                    <img class="img-responsive" src="{% static 'img/brands/mercruiser.png'%}" alt="">
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
-                <a href="{% url 'search:search' %}?var=category:Brands">
-                    <span class="helper"></span>
-                    <img class="img-responsive" src="{% static 'img/brands/chrysler.png'%}" alt="">
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
-                <a href="{% url 'search:search' %}?var=category:Brands">
-                    <span class="helper"></span>
-                    <img class="img-responsive" src="{% static 'img/brands/suzuki.png'%}" alt="">
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
-                <a href="{% url 'search:search' %}?var=category:Brands">
-                    <span class="helper"></span>
-                    <img class="img-responsive" src="{% static 'img/brands/yamaha.png'%}" alt="">
-                </a>
-            </div>
+            {%endfor%}
         </div>
     </div>
 </div>

@@ -37,7 +37,6 @@ FIXTURES_DIRS = (
     'marine_parts.apps.users.fixtures',
 )
 
-
 THIRD_PARTY_APPS = [
     'bootstrap_admin',
     'safedelete',
@@ -100,8 +99,7 @@ OSCAR_ORDER_STATUS_PIPELINE = {
 OSCAR_DASHBOARD_NAVIGATION[1]['children'].append(
     {
         'label': 'Bulk price update',
-        'url_name' : 'dashboard:bulk-price-updater-index',
-        #'access_fn': lambda user, url_name, url_args, url_kwargs: user.is_staff
+        'url_name': 'dashboard:bulk-price-updater-index',
     }
 )
 
@@ -109,14 +107,13 @@ OSCAR_DASHBOARD_NAVIGATION += [
     {
         'label': 'Shipping',
         'icon': 'icon-truck',
-        'children' : [
+        'children': [
             {
                 'label': 'Shipping Methods',
                 'url_name': 'dashboard:shipping-method-list'
             }
         ]
     },
-
 ]
 
 
@@ -162,7 +159,7 @@ HAYSTACK_CONNECTIONS = {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
         'URL': 'http://localhost:8983/solr/marine_parts',
         'ADMIN_URL': 'http://localhost:8983/solr/',
-	'TIMEOUT': 60 * 5,
+        'TIMEOUT': 60 * 5,
         'INCLUDE_SPELLING': True,
         'EXCLUDED_INDEXES': ['oscar.apps.search.search_indexes.ProductIndex'],
     },
@@ -225,7 +222,7 @@ DATABASES = {
 }
 
 # Google Ads
-ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  #OPTIONAL-DEFAULT TO None
+ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  # OPTIONAL-DEFAULT TO None
 
 ADS_ZONES = {
     'header': {
