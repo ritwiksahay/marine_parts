@@ -1,189 +1,436 @@
 [
-{
-    "model": "catalogue.category",
-    "pk": 1,
-    "fields": {
-        "path": "0001",
-        "depth": 1,
-        "numchild": 8,
-        "name": "Brands",
-        "description": "",
-        "image": "",
-        "slug": "brands",
-        "diagram_image": ""
+    {
+        "model": "catalogue.category",
+        "pk": 1,
+        "fields": {
+            "path": "0001",
+            "depth": 1,
+            "numchild": 8,
+            "name": "Brands",
+            "description": "",
+            "image": "",
+            "slug": "brands",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 2,
+        "fields": {
+            "path": "0002",
+            "depth": 1,
+            "numchild": 4,
+            "name": "Best Sellers",
+            "description": "",
+            "image": "",
+            "slug": "best-sellers",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 3,
+        "fields": {
+            "path": "0003",
+            "depth": 1,
+            "numchild": 15,
+            "name": "Categories",
+            "description": "",
+            "image": "",
+            "slug": "categories",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 4,
+        "fields": {
+            "path": "0004",
+            "depth": 1,
+            "numchild": 0,
+            "name": "Accessories",
+            "description": "",
+            "image": "",
+            "slug": "accessories",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 5,
+        "fields": {
+            "path": "00010001",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Volvo Penta",
+            "description": "",
+            "image": "brands/volvo-penta.png",
+            "slug": "volvo-penta",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 6,
+        "fields": {
+            "path": "00010002",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Evinrude Johnson",
+            "description": "",
+            "image": "brands/evinrude-johnson.png",
+            "slug": "evinrude-johnson",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 7,
+        "fields": {
+            "path": "00010003",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Crusader",
+            "description": "",
+            "image": "brands/crusader.png",
+            "slug": "crusader",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 8,
+        "fields": {
+            "path": "00010004",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Mercury",
+            "description": "",
+            "image": "brands/mercury.png",
+            "slug": "mercury",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 9,
+        "fields": {
+            "path": "00010005",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Mercruiser",
+            "description": "",
+            "image": "brands/mercruiser.png",
+            "slug": "mercruiser",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 10,
+        "fields": {
+            "path": "00010006",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Chrysler marine",
+            "description": "",
+            "image": "brands/chrysler-marine.png",
+            "slug": "chrysler-marine",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 11,
+        "fields": {
+            "path": "00010007",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Suzuki Marine",
+            "description": "",
+            "image": "brands/suzuki-marine.png",
+            "slug": "suzuki-marine",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 12,
+        "fields": {
+            "path": "00010008",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Yamaha",
+            "description": "",
+            "image": "brands/yamaha.png",
+            "slug": "yamaha",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 13,
+        "fields": {
+            "path": "00020001",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Gearcases",
+            "description": "",
+            "image": "best-sellers/gearcases.png",
+            "slug": "gearcases",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 14,
+        "fields": {
+            "path": "00020002",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Powerheads",
+            "description": "",
+            "image": "best-sellers/powerheads.png",
+            "slug": "powerheads",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 15,
+        "fields": {
+            "path": "00020003",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Extension Kits",
+            "description": "",
+            "image": "best-sellers/extension_kits.png",
+            "slug": "extension-kits",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 16,
+        "fields": {
+            "path": "00020004",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Generator Rewind",
+            "description": "",
+            "image": "best-sellers/generator.png",
+            "slug": "generator-rewind",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 17,
+        "fields": {
+            "path": "00030001",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Anchor & Dock Acc",
+            "description": "",
+            "image": "categories/anchor-dock.png",
+            "slug": "anchor-dock-acc",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 18,
+        "fields": {
+            "path": "00030002",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Electrical",
+            "description": "",
+            "image": "categories/electric.png",
+            "slug": "electrical",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 19,
+        "fields": {
+            "path": "00030003",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Fuel System",
+            "description": "",
+            "image": "categories/fuel-system.png",
+            "slug": "fuel-system",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 20,
+        "fields": {
+            "path": "00030004",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Watersports",
+            "description": "",
+            "image": "categories/water-sports.png",
+            "slug": "watersports",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 21,
+        "fields": {
+            "path": "00030005",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Safety",
+            "description": "",
+            "image": "categories/safety.png",
+            "slug": "safety",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 22,
+        "fields": {
+            "path": "00030006",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Maintenance",
+            "description": "",
+            "image": "categories/manteniance.png",
+            "slug": "maintenance",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 23,
+        "fields": {
+            "path": "00030007",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Winterizing",
+            "description": "",
+            "image": "categories/winterizing.png",
+            "slug": "winterizing",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 24,
+        "fields": {
+            "path": "00030008",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Trailering",
+            "description": "",
+            "image": "categories/trailering.png",
+            "slug": "trailering",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 25,
+        "fields": {
+            "path": "00030009",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Steering & Controls",
+            "description": "",
+            "image": "categories/stering-controls.png",
+            "slug": "steering-controls",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 26,
+        "fields": {
+            "path": "0003000A",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Propellers",
+            "description": "",
+            "image": "categories/propellers.png",
+            "slug": "propellers",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 27,
+        "fields": {
+            "path": "0003000B",
+            "depth": 2,
+            "numchild": 0,
+            "name": "General Boating",
+            "description": "",
+            "image": "categories/general-boating.png",
+            "slug": "general-boating",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 28,
+        "fields": {
+            "path": "0003000C",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Hardware",
+            "description": "",
+            "image": "categories/hadware.png",
+            "slug": "hardware",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 29,
+        "fields": {
+            "path": "0003000D",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Maintenance Paint",
+            "description": "",
+            "image": "categories/manteniance-paint.png",
+            "slug": "maintenance-paint",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 30,
+        "fields": {
+            "path": "0003000E",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Navigation",
+            "description": "",
+            "image": "categories/navigation.png",
+            "slug": "navigation",
+            "diagram_image": ""
+        }
+    },
+    {
+        "model": "catalogue.category",
+        "pk": 31,
+        "fields": {
+            "path": "0003000F",
+            "depth": 2,
+            "numchild": 0,
+            "name": "Chairs & Tables",
+            "description": "",
+            "image": "categories/chairs-table.png",
+            "slug": "chairs-tables",
+            "diagram_image": ""
+        }
     }
-},
-{
-    "model": "catalogue.category",
-    "pk": 2,
-    "fields": {
-        "path": "0002",
-        "depth": 1,
-        "numchild": 4,
-        "name": "Best Sellers",
-        "description": "",
-        "image": "",
-        "slug": "best-sellers",
-        "diagram_image": ""
-    }
-},
-{
-    "model": "catalogue.category",
-    "pk": 3,
-    "fields": {
-        "path": "0003",
-        "depth": 1,
-        "numchild": 15,
-        "name": "Categories",
-        "description": "",
-        "image": "",
-        "slug": "categories",
-        "diagram_image": ""
-    }
-},
-{
-    "model": "catalogue.category",
-    "pk": 4,
-    "fields": {
-        "path": "0004",
-        "depth": 1,
-        "numchild": 0,
-        "name": "Accessories",
-        "description": "",
-        "image": "",
-        "slug": "accessories",
-        "diagram_image": ""
-    }
-},
-{
-    "model": "catalogue.category",
-    "pk": 5,
-    "fields": {
-        "path": "00010001",
-        "depth": 2,
-        "numchild": 0,
-        "name": "Volvo Penta",
-        "description": "",
-        "image": "brands/volvo-penta.png",
-        "slug": "volvo-penta",
-        "diagram_image": ""
-    }
-},
-{
-    "model": "catalogue.category",
-    "pk": 6,
-    "fields": {
-        "path": "00010002",
-        "depth": 2,
-        "numchild": 0,
-        "name": "Evinrude Johnson",
-        "description": "",
-        "image": "brands/evinrude-johnson.png",
-        "slug": "evinrude-johnson",
-        "diagram_image": ""
-    }
-},
-{
-    "model": "catalogue.category",
-    "pk": 7,
-    "fields": {
-        "path": "00010003",
-        "depth": 2,
-        "numchild": 0,
-        "name": "Crusader",
-        "description": "",
-        "image": "brands/crusader.png",
-        "slug": "crusader",
-        "diagram_image": ""
-    }
-},
-{
-    "model": "catalogue.category",
-    "pk": 8,
-    "fields": {
-        "path": "00010004",
-        "depth": 2,
-        "numchild": 0,
-        "name": "Mercury",
-        "description": "",
-        "image": "brands/mercury.png",
-        "slug": "mercury",
-        "diagram_image": ""
-    }
-},
-{
-    "model": "catalogue.category",
-    "pk": 9,
-    "fields": {
-        "path": "00010005",
-        "depth": 2,
-        "numchild": 0,
-        "name": "Mercruiser",
-        "description": "",
-        "image": "brands/mercruiser.png",
-        "slug": "mercruiser",
-        "diagram_image": ""
-    }
-},
-{
-    "model": "catalogue.category",
-    "pk": 10,
-    "fields": {
-        "path": "00010006",
-        "depth": 2,
-        "numchild": 0,
-        "name": "Chrysler marine",
-        "description": "",
-        "image": "brands/chrysler-marine.png",
-        "slug": "chrysler-marine",
-        "diagram_image": ""
-    }
-},
-{
-    "model": "catalogue.category",
-    "pk": 11,
-    "fields": {
-        "path": "00010007",
-        "depth": 2,
-        "numchild": 0,
-        "name": "Suzuki Marine",
-        "description": "",
-        "image": "brands/suzuki-marine.png",
-        "slug": "suzuki-marine",
-        "diagram_image": ""
-    }
-},
-{
-    "model": "catalogue.category",
-    "pk": 12,
-    "fields": {
-        "path": "00010008",
-        "depth": 2,
-        "numchild": 0,
-        "name": "Yamaha",
-        "description": "",
-        "image": "brands/yamaha.png",
-        "slug": "yamaha",
-        "diagram_image": ""
-    }
-},
- {"model": "catalogue.category", "pk": 13, "fields": {"path": "00020001", "depth": 2, "numchild": 0, "name": "Gearcases", "description": "", "image": "best-sellers/gearcases.png", "slug": "gearcases", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 14, "fields": {"path": "00020002", "depth": 2, "numchild": 0, "name": "Powerheads", "description": "", "image": "best-sellers/powerheads.png", "slug": "powerheads", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 15, "fields": {"path": "00020003", "depth": 2, "numchild": 0, "name": "Extension Kits", "description": "", "image": "best-sellers/extension_kits.png", "slug": "extension-kits", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 16, "fields": {"path": "00020004", "depth": 2, "numchild": 0, "name": "Generator Rewind", "description": "", "image": "best-sellers/generator.png", "slug": "generator-rewind", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 17, "fields": {"path": "00030001", "depth": 2, "numchild": 0, "name": "Anchor & Dock Acc", "description": "", "image": "categories/anchor-dock.png", "slug": "anchor-dock-acc", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 18, "fields": {"path": "00030002", "depth": 2, "numchild": 0, "name": "Electrical", "description": "", "image": "categories/electric.png", "slug": "electrical", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 19, "fields": {"path": "00030003", "depth": 2, "numchild": 0, "name": "Fuel System", "description": "", "image": "categories/fuel-system.png", "slug": "fuel-system", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 20, "fields": {"path": "00030004", "depth": 2, "numchild": 0, "name": "Watersports", "description": "", "image": "categories/water-sports.png", "slug": "watersports", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 21, "fields": {"path": "00030005", "depth": 2, "numchild": 0, "name": "Safety", "description": "", "image": "categories/safety.png", "slug": "safety", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 22, "fields": {"path": "00030006", "depth": 2, "numchild": 0, "name": "Maintenance", "description": "", "image": "categories/manteniance.png", "slug": "maintenance", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 23, "fields": {"path": "00030007", "depth": 2, "numchild": 0, "name": "Winterizing", "description": "", "image": "categories/winterizing.png", "slug": "winterizing", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 24, "fields": {"path": "00030008", "depth": 2, "numchild": 0, "name": "Trailering", "description": "", "image": "categories/trailering.png", "slug": "trailering", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 25, "fields": {"path": "00030009", "depth": 2, "numchild": 0, "name": "Steering & Controls", "description": "", "image": "categories/stering-controls.png", "slug": "steering-controls", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 26, "fields": {"path": "0003000A", "depth": 2, "numchild": 0, "name": "Propellers", "description": "", "image": "categories/propellers.png", "slug": "propellers", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 27, "fields": {"path": "0003000B", "depth": 2, "numchild": 0, "name": "General Boating", "description": "", "image": "categories/general-boating.png", "slug": "general-boating", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 28, "fields": {"path": "0003000C", "depth": 2, "numchild": 0, "name": "Hardware", "description": "", "image": "categories/hadware.png", "slug": "hardware", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 29, "fields": {"path": "0003000D", "depth": 2, "numchild": 0, "name": "Maintenance Paint", "description": "", "image": "categories/manteniance-paint.png", "slug": "maintenance-paint", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 30, "fields": {"path": "0003000E", "depth": 2, "numchild": 0, "name": "Navigation", "description": "", "image": "categories/navigation.png", "slug": "navigation", "diagram_image": ""}},
- {"model": "catalogue.category", "pk": 31, "fields": {"path": "0003000F", "depth": 2, "numchild": 0, "name": "Chairs & Tables", "description": "", "image": "categories/chairs-table.png", "slug": "chairs-tables", "diagram_image": ""}}
 ]
