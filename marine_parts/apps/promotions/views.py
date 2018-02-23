@@ -16,6 +16,10 @@ class HomeView(TemplateView):
             best_sellers = Category.objects.get(slug='best-sellers')
             kwargs['best_sellers'] = best_sellers.get_children()
 
+        if 'brands' not in kwargs:
+            best_sellers = Category.objects.get(slug='brands')
+            kwargs['brands'] = best_sellers.get_children()
+
         return kwargs
 
 
