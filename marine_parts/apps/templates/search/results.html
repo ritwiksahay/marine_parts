@@ -45,7 +45,9 @@
 {% endblock %}
 
 {% block column_left %}
-    {% include 'basket/partials/basket_quick.html' with name=data.name items=data.results %}
+    <div class="basket-wrapper">
+    {% include 'basket/partials/basket_quick.html' with formset=formset %}
+    </div>
 {% endblock %}
 
 {% block content %}
@@ -298,6 +300,134 @@
                     $(".basket-wrapper").css('top', '0');
                 }
             });
+
+            // Basket-add ajax handling
+            $(".basket-add-btn").on('click', function(event){
+
+                var form = $(this).closest("form");
+                $.ajax({
+                    method: "POST",
+                    url: form.data("basket-add-url"),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function(data) {
+                      /* Update basket widget */
+                      var el = $.parseHTML(data.basket_html);
+                      $(".sidebar .basket-wrapper")
+                        .empty().append(el);
+                      /* Update basket product counter in navbar */
+                      $("#nav_basket-wrapper")
+                        .html(data.nav_basket_html);
+
+                      // Re-attach events
+                      $("#basket_formset input[type='number']")
+                            .on('change', on_basket_change)
+                            .on("submit", function(event){
+                            event.preventDefault();   
+                        });
+                      $("#basket_formset").on("submit", function(event){
+                            event.preventDefault();   
+                      });
+
+                      // Show messages
+                      msgs = data.messages;
+                      for (var prop in msgs) {
+                        if (msgs.hasOwnProperty(prop)){
+                            show_message(prop, msgs[prop]);
+                        }
+                      }
+                    },
+                    error: function(jqXHR, error, errorThrown) {  
+                       if(jqXHR.status && jqXHR.status==400){
+                            var errors = JSON.parse(jqXHR.responseText)
+                                    .__all__.join(". ")    
+                            show_message("error", errors, false);
+                       } else {
+                           alert("Something went wrong");
+                       }
+                    } 
+                });
+                event.preventDefault();
+            });
+
+            // Deactivate basket form submit (default behaviour)
+            $("#basket_formset").on("submit", function(event){
+                event.preventDefault();   
+            });
+            
+             // Callback function for Basket-change ajax handling
+            function on_basket_change(event) {
+                var form = $("#basket_formset");
+                event.preventDefault();
+                $.ajax({
+                    method: "POST",
+                    url: form.data("basket-summary-url"),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function(data) {
+                        
+                        /* Update basket widget */
+                        var el = $.parseHTML(data.content_html);
+                        $(".sidebar .basket-wrapper")
+                            .empty().append(el);
+
+                        /* Update basket product counter in navbar */
+                        $("#nav_basket-wrapper")
+                            .html(data.nav_basket_html);
+                            
+                        // Re-attach events
+                        $("#basket_formset input[type='number']")
+                            .on('change', on_basket_change)
+                            .on("submit", function(event){
+                            event.preventDefault();   
+                        });
+                        $("#basket_formset").on("submit", function(event){
+                            event.preventDefault();   
+                        });
+                    
+                        // Show messages
+                        msgs = data.messages;
+                        for (var prop in msgs) {
+                            if (msgs.hasOwnProperty(prop))
+                            {
+                                show_message(prop, msgs[prop]);
+                            }
+                        }
+
+                    },
+
+                    error: function(jqXHR, error, errorThrown) {
+                        alert(error);
+                    },
+                });
+            }
+
+            // Basket-change ajax handling
+            $("#basket_formset input[type='number']")
+                .on('change', on_basket_change);
+
+            /* Show feedback message to the end user 
+               after executing a task
+            */
+            function show_message(type, text, html){
+                html = typeof html !== 'undefined';
+                type = type === "error" ? "danger" : type;
+                $this = $("#messages > .alert-" + type);
+                $this
+                    .fadeIn(function() {
+                        var $this = $(this);
+                        setTimeout(function(){ 
+                            $this.fadeOut();
+                        },
+                        3000);
+                    });
+                if(html)
+                    $this.find(".alertinner > span")
+                        .text(text);
+                else
+                    $this.find(".alertinner > span")
+                        .html(text);
+            }
 
         });
     </script>

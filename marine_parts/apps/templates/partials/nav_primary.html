@@ -74,15 +74,8 @@
                                 <span class="icon icon-user"></span>
                             </a>
                         {% endif %}
-                        <a href="{% url 'basket:summary' %}" class="basket">
-                            <span class="icon icon-cart"></span>
-                            <span class="rounded">
-                                {% if not request.basket.is_empty %}
-                                    {{request.basket.num_items}}
-                                {%else%}
-                                    0
-                                {% endif %}
-                            </span>
+                        <a id="nav_basket-wrapper" href="{% url 'basket:summary' %}" class="basket">
+                            {% include 'partials/nav_basket.html' %}
                         </a>
                     </div>
                 </div>

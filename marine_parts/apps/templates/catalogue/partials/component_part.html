@@ -25,10 +25,10 @@
                 {% endif %}
 
                 {% basket_form request product 'single' as basket_form %}
-                <form action="{% url 'basket:add' pk=product.pk %}" method="post">
+                <form data-basket-add-url="{% url 'basket:add' product.pk %}">
                     {% csrf_token %}
                     {{ basket_form.as_p }}
-                    <button type="submit" class="btn btn-primary btn-sm btn-block" data-loading-text="...">Add</button>
+                    <button class="btn btn-primary btn-sm btn-block basket-add-btn">Add</button>
                 </form>
         </td>
     </tr>

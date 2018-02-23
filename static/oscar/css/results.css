@@ -212,3 +212,21 @@ Light Gray: #E6E6E6;
     font-size: 12px;
 }
 
+#messages .alert {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    top: 120px;
+    transition: scroll .5s ease 0s;
+    margin: 0 auto;
+}
+
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
