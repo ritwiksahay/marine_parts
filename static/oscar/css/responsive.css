@@ -324,6 +324,10 @@ Light Gray: #e6e6e6;
     }
 
     /*Results page*/
+    .basket-wrapper{
+        position: static;
+    }
+
     .customer-service .row .info,
     .customer-service .row .time{
         height: 214px;
@@ -398,6 +402,10 @@ Light Gray: #e6e6e6;
     }
 
     /*Results page*/
+    .basket-wrapper{
+        position: relative;
+    }
+
     .customer-service .row .info,
     .customer-service .row .time{
         height: 214px;
@@ -466,6 +474,10 @@ Light Gray: #e6e6e6;
     }
 
     /*Results page*/
+    .basket-wrapper{
+        position: relative;
+    }
+
     .customer-service .row .info,
     .customer-service .row .time{
         height: 214px;
@@ -558,6 +570,10 @@ Light Gray: #e6e6e6;
     }    
 
     /*Results page*/
+    .basket-wrapper{
+        position: relative;
+    }
+
     .customer-service .row .info,
     .customer-service .row .time{
         height: 214px;
@@ -649,6 +665,10 @@ Light Gray: #e6e6e6;
     }
 
     /*Results page*/
+    .basket-wrapper{
+        position: relative;
+    }
+
     .customer-service .row .info,
     .customer-service .row .time{
         height: 214px;
@@ -738,6 +758,10 @@ Light Gray: #e6e6e6;
     }
 
     /*Results page*/
+    .basket-wrapper{
+        position: relative;
+    }
+
     .customer-service .row .info,
     .customer-service .row .time{
         height: 214px;
