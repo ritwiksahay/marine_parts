@@ -2,8 +2,9 @@
 #   Creador: Daniel Leones
 #   Descripcion: Extrae las categorias  y los productos de los archivos JSON
 #                usando un version simplificada de DFS. Se imprime por
-#   salida estandar los resultados en la notacion jerarquica de Oscar.
+#                salida estandar los resultados en la notacion jerarquica de Oscar.
 #   Fecha: 7/12/2017
+#   Modificado: 26/02/2017
 #   Ejecucion: dentro del shell de Django. Usar extraer_prods. Este devuelve el
 #              numero de productos que encuentra. Por otra parte, crea las
 #              categorias, atributos, la clase de producto, y los valores de
@@ -11,7 +12,6 @@
 #
 import json
 import os
-import types
 import urllib
 
 from django.conf import settings
@@ -24,9 +24,9 @@ from oscar.apps.catalogue.categories import create_from_breadcrumbs
 from oscar.apps.partner.models import StockRecord, Partner
 from marine_parts.apps.catalogue.models import Product, ReplacementProduct
 from decimal import Decimal as D
+
 # Necesario para controlar que se introduce en la BD
 # from django.db.transaction import atomic
-
 
 
 class IOHandler:
@@ -66,7 +66,14 @@ class DBAccess(DBHandler):
         self.part_number, self.manufacturer, self.diag_number = \
             self.obt_crea_atributos_prods(self.subcomp_class)
         self.partner = self.obt_partner()
+        self.part_number_set = set()
 
+
+    def add_part_number(self, part_number_v):
+        self.part_number_set.add(part_number_v)
+
+    def check_partnumber(self, part_number_v):
+        return part_number_v in self.part_number_set
 
     def crear_categoria(self, breadcrumb, comp_img=None):
         path = "Brands > " + ' > '.join(breadcrumb[1:])
@@ -175,13 +182,12 @@ def nav_prods(json_products, bre_cat, db_oscar, comp_img=None):
 
         return None
 
+    comp_img = json_products.get('image')
     cat = db_oscar.crear_categoria(bre_cat, comp_img)
 
     pila = list()
     pila.append((json_products, None))
     nro_products = 0
-
-    part_number_set = set()
 
     while pila:
         prod_json, padr = pila.pop()
@@ -195,15 +201,16 @@ def nav_prods(json_products, bre_cat, db_oscar, comp_img=None):
             manufacturer_v = prod_json.get('manufacturer')
             diagram_number_v = prod_json.get('diagram_number')
 
-            if part_number_v in part_number_set:
+            #import pdb; pdb.set_trace()
+            if db_oscar.check_partnumber(part_number_v):
                 db_oscar.add_product_to_category(part_number_v, cat)
             else:
                 pro = db_oscar.crear_prods(cat, is_available, prod_name, part_number_v, manufacturer_v, diagram_number_v)
+                db_oscar.add_part_number(part_number_v)
+                nro_products += 1
 
             if padr:
                 db_oscar.asign_prod_replacement(padr, pro)
-
-            nro_products += 1
 
         if sucesores:
             for suc in sucesores:
@@ -255,11 +262,7 @@ def extraer_prods_aux(json_categorias, db):
                 pila.append((suc, nom_hijo))
         else:
             # Agregar o crear categorias
-
-            nro_products += nav_prods(hijo['products'],
-                                      list(camino),
-                                      db,
-                                      hijo['image'])
+            nro_products += nav_prods(hijo, list(camino), db)
 
             if pila:
                 # print('camino antes' , camino)

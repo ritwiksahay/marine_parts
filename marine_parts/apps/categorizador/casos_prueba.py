@@ -225,272 +225,6 @@ casoR_nivelesCompletos_variasCateg_variasSerial_variosComp = \
 ########################################################################################################################
 ########################################################################################################################
 
-
-caso_unProductoRecomendNulo = \
-    {
-        "part_number": "2189-832500A 1",
-        "manufacturer": "Mercury Quicksilver",
-        "diagram_number": "#1",
-        "product": "2189-832500A 1 - TOP COWL ASSEMBLY O",
-        "recomended": None
-    }
-
-caso_unProductoRecomendString = \
-    {
-        "part_number": "2189-832500A 1",
-        "manufacturer": "Mercury Quicksilver",
-        "diagram_number": "#1",
-        "product": "2189-832500A 1 - TOP COWL ASSEMBLY O",
-        "recomended": "/newparts/part_search.php?part_num=0355633",
-    }
-
-caso_unProductosConRecomendadoUnNivel = \
-    {
-        "part_number": "2189-832500A 1",
-        "manufacturer": "Mercury Quicksilver",
-        "diagram_number": "#1",
-        "product": "2189-832500A 1 - TOP COWL ASSEMBLY O",
-        "recomended": {
-            "part_number": "2189-832500A 2",
-            "manufacturer": "Mercury Quicksilver",
-            "diagram_number": "#1",
-            "product": "2189-832500A 2 - TOP COWL ASSEMBLY O",
-            "recomended": None
-        }
-    }
-
-
-caso_unProductoConRecomVariosNiveles = \
-    {
-        "product_image": "img/marine_engine/j&e/0334435.jpg",
-        "manufacturer": "Evinrude Johnson OMC",
-        "product_url": "/newparts/part_details.php?pnum=OMC0334435&pass_title=0334435+%3A+Replaced+by+0355633",
-        "diagram_number": "0 ",
-        "product": "0334435",
-        "recomended": {
-            "product_image": None,
-            "manufacturer": "Evinrude Johnson OMC",
-            "product_url": "/newparts/part_details.php?pnum=OMC0355633&pass_title=0355633+%3A",
-            "diagram_number": "0 ",
-            "product": "0355633 - DECAL OWNER ATTN",
-            "recomended": {
-                "part_number": "2189-832500A 2",
-                "manufacturer": "Mercury Quicksilver",
-                "diagram_number": "#1",
-                "product": "2189-832500A 2 - TOP COWL ASSEMBLY O",
-                "recomended": {
-                    "part_number": "2189-832498A 1",
-                    "manufacturer": "Mercury Quicksilver",
-                    "diagram_number": "#2",
-                    "product": "2189-832498A 1 - TOP COWL ASSEMBLY O",
-                    "recomended": "/newparts/part_search.php?part_num=0355633"
-                },
-                "part_number": "0355633"
-            },
-            "part_number": "0355633"
-        },
-        "part_number": "0334435"
-    }
-
-caso_ProductosRepetidoConRecomendadoRepetidoUnNivel = \
-    {
-        "products": [
-            {
-                "your_price": "$3.09",
-                "product_image": "img/marine_engine/j&e/0346151.jpg",
-                "manufacturer": "Evinrude Johnson OMC",
-                "product_url": "/newparts/part_details.php?pnum=OMC0346151",
-                "diagram_number": "3 ",
-                "product": "0346151 - Clamp",
-                "list_price": "$3.09",
-                "recomended": {
-                    "your_price": "$12.81",
-                    "product_image": None,
-                    "manufacturer": "Sierra Marine",
-                    "product_url": "/newparts/part_details.php?pnum=SIE18-9135-9",
-                    "diagram_number": "3 ",
-                    "product": "18-9135-9 - 10-Pack Oetiker Clamp 13/16",
-                    "list_price": "<span class=\"strike\">$18.24</span>",
-                    "recomended": None,
-                    "part_number": "18-9135-9"
-                },
-                "part_number": "0346151"
-            },
-            {
-                "your_price": "$12.81",
-                "product_image": None,
-                "manufacturer": "Sierra Marine",
-                "product_url": "/newparts/part_details.php?pnum=SIE18-9135-9",
-                "diagram_number": "3 ",
-                "product": "18-9135-9 - 10-Pack Oetiker Clamp 13/16",
-                "list_price": "<span class=\"strike\">$18.24</span>",
-                "recomended": None,
-                "part_number": "18-9135-9"
-            },
-        ]
-    }
-
-
-caso_ProductosRepetidoConRecomendadosAnidadosRepetidos = \
-    {
-        "products": [
-            {
-                "your_price": "$249.98",
-                "product_image": "img/marine_engine/j&e/0586890.jpg",
-                "manufacturer": "Evinrude Johnson OMC",
-                "product_url": "/newparts/part_details.php?pnum=OMC0586890",
-                "diagram_number": "1 ",
-                "product": "0586890 - Starter Motor",
-                "list_price": "<span class=\"strike\">$251.49</span>",
-                "recomended": {
-                    "your_price": "$223.64",
-                    "product_image": "img/marine_engine/j&e/18-5619.jpg",
-                    "manufacturer": "Sierra Marine",
-                    "product_url": "/newparts/part_details.php?pnum=SIE18-5619",
-                    "diagram_number": "1 ",
-                    "product": "18-5619 - Starter, 584799",
-                    "list_price": "<span class=\"strike\">$224.99</span>",
-                    "recomended": {
-                        "your_price": "$194.17",
-                        "product_image": "img/marine_engine/j&e/5387.jpg",
-                        "manufacturer": "Arco Marine",
-                        "product_url": "/newparts/part_details.php?pnum=ARC5387",
-                        "diagram_number": "1 ",
-                        "product": "5387 - Outboard Starter",
-                        "list_price": "<span class=\"strike\">$221.95</span>",
-                        "recomended": None,
-                        "part_number": "5387"
-                    },
-                    "part_number": "18-5619"
-                },
-                "part_number": "0586890"
-            },
-            {
-                "your_price": "$223.64",
-                "product_image": "img/marine_engine/j&e/18-5619.jpg",
-                "manufacturer": "Sierra Marine",
-                "product_url": "/newparts/part_details.php?pnum=SIE18-5619",
-                "diagram_number": "1 ",
-                "product": "18-5619 - Starter, 584799",
-                "list_price": "<span class=\"strike\">$224.99</span>",
-                "recomended": {
-                    "your_price": "$194.17",
-                    "product_image": "img/marine_engine/j&e/5387.jpg",
-                    "manufacturer": "Arco Marine",
-                    "product_url": "/newparts/part_details.php?pnum=ARC5387",
-                    "diagram_number": "1 ",
-                    "product": "5387 - Outboard Starter",
-                    "list_price": "<span class=\"strike\">$221.95</span>",
-                    "recomended": None,
-                    "part_number": "5387"
-                },
-                "part_number": "18-5619"
-            },
-            {
-                "your_price": "$194.17",
-                "product_image": "img/marine_engine/j&e/5387.jpg",
-                "manufacturer": "Arco Marine",
-                "product_url": "/newparts/part_details.php?pnum=ARC5387",
-                "diagram_number": "1 ",
-                "product": "5387 - Outboard Starter",
-                "list_price": "<span class=\"strike\">$221.95</span>",
-                "recomended": None,
-                "part_number": "5387"
-            },
-        ]
-    }
-
-
-caso_variosProductosDosConRecomendadosAnidados = \
-    {
-        "products": [
-            {
-                "your_price": "$249.98",
-                "product_image": "img/marine_engine/j&e/0586890.jpg",
-                "manufacturer": "Evinrude Johnson OMC",
-                "product_url": "/newparts/part_details.php?pnum=OMC0586890",
-                "diagram_number": "1 ",
-                "product": "0586890 - Starter Motor",
-                "list_price": "<span class=\"strike\">$251.49</span>",
-                "recomended": {
-                    "your_price": "$223.64",
-                    "product_image": "img/marine_engine/j&e/18-5619.jpg",
-                    "manufacturer": "Sierra Marine",
-                    "product_url": "/newparts/part_details.php?pnum=SIE18-5619",
-                    "diagram_number": "1 ",
-                    "product": "18-5619 - Starter, 584799",
-                    "list_price": "<span class=\"strike\">$224.99</span>",
-                    "recomended": {
-                        "your_price": "$194.17",
-                        "product_image": "img/marine_engine/j&e/5387.jpg",
-                        "manufacturer": "Arco Marine",
-                        "product_url": "/newparts/part_details.php?pnum=ARC5387",
-                        "diagram_number": "1 ",
-                        "product": "5387 - Outboard Starter",
-                        "list_price": "<span class=\"strike\">$221.95</span>",
-                        "recomended": None,
-                        "part_number": "5387"
-                    },
-                    "part_number": "18-5619"
-                },
-                "part_number": "0586890"
-            },
-            {
-                "your_price": "$223.64",
-                "product_image": "img/marine_engine/j&e/18-5619.jpg",
-                "manufacturer": "Sierra Marine",
-                "product_url": "/newparts/part_details.php?pnum=SIE18-5619",
-                "diagram_number": "1 ",
-                "product": "18-5619 - Starter, 584799",
-                "list_price": "<span class=\"strike\">$224.99</span>",
-                "recomended": {
-                    "your_price": "$194.17",
-                    "product_image": "img/marine_engine/j&e/5387.jpg",
-                    "manufacturer": "Arco Marine",
-                    "product_url": "/newparts/part_details.php?pnum=ARC5387",
-                    "diagram_number": "1 ",
-                    "product": "5387 - Outboard Starter",
-                    "list_price": "<span class=\"strike\">$221.95</span>",
-                    "recomended": None,
-                    "part_number": "5387"
-                },
-                "part_number": "18-5619"
-            },
-            {
-                "your_price": "$194.17",
-                "product_image": "img/marine_engine/j&e/5387.jpg",
-                "manufacturer": "Arco Marine",
-                "product_url": "/newparts/part_details.php?pnum=ARC5387",
-                "diagram_number": "1 ",
-                "product": "5387 - Outboard Starter",
-                "list_price": "<span class=\"strike\">$221.95</span>",
-                "recomended": None,
-                "part_number": "5387"
-            },
-            {
-                "part_number": "2189-832500A 1",
-                "manufacturer": "Mercury Quicksilver",
-                "diagram_number": "#1",
-                "product": "2189-832500A 1 - TOP COWL ASSEMBLY O",
-            },
-            {
-                "part_number": "2189-832500A 2",
-                "manufacturer": "Mercury Quicksilver",
-                "diagram_number": "#1",
-                "product": "2189-832500A 2 - TOP COWL ASSEMBLY O",
-                "recomended": None,
-            },
-            {
-                "part_number": "2189-832498A 1",
-                "manufacturer": "Mercury Quicksilver",
-                "diagram_number": "#2",
-                "product": "2189-832498A 1 - TOP COWL ASSEMBLY O",
-                "recomended": None,
-            }
-        ]
-    }
-
-
 varios_productos_no_anidados = \
     {
         "category_url": "/parts/mercury-outboard-parts/2/0t894577-up-usa/cylinder-block",
@@ -626,103 +360,93 @@ varios_productos_anidados = \
 
 productos_repetidos_categorias = \
     {
-        {
-            "category_url": "/parts/mercury-outboard-parts/2/0t894577-up-usa/cylinder-block",
-            "image": "img/marine_engine/mercury/6970.gif",
-            "products": [
-                {
-                    "is_available": True,
-                    "part_number": "878-9151  2",
-                    "product": "878-9151 2 - Cylinder Block",
-                    "manufacturer": "Mercury Quicksilver",
-                    "diagram_number": "1",
-                    "replacements": [
-                        {
-                            "is_available": True,
-                            "part_number": "22-8M0064617",
-                            "product": "228M0064617 - Nipple Fitting",
-                            "manufacturer": "Mercury Quicksilver",
-                            "diagram_number": "5",
-                            "replacements": [
-                                {
-                                    "is_available": True,
-                                    "part_number": "32-812940  4",
-                                    "product": "32-812940 4 - Hose",
-                                    "manufacturer": "Mercury Quicksilver",
-                                    "diagram_number": "6",
-                                    "replacements": [
-                                        {
-                                            "is_available": True,
-                                            "part_number": "12-809931044",
-                                            "product": "12-809931044 - Washer",
-                                            "manufacturer": "Mercury Quicksilver",
-                                            "diagram_number": "10",
-                                            "replacements": []
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                    ]
-                },
-                {
-                "is_available": True,
-                "part_number": "34-95304",
-                "product": "34-95304 - Reed Stop, NLA",
-                "manufacturer": "Mercury Quicksilver",
-                "diagram_number": "12",
-                "replacements": []
-                }
-            ]
-        }
-    },
-    {
-        "category_url": "/parts/mercury-outboard-parts/2/0t894577-up-usa/cylinder-block",
-        "image": "img/marine_engine/mercury/6970.gif",
-        "products": [
+        "category_url": "/parts/mercury-outboard-parts/2/0t894577-up-usa",
+        "category_name": "serial_range",
+        "category": "0T894577 & Up (USA)",
+        "sub_category": [
             {
-                "is_available": True,
-                "part_number": "878-9151  2",
-                "product": "878-9151 2 - Cylinder Block",
-                "manufacturer": "Mercury Quicksilver",
-                "diagram_number": "1",
-                "replacements": [
+                "category_url": "/parts/mercury-outboard-parts/2/0t894577-up-usa/cylinder-block",
+                "image": "img/marine_engine/mercury/6970.gif",
+                "category_name": "component",
+                "category": "Cylinder Block",
+                "products": [
                     {
                         "is_available": True,
-                        "part_number": "22-8M0064617",
-                        "product": "228M0064617 - Nipple Fitting",
+                        "part_number": "878-9151 2",
+                        "product": "878-9151 2 - Cylinder Block",
                         "manufacturer": "Mercury Quicksilver",
-                        "diagram_number": "5",
+                        "diagram_number": "1",
                         "replacements": [
                             {
                                 "is_available": True,
-                                "part_number": "32-812940  4",
-                                "product": "32-812940 4 - Hose",
+                                "part_number": "22-8M0064617",
+                                "product": "228M0064617 - Nipple Fitting",
                                 "manufacturer": "Mercury Quicksilver",
-                                "diagram_number": "6",
+                                "diagram_number": "5",
                                 "replacements": [
                                     {
                                         "is_available": True,
-                                        "part_number": "12-809931044",
-                                        "product": "12-809931044 - Washer",
+                                        "part_number": "32-812940  4",
+                                        "product": "32-812940 4 - Hose",
                                         "manufacturer": "Mercury Quicksilver",
-                                        "diagram_number": "10",
-                                        "replacements": []
+                                        "diagram_number": "6",
+                                        "replacements": [
+                                            {
+                                                "is_available": True,
+                                                "part_number": "12-809931044",
+                                                "product": "12-809931044 - Washer",
+                                                "manufacturer": "Mercury Quicksilver",
+                                                "diagram_number": "10",
+                                                "replacements": []
+                                            }
+                                        ]
                                     }
                                 ]
-                            }
+                            },
                         ]
                     },
+                    {
+                    "is_available": True,
+                    "part_number": "34-95304",
+                    "product": "34-95304 - Reed Stop, NLA",
+                    "manufacturer": "Mercury Quicksilver",
+                    "diagram_number": "12",
+                    "replacements": []
+                    }
                 ]
             },
             {
-                "is_available": True,
-                "part_number": "34-95304",
-                "product": "34-95304 - Reed Stop, NLA",
-                "manufacturer": "Mercury Quicksilver",
-                "diagram_number": "12",
-                "replacements": []
+                "category_url": "/parts/mercury-outboard-parts/2/0t894577-up-usa/cylinder-block",
+                "image": "img/marine_engine/mercury/6970.gif",
+                "category_name": "component",
+                "category": "Cylinder Block Primera",
+                "products": [
+                    {
+                        "is_available": True,
+                        "part_number": "878-9151 2",
+                        "product": "878-9151 2 - Cylinder Block",
+                        "manufacturer": "Mercury Quicksilver",
+                        "diagram_number": "1",
+                        "replacements": []
+                    },
+                    {
+                        "is_available": True,
+                        "part_number": "34-95304",
+                        "product": "34-95304 - Reed Stop, NLA",
+                        "manufacturer": "Mercury Quicksilver",
+                        "diagram_number": "12",
+                        "replacements": [
+                            {
+                                "is_available": True,
+                                "part_number": "22-8M0064618",
+                                "product": "228M0064618 - Nipple Fitting",
+                                "manufacturer": "Mercury Quicksilver",
+                                "diagram_number": "5",
+                                "replacements": []
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     }
-}

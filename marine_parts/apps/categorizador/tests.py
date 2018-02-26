@@ -9,10 +9,18 @@ class TestHandler(categorizador.IOHandler):
     def leer(self, nomArch):
         return self.entrada
 
+
 class FakeObjectOscar:
     pass
 
+
 class StubDBHandler(categorizador.DBHandler):
+    def add_part_number(self, part_number_v):
+        pass
+
+    def check_partnumber(self, part_number_v):
+        pass
+
     def crear_categoria(self, breadcrumb, comp_img=None):
         return FakeObjectOscar()
 
@@ -34,9 +42,17 @@ class MockDB(categorizador.DBHandler):
         self.ls = list()
         self.cnt = 0
         self.padres = list()
+        self.lsCatsProd = list()
+        self.part_number_set = set()
+
+    def add_part_number(self, part_number_v):
+        self.part_number_set.add(part_number_v)
+
+    def check_partnumber(self, part_number_v):
+        return part_number_v in self.part_number_set
 
     def crear_categoria(self, breadcrumb, comp_img=None):
-        pass
+        return ' > '.join(breadcrumb)
 
     def asign_prod_replacement(self, p_origin, p_asign):
         self.padres.append((p_origin, p_asign))
@@ -52,6 +68,9 @@ class MockDB(categorizador.DBHandler):
         self.cnt += 1
         return prod_name
 
+    def add_product_to_category(self, part_number_v, cat):
+        self.lsCatsProd.append((part_number_v, cat))
+
     @property
     def get_ls(self):
         return self.ls
@@ -63,6 +82,13 @@ class MockDB(categorizador.DBHandler):
     @property
     def get_padres(self):
         return self.padres
+
+    @property
+    def get_cats_prods(self):
+        return self.lsCatsProd
+
+
+
 
 class TestUnitExtraerCats(unittest.TestCase):
     def setUp(self):
@@ -143,17 +169,31 @@ class TestNavProds(unittest.TestCase):
                 ("32-812940 4 - Hose", "12-809931044 - Washer")
             ])
 
-# class TestIntegrationIO_extraerProds(unittest.TestCase):
-#     def setUp(self):
-#         self.entrada = categorizador.FileHandler().leer('marine_parts/apps/categorizador/'
-#                                                         'marine_engine_johnson_evinrude-2018-01-12.json')
-#         self.contador = MockDB()
-#
-#     def test_contarProductosCategorias_regresaIgual(self):
-#         categorizador.extraerProds_aux( self.entrada, self.contador )
-#         self.assertEqual(self.contador.nro_prod, 101)
-#
-#
+
+class TestExtraerProds(unittest.TestCase):
+
+    def setUp(self):
+        self.mockDB = MockDB()
+
+    def test_variasPartesRepetidas(self,):
+        nro_prod = categorizador.extraer_prods_aux(casos.productos_repetidos_categorias, self.mockDB)
+        self.assertEqual(self.mockDB.lsCatsProd,
+             [
+                 ('34-95304', '0T894577 & Up (USA) > Cylinder Block'),
+                 ('878-9151 2', '0T894577 & Up (USA) > Cylinder Block'),
+             ]
+        )
+
+        self.assertEqual(nro_prod, 6)
+
+
+class TestIntegrationExtraerProds(unittest.TestCase):
+    def setUp(self):
+        self.realDB = categorizador.DBAccess()
+
+    def test_crear_productos_regresa6(self):
+        nro_prod = categorizador.extraer_prods_aux(casos.productos_repetidos_categorias, self.realDB)
+        self.assertEqual(nro_prod, 6)
 
 class TestIntegrationDB_NavProds(unittest.TestCase):
     def setUp(self):
