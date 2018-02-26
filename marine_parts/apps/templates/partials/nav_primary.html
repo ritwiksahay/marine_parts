@@ -62,7 +62,7 @@
                     <div class="col-lg-6 col-md-6 col-sm-7 col-xs-12 search-bar">
                         {% include "partials/search.html" %}
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-2 text-center user-cart">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 text-center user-cart">
                         {% if user.is_authenticated %}
                             {% if num_unread_notifications > 0 %}
                                 {# If user has new notifications - we change account link to go to inbox #}
