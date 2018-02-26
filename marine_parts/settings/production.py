@@ -29,27 +29,13 @@ SECRET_KEY = 'cs)qm+=(yp=uvrkdam@vteo-giw_(4%4rdqmpq=b0otx9u*1*w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['www.marineparts.us', '34.226.121.167']
 
 
 # Application definition
 FIXTURES_DIRS = (
     'marine_parts.apps.users.fixtures',
 )
-
-OSCAR_DASHBOARD_NAVIGATION += [
-    {
-        'label': 'Shipping',
-        'icon': 'icon-map-marker',
-        'children' : [
-            {
-                'label': 'Shipping Methods',
-                'url_name': 'dashboard:shipping-method-list'
-            }
-        ]
-    }
-]
-
 
 THIRD_PARTY_APPS = [
     'bootstrap_admin',
@@ -64,6 +50,9 @@ THIRD_PARTY_APPS = [
 
 SYSTEM_APPS = [
     'marine_parts.apps.users',
+    'marine_parts.parts_scrapper',
+    'marine_parts.apps.authorize',
+    'marine_parts.apps.dashboard.bulk_price_updater'
 ]
 
 DJANGO_APPS = [
@@ -79,9 +68,11 @@ DJANGO_APPS = [
 
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + SYSTEM_APPS \
     + get_core_apps([
+        'marine_parts.apps.basket',
         'marine_parts.apps.catalogue',
         'marine_parts.apps.checkout',
         'marine_parts.apps.customer',
+        'marine_parts.apps.dashboard',
         'marine_parts.apps.dashboard.catalogue',
         'marine_parts.apps.promotions',
         'marine_parts.apps.search',
@@ -104,9 +95,34 @@ OSCAR_ORDER_STATUS_PIPELINE = {
     'Cancelled': (),
 }
 
+# Add updater
+
+OSCAR_DASHBOARD_NAVIGATION[1]['children'].append(
+    {
+        'label': 'Bulk price update',
+        'url_name': 'dashboard:bulk-price-updater-index',
+    }
+)
+
+OSCAR_DASHBOARD_NAVIGATION += [
+    {
+        'label': 'Shipping',
+        'icon': 'icon-truck',
+        'children': [
+            {
+                'label': 'Shipping Methods',
+                'url_name': 'dashboard:shipping-method-list'
+            }
+        ]
+    },
+]
+
+
+FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
+                        "django_excel.TemporaryExcelFileUploadHandler")
+
 
 # Oscar display setting
-OSCAR_SHOP_NAME = 'Marine parts'
 OSCAR_DEFAULT_CURRENCY = 'USD'
 OSCAR_SHOP_TAGLINE = 'Marine parts - Best Shop'
 
@@ -142,8 +158,9 @@ AUTHENTICATION_BACKENDS = (
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://127.0.0.1:8983/solr/prueba_parts',
-        'ADMIN_URL': 'http://127.0.0.1:8983/solr/',
+        'URL': 'http://localhost:8983/solr/marine_parts',
+        'ADMIN_URL': 'http://localhost:8983/solr/',
+        'TIMEOUT': 60 * 5,
         'INCLUDE_SPELLING': True,
         'EXCLUDED_INDEXES': ['oscar.apps.search.search_indexes.ProductIndex'],
     },
@@ -206,7 +223,7 @@ DATABASES = {
 }
 
 # Google Ads
-ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  #OPTIONAL-DEFAULT TO None
+ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  # OPTIONAL-DEFAULT TO None
 
 ADS_ZONES = {
     'header': {
@@ -278,13 +295,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = location('../static/')
+STATIC_ROOT = location('/home/ubuntu/marine-parts/static')
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
 STATICFILES_DIRS = (
-    os.path.join('static/'),
+
 )
 
 MEDIA_URL = '/media/'
@@ -304,3 +323,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'parts@marineparts.com'
 EMAIL_HOST_PASSWORD = 'M@rine0470'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+SCRAPPER_ROOT = os.path.join(BASE_DIR, 'parts_scrapper/')
