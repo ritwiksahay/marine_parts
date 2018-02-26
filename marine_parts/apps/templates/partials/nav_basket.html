@@ -1,0 +1,8 @@
+<span class="icon icon-cart"></span>
+<span class="rounded">
+    {% if not request.basket.is_empty %}
+        {{request.basket.num_items}}
+    {%else%}
+        0
+    {% endif %}
+</span>

@@ -1,5 +1,13 @@
 [
     {
+        "model": "sites.site",
+        "pk": 1,
+        "fields": {
+            "domain": "marineparts.us",
+            "name": "Marine Parts USA"
+        }
+    },
+    {
         "model": "catalogue.category",
         "pk": 1,
         "fields": {

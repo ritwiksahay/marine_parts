@@ -8,12 +8,18 @@ class Command(BaseCommand):
         parser.add_argument('filepaths', nargs='+')
 
     def handle(self, *args, **options):
+        total = 0
         for filepath in options['filepaths']:
+
             nro = 0
             try:
+                self.stdout.write('Processing file %s. Please wait...' % filepath)
                 nro += ejec_cargador(filepath)
             except Exception:
                 raise CommandError('An error occurred while processing this file: %s' % filepath)
 
             self.stdout.write(self.style.SUCCESS('%s products were created in DB from %s' % (nro, filepath)))
+            total += nro
+
+        self.stdout.write(self.style.SUCCESS('Total products created: %s' % total))
 

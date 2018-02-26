@@ -5,72 +5,50 @@
 {% load thumbnail %}
 {% load i18n %}
 {% load staticfiles %}
+{% load widget_tweaks %}
 
-<div class="basket-wrapper">
-    <div class="basket-title col-xs-12 hidden-xs">
-                <div>
-                    <p class="col-xs-12 h3 align-center">{% trans "Basket"|upper %}</p>
-                </div>
+
+<div class="basket-title col-xs-12">
+    <div>
+        <p class="col-xs-12 h3 align-center">{% trans "Basket"|upper %}</p>
     </div>
-    <ul class="basket-mini-item list-unstyled text-center">
-        {% if request.basket.num_lines %}
-            {% for line in request.basket.all_lines %}
-                <li class="mini-item text-left"><a href="{{ line.product.get_absolute_url }}"><small>{{ line.quantity }} x {{ line.product.title | strip_part_number }}</a></small></li>
-            {% endfor %}
-            <br>
-            <li class="total text-right">
-                    {% if request.basket.is_tax_known %}
-                        <strong>{% trans "Total" %}</strong>: {{ request.basket.total_incl_tax|currency:request.basket.currency }}
-                    {% else %}
-                        <strong>{% trans "Total" %}</strong>: {{ request.basket.total_excl_tax|currency:request.basket.currency }}
-                    {% endif %}
-            </li>
-            <li class="text-right" ><a href="{% url 'checkout:index' %}">{% trans "Checkout" %}</a></li>
-        {% else %}
-            <li><p>{% trans "Your basket is empty." %}</p></li>
-        {% endif %}
-    </ul>
 </div>
-{% comment %}
-<ul class="basket-mini-item list-unstyled">
-    {% if request.basket.num_lines %}
-        {% for line in request.basket.all_lines %}
-            <li>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <p><strong><a href="{{ line.product.get_absolute_url }}">{{ line.description }}</a></strong></p>
-                    </div>
-                    <div class="col-sm-1 align-center"> <span style="margin-left: 35px;">{{ line.quantity }}</span></div>
-                    <div class="col-sm-3 price_color align-center"><span style="margin-left: 7px;">{{ line.unit_price_excl_tax|currency:request.basket.currency }}</span></div>
+<ul class="basket-mini-item list-unstyled text-center">
+    {% if not request.basket.is_empty %}
+        <form id="basket_formset" data-basket-summary-url="{% url 'basket:summary' %}">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <input name="output_template" value="basket/partials/basket_quick" type="hidden">
+            {% for form in formset %}
+                 {{ form.id }}
+                 {% for field_errors in form.errors.values %}
+                    {% for error in field_errors %}
+                        <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                    {% endfor %}
 
-                    <div class="col-sm-2 price_color align-center">
-                                        <span style="margin-left: 9px;">
-                                        {% if line.is_tax_known %}
-                                            {{ line.line_price_incl_tax|currency:line.price_currency }}
-                                        {% else %}
-                                            {{ line.line_price_excl_tax|currency:line.price_currency }}
-                                        {% endif %}
-                                    </span>
-                    </div>
-                </div>
-            </li>
-        {% endfor %}
-        <li class="form-group basket-title" style="border-bottom: none;">
-            <div class="align-right total" style="background-color: transparent !important;">
-
+                {% endfor %}
+                 {% with line=form.instance product=form.instance.product %}
+                <li class="mini-item text-left">
+                    {% render_field form.quantity class+="form-control quantity_input" type="text" %}
+                    <a href="{{ product.get_absolute_url }}">
+                        <medium> {{ product.title | strip_part_number |truncatewords:4}}</medium>
+                    </a>
+                </li>
+                {% endwith %}
+            {% endfor %}
+            <hr>
+            <br>
+            <li id="basket_total" class="total text-right">
                 {% if request.basket.is_tax_known %}
-                    <h3 class="h3">{% trans "Basket total" %}:</h3> <h3 class="price_color">{{ request.basket.total_incl_tax|currency:request.basket.currency }}</h3>
+                    <strong>{% trans "Total" %}</strong>: <span>{{ request.basket.total_incl_tax|currency:request.basket.currency }}</span>
                 {% else %}
-                    <h3 class="h3">{% trans "Basket total" %}:</h3> <label class="h3 price_color basket-total"> {{ request.basket.total_excl_tax|currency:request.basket.currency }}</label>
+                    <strong>{% trans "Total" %}</strong>: <span>{{ request.basket.total_excl_tax|currency:request.basket.currency }}</span>
                 {% endif %}
-            </div>
-
-            <a href="{% url 'checkout:index' %}" class="btn btn-primary btn-sm pull-right">{% trans "Checkout" %}</a>
-            
-        </li>
+            </li>
+        <li class="text-right" ><a href="{% url 'checkout:index' %}">{% trans "Checkout" %}</a></li>
+        </form>
     {% else %}
         <li><p>{% trans "Your basket is empty." %}</p></li>
     {% endif %}
-</ul >
+</ul>
 
-{% endcomment %}
