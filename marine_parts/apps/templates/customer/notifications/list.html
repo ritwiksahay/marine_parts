@@ -1,8 +1,15 @@
 {% extends "customer/baseaccountpage.html" %}
 {% load i18n %}
 
-{% block tabcontent %}
+{% block top_banner %}
+    {% block top_banner_title %}
+        <h2 class="text-center top_banner_title">
+            {% trans "Notifications" %}
+        </h2>
+    {% endblock top_banner_title %}
+{% endblock top_banner %}
 
+{% block tabcontent %}
     <ul class="nav nav-tabs">
         <li class="{% if list_type == 'inbox' %}active{% endif %}"><a href="{% url 'customer:notifications-inbox' %}">{% trans 'Inbox' %}</a></li>
         <li class="{% if list_type == 'archive' %}active{% endif %}"><a href="{% url 'customer:notifications-archive' %}">{% trans 'Archive' context 'noun' %}</a></li>

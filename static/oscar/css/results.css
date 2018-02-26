@@ -9,60 +9,110 @@ Light Gray: #E6E6E6;
 
 */
 
-.filter-title{
-    font-family: 'Gotham Bold' !important;
-    color: #0d4a6c;
+.pre-content {
+    color: #ffffff;
+    padding: 0;
 }
 
-.page_inner{
+.filter-title {
+    font-family: 'Gotham Bold' !important;
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+.page_inner {
     padding: 0px 15px;
+}
+
+.page-header {
+    margin: 0;
 }
 
 .page-header{
     font-family: 'Gotham Bold' !important;
+    color: #0d4a6c;
+    background-color: #ffffff;
+    padding: 20px 15px 5px 15px;
 }
 
-.page_inner div .sidebar,
-.page_inner div .content{
-    padding-top: 15px;
-    padding-bottom: 15px;
+.page-header hr {
+    margin: 10px 0;
 }
 
-.page_inner div .content{
-    background-color: #0d4a6c;
-    color: #FFFFFF;
-}
-
-.page_inner div .sidebar form div select{
-    width: 90%;
-    float: none;
-    display: inline-block;
-    background-color: #E6E6E6;
-    font-family: 'Gotham Book';
-    font-size: 16px;
-    height: 40px;
-}
-
-.page_inner div .sidebar form div .search-field{
-    width: 90%;
-    float: none;
-    display: inline-block;
-    background-color: #E6E6E6;
-    font-family: 'Gotham Book';
-    font-size: 16px;
-    height: 40px;
-}
-
-.page_inner div .sidebar form div .search-button{
-    float: none;
-    font-family: 'Gotham Bold';
-    font-size: 16px;
-    height: 40px;
+.page-header {
+    border-bottom: none !important;
 }
 
 .page_inner div .sidebar {
-    border-right: 2px solid #eee;
-    border-bottom: 2px solid #eee;
+    padding-bottom: 0;
+    color: #0d4a6c;
+}
+
+.page_inner div .content {
+    padding-top: 0;
+}
+
+.page_inner div .pre-content {
+    padding-top: 20px;
+    padding-bottom: 5px;
+}
+
+.page_inner div .content {
+    padding-bottom: 30px;
+}
+
+.page-banner .top_banner_title{
+    font-family: 'Magneto';
+    font-size: 40px;
+    color: #fff;
+    margin-bottom: 0px;
+    padding: 62px 0px;
+    background-image: url('../../img/banners/banner-search.png');
+    background-position: center center; 
+}
+
+.page_inner div .content{
+    background-color: #FFFFFF;
+    color: #0d4a6c;
+}
+
+.page_inner div .content{
+    padding: 0;
+}
+
+.page_inner div .sidebar form div select,
+.page_inner div .pre-content form div select {
+    width: 90%;
+    float: none;
+    display: inline-block;
+    background-color: #E6E6E6;
+    font-family: 'Gotham Book';
+    font-size: 16px;
+    height: 21px;
+}
+
+.page_inner div .sidebar form div .search-field,
+.page_inner div .pre-content form div .search-field{
+    width: 90%;
+    float: none;
+    display: inline-block;
+    background-color: #E6E6E6;
+    font-family: 'Gotham Book';
+    font-size: 16px;
+    height: 27px;
+}
+
+.page_inner div .sidebar form div .search-button,
+.page_inner div .pre-content form div .search-button{
+    float: none;
+    font-family: 'Gotham Bold';
+    font-size: 16px;
+    height: 33px;
+}
+
+.page_inner div .sidebar {
+    padding-top: 5px;
+    border-bottom: none;
 }
 
 /* Search By Categories form styles */
@@ -75,7 +125,7 @@ Light Gray: #E6E6E6;
     background: transparent;
     outline: none;
     border: none;
-    color: white;
+    color: #0d4a6c;
     font-family: 'Gotham Book';
     width: 100%;
     z-index: 1;
@@ -85,18 +135,17 @@ Light Gray: #E6E6E6;
     padding-inline-start: 27px;
     position: relative;
     text-align-last: center;
-
 }
 
-#categories_form select[name='var'] option {
-    background: #0d4a6c;
+#categories_form .form-group {
+    margin-bottom: 6px;  
 }
 
 #categories_form .form-group.category-select {
     position: relative;
     cursor: pointer;
     position: relative;
-    background-color: #0d4a6c;
+    background-color: #ffffff;
     color: white;
     display: block;
 }
@@ -105,10 +154,71 @@ Light Gray: #E6E6E6;
     position: absolute;
     right: 13px;
     font-size: 1.3rem;
-    color: #ffffff;
-    top: 12px;
+    color: #0d4a6c;
+    top: 3px;
 }
 
-.highlighted {
-    color: yellow;
+.is-component #categories_form .form-group > i.icon-chevron-down {
+    color: #0d4a6c;
 }
+
+/* Part's table */
+
+.is-component table.table tbody td,
+.is-component table.table thead th
+ {
+    vertical-align: middle;
+}
+
+.is-component table.table tbody td p{
+    margin: 0;
+}
+
+.is-component table thead {
+    font-family: 'Gotham Bold' !important;
+    background-color: #0d4a6c;
+    color: #ffffff;
+}
+
+.is-component span.diagram_number {
+    border: 2px solid white;
+    border-radius: 20px;
+    padding: 6px 4px;
+    font-size: 1.4rem;
+    font-weight: bolder;
+    color: inherit;
+}
+
+/* thumbnail styles */
+.is-component .thumbnail p {
+    margin: 5px;
+}
+
+.is-component .table tr.component_header {
+    background-color: #04a0d3;
+    color: white;
+    font-family: "Gotham Bold";
+}
+
+.is-component .table tr.component_header a {
+    color: white;
+}
+
+#results {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+#num_results_form {
+    padding-left: 15px;
+}
+
+.deprecated, .deprecated:hover {
+    color: #04a0d3;
+    text-decoration: none;
+}
+
+#part-table .btn {
+    font-size: 12px;
+}
+

@@ -7,9 +7,13 @@
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/basket.css" %}" />
 {% endblock extrastyles %}
 
-{% block title %}
-    {% trans "Basket" %} | {{ block.super }}
-{% endblock %}
+{% block top_banner %}
+    {% block top_banner_title %}
+        <h2 class="text-center top_banner_title">
+            {% trans "Cart and Checkout" %}
+        </h2>
+    {% endblock top_banner_title %}
+{% endblock top_banner %}
 
 {% block breadcrumbs %}
     <ul class="breadcrumb">
@@ -19,6 +23,11 @@
         <li class="active">{% trans "Basket"|capfirst %}</li>
     </ul>
 {% endblock %}
+
+{% block title %}
+    {% trans "Basket" %} | {{ block.super }}
+{% endblock %}
+
 
 {# Hide mini-basket so we don't have two baskets to keep in sync #}
 {% block mini_basket %}{% endblock %}

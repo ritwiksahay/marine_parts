@@ -3,6 +3,14 @@
 {% load currency_filters %}
 {% load staticfiles %}
 
+{% block top_banner %}
+    {% block top_banner_title %}
+        <h2 class="text-center top_banner_title">
+            {% trans "Order History" %}
+        </h2>
+    {% endblock top_banner_title %}
+{% endblock top_banner %}
+
 {% block breadcrumbs %}
     <ul class="breadcrumb">
         <li>

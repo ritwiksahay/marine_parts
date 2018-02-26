@@ -83,6 +83,9 @@ class FacetedSearchView(views.FacetedSearchView):
                 component = category
         extra['component'] = component
 
+        # pass the user basket
+        extra['basket'] = self.request.basket
+
         return extra
 
     def get_results(self):

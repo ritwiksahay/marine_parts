@@ -17,11 +17,10 @@ Light Gray: #e6e6e6;
 .brands{
     padding-top: 10px;
     padding-bottom: 10px;
-    padding-left: 30px;
-    padding-right: 30px;
     margin-left: 0px;
     margin-right: 0px;
-    background-image: url('../img/brands-home.jpg')
+    background-image: url('../img/brands-home.jpg');
+    background-position: top center;
 }
 
 .brands-title{
@@ -31,8 +30,10 @@ Light Gray: #e6e6e6;
     margin-bottom: 0px;
 }
 
-.brands div .row .brand{
-    padding: 12px 25px 12px 25px;
+
+.brands .helper {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .best-sellers{
@@ -64,7 +65,7 @@ Light Gray: #e6e6e6;
     display: inline-block;
     width: 15px;
     height: 15px;
-    margin: 0 12px;
+    margin: 0 10px;
     background-color: #bababa;
 }
 
@@ -72,21 +73,6 @@ Light Gray: #e6e6e6;
 .best-sellers div div.row .col-centered{
     padding-left: 0px;
     padding-right: 0px;
-}
-
-.best-sellers div div .row{
-    padding-left: 34px;
-    padding-right: 34px;
-}
-
-.best-sellers div div .row .bordered{
-    border-left: 1px solid #04a0d3;
-}
-
-.best-sellers div div .row .category a img{
-    max-height: 175px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .best-sellers div div .row .category a p{
@@ -113,15 +99,6 @@ Light Gray: #e6e6e6;
     border-top: 1px solid #0d4a6c;
 }
 
-.categories div .row div.bordered{
-    border-right: 1px solid #0d4a6c;
-}
-
-.categories div .row div img.category-icon{
-    width: 42px;
-    display: inline-block;
-}
-
 .categories div .row div a:hover{
     color: #0d4a6c;
 }
@@ -131,9 +108,8 @@ Light Gray: #e6e6e6;
     text-decoration: none;
 }
 
-.categories div .row div a p{
+.categories div .row div a .category_name{
     display: inline-block;
     width: 75%;
-    text-align: center;
     margin-bottom: 10px;
 }

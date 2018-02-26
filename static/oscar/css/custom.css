@@ -55,7 +55,11 @@ a {
 }
 
 .bg-mid-blue {
-    background-color: #0d4a6c;
+    background-color: #0d4a6c !important;
+}
+
+.bg-light-gray {
+    background-color: #e6e6e6 !important;
 }
 
 .sub-header {

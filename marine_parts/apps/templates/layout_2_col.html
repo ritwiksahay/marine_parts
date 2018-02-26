@@ -8,6 +8,13 @@ main content area to split it into a sidebar and a content block
 {% endcomment %}
 {% block content_wrapper %}
 <div class="container-fluid page">
+    <div class="page-banner">
+        {% block top_banner %}
+                {% block top_banner_title %}
+                    
+                {% endblock top_banner_title %}
+        {% endblock top_banner %}
+    </div>
     <div class="page_inner">
         {% block breadcrumbs %}{% endblock %}
         <div class="row">
@@ -43,9 +50,9 @@ main content area to split it into a sidebar and a content block
             </div>
 
         </div><!-- /row -->
-        {% block bottom %}
-            
-        {% endblock bottom %}
     </div><!-- /page_inner -->
+    {% block bottom_banner %}
+        
+    {% endblock bottom_banner %}
 </div><!-- /container-fluid -->
 {% endblock %}
