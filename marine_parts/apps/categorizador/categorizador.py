@@ -2,8 +2,9 @@
 #   Creador: Daniel Leones
 #   Descripcion: Extrae las categorias  y los productos de los archivos JSON
 #                usando un version simplificada de DFS. Se imprime por
-#   salida estandar los resultados en la notacion jerarquica de Oscar.
+#                salida estandar los resultados en la notacion jerarquica de Oscar.
 #   Fecha: 7/12/2017
+#   Modificado: 26/02/2017
 #   Ejecucion: dentro del shell de Django. Usar extraer_prods. Este devuelve el
 #              numero de productos que encuentra. Por otra parte, crea las
 #              categorias, atributos, la clase de producto, y los valores de
@@ -11,7 +12,6 @@
 #
 import json
 import os
-import types
 import urllib
 
 from django.conf import settings
@@ -21,11 +21,12 @@ from oscar.apps.catalogue.models import (ProductClass,
                                          ProductCategory,
                                          ProductAttribute)
 from oscar.apps.catalogue.categories import create_from_breadcrumbs
-
+from oscar.apps.partner.models import StockRecord, Partner
 from marine_parts.apps.catalogue.models import Product, ReplacementProduct
+from decimal import Decimal as D
+
 # Necesario para controlar que se introduce en la BD
 # from django.db.transaction import atomic
-
 
 
 class IOHandler:
@@ -42,7 +43,7 @@ class FileHandler(IOHandler):
 
 class DBHandler:
 
-    def crear_categoria(self, breadcrumb):
+    def crear_categoria(self, breadcrumb, comp_img=None):
         pass
 
     def obt_subcomponent_class(self):
@@ -54,12 +55,25 @@ class DBHandler:
     def obt_crea_atributos_prods(self, product_class):
         pass
 
-    def crear_prods(self, p, cat, product_class, part_number, manufacturer,
-                    diag_number):
+    def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
         pass
 
 
 class DBAccess(DBHandler):
+
+    def __init__(self):
+        self.subcomp_class = self.obt_subcomponent_class()
+        self.part_number, self.manufacturer, self.diag_number = \
+            self.obt_crea_atributos_prods(self.subcomp_class)
+        self.partner = self.obt_partner()
+        self.part_number_set = set()
+
+
+    def add_part_number(self, part_number_v):
+        self.part_number_set.add(part_number_v)
+
+    def check_partnumber(self, part_number_v):
+        return part_number_v in self.part_number_set
 
     def crear_categoria(self, breadcrumb, comp_img=None):
         path = "Brands > " + ' > '.join(breadcrumb[1:])
@@ -82,6 +96,10 @@ class DBAccess(DBHandler):
     def obt_subcomponent_class(self):
         return self.obt_crea_prod_class('Subcomponent')
 
+    def obt_partner(self):
+        partner, _ = Partner.objects.get_or_create(name='Loaded')
+        return partner
+
     def obt_crea_prod_class(self, nom):
         product_class, _ = ProductClass.objects.get_or_create(name=nom)
         return product_class
@@ -89,6 +107,20 @@ class DBAccess(DBHandler):
     def asign_prod_replacement(self, p_origin, p_asign):
         ReplacementProduct.objects.create(primary=p_asign,
                                           replacement=p_origin)
+
+    def add_product_to_category(self, part_number_v, cat):
+        prod = Product.objects.get(attribute_values__value_text=part_number_v)
+        ProductCategory.objects.create(product=prod, category=cat)
+
+    def add_stock_records(self, pro, amount):
+        StockRecord.objects.create(
+            product=pro,
+            partner=self.partner,
+            partner_sku=pro.title,
+            price_excl_tax=D(0.00),
+            price_retail=D(0.00),
+            cost_price=D(0.00),
+            num_in_stock=amount)
 
     def obt_crea_atributos_prods(self, product_class):
         manufacturer, _ = ProductAttribute.objects.get_or_create(
@@ -109,74 +141,84 @@ class DBAccess(DBHandler):
             required=True,
             type=ProductAttribute.TEXT)
 
-        return (part_number, manufacturer, diag_number)
+        return part_number, manufacturer, diag_number
 
-    def crear_prods(self, p, cat, product_class, part_number, manufacturer,
-                    diag_number):
-        item = Product()
-        item.product_class = product_class
-        item.title = p['product']
+    def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
+        item = Product.objects.create(product_class=self.subcomp_class, title= prod_name)
+
+        if part_num_v:
+            self.part_number.save_value(item, part_num_v)
+        if manufac_v:
+            self.manufacturer.save_value(item, manufac_v)
+        if diag_num_v:
+            self.diag_number.save_value(item, diag_num_v)
+
         item.save()
 
-        part_number.save_value(item, p['part_number'])
-        manufacturer.save_value(item, p['manufacturer'])
-        diag_number.save_value(item, p['diagram_number'])
+        ProductCategory.objects.create(product=item, category=cat)
 
-        ProductCategory.objects.get_or_create(product=item, category=cat)
-        item.save()
+        if is_aval:
+            self.add_stock_records(item, 1000)
+
         return item
 
 
 ###############################################################################
 
 def nav_prods(json_products, bre_cat, db_oscar, comp_img=None):
-    """Crea los productos que se encuentre en el JSON en la BD del proyecto."""
-    """Devuelve el numero de productos procesados."""
-    cat = db_oscar.crear_categoria(bre_cat, comp_img)
-    product_class = db_oscar.obt_subcomponent_class()
-    part_number, manufacturer, diag_number = db_oscar.obt_crea_atributos_prods(
-        product_class)
+    """
+    Crea los productos que se encuentre en el JSON en la BD del proyecto.
+    Devuelve el numero de productos procesados.
+    """
 
+    def obt_sucesores(hijo):
+        products = hijo.get('products')
+        if products:
+            return products
+
+        products = hijo.get('replacements')
+        if products:
+            return products
+
+        return None
+
+    comp_img = json_products.get('image')
+    cat = db_oscar.crear_categoria(bre_cat, comp_img)
+
+    pila = list()
+    pila.append((json_products, None))
     nro_products = 0
 
-    for p in json_products:
-        prod_saved = db_oscar.crear_prods(p, cat, product_class,
-                                          part_number, manufacturer,
-                                          diag_number)
+    while pila:
+        prod_json, padr = pila.pop()
+        sucesores = obt_sucesores(prod_json)
 
-        replacements = p.get('replacements')
-        if replacements != []:
-            nro_products += crea_recomemd(prod_saved, p, replacements, 0,
-                                          cat, product_class, part_number,
-                                          manufacturer, diag_number,
-                                          db_oscar)
-        nro_products += 1
+        pro = None
+        prod_name = prod_json.get('product')
+        if prod_name:
+            is_available = prod_json.get('is_available')
+            part_number_v = prod_json.get('part_number')
+            manufacturer_v = prod_json.get('manufacturer')
+            diagram_number_v = prod_json.get('diagram_number')
+
+            #import pdb; pdb.set_trace()
+            if db_oscar.check_partnumber(part_number_v):
+                db_oscar.add_product_to_category(part_number_v, cat)
+            else:
+                pro = db_oscar.crear_prods(cat, is_available, prod_name, part_number_v, manufacturer_v, diagram_number_v)
+                db_oscar.add_part_number(part_number_v)
+                nro_products += 1
+
+            if padr:
+                db_oscar.asign_prod_replacement(padr, pro)
+
+        if sucesores:
+            for suc in sucesores:
+                pila.append((suc, pro))
 
     return nro_products
 
-
-def crea_recomemd(pro_root_saved, prod, replacements, nro, cat, product_class,
-                  part_number, manufacturer, diag_number, db_oscar):
-    """Crea los reemplazos de un producto."""
-    """Que se encuentre en el JSON en la BD del proyecto."""
-    """Devuelve el numero de productos insertados."""
-    for replacement in replacements:
-        prod_saved = \
-            db_oscar.crear_prods(replacement, cat, product_class, part_number,
-                                 manufacturer, diag_number)
-        db_oscar.asign_prod_replacement(prod_saved, pro_root_saved)
-
-        repls = replacement.get('replacements')
-        if repls != []:
-            nro += crea_recomemd(prod_saved, replacement, repls, 0,
-                                 cat, product_class, part_number,
-                                 manufacturer, diag_number,
-                                 db_oscar)
-        nro += 1
-
-    return nro
 ###############################################################################
-
 
 def obt_sucesores(hijo):
     suc_cat = hijo.get('categories')
@@ -220,11 +262,7 @@ def extraer_prods_aux(json_categorias, db):
                 pila.append((suc, nom_hijo))
         else:
             # Agregar o crear categorias
-
-            nro_products += nav_prods(hijo['products'],
-                                      list(camino),
-                                      db,
-                                      hijo['image'])
+            nro_products += nav_prods(hijo, list(camino), db)
 
             if pila:
                 # print('camino antes' , camino)
