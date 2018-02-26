@@ -99,7 +99,6 @@ Light Gray: #e6e6e6;
 }
 
 .basket-wrapper {
-    position: relative;
     padding: 0 7px 1px 7px;
     background-color: #ffffff;
     transition: top .4s ease .1s;
@@ -135,10 +134,6 @@ ul.basket-mini-item {
 .basket-mini-item li {
     padding: 0px 5px;
     border: none;
-}
-
-.basket-mini-item li.mini-item {
-    border-bottom: 1px solid #cccccc;
 }
 
 .basket-mini-item li.total {

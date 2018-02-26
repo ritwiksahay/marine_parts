@@ -1,6 +1,7 @@
 from haystack import views
 
 from oscar.core.loading import get_class, get_model
+from oscar.apps.basket.formsets import BasketLineFormSet
 
 from . import signals
 
@@ -83,6 +84,10 @@ class FacetedSearchView(views.FacetedSearchView):
                 component = category
         extra['component'] = component
 
+        # pass Basket formset to handle the basket element
+        formset = BasketLineFormSet(self.request.strategy)
+
+        extra['formset'] = formset
         # pass the user basket
         extra['basket'] = self.request.basket
 
