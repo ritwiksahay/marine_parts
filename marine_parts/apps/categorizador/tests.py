@@ -1,6 +1,10 @@
 import django.test as unittest
+from django.core.management import call_command
 import casos_prueba as casos
+from django.utils.six import StringIO
+from django.core.management.base import CommandError
 import categorizador
+
 
 
 class TestHandler(categorizador.IOHandler):
@@ -189,7 +193,7 @@ class TestExtraerProds(unittest.TestCase):
 
 class TestIntegrationExtraerProds(unittest.TestCase):
     def setUp(self):
-        self.realDB = categorizador.DBAccess()
+        self.realDB = categorizador.DBAccess("catBase")
 
     def test_crear_productos_regresa6(self):
         nro_prod = categorizador.extraer_prods_aux(casos.productos_repetidos_categorias, self.realDB)
@@ -197,7 +201,7 @@ class TestIntegrationExtraerProds(unittest.TestCase):
 
 class TestIntegrationDB_NavProds(unittest.TestCase):
     def setUp(self):
-        self.realDB = categorizador.DBAccess()
+        self.realDB = categorizador.DBAccess("catBase")
 
     def test_crear_productos_anidados_regresa5(self):
         nro_recom = categorizador.nav_prods(
@@ -205,4 +209,22 @@ class TestIntegrationDB_NavProds(unittest.TestCase):
             "Prueba", self.realDB)
         self.assertEqual(5, nro_recom)
 
+########################################################################################################################
 
+class LoadProductsManageTest(unittest.TestCase):
+
+    def setUp(self):
+        self.out = StringIO()
+        self.out.write("")
+
+    def test_executeFilepathsEmpty_regresaException(self):
+        call_command('load_products', '', stdout=self.out)
+        self.assertIn('No products were created', self.out.getvalue())
+
+    def test_executeInvalidSeveralFilePaths_regresaLog(self):
+        call_command('load_products', 'file1', stderr=self.out)
+        self.assertIn('An error occurred while processing this file: file1. Skipping...', self.out.getvalue())
+
+    def test_execWithCatBase_regresaLog(self):
+        call_command('load_products', 'file1', 'file2', stdout=self.out, cat_base='Prueba')
+        self.assertIn('Using base category: Prueba.', self.out.getvalue())
