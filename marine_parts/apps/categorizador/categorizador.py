@@ -17,6 +17,7 @@ import urllib
 from django.conf import settings
 from django.core.files import File
 
+from datetime import datetime
 from oscar.apps.catalogue.models import (ProductClass,
                                          ProductCategory,
                                          ProductAttribute)
@@ -112,12 +113,13 @@ class DBAccess(DBHandler):
     def add_product_to_category(self, part_number_v, cat):
         prod = Product.objects.get(attribute_values__value_text=part_number_v)
         ProductCategory.objects.create(product=prod, category=cat)
+        return prod
 
     def add_stock_records(self, pro, amount):
         StockRecord.objects.create(
             product=pro,
             partner=self.partner,
-            partner_sku=pro.title,
+            partner_sku=pro.title + str(datetime.now()),
             price_excl_tax=D(0.00),
             price_retail=D(0.00),
             cost_price=D(0.00),
@@ -202,16 +204,16 @@ def nav_prods(json_products, bre_cat, db_oscar):
             manufacturer_v = prod_json.get('manufacturer')
             diagram_number_v = prod_json.get('diagram_number')
 
-            #import pdb; pdb.set_trace()
+
             if db_oscar.check_partnumber(part_number_v):
-                db_oscar.add_product_to_category(part_number_v, cat)
+                ppp = db_oscar.add_product_to_category(part_number_v, cat)
             else:
                 pro = db_oscar.crear_prods(cat, is_available, prod_name, part_number_v, manufacturer_v, diagram_number_v)
                 db_oscar.add_part_number(part_number_v)
                 nro_products += 1
 
-            if padr:
-                db_oscar.asign_prod_replacement(padr, pro)
+                if padr:
+                    db_oscar.asign_prod_replacement(padr, pro)
 
         if sucesores:
             for suc in sucesores:
