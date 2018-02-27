@@ -27,7 +27,7 @@ from marine_parts.apps.catalogue.models import Product, ReplacementProduct
 from decimal import Decimal as D
 
 # Necesario para controlar que se introduce en la BD
-from django.db.transaction import atomic
+from django.db import transaction, IntegrityError, DatabaseError
 
 
 class IOHandler:
@@ -167,7 +167,7 @@ class DBAccess(DBHandler):
 
 
 ########################################################################################################################
-@atomic()
+
 def nav_prods(json_products, bre_cat, db_oscar):
     """
     Crea los productos que se encuentre en el JSON en la BD del proyecto.
@@ -206,7 +206,7 @@ def nav_prods(json_products, bre_cat, db_oscar):
 
 
             if db_oscar.check_partnumber(part_number_v):
-                ppp = db_oscar.add_product_to_category(part_number_v, cat)
+                db_oscar.add_product_to_category(part_number_v, cat)
             else:
                 pro = db_oscar.crear_prods(cat, is_available, prod_name, part_number_v, manufacturer_v, diagram_number_v)
                 db_oscar.add_part_number(part_number_v)
@@ -243,6 +243,7 @@ def obt_nombres(hijo):
         return ''
 
 
+@transaction.atomic
 def extraer_prods(json_categorias, db):
     return extraer_prods_aux(json_categorias, db)
 
@@ -257,21 +258,17 @@ def extraer_prods_aux(json_categorias, db):
         sucesores = obt_sucesores(hijo)
         nom_hijo = obt_nombres(hijo).strip()
         camino.append(nom_hijo)
-        # print('\nHijo: ', nom_hijo)
 
         if sucesores:
             for suc in sucesores:
                 pila.append((suc, nom_hijo))
         else:
-            # Agregar o crear categorias
             nro_products += nav_prods(hijo, list(camino), db)
 
             if pila:
-                # print('camino antes' , camino)
                 _, padre = pila[-1]
                 while camino[-1] != padre:
                     camino.pop()
-                # print('camino despues', camino)
 
     return nro_products
 
