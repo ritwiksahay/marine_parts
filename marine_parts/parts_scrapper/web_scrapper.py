@@ -81,7 +81,7 @@ def marineengine_mercury_scrapper():
         )
         tree = html.fromstring(page.content)
 
-        for hp in tree.xpath(xcategory_selector):
+        for hp in tree.xpath(xcategory_selector)[55:]:
             cat_name = re.sub(r'[\n\t]+', '', hp.text)
             print("'%s' starting...\n" % cat_name)
             horse_power = {
