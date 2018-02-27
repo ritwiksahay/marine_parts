@@ -229,6 +229,8 @@ DATABASES = {
         'USER': 'mp_user',
         'PASSWORD': '@mP19451#',
         'HOST': 'localhost',
+        'PORT': '',
+        'ATOMIC_REQUESTS': True,
     }
 }
 
