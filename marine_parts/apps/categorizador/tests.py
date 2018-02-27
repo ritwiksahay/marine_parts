@@ -38,7 +38,7 @@ class StubDBHandler(categorizador.DBHandler):
         return (FakeObjectOscar(), FakeObjectOscar(), FakeObjectOscar())
 
     def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
-        pass
+        return FakeObjectOscar, True
 
 class MockDB(categorizador.DBHandler):
 
@@ -70,7 +70,7 @@ class MockDB(categorizador.DBHandler):
     def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
         self.ls.append((self.cnt, prod_name))
         self.cnt += 1
-        return prod_name
+        return prod_name, True
 
     def add_product_to_category(self, part_number_v, cat):
         self.lsCatsProd.append((part_number_v, cat))

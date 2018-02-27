@@ -42,7 +42,7 @@ class Command(BaseCommand):
     def ejec(self, filepath, cat_base):
         try:
             nro = ejec_cargador(filepath, cat_base)
-        except Exception as e:
+        except Exception:
             import sys, traceback, pdb
             exc_info = sys.exc_info()
             traceback.print_tb(exc_info[2])
