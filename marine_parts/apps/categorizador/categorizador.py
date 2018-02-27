@@ -26,7 +26,7 @@ from marine_parts.apps.catalogue.models import Product, ReplacementProduct
 from decimal import Decimal as D
 
 # Necesario para controlar que se introduce en la BD
-# from django.db.transaction import atomic
+from django.db.transaction import atomic
 
 
 class IOHandler:
@@ -37,6 +37,7 @@ class IOHandler:
 
 class FileHandler(IOHandler):
 
+    # Manejo de excepciones de I/O
     def leer(self, nomArch):
         return json.load(open(nomArch, 'r'))
 
@@ -61,13 +62,13 @@ class DBHandler:
 
 class DBAccess(DBHandler):
 
-    def __init__(self):
+    def __init__(self, cat_base):
         self.subcomp_class = self.obt_subcomponent_class()
         self.part_number, self.manufacturer, self.diag_number = \
             self.obt_crea_atributos_prods(self.subcomp_class)
         self.partner = self.obt_partner()
         self.part_number_set = set()
-
+        self.cat_base = cat_base + '>'
 
     def add_part_number(self, part_number_v):
         self.part_number_set.add(part_number_v)
@@ -76,7 +77,7 @@ class DBAccess(DBHandler):
         return part_number_v in self.part_number_set
 
     def crear_categoria(self, breadcrumb, comp_img=None):
-        path = "Brands > " + ' > '.join(breadcrumb[1:])
+        path = self.cat_base + ' > '.join(breadcrumb[1:])
         cat = create_from_breadcrumbs(path)
         if comp_img:
             try:
@@ -163,9 +164,9 @@ class DBAccess(DBHandler):
         return item
 
 
-###############################################################################
-
-def nav_prods(json_products, bre_cat, db_oscar, comp_img=None):
+########################################################################################################################
+@atomic()
+def nav_prods(json_products, bre_cat, db_oscar):
     """
     Crea los productos que se encuentre en el JSON en la BD del proyecto.
     Devuelve el numero de productos procesados.
@@ -218,7 +219,7 @@ def nav_prods(json_products, bre_cat, db_oscar, comp_img=None):
 
     return nro_products
 
-###############################################################################
+########################################################################################################################
 
 def obt_sucesores(hijo):
     suc_cat = hijo.get('categories')
@@ -240,9 +241,8 @@ def obt_nombres(hijo):
         return ''
 
 
-def extraer_prods(json_categorias):
-    return extraer_prods_aux(json_categorias, DBAccess())
-
+def extraer_prods(json_categorias, db):
+    return extraer_prods_aux(json_categorias, db)
 
 def extraer_prods_aux(json_categorias, db):
     pila = list()
@@ -317,6 +317,7 @@ def imprimirCate(categorias):
         print(cat)
 
 
-def ejec_cargador(caminoArch):
+def ejec_cargador(caminoArch, cat_base):
     fh = FileHandler()
-    return extraer_prods(fh.leer(caminoArch))
+    db = DBAccess(cat_base)
+    return extraer_prods(fh.leer(caminoArch), db)
