@@ -213,9 +213,6 @@ def nav_prods(json_products, bre_cat, db_oscar):
                 nro_products += 1
 
                 if padr:
-                    if not pro:
-                        import pdb; pdb.set_trace()
-
                     db_oscar.asign_prod_replacement(padr, pro)
 
         if sucesores:
