@@ -96,8 +96,6 @@ class MockDB(categorizador.DBHandler):
         return self.lsCatsProd
 
 
-
-
 class TestUnitExtraerCats(unittest.TestCase):
     def setUp(self):
         self.handler = TestHandler()
@@ -122,7 +120,6 @@ class TestUnitExtraerCats(unittest.TestCase):
         self.handler.entrada = casos.caso_nivelesCompletos_variasCateg_variasSerial_variosComp
         resul = categorizador.extraer_cats(self.handler.leer('prueba.json'))
         self.assertEqual(resul, casos.casoR_nivelesCompletos_variasCateg_variasSerial_variosComp)
-
 
 
 class TestNavProds(unittest.TestCase):
@@ -217,7 +214,6 @@ class TestIntegrationDB_NavProds(unittest.TestCase):
         self.assertEqual(5, nro_recom)
 
 
-#
 # class TestIntegrationDBAccess(unittest.TestCase):
 #     # Auxiliar method
 #     def create_prod(self, title, has_stock, part_number, cat):
@@ -244,7 +240,7 @@ class TestIntegrationDB_NavProds(unittest.TestCase):
 #         self.create_prod("878-9151 2 - Cylinder Block", False, "878-9151 2", self.cat)
 #         self.assertRaises(MultipleObjectsReturned, self.realDB.add_product_to_category, "878-9151 2", self.cat)
 
-# Faltan los casos de productos iguales en varios archivos
+# Faltan los casos de productos iguales en varios archivos y su manejo.
 
 
 ########################################################################################################################
