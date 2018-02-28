@@ -10,11 +10,7 @@
 {% load staticfiles %}
 {% load thumbnail %}
 
-
 {% block extrastyles %}
-    {% if component and component.diagram_image %}
-        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results_parts.css" %}" />
-    {% endif %}
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/customer-service.css" %}" />
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/basket.css" %}" />
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
