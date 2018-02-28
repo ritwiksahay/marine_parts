@@ -14,11 +14,10 @@
 {% block extrastyles %}
     {% if component and component.diagram_image %}
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results_parts.css" %}" />
-    {% else %}
-        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
     {% endif %}
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/customer-service.css" %}" />
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/basket.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
 {% endblock extrastyles %}
 
 {% comment %}
