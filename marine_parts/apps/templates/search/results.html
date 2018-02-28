@@ -10,15 +10,10 @@
 {% load staticfiles %}
 {% load thumbnail %}
 
-
 {% block extrastyles %}
-    {% if component and component.diagram_image %}
-        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results_parts.css" %}" />
-    {% else %}
-        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
-    {% endif %}
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/customer-service.css" %}" />
         <link rel="stylesheet" type="text/css" href="{% static "oscar/css/basket.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/results.css" %}" />
 {% endblock extrastyles %}
 
 {% comment %}
@@ -60,14 +55,14 @@
     {% if component and component.diagram_image %}
         <div class="col-xs-12 col-md-8">
             <div class="thumbnail">
-                    <div>
-                       {% if component.diagram_image %} 
-                            <img id="diagram_img" src="{{ component.diagram_image.url }}" data-zoom-image="{{ component.diagram_image.url }}" alt="{{ component.name }}" class="img-responsive"/>
-                       {% else %}
-                            <img src="{% static 'img/logo/isotipo.png' %}" alt="{{ component.name }}" class="img-responsive"/>
-                       {% endif %}
-                    </div>
-                    <p class="text-center">{% trans "(Scroll over the image to zoom in or zoom out)" %}</p>
+                <div>
+                   {% if component.diagram_image %} 
+                        <img id="diagram_img" src="{{ component.diagram_image.url }}" data-zoom-image="{{ component.diagram_image.url }}" alt="{{ component.name }}" class="img-responsive"/>
+                   {% else %}
+                        <img src="{% static 'img/logo/isotipo.png' %}" alt="{{ component.name }}" class="img-responsive"/>
+                   {% endif %}
+                </div>
+                <p class="text-center">{% trans "(Scroll over the image to zoom in or zoom out)" %}</p>
             </div>
         </div>
         <div class="col-xs-12 col-md-4" style="overflow-y: scroll;height: 1000px;font-size: 12px;">
