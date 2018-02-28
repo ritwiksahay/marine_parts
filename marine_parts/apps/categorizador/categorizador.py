@@ -28,17 +28,15 @@ from marine_parts.apps.catalogue.models import Product, ReplacementProduct
 from decimal import Decimal as D
 
 # Necesario para controlar que se introduce en la BD
-from django.db import transaction
+from django.db import transaction, IntegrityError
 
 
 class IOHandler:
-
     def leer(self, nomArch):
         pass
 
 
 class FileHandler(IOHandler):
-
     # Manejo de excepciones de I/O
     def leer(self, nomArch):
         return json.load(open(nomArch, 'r'))
@@ -61,9 +59,7 @@ class DBHandler:
     def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
         pass
 
-
 class DBAccess(DBHandler):
-
     def __init__(self, cat_base):
         self.subcomp_class = self.obt_subcomponent_class()
         self.part_number, self.manufacturer, self.diag_number = \
@@ -119,12 +115,16 @@ class DBAccess(DBHandler):
         return product_class
 
     def asign_prod_replacement(self, p_origin, p_asign):
-        ReplacementProduct.objects.create(primary=p_asign,
+        ReplacementProduct.objects.get_or_create(primary=p_asign,
                                           replacement=p_origin)
+        return
 
     def add_product_to_category(self, prod, cat):
-        ProductCategory.objects.create(product=prod, category=cat)
-        return prod
+        try:
+            with transaction.atomic():
+                ProductCategory.objects.create(product=prod, category=cat)
+        except IntegrityError:
+            pass
 
     def add_stock_records(self, pro, amount):
         StockRecord.objects.create(
@@ -159,6 +159,7 @@ class DBAccess(DBHandler):
 
     def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
         item = Product.objects.create(product_class=self.subcomp_class, title=prod_name)
+
         if part_num_v:
             self.part_number.save_value(item, part_num_v)
         if manufac_v:
@@ -255,10 +256,6 @@ def obt_nombres(hijo):
 
 @transaction.atomic
 def extraer_prods(json_categorias, db):
-
-    return extraer_prods_aux(json_categorias, db)
-
-def extraer_prods_aux(json_categorias, db):
     pila = list()
     pila.append((json_categorias, ''))
     camino = list()
@@ -329,5 +326,4 @@ def imprimirCate(categorias):
 
 def ejec_cargador(caminoArch, cat_base):
     fh = FileHandler()
-    db = DBAccess(cat_base)
-    return extraer_prods(fh.leer(caminoArch), db)
+    return extraer_prods(fh.leer(caminoArch), DBAccess(cat_base))
