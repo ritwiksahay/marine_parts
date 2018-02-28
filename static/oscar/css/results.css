@@ -24,7 +24,7 @@ Light Gray: #E6E6E6;
     padding: 0px 15px;
 }
 
-.page-header {
+.page-header{
     margin: 0;
 }
 
@@ -33,19 +33,18 @@ Light Gray: #E6E6E6;
     color: #0d4a6c;
     background-color: #ffffff;
     padding: 20px 15px 5px 15px;
+    border-bottom: none !important;
 }
 
 .page-header hr {
     margin: 10px 0;
 }
 
-.page-header {
-    border-bottom: none !important;
-}
-
 .page_inner div .sidebar {
     padding-bottom: 0;
     color: #0d4a6c;
+    padding-top: 30px;
+    padding-bottom: 30px;
 }
 
 .page_inner div .content {
@@ -59,6 +58,7 @@ Light Gray: #E6E6E6;
 
 .page_inner div .content {
     padding-bottom: 30px;
+    padding-top: 30px;
 }
 
 .page-banner .top_banner_title{
@@ -87,7 +87,16 @@ Light Gray: #E6E6E6;
 }
 
 
-.page_inner div .sidebar form div select,
+.page_inner div .sidebar form div select{
+    width: 90%;
+    float: none;
+    display: inline-block;
+    background-color: #E6E6E6;
+    font-family: 'Gotham Book';
+    font-size: 16px;
+    height: 40px;
+}
+
 .page_inner div .pre-content form div select {
     width: 90%;
     float: none;
@@ -106,7 +115,7 @@ Light Gray: #E6E6E6;
     background-color: #E6E6E6;
     font-family: 'Gotham Book';
     font-size: 16px;
-    height: 27px;
+    height: 35px;
 }
 
 .page_inner div .sidebar form div .search-button,
@@ -114,7 +123,7 @@ Light Gray: #E6E6E6;
     float: none;
     font-family: 'Gotham Bold';
     font-size: 16px;
-    height: 33px;
+    height: 35px;
 }
 
 .page_inner div .sidebar {
@@ -158,10 +167,11 @@ Light Gray: #E6E6E6;
 
 #categories_form .form-group > i.icon-chevron-down {
     position: absolute;
-    right: 13px;
+    right: 11px;
     font-size: 1.3rem;
     color: #0d4a6c;
     top: 3px;
+    z-index: 1;
 }
 
 .is-component #categories_form .form-group > i.icon-chevron-down {
