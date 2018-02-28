@@ -168,6 +168,9 @@ HAYSTACK_CONNECTIONS = {
         'EXCLUDED_INDEXES': ['oscar.apps.search.search_indexes.ProductIndex'],
     },
 }
+
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 12
+
 OSCAR_SEARCH_FACETS = {
     'fields': OrderedDict([
     ]),
