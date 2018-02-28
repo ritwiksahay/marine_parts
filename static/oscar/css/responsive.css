@@ -11,8 +11,18 @@ Light Gray: #e6e6e6;
 
 /* Extra extra small devices (portrait phones, less than 299px)*/
 @media (max-width: 299px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 
     /*Header*/
+    header .row{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
     .header .navbar-nav div.search-bar form div h4{
         text-align: center;
     }
@@ -94,8 +104,18 @@ Light Gray: #e6e6e6;
 
 /* Extra extra small devices (portrait phones, less than 402)*/
 @media (min-width: 300px) and (max-width: 402px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 
     /*Header*/
+    header .row{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
     .header .navbar-nav div.search-bar form div h4{
         text-align: center;
     }
@@ -183,8 +203,18 @@ Light Gray: #e6e6e6;
 
 /* Extra small devices (portrait phones, less than 576px)*/
 @media (min-width: 403px) and (max-width: 575px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 
     /*Header*/
+    header .row{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
     .header .navbar-nav div.search-bar form div h4{
         text-align: center;
     }
@@ -271,7 +301,12 @@ Light Gray: #e6e6e6;
 }
 
 /* Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) and (max-width: 767px) { 
+@media (min-width: 576px) and (max-width: 767px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
     
     /*Header*/
     .header .navbar-nav div.search-bar form div h4{
@@ -354,7 +389,13 @@ Light Gray: #e6e6e6;
 }
 
 
-@media (min-width: 768px) and (max-width: 923px) { 
+@media (min-width: 768px) and (max-width: 923px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
     /*Header*/
     .header .navbar-nav div.search-bar form div .search-form{
         width: 88%;
@@ -431,7 +472,12 @@ Light Gray: #e6e6e6;
 }
 
 
-@media (min-width: 924px) and (max-width: 991px) { 
+@media (min-width: 924px) and (max-width: 991px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 
     /*Header*/
     .header .navbar-nav div.search-bar form div .search-form{
@@ -518,8 +564,13 @@ Light Gray: #e6e6e6;
     }
 }
 
-@media (min-width: 992px) and (max-width: 1060px) { 
-    
+@media (min-width: 992px) and (max-width: 1060px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
     /*Header*/
     .header .navbar-nav div.search-bar form div{
         margin-left: 10px;
@@ -613,7 +664,12 @@ Light Gray: #e6e6e6;
     }
 }
 
-@media (min-width: 1061px) and (max-width: 1199px) { 
+@media (min-width: 1061px) and (max-width: 1199px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
     
     /*Header*/
     .header .navbar-nav div.search-bar form div{
@@ -710,7 +766,12 @@ Light Gray: #e6e6e6;
 }
 
 /*Extra large devices (large desktops, 1200px and up)*/
-@media (min-width: 1200px) { 
+@media (min-width: 1200px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 
     /*Header*/
     .header .navbar-nav div.search-bar form div{

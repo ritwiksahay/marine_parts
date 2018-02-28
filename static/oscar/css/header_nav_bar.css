@@ -31,6 +31,16 @@ Light Gray: #e6e6e6;
     padding-bottom: 0px;
 }
 
+.logo-brand .brand-xs{
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
 .navbar-form{
     margin-right: 0px;
     margin-top: 1px;
