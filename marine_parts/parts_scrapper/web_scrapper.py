@@ -81,7 +81,7 @@ def marineengine_mercury_scrapper():
         )
         tree = html.fromstring(page.content)
 
-        for hp in tree.xpath(xcategory_selector)[55:]:
+        for hp in tree.xpath(xcategory_selector)[0:5]:
             cat_name = re.sub(r'[\n\t]+', '', hp.text)
             print("'%s' starting...\n" % cat_name)
             horse_power = {
@@ -233,7 +233,7 @@ def marineengine_mercury_scrapper():
 
             print("\n'%s' done...\n" % cat_name)
             output_file_path = FILE_DIR + '/marine_engine/mercury/' + \
-                cat.text + '/' + re.sub(r'/', r'\\', cat_name) + \
+                cat.text + '/' + re.sub(r'/', r'\\', cat_name.strip()) + \
                 '.json'
             create_output_file(catalog, output_file_path)
 
