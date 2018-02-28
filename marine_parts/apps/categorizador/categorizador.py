@@ -16,6 +16,7 @@ import urllib
 
 from django.conf import settings
 from django.core.files import File
+from django.core.exceptions import MultipleObjectsReturned
 
 from datetime import datetime
 from oscar.apps.catalogue.models import (ProductClass,
@@ -27,7 +28,7 @@ from marine_parts.apps.catalogue.models import Product, ReplacementProduct
 from decimal import Decimal as D
 
 # Necesario para controlar que se introduce en la BD
-from django.db import transaction, IntegrityError, DatabaseError
+from django.db import transaction
 
 
 class IOHandler:
@@ -75,7 +76,18 @@ class DBAccess(DBHandler):
         self.part_number_set.add(part_number_v)
 
     def check_partnumber(self, part_number_v):
-        return part_number_v in self.part_number_set
+        try:
+            prod = Product.objects.get(attribute_values__value_text=part_number_v)
+        except Product.DoesNotExist:
+            prod = None
+
+        if part_number_v in self.part_number_set:
+            return prod, True
+        elif prod:
+            self.add_part_number(part_number_v)
+            return prod, True
+        else:
+            return prod, False
 
     def crear_categoria(self, breadcrumb, comp_img=None):
         path = self.cat_base + ' > '.join(breadcrumb[1:])
@@ -110,8 +122,7 @@ class DBAccess(DBHandler):
         ReplacementProduct.objects.create(primary=p_asign,
                                           replacement=p_origin)
 
-    def add_product_to_category(self, part_number_v, cat):
-        prod = Product.objects.get(attribute_values__value_text=part_number_v)
+    def add_product_to_category(self, prod, cat):
         ProductCategory.objects.create(product=prod, category=cat)
         return prod
 
@@ -147,23 +158,22 @@ class DBAccess(DBHandler):
         return part_number, manufacturer, diag_number
 
     def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
-        item, is_created = Product.objects.get_or_create(product_class=self.subcomp_class, title=prod_name)
-        if is_created:
-            if part_num_v:
-                self.part_number.save_value(item, part_num_v)
-            if manufac_v:
-                self.manufacturer.save_value(item, manufac_v)
-            if diag_num_v:
-                self.diag_number.save_value(item, diag_num_v)
+        item = Product.objects.create(product_class=self.subcomp_class, title=prod_name)
+        if part_num_v:
+            self.part_number.save_value(item, part_num_v)
+        if manufac_v:
+            self.manufacturer.save_value(item, manufac_v)
+        if diag_num_v:
+            self.diag_number.save_value(item, diag_num_v)
 
-            item.save()
+        item.save()
 
-            ProductCategory.objects.create(product=item, category=cat)
+        ProductCategory.objects.create(product=item, category=cat)
 
-            if is_aval:
-                self.add_stock_records(item, 1000)
+        if is_aval:
+            self.add_stock_records(item, 1000)
 
-        return item, is_created
+        return item
 
 
 ########################################################################################################################
@@ -204,17 +214,16 @@ def nav_prods(json_products, bre_cat, db_oscar):
             manufacturer_v = prod_json.get('manufacturer')
             diagram_number_v = prod_json.get('diagram_number')
 
-
-            if db_oscar.check_partnumber(part_number_v):
-                db_oscar.add_product_to_category(part_number_v, cat)
+            prod, exists = db_oscar.check_partnumber(part_number_v)
+            if exists:
+                db_oscar.add_product_to_category(prod, cat)
             else:
-                pro, is_created = \
-                    db_oscar.crear_prods(cat, is_available, prod_name, part_number_v, manufacturer_v, diagram_number_v)
-                if is_created:
-                    db_oscar.add_part_number(part_number_v)
-                    nro_products += 1
-                    if padr:
-                        db_oscar.asign_prod_replacement(padr, pro)
+                pro = db_oscar.crear_prods(cat, is_available, prod_name, part_number_v, manufacturer_v, diagram_number_v)
+                db_oscar.add_part_number(part_number_v)
+                nro_products += 1
+
+                if padr:
+                    db_oscar.asign_prod_replacement(padr, pro)
 
         if sucesores:
             for suc in sucesores:
@@ -246,6 +255,7 @@ def obt_nombres(hijo):
 
 @transaction.atomic
 def extraer_prods(json_categorias, db):
+
     return extraer_prods_aux(json_categorias, db)
 
 def extraer_prods_aux(json_categorias, db):
