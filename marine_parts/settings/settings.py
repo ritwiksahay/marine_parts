@@ -216,11 +216,21 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'marine_parts_db',
         'USER': 'mp_user',
-        'PASSWORD': '@mP19451#',
-        'HOST': 'localhost',
+        'PASSWORD': 'AmP19451X',
+        'HOST': 'marineparts.ca9ar9i4iarq.us-east-1.rds.amazonaws.com',
         'PORT': '',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'marine_parts_db',
+#         'USER': 'mp_user',
+#         'PASSWORD': '@mP19451#',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
