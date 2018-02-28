@@ -217,31 +217,34 @@ class TestIntegrationDB_NavProds(unittest.TestCase):
         self.assertEqual(5, nro_recom)
 
 
-class TestIntegrationDBAccess(unittest.TestCase):
-    # Auxiliar method
-    def create_prod(self, title, has_stock, part_number, cat):
-        p = Product.objects.create(product_class=self.pc, title=title)
-        ProductCategory.objects.create(product=p,category=cat)
-        self.part_number.save_value(p, part_number)
-        if has_stock:
-            StockRecord.objects.create(product=p, partner=self.partner
-                                       , partner_sku=title, price_excl_tax=D('0.00'), num_in_stock=1)
+#
+# class TestIntegrationDBAccess(unittest.TestCase):
+#     # Auxiliar method
+#     def create_prod(self, title, has_stock, part_number, cat):
+#         p = Product.objects.create(product_class=self.pc, title=title)
+#         ProductCategory.objects.create(product=p,category=cat)
+#         self.part_number.save_value(p, part_number)
+#         if has_stock:
+#             StockRecord.objects.create(product=p, partner=self.partner
+#                                        , partner_sku=title, price_excl_tax=D('0.00'), num_in_stock=1)
+#
+#     @classmethod
+#     def setUpTestData(cls):
+#         cls.cat = create_from_breadcrumbs("0T894577 & Up (USA) > Cylinder Block")
+#         cls.pc = ProductClass.objects.create(name='Subcomponent')
+#         cls.partner = Partner.objects.create(name='Loaded')
+#         cls.part_number = ProductAttribute.objects.create(
+#             product_class=cls.pc, name='Part number', code='PN', required=True, type=ProductAttribute.TEXT)
+#
+#     def setUp(self):
+#         self.realDB = categorizador.DBAccess("catBase")
+#
+#     def test_ProductosConMismoPartNumber_regresaMultiplesObjectsReturned(self):
+#         self.create_prod("878-9151 2 - Cylinder Block", False, "878-9151 2", self.cat)
+#         self.create_prod("878-9151 2 - Cylinder Block", False, "878-9151 2", self.cat)
+#         self.assertRaises(MultipleObjectsReturned, self.realDB.add_product_to_category, "878-9151 2", self.cat)
 
-    @classmethod
-    def setUpTestData(cls):
-        cls.cat = create_from_breadcrumbs("0T894577 & Up (USA) > Cylinder Block")
-        cls.pc = ProductClass.objects.create(name='Subcomponent')
-        cls.partner = Partner.objects.create(name='Loaded')
-        cls.part_number = ProductAttribute.objects.create(
-            product_class=cls.pc, name='Part number', code='PN', required=True, type=ProductAttribute.TEXT)
-
-    def setUp(self):
-        self.realDB = categorizador.DBAccess("catBase")
-
-    def test_ProductosConMismoPartNumber_regresaMultiplesObjectsReturned(self):
-        self.create_prod("878-9151 2 - Cylinder Block", False, "878-9151 2", self.cat)
-        self.create_prod("878-9151 2 - Cylinder Block", False, "878-9151 2", self.cat)
-        self.assertRaises(MultipleObjectsReturned, self.realDB.add_product_to_category, "878-9151 2", self.cat)
+# Faltan los casos de productos iguales en varios archivos
 
 
 ########################################################################################################################

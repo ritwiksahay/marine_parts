@@ -76,7 +76,18 @@ class DBAccess(DBHandler):
         self.part_number_set.add(part_number_v)
 
     def check_partnumber(self, part_number_v):
-        return part_number_v in self.part_number_set
+        try:
+            prod = Product.objects.get(attribute_values__value_text=part_number_v)
+        except Product.DoesNotExist:
+            prod = None
+
+        if part_number_v in self.part_number_set:
+            return prod, True
+        elif prod:
+            self.add_part_number(part_number_v)
+            return prod, True
+        else:
+            return prod, False
 
     def crear_categoria(self, breadcrumb, comp_img=None):
         path = self.cat_base + ' > '.join(breadcrumb[1:])
@@ -111,14 +122,17 @@ class DBAccess(DBHandler):
         ReplacementProduct.objects.create(primary=p_asign,
                                           replacement=p_origin)
 
-    def add_product_to_category(self, part_number_v, cat):
-        try:
-            prod = Product.objects.get(attribute_values__value_text=part_number_v)
-        except Product.MultipleObjectsReturned as e:
-            print("Multiples objects returned. It ocurred with part number:  %s."
-                  % part_number_v)
-            raise
+    # Habilitar el chequeo
+    # def add_product_to_category(self, part_number_v, cat):
+    #     try:
+    #         prod = Product.objects.get(attribute_values__value_text=part_number_v)
+    #     except Product.MultipleObjectsReturned as e:
+    #         print("Multiples objects returned. It ocurred with part number:  %s."
+    #               % part_number_v)
+    #         raise
 
+    def add_product_to_category(self, prod, cat):
+        #prod = Product.objects.get(attribute_values__value_text=part_number_v)
         ProductCategory.objects.create(product=prod, category=cat)
         return prod
 
@@ -211,9 +225,9 @@ def nav_prods(json_products, bre_cat, db_oscar):
             manufacturer_v = prod_json.get('manufacturer')
             diagram_number_v = prod_json.get('diagram_number')
 
-
-            if db_oscar.check_partnumber(part_number_v):
-                db_oscar.add_product_to_category(part_number_v, cat)
+            prod, exists = db_oscar.check_partnumber(part_number_v)
+            if exists:
+                db_oscar.add_product_to_category(prod, cat)
             else:
                 pro, is_created = \
                     db_oscar.crear_prods(cat, is_available, prod_name, part_number_v, manufacturer_v, diagram_number_v)
