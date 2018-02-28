@@ -120,7 +120,6 @@ class DBAccess(DBHandler):
         return
 
     def add_product_to_category(self, prod, cat):
-        import pdb; pdb.set_trace()
         try:
             with transaction.atomic():
                 ProductCategory.objects.create(product=prod, category=cat)
