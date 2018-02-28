@@ -43,7 +43,7 @@ class Command(BaseCommand):
         try:
             nro = ejec_cargador(filepath, cat_base)
         except Exception:
-            import sys, traceback, pdb
+            import sys, traceback
             exc_info = sys.exc_info()
             traceback.print_tb(exc_info[2])
             print(exc_info[1])

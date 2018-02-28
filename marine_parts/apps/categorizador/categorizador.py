@@ -16,6 +16,7 @@ import urllib
 
 from django.conf import settings
 from django.core.files import File
+from django.core.exceptions import MultipleObjectsReturned
 
 from datetime import datetime
 from oscar.apps.catalogue.models import (ProductClass,
@@ -27,7 +28,7 @@ from marine_parts.apps.catalogue.models import Product, ReplacementProduct
 from decimal import Decimal as D
 
 # Necesario para controlar que se introduce en la BD
-from django.db import transaction, IntegrityError, DatabaseError
+from django.db import transaction
 
 
 class IOHandler:
@@ -111,7 +112,13 @@ class DBAccess(DBHandler):
                                           replacement=p_origin)
 
     def add_product_to_category(self, part_number_v, cat):
-        prod = Product.objects.get(attribute_values__value_text=part_number_v)
+        try:
+            prod = Product.objects.get(attribute_values__value_text=part_number_v)
+        except Product.MultipleObjectsReturned as e:
+            print("Multiples objects returned. It ocurred with part number:  %s."
+                  % part_number_v)
+            raise
+
         ProductCategory.objects.create(product=prod, category=cat)
         return prod
 
@@ -213,7 +220,7 @@ def nav_prods(json_products, bre_cat, db_oscar):
                 if is_created:
                     db_oscar.add_part_number(part_number_v)
                     nro_products += 1
-                    if padr:
+                if padr:
                         db_oscar.asign_prod_replacement(padr, pro)
 
         if sucesores:
@@ -246,6 +253,7 @@ def obt_nombres(hijo):
 
 @transaction.atomic
 def extraer_prods(json_categorias, db):
+
     return extraer_prods_aux(json_categorias, db)
 
 def extraer_prods_aux(json_categorias, db):

@@ -2,7 +2,11 @@ import django.test as unittest
 from django.core.management import call_command
 import casos_prueba as casos
 from django.utils.six import StringIO
-from django.core.management.base import CommandError
+from django.core.exceptions import MultipleObjectsReturned
+from marine_parts.apps.catalogue.models import Product, ProductClass, ProductAttribute, ProductCategory
+from oscar.apps.partner.models import Partner, StockRecord
+from oscar.apps.catalogue.categories import create_from_breadcrumbs
+from decimal import Decimal as D
 import categorizador
 
 
@@ -190,7 +194,6 @@ class TestExtraerProds(unittest.TestCase):
 
         self.assertEqual(nro_prod, 6)
 
-
 class TestIntegrationExtraerProds(unittest.TestCase):
     def setUp(self):
         self.realDB = categorizador.DBAccess("catBase")
@@ -199,7 +202,11 @@ class TestIntegrationExtraerProds(unittest.TestCase):
         nro_prod = categorizador.extraer_prods_aux(casos.productos_repetidos_categorias, self.realDB)
         self.assertEqual(nro_prod, 6)
 
+
+
 class TestIntegrationDB_NavProds(unittest.TestCase):
+
+
     def setUp(self):
         self.realDB = categorizador.DBAccess("catBase")
 
@@ -208,6 +215,34 @@ class TestIntegrationDB_NavProds(unittest.TestCase):
             casos.varios_productos_anidados,
             "Prueba", self.realDB)
         self.assertEqual(5, nro_recom)
+
+
+class TestIntegrationDBAccess(unittest.TestCase):
+    # Auxiliar method
+    def create_prod(self, title, has_stock, part_number, cat):
+        p = Product.objects.create(product_class=self.pc, title=title)
+        ProductCategory.objects.create(product=p,category=cat)
+        self.part_number.save_value(p, part_number)
+        if has_stock:
+            StockRecord.objects.create(product=p, partner=self.partner
+                                       , partner_sku=title, price_excl_tax=D('0.00'), num_in_stock=1)
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.cat = create_from_breadcrumbs("0T894577 & Up (USA) > Cylinder Block")
+        cls.pc = ProductClass.objects.create(name='Subcomponent')
+        cls.partner = Partner.objects.create(name='Loaded')
+        cls.part_number = ProductAttribute.objects.create(
+            product_class=cls.pc, name='Part number', code='PN', required=True, type=ProductAttribute.TEXT)
+
+    def setUp(self):
+        self.realDB = categorizador.DBAccess("catBase")
+
+    def test_ProductosConMismoPartNumber_regresaMultiplesObjectsReturned(self):
+        self.create_prod("878-9151 2 - Cylinder Block", False, "878-9151 2", self.cat)
+        self.create_prod("878-9151 2 - Cylinder Block", False, "878-9151 2", self.cat)
+        self.assertRaises(MultipleObjectsReturned, self.realDB.add_product_to_category, "878-9151 2", self.cat)
+
 
 ########################################################################################################################
 
