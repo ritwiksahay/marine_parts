@@ -1,5 +1,5 @@
 import django.test as unittest
-from django.core.management import call_command
+from django.core.management import call_command, CommandError
 import casos_prueba as casos
 from django.utils.six import StringIO
 from marine_parts.apps.catalogue.models import Product, ProductClass, ProductAttribute, ProductCategory
@@ -250,16 +250,34 @@ class LoadProductsManageTest(unittest.TestCase):
 
     def setUp(self):
         self.out = StringIO()
-        self.out.write("")
+        self.out.flush()
+        self.derr = StringIO()
+        self.derr.flush()
 
     def test_executeFilepathsEmpty_regresaException(self):
-        call_command('load_products', '', stdout=self.out)
+        call_command('load_products', '', stdout=self.out, stderr=self.derr)
         self.assertIn('No products were created', self.out.getvalue())
 
     def test_executeInvalidSeveralFilePaths_regresaLog(self):
-        call_command('load_products', 'file1', stderr=self.out)
-        self.assertIn('An error occurred while processing this file: file1. Skipping...', self.out.getvalue())
+        call_command('load_products', 'file1', stderr=self.out, stdout=self.derr)
+        self.assertIn('An error occurred while processing this file: file1', self.out.getvalue())
 
     def test_execWithCatBase_regresaLog(self):
-        call_command('load_products', 'file1', 'file2', stdout=self.out, cat_base='Prueba')
+        call_command('load_products', 'file1', 'file2', stdout=self.out, cat_base='Prueba', stderr=self.derr)
         self.assertIn('Using base category: Prueba.', self.out.getvalue())
+
+########################################################################################################################
+
+class RetrieveCategoriesTest(unittest.TestCase):
+    def setUp(self):
+        self.out = StringIO()
+        self.out.flush()
+        self.derr = StringIO()
+        self.derr.flush()
+
+    def test_executeFilepathsEmpty_regresaException(self):
+        self.assertRaises(CommandError, call_command, 'retrieve_categories', stdout=self.out, stderr=self.derr)
+
+    def test_executeInvalidFilePath_regresaLog(self):
+        call_command('retrieve_categories', 'file1', stderr=self.out, stdio=self.derr)
+        self.assertIn('An error occurred while processing this file: file1', self.out.getvalue())

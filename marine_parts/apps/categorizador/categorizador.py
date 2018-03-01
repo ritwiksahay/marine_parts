@@ -65,7 +65,7 @@ class DBAccess(DBHandler):
             self.obt_crea_atributos_prods(self.subcomp_class)
         self.partner = self.obt_partner()
         self.part_number_set = set()
-        self.cat_base = cat_base + '>'
+        self.cat_base = cat_base.strip() + ' > '
 
     def add_part_number(self, part_number_v):
         self.part_number_set.add(part_number_v)
@@ -74,7 +74,7 @@ class DBAccess(DBHandler):
         try:
             prod = Product.objects.get(attribute_values__value_text=part_number_v)
         except Product.MultipleObjectsReturned:
-            print("Offeding product part-number: %s", part_number_v)
+            print("Offending product part number: %s", part_number_v)
             raise
         except Product.DoesNotExist:
             prod = None
@@ -174,8 +174,6 @@ class DBAccess(DBHandler):
             self.manufacturer.save_value(item, manufac_v)
         if diag_num_v:
             self.diag_number.save_value(item, diag_num_v)
-
-        item.save()
 
         ProductCategory.objects.create(product=item, category=cat)
 
@@ -316,7 +314,6 @@ def extraer_cats(json_categorias):
     categorias.reverse()
     return categorias
 
-
 def aNotJerarquica(list):
     xs = []
     for li in (list):
@@ -325,12 +322,19 @@ def aNotJerarquica(list):
 
     return xs
 
-
 def imprimirCate(categorias):
-    print('Categorias encontradas')
+    total = 0
     for cat in categorias:
         print(cat)
+        total += 1
+    print('Categories found: %s' % total)
 
+def ejec_extraer_cats(caminoArch):
+    fh = FileHandler()
+    ejec_extraer_cats_con(caminoArch, fh)
+
+def ejec_extraer_cats_con(caminoArch, ioh):
+    imprimirCate(aNotJerarquica(extraer_cats(ioh.leer(caminoArch))))
 
 def ejec_cargador(caminoArch, cat_base):
     fh = FileHandler()
