@@ -2,9 +2,11 @@ import django.test as unittest
 from django.core.management import call_command
 import casos_prueba as casos
 from django.utils.six import StringIO
-from django.core.management.base import CommandError
+from marine_parts.apps.catalogue.models import Product, ProductClass, ProductAttribute, ProductCategory
+from oscar.apps.partner.models import Partner, StockRecord
+from oscar.apps.catalogue.categories import create_from_breadcrumbs
+from decimal import Decimal as D
 import categorizador
-
 
 
 class TestHandler(categorizador.IOHandler):
@@ -23,7 +25,7 @@ class StubDBHandler(categorizador.DBHandler):
         pass
 
     def check_partnumber(self, part_number_v):
-        pass
+        return (None, False)
 
     def crear_categoria(self, breadcrumb, comp_img=None):
         return FakeObjectOscar()
@@ -38,7 +40,7 @@ class StubDBHandler(categorizador.DBHandler):
         return (FakeObjectOscar(), FakeObjectOscar(), FakeObjectOscar())
 
     def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
-        pass
+        return FakeObjectOscar, True
 
 class MockDB(categorizador.DBHandler):
 
@@ -53,7 +55,10 @@ class MockDB(categorizador.DBHandler):
         self.part_number_set.add(part_number_v)
 
     def check_partnumber(self, part_number_v):
-        return part_number_v in self.part_number_set
+        if part_number_v in self.part_number_set:
+            return part_number_v, True
+        else:
+            return None, False
 
     def crear_categoria(self, breadcrumb, comp_img=None):
         return ' > '.join(breadcrumb)
@@ -92,8 +97,6 @@ class MockDB(categorizador.DBHandler):
         return self.lsCatsProd
 
 
-
-
 class TestUnitExtraerCats(unittest.TestCase):
     def setUp(self):
         self.handler = TestHandler()
@@ -118,7 +121,6 @@ class TestUnitExtraerCats(unittest.TestCase):
         self.handler.entrada = casos.caso_nivelesCompletos_variasCateg_variasSerial_variosComp
         resul = categorizador.extraer_cats(self.handler.leer('prueba.json'))
         self.assertEqual(resul, casos.casoR_nivelesCompletos_variasCateg_variasSerial_variosComp)
-
 
 
 class TestNavProds(unittest.TestCase):
@@ -180,7 +182,7 @@ class TestExtraerProds(unittest.TestCase):
         self.mockDB = MockDB()
 
     def test_variasPartesRepetidas(self,):
-        nro_prod = categorizador.extraer_prods_aux(casos.productos_repetidos_categorias, self.mockDB)
+        nro_prod = categorizador.extraer_prods(casos.productos_repetidos_categorias, self.mockDB)
         self.assertEqual(self.mockDB.lsCatsProd,
              [
                  ('34-95304', '0T894577 & Up (USA) > Cylinder Block'),
@@ -190,24 +192,57 @@ class TestExtraerProds(unittest.TestCase):
 
         self.assertEqual(nro_prod, 6)
 
-
 class TestIntegrationExtraerProds(unittest.TestCase):
     def setUp(self):
         self.realDB = categorizador.DBAccess("catBase")
 
     def test_crear_productos_regresa6(self):
-        nro_prod = categorizador.extraer_prods_aux(casos.productos_repetidos_categorias, self.realDB)
+        nro_prod = categorizador.extraer_prods(casos.productos_repetidos_categorias, self.realDB)
         self.assertEqual(nro_prod, 6)
 
+
+
 class TestIntegrationDB_NavProds(unittest.TestCase):
+    def create_prod(self, title, has_stock, part_number, cat=None):
+        p = Product.objects.create(product_class=self.pc, title=title)
+        if cat:
+            ProductCategory.objects.create(product=p, category=cat)
+
+        self.part_number.save_value(p, part_number)
+        if has_stock:
+            StockRecord.objects.create(product=p, partner=self.partner
+                                       , partner_sku=title, price_excl_tax=D('0.00'), num_in_stock=1)
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.pc = ProductClass.objects.create(name='Subcomponent')
+        cls.partner = Partner.objects.create(name='Loaded')
+        cls.part_number = ProductAttribute.objects.create(
+            product_class=cls.pc, name='Part number', code='PN', required=True, type=ProductAttribute.TEXT)
+
+
     def setUp(self):
         self.realDB = categorizador.DBAccess("catBase")
 
     def test_crear_productos_anidados_regresa5(self):
         nro_recom = categorizador.nav_prods(
-            casos.varios_productos_anidados,
-            "Prueba", self.realDB)
+            casos.varios_productos_anidados, ["", "Prueba"], self.realDB)
         self.assertEqual(5, nro_recom)
+
+    def test_ProductoYCategoriaRepetidoBajoTransaccion_regresa2(self):
+        cat = create_from_breadcrumbs("catBase > Prueba")
+        self.create_prod("878-9151 2 - Cylinder Block", False, "878-9151  2", cat)
+        nro_recom = categorizador.nav_prods(
+            casos.varios_productos_no_anidados, ["", "Prueba"], self.realDB)
+        self.assertEqual(2, nro_recom)
+
+    # def test_checkPartNumber_regresaMultiplesObjectsReturned(self):
+    #     self.create_prod("878-9151 2 - Cylinder Block", False, "878-9151 2")
+    #     nro_recom = categorizador.nav_prods(
+    #         casos.varios_productos_no_anidados, ["", "Prueba"], self.realDB)
+
+
+# Faltan los mas casos de productos iguales en varios archivos y su manejo.
 
 ########################################################################################################################
 

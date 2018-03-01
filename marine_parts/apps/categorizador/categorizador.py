@@ -17,6 +17,7 @@ import urllib
 from django.conf import settings
 from django.core.files import File
 
+from datetime import datetime
 from oscar.apps.catalogue.models import (ProductClass,
                                          ProductCategory,
                                          ProductAttribute)
@@ -26,17 +27,15 @@ from marine_parts.apps.catalogue.models import Product, ReplacementProduct
 from decimal import Decimal as D
 
 # Necesario para controlar que se introduce en la BD
-from django.db.transaction import atomic
+from django.db import transaction, IntegrityError
 
 
 class IOHandler:
-
     def leer(self, nomArch):
         pass
 
 
 class FileHandler(IOHandler):
-
     # Manejo de excepciones de I/O
     def leer(self, nomArch):
         return json.load(open(nomArch, 'r'))
@@ -59,9 +58,7 @@ class DBHandler:
     def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
         pass
 
-
 class DBAccess(DBHandler):
-
     def __init__(self, cat_base):
         self.subcomp_class = self.obt_subcomponent_class()
         self.part_number, self.manufacturer, self.diag_number = \
@@ -74,11 +71,31 @@ class DBAccess(DBHandler):
         self.part_number_set.add(part_number_v)
 
     def check_partnumber(self, part_number_v):
-        return part_number_v in self.part_number_set
+        try:
+            prod = Product.objects.get(attribute_values__value_text=part_number_v)
+        except Product.MultipleObjectsReturned:
+            print("Offeding product part-number: %s", part_number_v)
+            raise
+        except Product.DoesNotExist:
+            prod = None
+
+        if part_number_v in self.part_number_set:
+            return prod, True
+        elif prod:
+            self.add_part_number(part_number_v)
+            return prod, True
+        else:
+            return prod, False
 
     def crear_categoria(self, breadcrumb, comp_img=None):
         path = self.cat_base + ' > '.join(breadcrumb[1:])
-        cat = create_from_breadcrumbs(path)
+
+        try:
+            cat = create_from_breadcrumbs(path)
+        except IntegrityError:
+            print("Offending category: %s" % path)
+            raise
+
         if comp_img:
             try:
                 url = os.path.join(settings.SCRAPPER_ROOT, comp_img)
@@ -106,18 +123,22 @@ class DBAccess(DBHandler):
         return product_class
 
     def asign_prod_replacement(self, p_origin, p_asign):
-        ReplacementProduct.objects.create(primary=p_asign,
+        ReplacementProduct.objects.get_or_create(primary=p_asign,
                                           replacement=p_origin)
+        return
 
-    def add_product_to_category(self, part_number_v, cat):
-        prod = Product.objects.get(attribute_values__value_text=part_number_v)
-        ProductCategory.objects.create(product=prod, category=cat)
+    def add_product_to_category(self, prod, cat):
+        try:
+            with transaction.atomic():
+                ProductCategory.objects.create(product=prod, category=cat)
+        except IntegrityError:
+            pass
 
     def add_stock_records(self, pro, amount):
         StockRecord.objects.create(
             product=pro,
             partner=self.partner,
-            partner_sku=pro.title,
+            partner_sku=pro.title + str(datetime.now()),
             price_excl_tax=D(0.00),
             price_retail=D(0.00),
             cost_price=D(0.00),
@@ -145,7 +166,7 @@ class DBAccess(DBHandler):
         return part_number, manufacturer, diag_number
 
     def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
-        item = Product.objects.create(product_class=self.subcomp_class, title= prod_name)
+        item = Product.objects.create(product_class=self.subcomp_class, title=prod_name)
 
         if part_num_v:
             self.part_number.save_value(item, part_num_v)
@@ -165,7 +186,7 @@ class DBAccess(DBHandler):
 
 
 ########################################################################################################################
-@atomic()
+
 def nav_prods(json_products, bre_cat, db_oscar):
     """
     Crea los productos que se encuentre en el JSON en la BD del proyecto.
@@ -202,16 +223,16 @@ def nav_prods(json_products, bre_cat, db_oscar):
             manufacturer_v = prod_json.get('manufacturer')
             diagram_number_v = prod_json.get('diagram_number')
 
-            #import pdb; pdb.set_trace()
-            if db_oscar.check_partnumber(part_number_v):
-                db_oscar.add_product_to_category(part_number_v, cat)
+            prod, exists = db_oscar.check_partnumber(part_number_v)
+            if exists:
+                db_oscar.add_product_to_category(prod, cat)
             else:
                 pro = db_oscar.crear_prods(cat, is_available, prod_name, part_number_v, manufacturer_v, diagram_number_v)
                 db_oscar.add_part_number(part_number_v)
                 nro_products += 1
 
-            if padr:
-                db_oscar.asign_prod_replacement(padr, pro)
+                if padr:
+                    db_oscar.asign_prod_replacement(padr, pro)
 
         if sucesores:
             for suc in sucesores:
@@ -241,10 +262,8 @@ def obt_nombres(hijo):
         return ''
 
 
+@transaction.atomic
 def extraer_prods(json_categorias, db):
-    return extraer_prods_aux(json_categorias, db)
-
-def extraer_prods_aux(json_categorias, db):
     pila = list()
     pila.append((json_categorias, ''))
     camino = list()
@@ -255,21 +274,17 @@ def extraer_prods_aux(json_categorias, db):
         sucesores = obt_sucesores(hijo)
         nom_hijo = obt_nombres(hijo).strip()
         camino.append(nom_hijo)
-        # print('\nHijo: ', nom_hijo)
 
         if sucesores:
             for suc in sucesores:
                 pila.append((suc, nom_hijo))
         else:
-            # Agregar o crear categorias
             nro_products += nav_prods(hijo, list(camino), db)
 
             if pila:
-                # print('camino antes' , camino)
                 _, padre = pila[-1]
                 while camino[-1] != padre:
                     camino.pop()
-                # print('camino despues', camino)
 
     return nro_products
 
@@ -319,5 +334,4 @@ def imprimirCate(categorias):
 
 def ejec_cargador(caminoArch, cat_base):
     fh = FileHandler()
-    db = DBAccess(cat_base)
-    return extraer_prods(fh.leer(caminoArch), db)
+    return extraer_prods(fh.leer(caminoArch), DBAccess(cat_base))
