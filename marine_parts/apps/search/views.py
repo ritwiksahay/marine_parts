@@ -1,12 +1,12 @@
+"""."""
+
+import sys
 
 from django.core.paginator import Paginator
 
 from haystack import views
-
 from oscar.core.loading import get_class, get_model
 from oscar.apps.basket.formsets import BasketLineFormSet
-from django.core.paginator import InvalidPage, Paginator
-from django.http import Http404
 
 from . import signals
 
@@ -107,7 +107,7 @@ class FacetedSearchView(views.FacetedSearchView):
 
         if self.is_component:
             # if it's component then there's not pagination
-            paginator = Paginator(self.results, len(self.results))
+            paginator = Paginator(self.results, sys.maxsize)
             page = paginator.page(1)
             return (paginator, page)
         return super(FacetedSearchView, self).build_page()
