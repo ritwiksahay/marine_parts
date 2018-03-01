@@ -1,3 +1,6 @@
+
+from django.core.paginator import Paginator
+
 from haystack import views
 
 from oscar.core.loading import get_class, get_model
@@ -27,6 +30,10 @@ class FacetedSearchView(views.FacetedSearchView):
     template = "search/results.html"
     search_signal = signals.user_search
 
+    def __init__(self, *args, **kwargs):
+        super(FacetedSearchView, self).__init__(*args, **kwargs)
+        self.is_component = None
+
     def __call__(self, request):
         response = super(FacetedSearchView, self).__call__(request)
 
@@ -41,6 +48,7 @@ class FacetedSearchView(views.FacetedSearchView):
     # convert Haystack's default facet data into a more useful structure so we
     # have to do less work in the template.
     def extra_context(self):
+        """Override to add the component to the context."""
         extra = super(FacetedSearchView, self).extra_context()
 
         # Show suggestion no matter what.  Haystack 2.1 only shows a suggestion
@@ -69,9 +77,21 @@ class FacetedSearchView(views.FacetedSearchView):
 
         # Obtain the Component name and, retrieve it
         # check if it is a compoenent and pass it to context
-        component = None
-        vars_list = self.request.GET.getlist("var")
 
+        extra['component'] = self.is_component
+
+        # pass Basket formset to handle the basket element
+        formset = BasketLineFormSet(self.request.strategy)
+
+        extra['formset'] = formset
+        # pass the user basket
+        extra['basket'] = self.request.basket
+
+        return extra
+
+    def build_page(self):
+        """Override to add component behaviour."""
+        vars_list = self.request.GET.getlist("var")
         vars_list = [var for var in vars_list if var != '0']
         if len(vars_list) > 0:
             category_full_name = vars_list[-1][9:]
@@ -83,51 +103,11 @@ class FacetedSearchView(views.FacetedSearchView):
 
             # Check if the category is a leaf (Component)
             if not category.has_children():
-                component = category
-        extra['component'] = component
+                self.is_component = category
 
-        # pass Basket formset to handle the basket element
-        formset = BasketLineFormSet(self.request.strategy)
-
-        extra['formset'] = formset
-        # pass the user basket
-        extra['basket'] = self.request.basket
-
-        return extra
-
-    def get_results(self):
-        # We're only interested in products (there might be other content types
-        # in the Solr index).
-        return super(FacetedSearchView, self).get_results().models(Product)
-
-
-class SearchView(object):
-
-    def build_page(self):
-        """
-        Paginates the results appropriately.
-
-        In case someone does not want to use Django's built-in pagination, it
-        should be a simple matter to override this method to do what they would
-        like.
-        """
-        try:
-            page_no = int(self.request.GET.get('page', 1))
-        except (TypeError, ValueError):
-            raise Http404("Not a valid number for page.")
-
-        print page_no
-        if page_no < 1:
-            raise Http404("Pages should be 1 or greater.")
-        print self.results_per_page
-        start_offset = (page_no - 1) * self.results_per_page
-        self.results[start_offset:start_offset + self.results_per_page]
-
-        paginator = Paginator(self.results, self.results_per_page)
-
-        try:
-            page = paginator.page(page_no)
-        except InvalidPage:
-            raise Http404("No such page!")
-
-        return (paginator, page)
+        if self.is_component:
+            # if it's component then there's not pagination
+            paginator = Paginator(self.results, len(self.results))
+            page = paginator.page(1)
+            return (paginator, page)
+        return super(FacetedSearchView, self).build_page()
