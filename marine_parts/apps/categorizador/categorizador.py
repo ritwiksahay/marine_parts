@@ -73,6 +73,9 @@ class DBAccess(DBHandler):
     def check_partnumber(self, part_number_v):
         try:
             prod = Product.objects.get(attribute_values__value_text=part_number_v)
+        except Product.MultipleObjectsReturned:
+            print("Offeding product part-number: %s", part_number_v)
+            raise
         except Product.DoesNotExist:
             prod = None
 
