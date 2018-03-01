@@ -16,7 +16,6 @@ import urllib
 
 from django.conf import settings
 from django.core.files import File
-from django.core.exceptions import MultipleObjectsReturned
 
 from datetime import datetime
 from oscar.apps.catalogue.models import (ProductClass,
@@ -87,7 +86,13 @@ class DBAccess(DBHandler):
 
     def crear_categoria(self, breadcrumb, comp_img=None):
         path = self.cat_base + ' > '.join(breadcrumb[1:])
-        cat = create_from_breadcrumbs(path)
+
+        try:
+            cat = create_from_breadcrumbs(path)
+        except IntegrityError:
+            print("Offending category: %s" % path)
+            raise
+
         if comp_img:
             try:
                 url = os.path.join(settings.SCRAPPER_ROOT, comp_img)
