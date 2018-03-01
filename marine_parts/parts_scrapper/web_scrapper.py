@@ -18,7 +18,7 @@ def create_output_file(data, path):
     """Dump the json data into a file."""
     data['scraping_successful'] = True
     with open(path, 'w') as outfile:
-        json.dump(data, outfile, indent=4)
+        json.dump(data, outfile, separators=(',', ':'))
     data['sub_category'] = []
 
 
@@ -88,7 +88,8 @@ def marineengine_mercury_scrapper():
                 'category_url': hp.get('href'),
                 'sub_category': []
             }
-            category['sub_category'].append(horse_power)
+
+            category['sub_category'] = [horse_power]
 
             # Serial Range scrapping
             page = request_get(
