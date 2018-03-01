@@ -2,13 +2,11 @@ import django.test as unittest
 from django.core.management import call_command
 import casos_prueba as casos
 from django.utils.six import StringIO
-from django.core.exceptions import MultipleObjectsReturned
 from marine_parts.apps.catalogue.models import Product, ProductClass, ProductAttribute, ProductCategory
 from oscar.apps.partner.models import Partner, StockRecord
 from oscar.apps.catalogue.categories import create_from_breadcrumbs
 from decimal import Decimal as D
 import categorizador
-
 
 
 class TestHandler(categorizador.IOHandler):
