@@ -1,9 +1,10 @@
 __pycache__/
 cache/
-haystack/
-logs/
-*.log
 *.pyc
 *.sqlite3
 *.xml
 *.tgz
+
+media/categories
+marine_parts/parts_scrapper/
+!marine_parts/parts_scrapper/web_scrapper.py
