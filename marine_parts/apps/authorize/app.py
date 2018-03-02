@@ -1,5 +1,4 @@
 from oscar.apps.checkout import app
-
 from apps.checkout import views
 
 

@@ -188,7 +188,13 @@
             </div>
           </div>
       </div>
-
+        <div class="form-group">
+          <div class="row">
+              <div class="col-xs-offset-4 col-xs-4">
+                  <button id="continue" type="submit" class="btn btn-lg btn-block btn-primary" data-loading-text="{% trans 'Continuing...' %}">{% trans "Continue" %}</button>
+              </div>
+          </div>
+      </div>
   	</form>
 
   <br>
@@ -200,13 +206,7 @@
 	  	<input type="hidden" id="cardholder_name" name="cardholder_name" value="{{ cardholder_name }}" />
 	  	<input type="hidden" id="card_type" name="card_type" value="{{ card_type }}" />
 	  	<input type="hidden" id="exp_date" name="exp_date" value="{{ exp_date }}" />
-      <div class="form-group">
-          <div class="row">
-              <div class="col-xs-offset-4 col-xs-4">
-                  <button id="continue" type="submit" class="btn btn-lg btn-block btn-primary" data-loading-text="{% trans 'Continuing...' %}">{% trans "Continue" %}</button>
-              </div>
-          </div>
-      </div>
+
   </form>
 
 

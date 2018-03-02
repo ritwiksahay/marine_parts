@@ -7,12 +7,10 @@
 #   Execution: In project root. > python manage.py drop_catalogue
 #
 
-from .models import Product, Category
+from .models import Product
 
 
 def execute():
-    """Runner."""
-    Category.objects.filter(pk__gt=22).delete(),
-
+    """Remove all products from DB."""
     # Return the number of deleted products
     return Product.objects.all().delete()[0]

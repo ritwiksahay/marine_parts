@@ -203,9 +203,11 @@ class TestIntegrationExtraerProds(unittest.TestCase):
 
 
 class TestIntegrationDB_NavProds(unittest.TestCase):
-    def create_prod(self, title, has_stock, part_number, cat):
+    def create_prod(self, title, has_stock, part_number, cat=None):
         p = Product.objects.create(product_class=self.pc, title=title)
-        ProductCategory.objects.create(product=p, category=cat)
+        if cat:
+            ProductCategory.objects.create(product=p, category=cat)
+
         self.part_number.save_value(p, part_number)
         if has_stock:
             StockRecord.objects.create(product=p, partner=self.partner
@@ -233,6 +235,12 @@ class TestIntegrationDB_NavProds(unittest.TestCase):
         nro_recom = categorizador.nav_prods(
             casos.varios_productos_no_anidados, ["", "Prueba"], self.realDB)
         self.assertEqual(2, nro_recom)
+
+    # def test_checkPartNumber_regresaMultiplesObjectsReturned(self):
+    #     self.create_prod("878-9151 2 - Cylinder Block", False, "878-9151 2")
+    #     nro_recom = categorizador.nav_prods(
+    #         casos.varios_productos_no_anidados, ["", "Prueba"], self.realDB)
+
 
 # Faltan los mas casos de productos iguales en varios archivos y su manejo.
 

@@ -8,9 +8,7 @@ from oscar.apps.payment import models, exceptions
 
 from authorizenet import apicontractsv1
 from authorizenet.apicontrollers import createTransactionController
-
-from marine_parts.payment_mods.libPayeezy import (setup_params_request,
-                                                  execPaymentPayeezySandbox)
+from marine_parts.apps.checkout.lib_payeezy import setup_params_request, execPaymentPayeezySandbox, execPaymentPayeezyLive
 
 
 class PaymentDetailsView(views.PaymentDetailsView):
