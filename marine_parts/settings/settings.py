@@ -47,7 +47,6 @@ THIRD_PARTIES_APP = [
 
 SYSTEM_APPS = [
     'marine_parts.users',
-    'marine_parts.payment_mods'
 ]
 
 DJANGO_APPS = [
@@ -62,7 +61,7 @@ DJANGO_APPS = [
 ]
 
 INSTALLED_APPS = DJANGO_APPS + SYSTEM_APPS + THIRD_PARTIES_APP \
-    + get_core_apps()
+    + get_core_apps(['marine_parts.apps.checkout'])
 
 AUTH_USER_MODEL = 'users.User'
 

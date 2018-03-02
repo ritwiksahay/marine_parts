@@ -2,12 +2,12 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from oscar.apps.checkout import views
-from oscar.apps.payment import forms, models, exceptions
+from oscar.apps.payment import models, exceptions
 
 from authorizenet import apicontractsv1
 from authorizenet.apicontrollers import createTransactionController
 
-from marine_parts.payment_mods.libPayeezy import setup_params_request, execPaymentPayeezySandbox, execPaymentPayeezyLive
+from marine_parts.apps.checkout.lib_payeezy import setup_params_request, execPaymentPayeezySandbox, execPaymentPayeezyLive
 
 class PaymentDetailsView(views.PaymentDetailsView):
     """
@@ -83,7 +83,7 @@ class PaymentDetailsView(views.PaymentDetailsView):
         #
         # Payeezy payment
         #
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
         if kwargs['payment_method'] == 'payeezy':
             self.execPayeezy(order_number, total, kwargs)
         else:

@@ -3,6 +3,7 @@ import constants
 # import required libs to generate HMAC
 import os, hashlib, hmac, time, base64, json
 
+
 def setup_params_request(price, card_type, token, cardholder_name, exp_date):
     payload = {
         "merchant_ref": "Marine parts",
