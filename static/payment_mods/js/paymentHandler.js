@@ -38,7 +38,7 @@
     };
 
 jQuery(function($) {
-    $('#continue-form').submit(function(e) {
+    $('#payment-info-form').submit(function(e) {
         $('#response_msg').html('');
         $('#response_note').html('');
         $('#payment-errors').html('');

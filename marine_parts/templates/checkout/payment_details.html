@@ -158,6 +158,13 @@
 				</select></td>
 			</tr>
 		</table>
+      <div class="form-group">
+            <div class="row">
+                <div class="col-sm-3">
+                    <button id="continue" type="submit" class="btn btn-lg btn-block btn-primary" data-loading-text="{% trans 'Continuing...' %}">{% trans "Continue" %}</button>
+                </div>
+            </div>
+        </div>
 
 	</form>
   <form method="post" id="continue-form" name="continue-form"
@@ -168,13 +175,6 @@
 	  	<input type="hidden" id="cardholder_name" name="cardholder_name" value="{{ cardholder_name }}" />
 	  	<input type="hidden" id="card_type" name="card_type" value="{{ card_type }}" />
 	  	<input type="hidden" id="exp_date" name="exp_date" value="{{ exp_date }}" />
-        <div class="form-group">
-            <div class="row">
-                <div class="col-sm-3">
-                    <button id="continue" type="submit" class="btn btn-lg btn-block btn-primary" data-loading-text="{% trans 'Continuing...' %}">{% trans "Continue" %}</button>
-                </div>
-            </div>
-        </div>
     </form>
 </div>
 
