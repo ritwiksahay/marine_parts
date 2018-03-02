@@ -51,7 +51,6 @@ THIRD_PARTY_APPS = [
 SYSTEM_APPS = [
     'marine_parts.apps.users',
     'marine_parts.parts_scrapper',
-    'marine_parts.apps.authorize',
     'marine_parts.apps.dashboard.bulk_price_updater'
 ]
 
@@ -165,6 +164,9 @@ HAYSTACK_CONNECTIONS = {
         'EXCLUDED_INDEXES': ['oscar.apps.search.search_indexes.ProductIndex'],
     },
 }
+
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 12
+
 OSCAR_SEARCH_FACETS = {
     'fields': OrderedDict([
     ]),
