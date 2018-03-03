@@ -213,7 +213,6 @@
                         if (unescapeHtml(values[index].split(":").pop()) == get_last_slug(value['full_slug'])){
 
                             index++;
-                            console.log(value)
                             results.push([value['id'], value['name'], value['children'], value.full_slug]);
                             search(value['children'], values);
                         }
