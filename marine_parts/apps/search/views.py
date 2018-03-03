@@ -1,5 +1,6 @@
 """."""
 
+import json
 import sys
 
 from django.core.paginator import Paginator
@@ -51,14 +52,6 @@ class FacetedSearchView(views.FacetedSearchView):
         """Override to add the component to the context."""
         extra = super(FacetedSearchView, self).extra_context()
 
-        # Show suggestion no matter what.  Haystack 2.1 only shows a suggestion
-        # if there are some results, which seems a bit weird to me.
-        if self.results.query.backend.include_spelling:
-            # Note, this triggers an extra call to the search backend
-            suggestion = self.form.get_suggestion()
-            if suggestion != self.query:
-                extra['suggestion'] = suggestion
-
         # Convert facet data into a more useful data structure
         if 'fields' in extra['facets']:
             munger = FacetMunger(
@@ -87,7 +80,50 @@ class FacetedSearchView(views.FacetedSearchView):
         # pass the user basket
         extra['basket'] = self.request.basket
 
+        args = ','.join(extra['selected_facets'])
+
+        # get last var element (contains the complete category path)
+        try:
+            path = self.request.GET.getlist('var')[-1][9:].split(' > ')
+        except IndexError:
+            path = []
+
+        # get categories to show in refined search form
+        categories = self.categories_json(path)
+
+        extra['categories_json'] = categories
+        extra['url_args'] = args
+
         return extra
+
+    def categories_json(self, path):
+        """Json with all the categories to show to the user for selection."""
+        forest = {'trees': []}
+        roots = Category.get_root_nodes()
+
+        def get_tree(parents, path):
+            p = {}
+            result = []
+            for parent in parents:
+                # build category dict
+                p['id'] = parent.id
+                p['name'] = parent.name,
+                p['full_name'] = parent.full_name,
+                p['children'] = []
+
+                if len(path) != 0 and \
+                        parent.name == path[0] and \
+                        parent.has_children():
+
+                    path = path[1:]
+                    p['children'] = get_tree(parent.get_children(), path)
+
+                result.append(p.copy())
+
+            return result
+
+        forest['trees'] = get_tree(roots, path)
+        return json.dumps(forest)
 
     def build_page(self):
         """Override to add component behaviour."""
