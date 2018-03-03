@@ -108,12 +108,6 @@
             {% else %}
                 <p>
                     {% trans "Found <strong>0</strong> results." %}
-                    {% if suggestion %}
-                        {% url 'search:search' as search_url %}
-                        {% blocktrans %}
-                            Did you mean <a href="{{ search_url }}?q={{ suggestion }}">"{{ suggestion }}"</a>?
-                        {% endblocktrans %}
-                    {% endif %}
                 </p>
             {% endif %}
         </form>
@@ -174,7 +168,7 @@
         $(document).ready(function() {
             var results = [];
             var index = 0;
-            var params = '{{url_args}}'.split(',');
+            var params = '{{url_args}}'.split('/');
             var categories = jQuery.parseJSON('{{categories_json|safe}}');
 
             categories = categories['trees'];
@@ -194,9 +188,10 @@
 
             /*Function to initialize the form*/
             function init_search_form(value){
-                append_value += '<option value="category:'+ value['full_name'] + '"';
+                append_value += '<option value="category:'+ value['full_slug'] + '"';
+                var f_slug = get_last_slug(value['full_slug']);
 
-                if($.inArray("category:" + escapeHtml(value['full_name'].toString()), params) >= 0){
+                if($.inArray(escapeHtml(f_slug), params) >= 0){
                     append_value +='selected >' + value['name'] + '</option>';
                 }
                 else
@@ -205,15 +200,21 @@
                 }
             }
 
+            function get_last_slug(full_slug){
+                var split = full_slug.split("/");
+                return split[split.length - 1];
+            }
+
             /*Searchs for the selected values in the tree*/
             function search(dictionary, values){
                 $.each(dictionary, function(key, value){
                     if (values[index] !== undefined) {
                         
-                        if (unescapeHtml(values[index].split(":").pop()) == value['full_name'][0]){
+                        if (unescapeHtml(values[index].split(":").pop()) == get_last_slug(value['full_slug'])){
 
                             index++;
-                            results.push([value['id'], value['name'], value['children']]);
+                            console.log(value)
+                            results.push([value['id'], value['name'], value['children'], value.full_slug]);
                             search(value['children'], values);
                         }
                     }
@@ -226,19 +227,20 @@
             function generate_fields(values){
 
                 for(var i=0; i < values.length; i++){
-                    var append_value = '<div class="form-group text-center rounded category-select"><i class="icon-chevron-down"></i><select class="form-control rounded" name="var" id="var"><option value="0">--{% trans "Select Category" %}--</option>';
+                    var append_value = '<div class="form-group text-center rounded category-select"><i class="icon-chevron-down"></i><select class="form-control rounded" name="var" id="var"><option value="category:' + values[i][3] + '">--{% trans "Select Category" %}--</option>';
                     children = values[i][2];
 
                     if(!$.isEmptyObject(children))
                     {
                         for(var j=0; j < children.length; j++){
-                            if($.inArray("category:" + escapeHtml(children[j].full_name.toString()), params) >= 0)
+                            var f_slug = get_last_slug(children[j].full_slug);
+                            if($.inArray(escapeHtml(f_slug), params) >= 0)
                             {
-                                append_value += '<option value="category:' + children[j].full_name + '" selected>' + children[j].name + '</option>';
+                                append_value += '<option value="category:' + children[j].full_slug + '" selected>' + children[j].name + '</option>';
                             }
                             else
                             {
-                                append_value += '<option value="category:' + children[j].full_name + '">' + children[j].name + '</option>';
+                                append_value += '<option value="category:' + children[j].full_slug + '">' + children[j].name + '</option>';
                             }
                         }
                         append_value += '</select><i class="icon-chevron-down"></i></div>';
@@ -268,22 +270,22 @@
             }
 
 
-            /* When an category select widget is changed, its children must be cleared */
-            $("select[name='var']").on('change', function(){
-
-                $.each($(this).parent().nextUntil('#search_field'), function(key, elem){
-                    elem.remove();
-                });
-
-            });
-
-
             /* When the user changes the category in one of the search category fields then 
                the search form is submitted automatically */
             $('select[name="var"]').on('change', function(){
+
+                $.each($(this).nextUntil('#search_field'), function(key, elem){
+                    elem.remove();
+                });
+                
+                $('select[name="var"]').attr("disabled", true);
+                $(this).attr("disabled", false);
                 $('#categories_form').submit();
             });
 
+            $("#categories_form button[type='submit']").on("click", function() {
+                $('select[name="var"]:not(:last)').attr("disabled", true);
+            });
 
             /* When the user scrolls down, the basket in the sidebar will 
              follow */
