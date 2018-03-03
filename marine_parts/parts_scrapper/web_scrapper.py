@@ -2,9 +2,6 @@
 
 import copy
 from datetime import date
-
-# from logging.handlers import RotatingFileHandler
-
 import json
 from lxml import etree, html
 import os
@@ -12,7 +9,6 @@ import re
 import requests
 import sys
 from urllib import parse
-
 
 FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 MARINE_ENGINE_BASE_URL = 'https://www.marineengine.com'
@@ -22,7 +18,7 @@ def create_output_file(data, path):
     """Dump the json data into a file."""
     data['scraping_successful'] = True
     with open(path, 'w') as outfile:
-        json.dump(data, outfile, indent=4)
+        json.dump(data, outfile, separators=(',', ':'))
     data['sub_category'] = []
 
 
@@ -83,7 +79,7 @@ def marineengine_mercury_scrapper():
         )
         tree = html.fromstring(page.content)
 
-        for hp in tree.xpath(xcategory_selector)[141:]:
+        for hp in tree.xpath(xcategory_selector)[233:]:
             cat_name = re.sub(r'[\n\t]+', '', hp.text)
             print("'%s' starting...\n" % cat_name)
             horse_power = {
@@ -166,6 +162,10 @@ def marineengine_mercury_scrapper():
                             except IndexError:
                                 url = prod.xpath('td[3]/p/strong/a')[0] \
                                     .get('href')
+
+                            # Ignore parts with no title
+                            if not title:
+                                continue
 
                             product = {
                                 'product': re.sub(' +', ' ', title),
@@ -484,6 +484,42 @@ def marineengine_johnson_evinrude_scrapper():
                     '.json'
                 create_output_file(catalog, output_file_path)
 
+                ''' Ignore manuals (incomplete scraping, just partial)
+                man_image = None
+
+                if(len(tree.xpath(xmanual_img_selector)) > 0):
+                    man_image = tree.xpath(xmanual_img_selector)[0]
+
+                # Manuals cycle
+                for man in tree.xpath(xmanuals_selector):
+                    manual = \
+                        {'manual': man.text, 'manual_url': man.get('href')}
+
+                    page = requests.get(
+                        MARINE_ENGINE_BASE_URL + manual['manual_url']
+                    )
+                    second_tree = html.fromstring(page.content)
+
+                    for man_det in second_tree.xpath(xmanual_details_selector):
+                        print('MANUAL')
+                        count = 0
+                        for row in man_det.xpath('td'):
+                            if count < 2:
+                                print(etree.tostring(row).decode('utf-8')
+                                    .replace('<span class="strike">', '')
+                                    .replace('</span>', '').replace('\t', '')
+                                    .replace('\n', '').split('<br/>')[1])
+                            count += 1
+
+                        print('HEREEE')
+                        count = 0
+                        for row in man_det.xpath('td/p'):
+                            if count == 1:
+                                print(etree.tostring(row))
+                            else:
+                                print(etree.tostring(row))
+                            count += 1
+                '''
 
 def marineengine_mercruiser_scrapper():
     """Scrapper for marine engine's Mercruiser section."""
