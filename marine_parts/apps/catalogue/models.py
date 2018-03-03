@@ -28,9 +28,7 @@ class Category(AbstractCategory):
 
     def get_absolute_url(self):
         """Building the url that points to the search of the category."""
-        url = reverse('search:search') + '?var=category:'
-        url += '&var=category:' \
-            .join([to_url(c.full_name) for c in self.get_ancestors_and_self()])
+        url = reverse('search:search') + '?var=category:' + to_url(self.full_slug)
 
         return url
 

@@ -4,6 +4,7 @@ import json
 import sys
 
 from django.core.paginator import Paginator
+from django.http import Http404
 
 from haystack import views
 from oscar.core.loading import get_class, get_model
@@ -80,11 +81,11 @@ class FacetedSearchView(views.FacetedSearchView):
         # pass the user basket
         extra['basket'] = self.request.basket
 
-        args = ','.join(extra['selected_facets'])
+        args = "".join(extra['selected_facets'])
 
         # get last var element (contains the complete category path)
         try:
-            path = self.request.GET.getlist('var')[-1][9:].split(' > ')
+            path = self.request.GET.getlist('var')[-1][9:].split('/')
         except IndexError:
             path = []
 
@@ -92,7 +93,7 @@ class FacetedSearchView(views.FacetedSearchView):
         categories = self.categories_json(path)
 
         extra['categories_json'] = categories
-        extra['url_args'] = args
+        extra['url_args'] = args[9:]
 
         return extra
 
@@ -107,12 +108,12 @@ class FacetedSearchView(views.FacetedSearchView):
             for parent in parents:
                 # build category dict
                 p['id'] = parent.id
-                p['name'] = parent.name,
-                p['full_name'] = parent.full_name,
+                p['name'] = parent.name
+                p['full_slug'] = parent.full_slug
                 p['children'] = []
 
                 if len(path) != 0 and \
-                        parent.name == path[0] and \
+                        parent.slug == path[0] and \
                         parent.has_children():
 
                     path = path[1:]
@@ -130,12 +131,15 @@ class FacetedSearchView(views.FacetedSearchView):
         vars_list = self.request.GET.getlist("var")
         vars_list = [var for var in vars_list if var != '0']
         if len(vars_list) > 0:
-            category_full_name = vars_list[-1][9:]
+            category_full_slug = vars_list[-1][9:]
             category = None
             for cat in Category.objects.all():
-                if cat.full_name == category_full_name:
+                if cat.full_slug == category_full_slug:
                     category = cat
                     break
+
+            if category is None:
+                raise Http404("Category doesn't exist.")
 
             # Check if the category is a leaf (Component)
             if not category.has_children():
