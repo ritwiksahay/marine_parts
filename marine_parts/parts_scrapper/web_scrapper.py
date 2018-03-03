@@ -18,7 +18,7 @@ def create_output_file(data, path):
     """Dump the json data into a file."""
     data['scraping_successful'] = True
     with open(path, 'w') as outfile:
-        json.dump(data, outfile, indent=4)
+        json.dump(data, outfile, separators=(',', ':'))
     data['sub_category'] = []
 
 
@@ -62,7 +62,7 @@ def marineengine_mercury_scrapper():
         'scraping_successful': False,
     }
 
-    for cat in tree.xpath(xpath_selector)[0:1]:
+    for cat in tree.xpath(xpath_selector):
         if not os.path.exists(FILE_DIR + '/marine_engine/mercury/' + cat.text):
             os.makedirs(FILE_DIR + '/marine_engine/mercury/' + cat.text)
         category = {
@@ -162,6 +162,10 @@ def marineengine_mercury_scrapper():
                             except IndexError:
                                 url = prod.xpath('td[3]/p/strong/a')[0] \
                                     .get('href')
+
+                            # Ignore parts with no title
+                            if not title:
+                                continue
 
                             product = {
                                 'product': re.sub(' +', ' ', title),
