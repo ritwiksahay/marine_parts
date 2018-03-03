@@ -1,6 +1,6 @@
 # encoding: utf-8
-from __future__ import absolute_import, division, print_function, unicode_literals
-import json
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
 
 from django.conf import settings
 from django.core.paginator import InvalidPage, Paginator
@@ -10,7 +10,6 @@ from django.shortcuts import render
 from haystack.forms import FacetedSearchForm, ModelSearchForm
 from haystack.query import EmptySearchQuerySet
 
-from marine_parts.apps.catalogue.models import Category
 
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
@@ -24,7 +23,9 @@ class SearchView(object):
     form = None
     results_per_page = RESULTS_PER_PAGE
 
-    def __init__(self, template=None, load_all=True, form_class=None, searchqueryset=None, results_per_page=None):
+    def __init__(self, template=None, load_all=True,
+                 form_class=None, searchqueryset=None,
+                 results_per_page=None):
         self.load_all = load_all
         self.form_class = form_class
         self.searchqueryset = searchqueryset
@@ -32,7 +33,7 @@ class SearchView(object):
         if form_class is None:
             self.form_class = ModelSearchForm
 
-        if not results_per_page is None:
+        if results_per_page is not None:
             self.results_per_page = results_per_page
 
         if template:
@@ -121,16 +122,9 @@ class SearchView(object):
     def extra_context(self):
         """
         Allows the addition of more context variables as needed.
-
         Must return a dictionary.
         """
-        args = ','.join(self.request.GET.getlist('var'))
-        categories = self.categories_json()
-        extra_context = {
-            'categories_json': categories,
-            'url_args': args
-        }
-        return extra_context
+        return {}
 
     def get_context(self):
         (paginator, page) = self.build_page()
@@ -143,7 +137,8 @@ class SearchView(object):
             'suggestion': None,
         }
 
-        if hasattr(self.results, 'query') and self.results.query.backend.include_spelling:
+        if hasattr(self.results, 'query') and \
+                self.results.query.backend.include_spelling:
             context['suggestion'] = self.form.get_suggestion()
 
         context.update(self.extra_context())
@@ -158,33 +153,6 @@ class SearchView(object):
         context = self.get_context()
 
         return render(self.request, self.template, context)
-
-    def categories_json(self):
-        forest = {'trees': []}
-
-        for root in Category.get_root_nodes():
-            stack1 = []
-            stack2 = []
-            salida = {}
-            stack1.append(root)
-            stack2.append((salida, None))
-
-            while stack1:
-                child = stack1.pop()
-                h, p = stack2.pop()
-                h['id'] = child.id
-                h['name'] = child.name,
-                h['full_name'] = child.full_name,
-                h['children'] = []
-
-                if p:
-                    p['children'].append(h.copy())
-
-                for childs in child.get_children():
-                    stack1.append(childs)
-                    stack2.append(({}, h))
-            forest['trees'].append(salida)
-        return json.dumps(forest)
 
 
 def search_view_factory(view_class=SearchView, *args, **kwargs):
@@ -207,7 +175,7 @@ class FacetedSearchView(SearchView):
 
         # This way the form can always receive a list containing zero or more
         # facet expressions:
-        vars_list = self.request.GET.getlist("var");
+        vars_list = self.request.GET.getlist("var")
 
         vars_list = [var for var in vars_list if var != '0']
 
@@ -222,7 +190,10 @@ class FacetedSearchView(SearchView):
         return extra
 
 
-def basic_search(request, template='search/search.html', load_all=True, form_class=ModelSearchForm, searchqueryset=None, extra_context=None, results_per_page=None):
+def basic_search(request, template='search/search.html',
+                 load_all=True, form_class=ModelSearchForm,
+                 searchqueryset=None, extra_context=None,
+                 results_per_page=None):
     """
     A more traditional view that also demonstrate an alternative
     way to use Haystack.
@@ -247,7 +218,9 @@ def basic_search(request, template='search/search.html', load_all=True, form_cla
     results = EmptySearchQuerySet()
 
     if request.GET.get('q'):
-        form = form_class(request.GET, searchqueryset=searchqueryset, load_all=load_all)
+        form = form_class(request.GET,
+                          searchqueryset=searchqueryset,
+                          load_all=load_all)
 
         if form.is_valid():
             query = form.cleaned_data['q']
