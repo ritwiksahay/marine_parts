@@ -49,7 +49,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_category(self, obj):
         categories = obj.categories.all()
         if len(categories) > 0:
-            return [category.full_slugs for category in categories]
+            return [category.full_slug for category in categories]
 
     def prepare_rating(self, obj):
         if obj.rating is not None:
