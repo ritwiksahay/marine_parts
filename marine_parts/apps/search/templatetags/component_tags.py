@@ -72,6 +72,22 @@ def render_component_part(context, product, session):
 
 
 @register.simple_tag(takes_context=True)
+def render_category_search_field(context, tree, parent=None):
+    """Render the categories in the refined search widget."""
+    if tree == []:
+        return ""
+
+    names = ['search/partials/category_search_field.html']
+    template_ = select_template(names)
+    context = context.flatten()
+
+    context['category_tree'] = tree
+    context['parent'] = parent
+
+    return template_.render(context)
+
+
+@register.simple_tag(takes_context=True)
 def render_component_part_header(context, product, session):
     """Render a component part header."""
     if not product:

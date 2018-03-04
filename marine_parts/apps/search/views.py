@@ -12,7 +12,7 @@ from oscar.apps.basket.formsets import BasketLineFormSet
 
 from . import signals
 
-from marine_parts.apps.catalogue.models import Category
+from marine_parts.apps.catalogue.models import Cat, Category
 
 Product = get_model('catalogue', 'Product')
 FacetMunger = get_class('search.facets', 'FacetMunger')
@@ -84,47 +84,47 @@ class FacetedSearchView(views.FacetedSearchView):
         args = "".join(extra['selected_facets'])
 
         # get last var element (contains the complete category path)
+
         try:
             path = self.request.GET.getlist('var')[-1][9:].split('/')
         except IndexError:
             path = []
 
         # get categories to show in refined search form
-        categories = self.categories_json(path)
-
-        extra['categories_json'] = categories
+        extra['category_tree'] = self.categories_json(path)
         extra['url_args'] = args[9:]
 
         return extra
 
     def categories_json(self, path):
         """Json with all the categories to show to the user for selection."""
-        forest = {'trees': []}
         roots = Category.get_root_nodes()
 
         def get_tree(parents, path):
-            p = {}
             result = []
+            selected = None
             for parent in parents:
                 # build category dict
-                p['id'] = parent.id
-                p['name'] = parent.name
-                p['full_slug'] = parent.full_slug
-                p['children'] = []
+                cat = Cat()
+                cat.id = parent.id
+                cat.name = parent.name
+                cat.full_slug = parent.full_slug
+                cat.url = parent.get_search_url()
+                cat.is_selected = False
+                cat.children = []
 
-                if len(path) != 0 and \
-                        parent.slug == path[0] and \
-                        parent.has_children():
+                if len(path) != 0 and parent.slug == path[0]:
+                    cat.is_selected = True
+                    selected = cat
+                    if parent.has_children():
+                        path = path[1:]
+                        cat.children = get_tree(parent.get_children(), path)
 
-                    path = path[1:]
-                    p['children'] = get_tree(parent.get_children(), path)
+                result.append(cat)
 
-                result.append(p.copy())
+            return {"categories": result, "selected": selected}
 
-            return result
-
-        forest['trees'] = get_tree(roots, path)
-        return json.dumps(forest)
+        return get_tree(roots, path)
 
     def build_page(self):
         """Override to add component behaviour."""
