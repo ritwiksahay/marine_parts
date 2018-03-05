@@ -9,11 +9,8 @@ from lxml import etree, html
 import os
 import re
 import requests
-import sys
 import textwrap
 from urllib import parse
-
-import pdb
 
 FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 MARINE_ENGINE_BASE_URL = 'https://www.marineengine.com'
@@ -102,7 +99,8 @@ def marineengine_mercury_scrapper():
                 'category_url': hp.get('href'),
                 'sub_category': []
             }
-            category['sub_category'].append(horse_power)
+
+            category['sub_category'] = [horse_power]
 
             # Serial Range scrapping
             page = request_get(
@@ -584,9 +582,11 @@ def marineengine_mercruiser_scrapper():
         tree = html.fromstring(page.content)
         # Years cycle
         for mod in tree.xpath(xmodel_selector):
+            cat_name = re.sub(r'[\n\t]+', '', mod.text)
+            print("\n'%s' starting...\n" % cat_name)
             model = {
                 'category_name': 'model',
-                'category': mod.text,
+                'category': cat_name,
                 'category_url': mod.get('href'),
                 'sub_category': []
             }
@@ -619,7 +619,7 @@ def marineengine_mercruiser_scrapper():
                 else:
                     print("Caso especial mercruiser")
 
-                for comp in comps:
+                for comp in comps[-2:]:
                     component = {
                         'category_name': 'component',
                         'category': comp.text,
@@ -647,7 +647,7 @@ def marineengine_mercruiser_scrapper():
                         r = request_get(component_image, stream=True)
                         save_downloaded_file(
                             FILE_DIR +
-                            'img/marine_engine/mercruiser/' +
+                            '/img/marine_engine/mercruiser/' +
                             component_image.split('/')[-1], r)
                         component_image = \
                             'img/marine_engine/mercruiser/' + \
@@ -700,7 +700,7 @@ def marineengine_mercruiser_scrapper():
                                 # Product details scraping
                                 page = request_get(
                                     MARINE_ENGINE_BASE_URL +
-                                    product['product_url']
+                                    url
                                 )
                                 tree = html.fromstring(page.content)
 
@@ -748,15 +748,11 @@ def marineengine_mercruiser_scrapper():
                                 diag_number = prod.xpath("td/span/strong")[0] \
                                     .text.replace('#', '')
 
-        print("Finishing Marine Engine"
-              " Mercruiser Scraping...\n")
-        catalog['scraping_successful'] = True
-        with open('marine_engine_mercruiser-' +
-                  scrap_date + '.json', 'w') \
-                as outfile:
-            json.dump(catalog, outfile, indent=4)
-            pass
-        return
+            print("\n'%s' done...\n" % cat_name)
+            output_file_path = FILE_DIR + '/marine_engine/mercruiser/' + \
+                cat.text + '/' + re.sub(r'/', r'\\', cat_name) + \
+                '.json'
+            create_output_file(catalog, output_file_path)
 
 
 def marineengine_force_scrapper():
@@ -2258,13 +2254,15 @@ if __name__ == '__main__':
                         help='outputs json in a friendly indented format',
                         action='store_true')
 
-    subparsers = parser.add_subparsers(dest='site', help="The name of the site to scrap")
+    subparsers = parser.add_subparsers(
+        dest='site',
+        help="The name of the site to scrap")
 
     parser_marine_engine = subparsers.add_parser('marine_engine')
 
     parser_marine_engine.add_argument(
         'manufacturer', type=str,
-        choices=["mercury", "johnson"],
+        choices=["mercury", "mercruiser"],
         help="The name of the manufacturer"
     )
 
@@ -2277,8 +2275,6 @@ if __name__ == '__main__':
     )
 
     args = parser.parse_args()
-
-    # pdb.set_trace()
 
     if not args.site:
         parser.error(message="Too few arguments")
@@ -2318,16 +2314,18 @@ if __name__ == '__main__':
         "marine_engine mercruiser": marineengine_mercruiser_scrapper,
     }
 
+    try:
+        selected_scrapper_func = OPT_DICT[selected_scrapper]
+    except KeyError as e:
+        print("Selected scrapper doesn't exists nor is implemented yet.\n"
+              "Current available brands are: mercury, johnson.")
+        exit(1)
+
     ############################################
     # Start the actual Scrapping
     print('Started scraping.')
     print('Ignoring some manuals...')
 
-    try:
-        OPT_DICT[selected_scrapper]()
-    except KeyError:
-        print("Selected scrapper doesn't exists nor is implemented yet.\n"
-              "Current available brands are: mercury, johnson.")
-        exit(1)
+    selected_scrapper_func()
 
     print('\nFinished scraping.')
