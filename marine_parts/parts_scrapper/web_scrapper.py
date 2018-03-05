@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import argparse
 import copy
 from datetime import date
 import json
@@ -8,17 +9,24 @@ import os
 import re
 import requests
 import sys
+import textwrap
 from urllib import parse
+
+import pdb
 
 FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 MARINE_ENGINE_BASE_URL = 'https://www.marineengine.com'
+PRETTY_OUTPUT = False
 
 
 def create_output_file(data, path):
     """Dump the json data into a file."""
     data['scraping_successful'] = True
     with open(path, 'w') as outfile:
-        json.dump(data, outfile, separators=(',', ':'))
+        if PRETTY_OUTPUT:
+            json.dump(data, outfile, indent=4)
+        else:
+            json.dump(data, outfile, separators=(',', ':'))
     data['sub_category'] = []
 
 
@@ -49,7 +57,8 @@ def marineengine_mercury_scrapper():
     # The selectors goes here so they dont recreate on every cicle
     xpath_selector = "/html/body/main/div[1]/div[2]/div[1]/div[2]/div/ul//li/a"
     xcategory_selector = "/html/body/main/div[2]/ul//li/a"
-    xcomponents_selector = "/html/body/main/div[2]/div[2]/ul//li/a"
+    # Change depending of the category to scrap
+    xcomponents_selector = "/html/body/main/div[2]/div[1]/ul//li/a"
     ximg_selector = "/html/body/main/div[2]/p[1]/img"
     xproduct_selector = "/html/body/main/table//tr"
     xproduct_details_selector = ("/html/body/main/div[1]/div[1]"
@@ -62,7 +71,7 @@ def marineengine_mercury_scrapper():
         'scraping_successful': False,
     }
 
-    for cat in tree.xpath(xpath_selector):
+    for cat in tree.xpath(xpath_selector)[1:2]:
         if not os.path.exists(FILE_DIR + '/marine_engine/mercury/' + cat.text):
             os.makedirs(FILE_DIR + '/marine_engine/mercury/' + cat.text)
         category = {
@@ -72,6 +81,10 @@ def marineengine_mercury_scrapper():
             'sub_category': []
         }
         catalog['categories'].append(category)
+
+        # The navigation changes depending on the category selected
+        if cat.text == 'Mercury Outboard (1960-present)':
+            xcomponents_selector = "/html/body/main/div[2]/div[2]/ul//li/a"
 
         # Horse Power scraping
         page = request_get(
@@ -2209,8 +2222,10 @@ def boatsnet_suzuki_marine_scrapper():
                         counter += 1
                         if counter > 100:
                             catalog['scraping_successful'] = True
-                            print('Finishing Boats Net Suzuki Marine Scraping...\n')
-                            with open('boats_net_suzuki_marine-' + scrap_date + '.json', 'w') as outfile:
+                            print("Finishing Boats Net Suzuki "
+                                  "Marine Scraping...\n")
+                            with open('boats_net_suzuki_marine-' +
+                                      scrap_date + '.json', 'w') as outfile:
                                 json.dump(catalog, outfile, indent=4)
                                 pass
                             return
@@ -2228,16 +2243,51 @@ def save_downloaded_file(path, r):
 
 if __name__ == '__main__':
 
-    # Check stdin params
-    if len(sys.argv) != 3:
-        print("Invalid format.\nMust be: "
-              "python3 part_scrapper.py [page] [brand].\n"
-              "For example: python3 part_scrapper.py marine_engine johnson\n"
-              "Current available brands are: mercury, johnson.")
+    ###############################################
+    # ------------- Argument Parsing ------------ #
+    ###############################################
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=textwrap.dedent('''\
+        Usage of the Marine Parts Scrapper Module.
+        ------------------------------------------
 
-        exit(1)
+        '''))
+    parser.add_argument('--pretty',
+                        help='outputs json in a friendly indented format',
+                        action='store_true')
 
-    # Create needed directories
+    subparsers = parser.add_subparsers(dest='site', help="The name of the site to scrap")
+
+    parser_marine_engine = subparsers.add_parser('marine_engine')
+
+    parser_marine_engine.add_argument(
+        'manufacturer', type=str,
+        choices=["mercury", "johnson"],
+        help="The name of the manufacturer"
+    )
+
+    parser_boatsnet = subparsers.add_parser('boatsnet')
+
+    parser_boatsnet.add_argument(
+        'manufacturer', type=str,
+        choices=["suzuki"],
+        help="The name of the manufacturer"
+    )
+
+    args = parser.parse_args()
+
+    # pdb.set_trace()
+
+    if not args.site:
+        parser.error(message="Too few arguments")
+
+    # json output mode
+    PRETTY_OUTPUT = args.pretty
+
+    ###############################################
+    # ----------- Directories creation ---------- #
+    ###############################################
     if not os.path.exists(FILE_DIR + '/img'):
         os.makedirs(FILE_DIR + '/img')
     if not os.path.exists(FILE_DIR + '/manuals'):
@@ -2256,54 +2306,9 @@ if __name__ == '__main__':
     if not os.path.exists(FILE_DIR + '/img/marine_engine/mercruiser'):
         os.makedirs(FILE_DIR + '/img/marine_engine/mercruiser')
 
-    """ Is this necessary?
-    if not os.path.exists('img/marine_engine/mercruiser'):
-        os.makedirs('img/marine_engine/mercruiser')
-
-    if not os.path.exists('img/marine_engine/force'):
-        os.makedirs('img/marine_engine/force')
-    if not os.path.exists('img/marine_engine/mariner'):
-        os.makedirs('img/marine_engine/mariner')
-    if not os.path.exists('img/marine_engine/omc'):
-        os.makedirs('img/marine_engine/omc')
-
-    ################################################
-    # Marine Express Directories and sub-directories
-    if not os.path.exists('img/marine_express'):
-        os.makedirs('img/marine_express')
-    if not os.path.exists('manuals/marine_express'):
-        os.makedirs('manuals/marine_express')
-
-    # Subdirs
-    if not os.path.exists('img/marine_express/chrysler'):
-        os.makedirs('img/marine_express/chrysler')
-    if not os.path.exists('img/marine_express/crusader'):
-        os.makedirs('img/marine_express/crusader')
-    if not os.path.exists('manuals/marine_express/crusader'):
-        os.makedirs('manuals/marine_express/crusader')
-    if not os.path.exists('img/marine_express/volvo'):
-        os.makedirs('img/marine_express/volvo')
-    if not os.path.exists('manuals/marine_express/volvo'):
-        os.makedirs('manuals/marine_express/volvo')
-
-    ############################################
-    # Boats Net Directories and sub-directories
-    if not os.path.exists('img/boats_net'):
-        os.makedirs('img/boats_net')
-
-    # Subdirs
-    if not os.path.exists('img/boats_net/yamaha'):
-        os.makedirs('img/boats_net/yamaha')
-    if not os.path.exists('img/boats_net/honda'):
-        os.makedirs('img/boats_net/honda')
-    if not os.path.exists('img/boats_net/suzuki'):
-        os.makedirs('img/boats_net/suzuki')
-
-    """
-
     # get user's input from stdin
-    selected_scrapper = "%s %s" % (sys.argv[1],
-                                   sys.argv[2])
+    selected_scrapper = "%s %s" % (args.site,
+                                   args.manufacturer)
 
     # this dict maps user's input with a scrapper
     OPT_DICT = {
