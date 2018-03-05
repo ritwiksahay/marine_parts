@@ -74,7 +74,7 @@ class DBAccess(DBHandler):
         try:
             prod = Product.objects.get(attribute_values__value_text=part_number_v)
         except Product.MultipleObjectsReturned:
-            print("Offending product part number: %s", part_number_v)
+            print("Offending product part number: %s" % part_number_v)
             raise
         except Product.DoesNotExist:
             prod = None
@@ -134,11 +134,11 @@ class DBAccess(DBHandler):
         except IntegrityError:
             pass
 
-    def add_stock_records(self, pro, amount):
+    def add_stock_records(self, pro, part_number,  amount):
         StockRecord.objects.create(
             product=pro,
             partner=self.partner,
-            partner_sku=pro.title + str(datetime.now()),
+            partner_sku=part_number + str(datetime.now()),
             price_excl_tax=D(0.00),
             price_retail=D(0.00),
             cost_price=D(0.00),
@@ -178,7 +178,7 @@ class DBAccess(DBHandler):
         ProductCategory.objects.create(product=item, category=cat)
 
         if is_aval:
-            self.add_stock_records(item, 1000)
+            self.add_stock_records(item, part_num_v, 1000)
 
         return item
 
