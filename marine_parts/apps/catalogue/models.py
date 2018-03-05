@@ -58,13 +58,13 @@ class Product(abstract_models.AbstractProduct):
                     "main product."))
 
 
-# if not is_model_registered('catalogue.', 'ReplacementProduct'):
 class ReplacementProduct(AbstractReplacementProduct):
     pass
 
 
 class Cat():
-    """Auxiliar Category structure for search view"""
+    """Auxiliar Category structure for search view."""
+
     pass
 
 from oscar.apps.catalogue.models import *  # noqa isort:skip

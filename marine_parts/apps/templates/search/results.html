@@ -173,7 +173,9 @@
                 
                 $('select[name="var"]').attr("disabled", true);
                 $(this).attr("disabled", false);
-                $('#categories_form').submit();
+                var url = $('#categories_form').attr('action');
+                url += "?var=" + $(this).val();
+                location.href = url;
             });
 
             $("#categories_form button[type='submit']").on("click", function() {
