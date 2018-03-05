@@ -47,10 +47,10 @@ do
 	RETVAL=$?
 	if [ ! $RETVAL -eq 0 ]; then
 		mv "$file" "$OUTPUT_PATH"
-		printf "${GREEN}COMPLETED SUCCESSFULLY. ${file} loaded and moved to ${OUTPUT_PATH}${NC}"
+		printf "${GREEN}COMPLETED SUCCESSFULLY. ${file} loaded and moved to ${OUTPUT_PATH}${NC}\n"
 	else
 		mv "$file" "$FAILED_PATH"
-                printf "${RED}FAILED. ${file} moved to ${FAILED_PATH}${NC}"
+                printf "${RED}FAILED. ${file} moved to ${FAILED_PATH}${NC}\n"
 	fi
 	OUTPUT=""
 done
