@@ -28,19 +28,13 @@ class Category(AbstractCategory):
 
     def get_absolute_url(self):
         """Building the url that points to the search of the category."""
-        url = reverse('search:search') + '?var=category:' + to_url(self.full_slug)
-
+        url = reverse('search:search') + '?var=category:' + \
+            to_url(self.full_slug)
         return url
 
-    # def clean(self):
-    #    """Override Category Validation Method."""
-    # When adding a new category, the parent cannot have a diagram image
-    #    super(Category, self).clean()
-    #    if self.get_parent().diagram_image:
-    #        raise ValidationError(
-    #            _("Cannot add a child to a leaf category."
-    #              "Delete diagram image in the parent first.")
-    #        )
+    def get_search_url(self):
+        """Build part of the url that points to the search of the category."""
+        return 'category:' + to_url(self.full_slug)
 
 
 # @python_2_unicode_compatible
@@ -66,6 +60,11 @@ class Product(abstract_models.AbstractProduct):
 
 # if not is_model_registered('catalogue.', 'ReplacementProduct'):
 class ReplacementProduct(AbstractReplacementProduct):
+    pass
+
+
+class Cat():
+    """Auxiliar Category structure for search view"""
     pass
 
 from oscar.apps.catalogue.models import *  # noqa isort:skip
