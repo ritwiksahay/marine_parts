@@ -1,11 +1,15 @@
 {% load i18n %}
 {% load widget_tweaks %}
+{% load component_tags %}
 
 <h3 class="filter-title h3 text-center">
     {% trans "Refine Search"|upper %}
 </h3>
 <form method="get" action="{% url 'search:search' %}" class="filter-form form-horizontal col-lg-12 col-md-12" id="categories_form">
     <div class="form-group text-center" id="search_field">
+
+        {% render_category_search_field category_tree %}
+        
         <div class="select-wrapper">
         	{% render_field search_form.q label='' placeholder=field.placeholder class+="search-field" %}
         </div>

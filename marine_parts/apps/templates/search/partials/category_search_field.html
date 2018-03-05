@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load component_tags %}
+
+<div class="form-group text-center rounded category-select">
+	<i class="icon-chevron-down"></i>
+	<select class="form-control rounded" name="var" id="var">
+		<option value="{% if parent %}{{cat.url}}{% else %}0{% endif %}">--{% trans "Select Category" %}--</option>'
+		{% for cat in category_tree.categories %}
+			<option value="{{cat.url}}"{% if cat.is_selected %}selected{% endif %}>{{ cat.name }}</option>	
+		{% endfor %}
+	</select>
+</div>
+
+
+{%if category_tree.selected %}
+{% with cat=category_tree.selected %}
+	{% if cat.children %}
+		{% render_category_search_field cat.children cat %}	
+	{% endif %}
+{% endwith %}
+{% endif %}
