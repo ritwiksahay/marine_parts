@@ -14,6 +14,8 @@ from urllib import parse
 
 FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 MARINE_ENGINE_BASE_URL = 'https://www.marineengine.com'
+MARINE_EXPRESS_BASE_URL = 'http://www.marinepartsexpress.com'
+MARINE_PARTS_EUROPE_BASE_URL = 'http://www.marinepartseurope.com'
 PRETTY_OUTPUT = False
 
 
@@ -37,16 +39,50 @@ def request_get(path, stream=False):
 
 
 ##################################################################
+# MARINE PARTS EUROPE WEB ########################################
+##################################################################
+
+def marinepartseurope_volvo_penta_scrapper():
+    """Scrapper for Marine Parts Europe Volvo Penta Parts."""
+    global MARINE_PARTS_EUROPE_BASE_URL, FILE_DIR
+
+    print('Starting Marine Parts Europe Volvo Penta Scrapping...')
+
+    # Get Index Page
+    page = request_get(MARINE_PARTS_EUROPE_BASE_URL)
+    tree = html.fromstring(page.content)
+
+    # The selectors goes here so they dont recreate on every cicle
+    xpath_selector = ("//table[@width='301']//tr[@class='cartItems']"
+                      "[position()<3]/td[2]/a")
+
+    mod_selector = ("//td[@class='bookCell']/h2/a")
+
+
+    for cat in tree.xpath(xpath_selector):
+        print(cat.text)
+        cat_link = cat.get('href')
+
+        # Get Models Page
+        page = request_get(
+            MARINE_PARTS_EUROPE_BASE_URL +
+            '/' + cat_link)
+        tree = html.fromstring(page.content)
+        for mod in tree.xpath(mod_selector):
+            print('\t' + mod.text)
+
+    print('Finished Marine Parts Europe Volvo Penta Scrapping...')
+
+##################################################################
 # MARINE ENGINE WEB ##############################################
 ##################################################################
 
 
 def marineengine_mercury_scrapper():
     """Scrapper for Marine Engine Mercury Parts."""
-    # Marineengine base url
     global MARINE_ENGINE_BASE_URL, FILE_DIR
 
-    print('Starting Marine Engine Mercury Scraping...')
+    print('Starting Marine Engine Mercury Scrapping...')
     # Categorys scraping
     page = request_get(
         MARINE_ENGINE_BASE_URL + '/parts/mercury-outboard/index.php'
@@ -661,22 +697,15 @@ def marineengine_mercruiser_scrapper():
                     # products cycle
                     for prod in tree.xpath(xcomponent_parts_selector):
                         if prod.get('class') is None:
-                            title = ''
-                            url = ''
-                            if prod.xpath('td[3]/a/strong'):
-                                title = re.sub(' +',
-                                               ' ',
-                                               prod.xpath('td[3]/a/strong')[0]
-                                               .text)
+                            try:
+                                title = prod.xpath('td[3]/a/strong')[0].text
                                 url = prod.xpath('td[3]/a')[0].get('href')
-                            elif prod.xpath('td[3]/p/strong/a'):
-                                title = \
-                                    re.sub(' +',
-                                           ' ',
-                                           prod.xpath('td[3]/p/strong/a')[0]
-                                           .text)
+                            except IndexError:
+                                title = prod.xpath('td[3]/p/strong/a')[0].text
                                 url = prod.xpath('td[3]/p/strong/a')[0] \
                                     .get('href')
+                            except TypeError:
+                                continue
 
                             if title and url:
                                 product = {
@@ -1478,7 +1507,8 @@ def marinepartsexpress_crusader_scrapper():
     )
     tree = html.fromstring(page.content)
 
-    xpath_selector = "/html/body/div/div[2]/div[1]/section[1]/blockquote/ul//li/a"
+    xpath_selector = ("/html/body/div/div[2]/div[1]/"
+                      "section[1]/blockquote/ul//li/a")
     xpath_selector2 = "/html/body/div/div[2]/div[1]/section[1]/table//tr/td"
 
     scrap_date = str(date.today()).replace(' ', '')
@@ -1488,7 +1518,6 @@ def marinepartsexpress_crusader_scrapper():
         'scraping_successful': False,
     }
 
-    counter = 0
     # Categorys on johnson_evinrude
     for item in tree.xpath(xpath_selector2):
         manual = {
@@ -1501,9 +1530,13 @@ def marinepartsexpress_crusader_scrapper():
 
         if manual['manual_url']:
             print(man_url + manual['manual_url'].replace(' ', '%20'))
-            r = requests.get(man_url + manual['manual_url'].replace(' ', '%20'), stream=True)
-            save_downloaded_file('manuals/marine_express/crusader/'+ manual['manual_url'].split('/')[-1], r)
-            manual['manual_url'] = 'manuals/marine_express/crusader/'+ manual['manual_url'].split('/')[-1]
+            r = requests.get(man_url +
+                             manual['manual_url'].replace(' ', '%20'),
+                             stream=True)
+            save_downloaded_file('manuals/marine_express/crusader/' +
+                                 manual['manual_url'].split('/')[-1], r)
+            manual['manual_url'] = 'manuals/marine_express/crusader/' + \
+                                   manual['manual_url'].split('/')[-1]
 
     for item in tree.xpath(xpath_selector):
         present = False
@@ -1523,22 +1556,31 @@ def marinepartsexpress_crusader_scrapper():
             catalog['categories'].append(manual)
             if manual['manual_url']:
                 print(man_url + manual['manual_url'].replace(' ', '%20'))
-                r = requests.get(man_url + manual['manual_url'].replace(' ', '%20'), stream=True)
-                save_downloaded_file('manuals/marine_express/crusader/'+ manual['manual_url'].split('/')[-1], r)
-                manual['manual_url'] = 'manuals/marine_express/crusader/'+ manual['manual_url'].split('/')[-1]
+                r = requests.get(man_url + manual['manual_url']
+                                 .replace(' ', '%20'),
+                                 stream=True)
+                save_downloaded_file(
+                    'manuals/marine_express/crusader/' +
+                    manual['manual_url'].split('/')[-1],
+                    r)
+                manual['manual_url'] = 'manuals/marine_express/crusader/' + \
+                    manual['manual_url'].split('/')[-1]
 
     catalog['scraping_successful'] = True
     print('Finishing Marine Parts Express Crusader Manuals Scraping...\n')
-    with open('marine_parts_express_crusader-' + scrap_date + '.json', 'w') as outfile:
+    with open('marine_parts_express_crusader-' + scrap_date + '.json', 'w') \
+            as outfile:
         json.dump(catalog, outfile, indent=4)
         pass
 
 
 def marinepartsexpress_volvo_penta_marine_scrapper():
-    base_url = 'http://www.marinepartsexpress.com'
+    """Scrapper for Marine Express's Volvo Parts."""
+    global MARINE_EXPRESS_BASE_URL, FILE_DIR
+
     # Categorys scraping
-    page = requests.get(
-        base_url + '/VP_Schematics/directory.php'
+    page = request_get(
+        MARINE_EXPRESS_BASE_URL + '/VP_Schematics/directory.php'
     )
     tree = html.fromstring(page.content)
 
@@ -1554,7 +1596,7 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
     }
 
     counter = 0
-    # Categorys on johnson_evinrude
+    # Categorys on volvo
     for item in tree.xpath(xpath_selector):
         category = {
             'category_name': 'category',
@@ -1564,11 +1606,11 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
         }
         catalog['categories'].append(category)
 
-        page = requests.get(
-            base_url + category['category_url']
+        page = request_get(
+            MARINE_EXPRESS_BASE_URL + category['category_url']
         )
 
-        print(base_url + category['category_url'] + " ACAA1")
+        print(MARINE_EXPRESS_BASE_URL + category['category_url'] + " ACAA1")
         tree = html.fromstring(page.content)
         # models cycle
         for mod in tree.xpath(xmodel_selector):
@@ -1581,11 +1623,12 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                 }
                 category['sub_category'].append(model)
 
-                page = requests.get(
-                    base_url + model['category_url']
+                page = request_get(
+                    MARINE_EXPRESS_BASE_URL + model['category_url']
                 )
                 tree = html.fromstring(page.content)
-                print(base_url + model['category_url'] + " ACAA2")
+                print(MARINE_EXPRESS_BASE_URL +
+                      model['category_url'] + " ACAA2")
                 # components cycle
                 for comp in tree.xpath(xmodel_selector):
                     if not tree.xpath(xpdf_selector):
@@ -1597,10 +1640,11 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                         }
                         model['sub_category'].append(component)
 
-                        page = requests.get(
-                            base_url + component['category_url']
+                        page = request_get(
+                            MARINE_EXPRESS_BASE_URL + component['category_url']
                         )
-                        print(base_url + component['category_url'] + " ACA3")
+                        print(MARINE_EXPRESS_BASE_URL +
+                              component['category_url'] + " ACA3")
                         tree2 = html.fromstring(page.content)
                         # Items cycle
                         if not tree2.xpath(xpdf_selector):
@@ -1624,12 +1668,19 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                                 component['sub_category'].append(manual)
 
                                 if manual['manual_url']:
-                                    url = manual['manual_url'].replace("viewer.php?pdf=", "").split("&breadcrumb")[0]
-                                    url = parse.unquote(url).replace('+', '%20')
-                                    r = requests.get(url, stream=True)
-                                    save_downloaded_file('manuals/marine_express/volvo/'+ url.split('/')[-1], r)
-                                    manual['manual_url'] = 'manuals/marine_express/volvo/'+ url.split('/')[-1]
-                    else:  
+                                    url = manual['manual_url'] \
+                                        .replace("viewer.php?pdf=", "") \
+                                        .split("&breadcrumb")[0]
+                                    url = parse.unquote(url) \
+                                        .replace('+', '%20')
+                                    r = request_get(url, stream=True)
+                                    save_downloaded_file(
+                                        'manuals/marine_express/volvo/' +
+                                        url.split('/')[-1], r)
+                                    manual['manual_url'] = \
+                                        'manuals/marine_express/volvo/' + \
+                                        url.split('/')[-1]
+                    else:
                         for man in tree.xpath(xpdf_selector):
                             print('pdf 2 ')
                             manual = {
@@ -1641,19 +1692,28 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                             model['sub_category'].append(manual)
 
                             if manual['manual_url']:
-                                url = manual['manual_url'].replace("viewer.php?pdf=", "").split("&breadcrumb")[0]
+                                url = manual['manual_url'] \
+                                    .replace("viewer.php?pdf=", "") \
+                                    .split("&breadcrumb")[0]
                                 url = parse.unquote(url).replace('+', '%20')
                                 print(url)
-                                r = requests.get(url, stream=True)
-                                save_downloaded_file('manuals/marine_express/volvo/'+ url.split('/')[-1], r)
-                                manual['manual_url'] = 'manuals/marine_express/volvo/'+ url.split('/')[-1]
+                                r = request_get(url, stream=True)
+                                save_downloaded_file(
+                                    'manuals/marine_express/volvo/' +
+                                    url.split('/')[-1],
+                                    r)
+                                manual['manual_url'] = \
+                                    'manuals/marine_express/volvo/' + \
+                                    url.split('/')[-1]
 
                             counter += 1
 
                     if counter > 15:
                         catalog['scraping_successful'] = True
-                        print('Finishing Marine Parts Express Volvo Penta Marine Manuals Scraping...\n')
-                        with open('marine_parts_express_volvo_penta_marine-' + scrap_date + '.json', 'w') as outfile:
+                        print("Finishing Marine Parts Express Volvo "
+                              "Penta Marine Manuals Scraping...\n")
+                        with open('marine_parts_express_volvo_penta_marine-' +
+                                  scrap_date + '.json', 'w') as outfile:
                             json.dump(catalog, outfile, indent=4)
                             pass
                         return
@@ -1676,12 +1736,19 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                         category['sub_category'].append(manual)
 
                         if manual['manual_url']:
-                            url = manual['manual_url'].replace("viewer.php?pdf=", "").split("&breadcrumb")[0]
+                            url = manual['manual_url'] \
+                                .replace("viewer.php?pdf=", "") \
+                                .split("&breadcrumb")[0]
                             url = parse.unquote(url).replace('+', '%20')
                             print(url + " here")
-                            r = requests.get(url, stream=True)
-                            save_downloaded_file('manuals/marine_express/volvo/'+ url.split('/')[-1], r)
-                            manual['manual_url'] = 'manuals/marine_express/volvo/'+ url.split('/')[-1]
+                            r = request_get(url, stream=True)
+                            save_downloaded_file(
+                                'manuals/marine_express/volvo/' +
+                                url.split('/')[-1],
+                                r)
+                            manual['manual_url'] = \
+                                'manuals/marine_express/volvo/' + \
+                                url.split('/')[-1]
 
                     model = {
                         'category_name': 'model',
@@ -1691,11 +1758,12 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                     }
                     category['sub_category'].append(model)
 
-                    page = requests.get(
-                        base_url + model['category_url']
+                    page = request_get(
+                        MARINE_EXPRESS_BASE_URL + model['category_url']
                     )
                     tree = html.fromstring(page.content)
-                    print(base_url + model['category_url'] + " ACAA2")
+                    print(MARINE_EXPRESS_BASE_URL +
+                          model['category_url'] + " ACAA2")
                     # components cycle
                     for comp in tree.xpath(xmodel_selector):
                         if not tree.xpath(xpdf_selector):
@@ -1707,10 +1775,12 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                             }
                             model['sub_category'].append(component)
 
-                            page = requests.get(
-                                base_url + component['category_url']
+                            page = request_get(
+                                MARINE_EXPRESS_BASE_URL +
+                                component['category_url']
                             )
-                            print(base_url + component['category_url'] + " ACA3")
+                            print(MARINE_EXPRESS_BASE_URL +
+                                  component['category_url'] + " ACA3")
                             tree2 = html.fromstring(page.content)
                             # Items cycle
                             if not tree2.xpath(xpdf_selector):
@@ -1727,18 +1797,26 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
                                 for man in tree2.xpath(xpdf_selector):
                                     manual = {
                                         'category_name': 'manual',
-                                        'products': man.xpath('strong')[0].text,
+                                        'products': man.xpath('strong')[0]
+                                        .text,
                                         'manual_url': man.get('href'),
                                         'image': None,
                                     }
                                     component['sub_category'].append(manual)
 
                                     if manual['manual_url']:
-                                        url = manual['manual_url'].replace("viewer.php?pdf=", "").split("&breadcrumb")[0]
-                                        url = parse.unquote(url).replace('+', '%20')
-                                        r = requests.get(url, stream=True)
-                                        save_downloaded_file('manuals/marine_express/volvo/'+ url.split('/')[-1], r)
-                                        manual['manual_url'] = 'manuals/marine_express/volvo/'+ url.split('/')[-1]
+                                        url = manual['manual_url'] \
+                                            .replace("viewer.php?pdf=", "") \
+                                            .split("&breadcrumb")[0]
+                                        url = parse.unquote(url) \
+                                            .replace('+', '%20')
+                                        r = request_get(url, stream=True)
+                                        save_downloaded_file(
+                                            'manuals/marine_express/volvo/' +
+                                            url.split('/')[-1], r)
+                                        manual['manual_url'] = \
+                                            'manuals/marine_express/volvo/' + \
+                                            url.split('/')[-1]
 
                     counter += 1
 
@@ -2274,6 +2352,14 @@ if __name__ == '__main__':
         help="The name of the manufacturer"
     )
 
+    parser_marineeurope = subparsers.add_parser('marineparts_europe')
+
+    parser_marineeurope.add_argument(
+        'manufacturer', type=str,
+        choices=["volvo"],
+        help="The name of the manufacturer"
+    )
+
     args = parser.parse_args()
 
     if not args.site:
@@ -2312,6 +2398,7 @@ if __name__ == '__main__':
         "marine_engine mercury": marineengine_mercury_scrapper,
         "marine_engine johnson": marineengine_johnson_evinrude_scrapper,
         "marine_engine mercruiser": marineengine_mercruiser_scrapper,
+        "marineparts_europe volvo": marinepartseurope_volvo_penta_scrapper,
     }
 
     try:
