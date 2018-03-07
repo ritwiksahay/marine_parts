@@ -8,7 +8,6 @@ from lxml import etree, html
 import os
 import re
 import requests
-import sys
 import textwrap
 from urllib import parse
 
@@ -16,6 +15,7 @@ FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 MARINE_ENGINE_BASE_URL = 'https://www.marineengine.com'
 MARINE_EXPRESS_BASE_URL = 'http://www.marinepartsexpress.com'
 MARINE_PARTS_EUROPE_BASE_URL = 'http://www.marinepartseurope.com'
+INIT_OFFSET = 0
 PRETTY_OUTPUT = False
 
 
@@ -57,10 +57,30 @@ def marinepartseurope_volvo_penta_scrapper():
                       "[position()<3]/td[2]/a")
 
     mod_selector = ("//td[@class='bookCell']/h2/a")
+    comp_selector = ("//div[@id='ctl00_PageContent_EPCCategories']/"
+                     "table[1]//tr")
+    prod_selector = ("//div[@id='ctl00_PageContent_PentaPanel']/"
+                     "table/tbody/tr")
 
+    scrap_date = str(date.today()).replace(' ', '')
+    catalog = {
+        'categories': [],
+        'scraped_date': scrap_date,
+        'scraping_successful': False,
+    }
 
     for cat in tree.xpath(xpath_selector):
-        print(cat.text)
+        if not os.path.exists(FILE_DIR + '/marine_europe/volvo/' + cat.text):
+            os.makedirs(FILE_DIR + '/marine_europe/volvo/' + cat.text)
+
+        category = {
+            'category_name': 'category',
+            'category': cat.text,
+            'sub_category': []
+        }
+
+        catalog['categories'].append(category)
+
         cat_link = cat.get('href')
 
         # Get Models Page
@@ -68,10 +88,109 @@ def marinepartseurope_volvo_penta_scrapper():
             MARINE_PARTS_EUROPE_BASE_URL +
             '/' + cat_link)
         tree = html.fromstring(page.content)
-        for mod in tree.xpath(mod_selector):
-            print('\t' + mod.text)
+
+        for mod in tree.xpath(mod_selector)[INIT_OFFSET:]:
+            mod_name = re.sub(r'[\n\t]+', '', mod.text)
+            print("'%s' starting...\n" % mod_name)
+            mod_link = mod.get('href')
+
+            model = {
+                'category_name': 'model',
+                'category': mod_name,
+                'sub_category': []
+            }
+
+            category['sub_category'] = [model]
+
+            # Get Components Page
+            page = request_get(
+                MARINE_PARTS_EUROPE_BASE_URL +
+                '/' + mod_link)
+            tree = html.fromstring(page.content)
+            section = {}
+
+            for comp in tree.xpath(comp_selector)[0:2]:
+                # Section Header
+                if (comp.xpath("td[@class='catalogHeaderCell']/h2")):
+                    # Save Previous section
+                    if section != {}:
+                        model['sub_category'].append(section.copy())
+                    sect_name = comp.xpath(
+                        "td[@class='catalogHeaderCell']/h2")[0].text
+                    section = {
+                        'category_name': 'section',
+                        'category': sect_name,
+                        'sub_category': []
+                    }
+                # Component entry
+                else:
+                    comp_a = comp.xpath(
+                        "td[@class='catalogCell']/span/a")[0]
+                    comp_name = comp_a.xpath('h3')[0].text
+                    comp_link = comp_a.get('href')
+
+                    # Build component
+                    component = {
+                        'category_name': 'component',
+                        'category': comp_name,
+                        'products': [],
+                        'sub_category': []
+                    }
+
+                    # Scrap component parts
+                    page = request_get(
+                        MARINE_PARTS_EUROPE_BASE_URL +
+                        '/' + comp_link)
+                    tree = html.fromstring(page.content)
+
+                    for prod in tree.xpath(prod_selector):
+                        # Build product
+
+                        try:
+                            # if any of the following info is missing,
+                            # then ignore part
+                            diagram_number = prod.xpath('td[1]')[0].text
+                            if not diagram_number:
+                                    part_number = '0'
+                            try:
+                                prod_name = prod.xpath('td[2]/a')[0].text
+                            except IndexError:
+                                prod_name = prod.xpath('td[2]')[0].text
+                                if not prod_name:
+                                    prod_name = prod.xpath('td[2]/img')[0].tail
+                                    if not prod_name:
+                                        continue
+
+                            try:
+                                part_number = prod.xpath('td[3]/a')[0].text
+                                if not part_number:
+                                    continue
+                            except IndexError:
+                                continue
+
+                        except TypeError:
+                            continue
+
+                        product = {
+                            'product': prod_name.strip(),
+                            'part_number': part_number.strip(),
+                            'diagram_number': diagram_number.strip(),
+                            'replacements': [],
+                            'is_available': [],
+                            'manufacturer': '',
+                        }
+                        component['products'].append(product.copy())
+
+                    # Save component
+                    if section != {}:
+                        section['sub_category'].append(component.copy())
+
+            # Save Last Section
+            if section != {}:
+                        model['sub_category'].append(section.copy())
 
     print('Finished Marine Parts Europe Volvo Penta Scrapping...')
+    print(json.dumps(catalog, indent=4))
 
 ##################################################################
 # MARINE ENGINE WEB ##############################################
@@ -105,7 +224,7 @@ def marineengine_mercury_scrapper():
         'scraping_successful': False,
     }
 
-    for cat in tree.xpath(xpath_selector)[1:2]:
+    for cat in tree.xpath(xpath_selector):
         if not os.path.exists(FILE_DIR + '/marine_engine/mercury/' + cat.text):
             os.makedirs(FILE_DIR + '/marine_engine/mercury/' + cat.text)
         category = {
@@ -126,7 +245,7 @@ def marineengine_mercury_scrapper():
         )
         tree = html.fromstring(page.content)
 
-        for hp in tree.xpath(xcategory_selector)[233:]:
+        for hp in tree.xpath(xcategory_selector)[INIT_OFFSET:]:
             cat_name = re.sub(r'[\n\t]+', '', hp.text)
             print("'%s' starting...\n" % cat_name)
             horse_power = {
@@ -135,6 +254,7 @@ def marineengine_mercury_scrapper():
                 'category_url': hp.get('href'),
                 'sub_category': []
             }
+
             category['sub_category'] = [horse_power]
 
             # Serial Range scrapping
@@ -280,7 +400,7 @@ def marineengine_mercury_scrapper():
 
             print("\n'%s' done...\n" % cat_name)
             output_file_path = FILE_DIR + '/marine_engine/mercury/' + \
-                cat.text + '/' + re.sub(r'/', r'\\', cat_name.strip()) + \
+                cat.text + '/' + re.sub(r'/', r'\\', cat_name) + \
                 '.json'
             create_output_file(catalog, output_file_path)
 
@@ -337,7 +457,7 @@ def marineengine_johnson_evinrude_scrapper():
         )
         tree = html.fromstring(page.content)
         # Years cycle
-        for yr in tree.xpath(xyears_selector)[0:1]:
+        for yr in tree.xpath(xyears_selector)[INIT_OFFSET:]:
             if not os.path.exists(FILE_DIR + '/marine_engine/j&e/' +
                                   re.sub(r'/', r'\\', cat.text) + '/' +
                                   yr.text):
@@ -350,7 +470,7 @@ def marineengine_johnson_evinrude_scrapper():
                 'category_url': yr.get('href'),
                 'sub_category': []
             }
-            category['sub_category'].append(year)
+            category['sub_category'] = [year]
 
             page = request_get(
                 MARINE_ENGINE_BASE_URL + year['category_url']
@@ -531,42 +651,6 @@ def marineengine_johnson_evinrude_scrapper():
                     '.json'
                 create_output_file(catalog, output_file_path)
 
-                ''' Ignore manuals (incomplete scraping, just partial)
-                man_image = None
-
-                if(len(tree.xpath(xmanual_img_selector)) > 0):
-                    man_image = tree.xpath(xmanual_img_selector)[0]
-
-                # Manuals cycle
-                for man in tree.xpath(xmanuals_selector):
-                    manual = \
-                        {'manual': man.text, 'manual_url': man.get('href')}
-
-                    page = requests.get(
-                        MARINE_ENGINE_BASE_URL + manual['manual_url']
-                    )
-                    second_tree = html.fromstring(page.content)
-
-                    for man_det in second_tree.xpath(xmanual_details_selector):
-                        print('MANUAL')
-                        count = 0
-                        for row in man_det.xpath('td'):
-                            if count < 2:
-                                print(etree.tostring(row).decode('utf-8')
-                                    .replace('<span class="strike">', '')
-                                    .replace('</span>', '').replace('\t', '')
-                                    .replace('\n', '').split('<br/>')[1])
-                            count += 1
-
-                        print('HEREEE')
-                        count = 0
-                        for row in man_det.xpath('td/p'):
-                            if count == 1:
-                                print(etree.tostring(row))
-                            else:
-                                print(etree.tostring(row))
-                            count += 1
-                '''
 
 def marineengine_mercruiser_scrapper():
     """Scrapper for marine engine's Mercruiser section."""
@@ -615,10 +699,12 @@ def marineengine_mercruiser_scrapper():
         )
         tree = html.fromstring(page.content)
         # Years cycle
-        for mod in tree.xpath(xmodel_selector):
+        for mod in tree.xpath(xmodel_selector)[INIT_OFFSET:]:
+            cat_name = re.sub(r'[\n\t]+', '', mod.text)
+            print("\n'%s' starting...\n" % cat_name)
             model = {
                 'category_name': 'model',
-                'category': mod.text,
+                'category': cat_name,
                 'category_url': mod.get('href'),
                 'sub_category': []
             }
@@ -679,7 +765,7 @@ def marineengine_mercruiser_scrapper():
                         r = request_get(component_image, stream=True)
                         save_downloaded_file(
                             FILE_DIR +
-                            'img/marine_engine/mercruiser/' +
+                            '/img/marine_engine/mercruiser/' +
                             component_image.split('/')[-1], r)
                         component_image = \
                             'img/marine_engine/mercruiser/' + \
@@ -725,7 +811,7 @@ def marineengine_mercruiser_scrapper():
                                 # Product details scraping
                                 page = request_get(
                                     MARINE_ENGINE_BASE_URL +
-                                    product['product_url']
+                                    url
                                 )
                                 tree = html.fromstring(page.content)
 
@@ -773,15 +859,11 @@ def marineengine_mercruiser_scrapper():
                                 diag_number = prod.xpath("td/span/strong")[0] \
                                     .text.replace('#', '')
 
-        print("Finishing Marine Engine"
-              " Mercruiser Scraping...\n")
-        catalog['scraping_successful'] = True
-        with open('marine_engine_mercruiser-' +
-                  scrap_date + '.json', 'w') \
-                as outfile:
-            json.dump(catalog, outfile, indent=4)
-            pass
-        return
+            print("\n'%s' done...\n" % cat_name)
+            output_file_path = FILE_DIR + '/marine_engine/mercruiser/' + \
+                cat.text + '/' + re.sub(r'/', r'\\', cat_name) + \
+                '.json'
+            create_output_file(catalog, output_file_path)
 
 
 def marineengine_force_scrapper():
@@ -2332,22 +2414,22 @@ if __name__ == '__main__':
                         help='outputs json in a friendly indented format',
                         action='store_true')
 
-    subparsers = parser.add_subparsers(dest='site', help="The name of the site to scrap")
+    subparsers = parser.add_subparsers(
+        dest='site',
+        help="The name of the site to scrap")
 
     parser_marine_engine = subparsers.add_parser('marine_engine')
 
     parser_marine_engine.add_argument(
         'manufacturer', type=str,
-        choices=["mercury", "johnson"],
+        choices=["mercury", "mercruiser"],
         help="The name of the manufacturer"
     )
 
-    parser_boatsnet = subparsers.add_parser('boatsnet')
-
-    parser_boatsnet.add_argument(
-        'manufacturer', type=str,
-        choices=["suzuki"],
-        help="The name of the manufacturer"
+    parser_marine_engine.add_argument(
+        '--offset', type=int,
+        dest='offset',
+        help="Initial offset"
     )
 
     parser_marineeurope = subparsers.add_parser('marineparts_europe')
@@ -2358,15 +2440,22 @@ if __name__ == '__main__':
         help="The name of the manufacturer"
     )
 
+    parser_marineeurope.add_argument(
+        '--offset', type=int,
+        dest='offset',
+        help="Initial offset"
+    )
+
     args = parser.parse_args()
 
-    # pdb.set_trace()
-
+    # a site has to be introduced
     if not args.site:
         parser.error(message="Too few arguments")
-
     # json output mode
     PRETTY_OUTPUT = args.pretty
+    # scrapper offset
+    if args.offset:
+        INIT_OFFSET = args.offset
 
     ###############################################
     # ----------- Directories creation ---------- #
@@ -2389,6 +2478,9 @@ if __name__ == '__main__':
     if not os.path.exists(FILE_DIR + '/img/marine_engine/mercruiser'):
         os.makedirs(FILE_DIR + '/img/marine_engine/mercruiser')
 
+    if not os.path.exists(FILE_DIR + '/img/marine_europe/volvo'):
+        os.makedirs(FILE_DIR + '/img/marine_europe/volvo')
+
     # get user's input from stdin
     selected_scrapper = "%s %s" % (args.site,
                                    args.manufacturer)
@@ -2401,16 +2493,18 @@ if __name__ == '__main__':
         "marineparts_europe volvo": marinepartseurope_volvo_penta_scrapper,
     }
 
+    try:
+        selected_scrapper_func = OPT_DICT[selected_scrapper]
+    except KeyError as e:
+        print("Selected scrapper doesn't exists nor is implemented yet.\n"
+              "Current available brands are: mercury, johnson.")
+        exit(1)
+
     ############################################
     # Start the actual Scrapping
     print('Started scraping.')
     print('Ignoring some manuals...')
 
-    try:
-        OPT_DICT[selected_scrapper]()
-    except KeyError:
-        print("Selected scrapper doesn't exists nor is implemented yet.\n"
-              "Current available brands are: mercury, johnson.")
-        exit(1)
+    selected_scrapper_func()
 
     print('\nFinished scraping.')
