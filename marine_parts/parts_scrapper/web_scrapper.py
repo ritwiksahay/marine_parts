@@ -708,7 +708,7 @@ def marineengine_mercruiser_scrapper():
                 'category_url': mod.get('href'),
                 'sub_category': []
             }
-            category['sub_category'].append(model)
+            category['sub_category'] = [model]
 
             # Serial Range scrapping
             page = request_get(
@@ -737,7 +737,7 @@ def marineengine_mercruiser_scrapper():
                 else:
                     print("Caso especial mercruiser")
 
-                for comp in comps[-2:]:
+                for comp in comps:
                     component = {
                         'category_name': 'component',
                         'category': comp.text,
