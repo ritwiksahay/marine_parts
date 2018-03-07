@@ -1,8 +1,10 @@
 """."""
 
+import json
 import sys
 
 from django.core.paginator import Paginator
+from django.http import Http404
 
 from haystack import views
 from oscar.core.loading import get_class, get_model
@@ -11,7 +13,7 @@ from django.shortcuts import render
 
 from . import signals
 
-from marine_parts.apps.catalogue.models import Category
+from marine_parts.apps.catalogue.models import Cat, Category
 
 Product = get_model('catalogue', 'Product')
 FacetMunger = get_class('search.facets', 'FacetMunger')
@@ -52,14 +54,6 @@ class FacetedSearchView(views.FacetedSearchView):
         """Override to add the component to the context."""
         extra = super(FacetedSearchView, self).extra_context()
 
-        # Show suggestion no matter what.  Haystack 2.1 only shows a suggestion
-        # if there are some results, which seems a bit weird to me.
-        if self.results.query.backend.include_spelling:
-            # Note, this triggers an extra call to the search backend
-            suggestion = self.form.get_suggestion()
-            if suggestion != self.query:
-                extra['suggestion'] = suggestion
-
         # Convert facet data into a more useful data structure
         if 'fields' in extra['facets']:
             munger = FacetMunger(
@@ -88,19 +82,65 @@ class FacetedSearchView(views.FacetedSearchView):
         # pass the user basket
         extra['basket'] = self.request.basket
 
+        args = "".join(extra['selected_facets'])
+
+        # get last var element (contains the complete category path)
+
+        try:
+            path = self.request.GET.getlist('var')[-1][9:].split('/')
+        except IndexError:
+            path = []
+
+        # get categories to show in refined search form
+        extra['category_tree'] = self.categories_json(path)
+        extra['url_args'] = args[9:]
+
         return extra
+
+    def categories_json(self, path):
+        """Json with all the categories to show to the user for selection."""
+        roots = Category.get_root_nodes()
+
+        def get_tree(parents, path):
+            result = []
+            selected = None
+            for parent in parents:
+                # build category dict
+                cat = Cat()
+                cat.id = parent.id
+                cat.name = parent.name
+                cat.full_slug = parent.full_slug
+                cat.url = parent.get_search_url()
+                cat.is_selected = False
+                cat.children = []
+
+                if len(path) != 0 and parent.slug == path[0]:
+                    cat.is_selected = True
+                    selected = cat
+                    if parent.has_children():
+                        path = path[1:]
+                        cat.children = get_tree(parent.get_children(), path)
+
+                result.append(cat)
+
+            return {"categories": result, "selected": selected}
+
+        return get_tree(roots, path)
 
     def build_page(self):
         """Override to add component behaviour."""
         vars_list = self.request.GET.getlist("var")
         vars_list = [var for var in vars_list if var != '0']
         if len(vars_list) > 0:
-            category_full_name = vars_list[-1][9:]
+            category_full_slug = vars_list[-1][9:]
             category = None
             for cat in Category.objects.all():
-                if cat.full_name == category_full_name:
+                if cat.full_slug == category_full_slug:
                     category = cat
                     break
+
+            if category is None:
+                raise Http404("Category doesn't exist.")
 
             # Check if the category is a leaf (Component)
             if not category.has_children():
