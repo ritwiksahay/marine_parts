@@ -92,10 +92,3 @@ class AsynBasketAddView(BasketAddView):
 
         return HttpResponse(json.dumps(payload),
                             content_type="application/json")
-
-
-def prueba_ajax(request):
-    data = {
-        'pk': "llega",
-    }
-    return JsonResponse(data)
