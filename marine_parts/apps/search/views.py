@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 from haystack import views
 from oscar.core.loading import get_class, get_model
 from oscar.apps.basket.formsets import BasketLineFormSet
+from django.shortcuts import render
 
 from . import signals
 
@@ -111,3 +112,14 @@ class FacetedSearchView(views.FacetedSearchView):
             page = paginator.page(1)
             return (paginator, page)
         return super(FacetedSearchView, self).build_page()
+
+    def create_response(self):
+            """
+            Generates the actual HttpResponse to send back to the user.
+            """
+            print self.request
+            if self.request.is_ajax():
+                print "Yay!"
+            context = self.get_context()
+
+            return render(self.request, self.template, context)

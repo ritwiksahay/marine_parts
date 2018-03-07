@@ -4,8 +4,6 @@ from django.contrib.auth.decorators import login_required
 from oscar.core.application import Application
 from oscar.core.loading import get_class
 
-from marine_parts.apps.basket.views import prueba_ajax
-
 
 class BasketApplication(Application):
     name = 'basket'
@@ -19,7 +17,6 @@ class BasketApplication(Application):
         urls = [
             url(r'^$', self.summary_view.as_view(), name='summary'),
             url(r'^add/(?P<pk>\d+)/$', self.add_view.as_view(), name='add'),
-            url(r'^prueba/$', prueba_ajax, name="prueba"),
             url(r'^vouchers/add/$', self.add_voucher_view.as_view(),
                 name='vouchers-add'),
             url(r'^vouchers/(?P<pk>\d+)/remove/$',
