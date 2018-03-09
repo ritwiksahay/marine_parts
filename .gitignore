@@ -4,6 +4,7 @@ cache/
 *.sqlite3
 *.xml
 *.tgz
+*.ppk
 
 media/categories
 marine_parts/parts_scrapper/
