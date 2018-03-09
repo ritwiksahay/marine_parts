@@ -223,6 +223,7 @@
                       $("#basket_formset").on("submit", function(event){
                             event.preventDefault();   
                       });
+                      $('.basket-line-remove').on('click', onClickRemoveBasketLine);
 
                       // Show messages
                       msgs = data.messages;
@@ -279,6 +280,7 @@
                         $("#basket_formset").on("submit", function(event){
                             event.preventDefault();   
                         });
+                        $('.basket-line-remove').on('click', onClickRemoveBasketLine);
                     
                         // Show messages
                         msgs = data.messages;
@@ -295,10 +297,23 @@
                 });
             }
 
-            // Basket-change ajax handling
+            // Callback to remove basket line
+            function onClickRemoveBasketLine(){
+                // get qty input, set its value to 0,
+                // trigger change event so the server
+                // process deletion of the basket line
+                $qty_input = $(this).siblings('input');
+                $qty_input.val(0);
+                $qty_input.change();
+            }
+
+            // Basket-change ajax event handling
             $("#basket_formset input[type='number']")
                 .on('change', on_basket_change);
 
+            // Basket line remove event handling
+            $('.basket-line-remove').on('click', onClickRemoveBasketLine);
+            
             /* Show feedback message to the end user 
                after executing a task
             */

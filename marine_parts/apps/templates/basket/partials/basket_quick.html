@@ -33,6 +33,7 @@
                     <a href="{{ product.get_absolute_url }}">
                         <medium> {{ product.title | strip_part_number |truncatewords:4}}</medium>
                     </a>
+                    <i class="icon icon-cross basket-line-remove"></i>
                 </li>
                 {% endwith %}
             {% endfor %}
