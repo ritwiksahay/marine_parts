@@ -27,10 +27,11 @@
 
 {% block headertext %}
     {% if component and component.diagram_image %}
-        {{component.name | upper}}
-        <hr>
+        <h3 class="page-header-title">{{component.name | upper}}</h3>
     {% else %}
-        {% trans "Results"|upper %}
+        {% if request.GET.q %}
+            {% trans "Results"|upper %}
+        {% endif %}
     {% endif %}
 {% endblock %}
 
@@ -86,38 +87,37 @@
                 <input type="hidden" name="selected_facets" value="{{ value }}" />
             {% endfor %}
             <input type="hidden" name="q" value="{{ search_form.q.value }}" />
-
-            {% if paginator.count %}
-                {% if paginator.num_pages > 1 %}
-                    {% blocktrans with start=page.start_index end=page.end_index num_results=paginator.count %}
-                        Found <strong>{{ num_results }}</strong> results, showing <strong>{{ start }}</strong> to <strong>{{ end }}</strong>.
-                    {% endblocktrans %}
+            
+            {% if request.GET.q %}
+                {% if paginator.count %}
+                    {% if paginator.num_pages > 1 %}
+                        {% blocktrans with start=page.start_index end=page.end_index num_results=paginator.count %}
+                            Found <strong>{{ num_results }}</strong> results, showing <strong>{{ start }}</strong> to <strong>{{ end }}</strong>.
+                        {% endblocktrans %}
+                    {% else %}
+                        {% blocktrans with num_results=paginator.count %}Found <strong>{{ num_results }}</strong> results.{% endblocktrans %}
+                    {% endif %}                
                 {% else %}
-                    {% blocktrans with num_results=paginator.count %}Found <strong>{{ num_results }}</strong> results.{% endblocktrans %}
+                    <p>
+                        {% trans "Found <strong>0</strong> results." %}
+                    </p>
                 {% endif %}
-                <!--
-                <div class="pull-right">
-                    {# {% include "partials/form_field.html" with field=search_form.sort_by %} #}
-                </div>
-                -->
-            {% else %}
-                <p>
-                    {% trans "Found <strong>0</strong> results." %}
-                </p>
-            {% endif %}
+            {% endif %} 
         </form>
-
-        {% if page.object_list %}
-            <section id="results">
-                <div>
-                    <ol class="row">
-                        {% for result in page.object_list %}
-                            <li class="col-xs-12 col-sm-6 col-md-4 col-lg-3">{% render_product result.object %}</li>
-                        {% endfor %}
-                    </ol>
-                    {% include "partials/pagination.html" with page_obj=page %}
-                </div>
-            </section>
+        
+        {% if request.GET.q %}
+            {% if page.object_list %}
+                <section id="results">
+                    <div>
+                        <ol class="row">
+                            {% for result in page.object_list %}
+                                <li class="col-xs-12 col-sm-6 col-md-4 col-lg-3">{% render_product result.object %}</li>
+                            {% endfor %}
+                        </ol>
+                        {% include "partials/pagination.html" with page_obj=page %}
+                    </div>
+                </section>
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endblock %}
@@ -184,13 +184,17 @@
 
             /* When the user scrolls down, the basket in the sidebar will 
              follow */
-            var threshold = $('.basket-wrapper').offset().top;
+            var threshold_top = $('.basket-wrapper').offset().top;
+            var threshold_bottom = $('.customer-service').offset().top;
             $(window).scroll(function(){
                 var scrollT = $(window).scrollTop();
-                if(scrollT > threshold) {
-                    $(".basket-wrapper").css({
-                       'top': (scrollT - threshold + 5) + 'px' 
-                    });
+                if(scrollT > threshold_top) {
+                    var h = $('.basket-wrapper').height();
+                    if(scrollT + h + 5 <= threshold_bottom){
+                        $(".basket-wrapper").css({
+                           'top': (scrollT - threshold_top + 5) + 'px' 
+                        });
+                    }
                 } else {
                     $(".basket-wrapper").css('top', '0');
                 }
