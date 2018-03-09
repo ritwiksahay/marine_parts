@@ -27,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'cs)qm+=(yp=uvrkdam@vteo-giw_(4%4rdqmpq=b0otx9u*1*w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['www.marineparts.us', 'marineparts.us']
 
@@ -157,8 +157,8 @@ AUTHENTICATION_BACKENDS = (
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://localhost:8983/solr/marine_parts',
-        'ADMIN_URL': 'http://localhost:8983/solr/',
+        'URL': 'http://54.210.86.226:8983/solr/marine_parts',
+        'ADMIN_URL': 'http://54.210.86.226:8983/solr/',
         'TIMEOUT': 60 * 5,
         'INCLUDE_SPELLING': True,
         'EXCLUDED_INDEXES': ['oscar.apps.search.search_indexes.ProductIndex'],
