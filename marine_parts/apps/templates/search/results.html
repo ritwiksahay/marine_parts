@@ -27,10 +27,11 @@
 
 {% block headertext %}
     {% if component and component.diagram_image %}
-        {{component.name | upper}}
-        <hr>
+        <h3 class="page-header-title">{{component.name | upper}}</h3>
     {% else %}
-        {% trans "Results"|upper %}
+        {% if request.GET.q %}
+            {% trans "Results"|upper %}
+        {% endif %}
     {% endif %}
 {% endblock %}
 
@@ -87,10 +88,6 @@
             {% endfor %}
             <input type="hidden" name="q" value="{{ search_form.q.value }}" />
             
-            
-            {% if paginator.count %}
-                {% blocktrans with num_results=paginator.count %}Found <strong>{{ num_results }}</strong> results.{% endblocktrans %}
-            {% endif %}
             {% if request.GET.q %}
                 {% if paginator.count %}
                     {% if paginator.num_pages > 1 %}
@@ -107,7 +104,6 @@
                 {% endif %}
             {% endif %} 
         </form>
-        <br>
         
         {% if request.GET.q %}
             {% if page.object_list %}
@@ -188,13 +184,17 @@
 
             /* When the user scrolls down, the basket in the sidebar will 
              follow */
-            var threshold = $('.basket-wrapper').offset().top;
+            var threshold_top = $('.basket-wrapper').offset().top;
+            var threshold_bottom = $('.customer-service').offset().top;
             $(window).scroll(function(){
                 var scrollT = $(window).scrollTop();
-                if(scrollT > threshold) {
-                    $(".basket-wrapper").css({
-                       'top': (scrollT - threshold + 5) + 'px' 
-                    });
+                if(scrollT > threshold_top) {
+                    var h = $('.basket-wrapper').height();
+                    if(scrollT + h + 5 <= threshold_bottom){
+                        $(".basket-wrapper").css({
+                           'top': (scrollT - threshold_top + 5) + 'px' 
+                        });
+                    }
                 } else {
                     $(".basket-wrapper").css('top', '0');
                 }

@@ -122,9 +122,9 @@ class FacetedSearchView(views.FacetedSearchView):
             else:
                 raise Http404("Category doesn't exist.")
 
-        # Check if the category is a leaf (Component)
-        if category.is_leaf():
-            self.is_component = category
+            # Check if the category is a leaf (Component)
+            if category.is_leaf():
+                self.is_component = category
 
     def build_page(self):
         """Override to add component behaviour."""
