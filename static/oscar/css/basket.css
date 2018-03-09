@@ -195,3 +195,9 @@ ul.basket-mini-item {
 .basket-items .price_color {
     font-family: "Gotham Book";
 }
+
+.basket-mini-item .mini-item .icon-cross {
+    color: red;
+    cursor: pointer;
+    margin-left: 1rem;
+} 
