@@ -1,6 +1,5 @@
 """."""
 
-import json
 import sys
 
 from django.core.paginator import Paginator
@@ -33,18 +32,13 @@ class FacetedSearchView(views.FacetedSearchView):
     search_signal = signals.user_search
 
     def __init__(self, *args, **kwargs):
+        """Override to add the component attribute."""
         super(FacetedSearchView, self).__init__(*args, **kwargs)
         self.is_component = None
 
     def __call__(self, request):
-        response = super(FacetedSearchView, self).__call__(request)
-
-        # Raise a signal for other apps to hook into for analytics
-        self.search_signal.send(
-            sender=self, session=self.request.session,
-            user=self.request.user, query=self.query)
-
-        return response
+        self._is_component_(request)
+        return super(FacetedSearchView, self).__call__(request)
 
     # Override this method to add the spelling suggestion to the context and to
     # convert Haystack's default facet data into a more useful structure so we
@@ -53,20 +47,8 @@ class FacetedSearchView(views.FacetedSearchView):
         """Override to add the component to the context."""
         extra = super(FacetedSearchView, self).extra_context()
 
-        # Convert facet data into a more useful data structure
-        if 'fields' in extra['facets']:
-            munger = FacetMunger(
-                self.request.get_full_path(),
-                self.form.selected_multi_facets,
-                self.results.facet_counts())
-            extra['facet_data'] = munger.facet_data()
-            has_facets = any([len(data['results']) for
-                              data in extra['facet_data'].values()])
-            extra['has_facets'] = has_facets
-
         # Pass list of selected facets so they can be included in the sorting
         # form.
-
         extra['selected_facets'] = self.request.GET.getlist('var')
 
         # Obtain the Component name and, retrieve it
@@ -81,23 +63,19 @@ class FacetedSearchView(views.FacetedSearchView):
         # pass the user basket
         extra['basket'] = self.request.basket
 
-        args = "".join(extra['selected_facets'])
-
-        # get last var element (contains the complete category path)
-
+        # get var element (contains the complete category path)
         try:
-            path = self.request.GET.getlist('var')[-1][9:].split('/')
+            path = self.request.GET.get('var')[9:].split('/')
         except IndexError:
             path = []
 
         # get categories to show in refined search form
         extra['category_tree'] = self.categories_json(path)
-        extra['url_args'] = args[9:]
 
         return extra
 
     def categories_json(self, path):
-        """Json with all the categories to show to the user for selection."""
+        """Json with all the categories to show in the refined search form."""
         roots = Category.get_root_nodes()
 
         def get_tree(parents, path):
@@ -126,28 +104,43 @@ class FacetedSearchView(views.FacetedSearchView):
 
         return get_tree(roots, path)
 
-    def build_page(self):
-        """Override to add component behaviour."""
-        vars_list = self.request.GET.getlist("var")
-        vars_list = [var for var in vars_list if var != '0']
-        if len(vars_list) > 0:
-            category_full_slug = vars_list[-1][9:]
+    def _is_component_(self, request):
+        """Set is_component attribute."""
+        # Get the selected category
+        var = request.GET.get("var")
+        if var and var != '0':
+            category_full_slug = var[9:].strip()
+            cat_slug = category_full_slug.split('/')[-1]
             category = None
-            for cat in Category.objects.all():
-                if cat.full_slug == category_full_slug:
-                    category = cat
-                    break
+            matches = Category.objects.filter(slug=cat_slug)
 
-            if category is None:
+            if matches:
+                for cat in matches:
+                    if cat.full_slug == category_full_slug:
+                        category = cat
+
+            else:
                 raise Http404("Category doesn't exist.")
 
-            # Check if the category is a leaf (Component)
-            if not category.has_children():
-                self.is_component = category
+        # Check if the category is a leaf (Component)
+        if category.is_leaf():
+            self.is_component = category
 
+    def build_page(self):
+        """Override to add component behaviour."""
+        # Check if the category is a leaf (Component)
         if self.is_component:
             # if it's component then there's not pagination
             paginator = Paginator(self.results, sys.maxsize)
             page = paginator.page(1)
             return (paginator, page)
         return super(FacetedSearchView, self).build_page()
+
+    def get_results(self):
+        """."""
+        # We're only interested in products (there might be other content types
+        # in the Solr index).
+        if self.is_component or self.request.GET.get("q"):
+            return super(FacetedSearchView, self).get_results()
+        else:
+            return []

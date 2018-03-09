@@ -86,38 +86,42 @@
                 <input type="hidden" name="selected_facets" value="{{ value }}" />
             {% endfor %}
             <input type="hidden" name="q" value="{{ search_form.q.value }}" />
-
+            
+            
             {% if paginator.count %}
-                {% if paginator.num_pages > 1 %}
-                    {% blocktrans with start=page.start_index end=page.end_index num_results=paginator.count %}
-                        Found <strong>{{ num_results }}</strong> results, showing <strong>{{ start }}</strong> to <strong>{{ end }}</strong>.
-                    {% endblocktrans %}
-                {% else %}
-                    {% blocktrans with num_results=paginator.count %}Found <strong>{{ num_results }}</strong> results.{% endblocktrans %}
-                {% endif %}
-                <!--
-                <div class="pull-right">
-                    {# {% include "partials/form_field.html" with field=search_form.sort_by %} #}
-                </div>
-                -->
-            {% else %}
-                <p>
-                    {% trans "Found <strong>0</strong> results." %}
-                </p>
+                {% blocktrans with num_results=paginator.count %}Found <strong>{{ num_results }}</strong> results.{% endblocktrans %}
             {% endif %}
+            {% if request.GET.q %}
+                {% if paginator.count %}
+                    {% if paginator.num_pages > 1 %}
+                        {% blocktrans with start=page.start_index end=page.end_index num_results=paginator.count %}
+                            Found <strong>{{ num_results }}</strong> results, showing <strong>{{ start }}</strong> to <strong>{{ end }}</strong>.
+                        {% endblocktrans %}
+                    {% else %}
+                        {% blocktrans with num_results=paginator.count %}Found <strong>{{ num_results }}</strong> results.{% endblocktrans %}
+                    {% endif %}                
+                {% else %}
+                    <p>
+                        {% trans "Found <strong>0</strong> results." %}
+                    </p>
+                {% endif %}
+            {% endif %} 
         </form>
-
-        {% if page.object_list %}
-            <section id="results">
-                <div>
-                    <ol class="row">
-                        {% for result in page.object_list %}
-                            <li class="col-xs-12 col-sm-6 col-md-4 col-lg-3">{% render_product result.object %}</li>
-                        {% endfor %}
-                    </ol>
-                    {% include "partials/pagination.html" with page_obj=page %}
-                </div>
-            </section>
+        <br>
+        
+        {% if request.GET.q %}
+            {% if page.object_list %}
+                <section id="results">
+                    <div>
+                        <ol class="row">
+                            {% for result in page.object_list %}
+                                <li class="col-xs-12 col-sm-6 col-md-4 col-lg-3">{% render_product result.object %}</li>
+                            {% endfor %}
+                        </ol>
+                        {% include "partials/pagination.html" with page_obj=page %}
+                    </div>
+                </section>
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endblock %}
