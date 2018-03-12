@@ -19,13 +19,10 @@ from django.core.files import File
 
 from datetime import datetime
 
-from django.utils.lorem_ipsum import paragraph
-from oscar.apps.catalogue.models import (ProductClass,
-                                         ProductCategory,
-                                         ProductAttribute)
+from oscar.apps.catalogue.models import ProductClass, ProductAttribute
 from oscar.apps.catalogue.categories import create_from_breadcrumbs
 from oscar.apps.partner.models import StockRecord, Partner
-from marine_parts.apps.catalogue.models import Product, ReplacementProduct
+from marine_parts.apps.catalogue.models import Product, ReplacementProduct, ProductCategory
 from decimal import Decimal as D
 
 # Necesario para controlar que se introduce en la BD
@@ -63,7 +60,7 @@ class DBHandler:
 class DBAccess(DBHandler):
     def __init__(self, cat_base):
         self.subcomp_class = self.obt_subcomponent_class()
-        self.part_number, self.manufacturer, self.diag_number = \
+        self.part_number, self.manufacturer = \
             self.obt_crea_atributos_prods(self.subcomp_class)
         self.partner = self.obt_partner()
         self.part_number_set = set()
@@ -129,10 +126,10 @@ class DBAccess(DBHandler):
                                           replacement=p_origin)
         return
 
-    def add_product_to_category(self, prod, cat):
+    def add_product_to_category(self, prod, cat, diag_number):
         try:
             with transaction.atomic():
-                ProductCategory.objects.create(product=prod, category=cat)
+                ProductCategory.objects.create(product=prod, category=cat, diagram_number=diag_number)
         except IntegrityError:
             pass
 
@@ -158,14 +155,14 @@ class DBAccess(DBHandler):
             code='PN',
             required=True,
             type=ProductAttribute.TEXT)
-        diag_number, _ = ProductAttribute.objects.get_or_create(
-            product_class=product_class,
-            name='Diagram number',
-            code='DN',
-            required=True,
-            type=ProductAttribute.TEXT)
+        # diag_number, _ = ProductAttribute.objects.get_or_create(
+        #     product_class=product_class,
+        #     name='Diagram number',
+        #     code='DN',
+        #     required=True,
+        #     type=ProductAttribute.TEXT)
 
-        return part_number, manufacturer, diag_number
+        return part_number, manufacturer
 
     def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
         item = Product.objects.create(product_class=self.subcomp_class, title=prod_name)
@@ -177,10 +174,8 @@ class DBAccess(DBHandler):
 
         if manufac_v:
             self.manufacturer.save_value(item, manufac_v)
-        if diag_num_v:
-            self.diag_number.save_value(item, diag_num_v)
 
-        ProductCategory.objects.create(product=item, category=cat)
+        ProductCategory.objects.create(product=item, category=cat, diagram_number=diag_num_v)
 
         if is_aval:
             self.add_stock_records(item, part_num_v, 1000)
@@ -228,7 +223,7 @@ def nav_prods(json_products, bre_cat, db_oscar):
 
             prod, exists = db_oscar.check_partnumber(part_number_v)
             if exists:
-                db_oscar.add_product_to_category(prod, cat)
+                db_oscar.add_product_to_category(prod, cat, diagram_number_v)
             else:
                 pro = db_oscar.crear_prods(cat, is_available, prod_name, part_number_v, manufacturer_v, diagram_number_v)
                 db_oscar.add_part_number(part_number_v)

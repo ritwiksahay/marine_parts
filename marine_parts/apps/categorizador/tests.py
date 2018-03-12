@@ -77,8 +77,8 @@ class MockDB(categorizador.DBHandler):
         self.cnt += 1
         return prod_name
 
-    def add_product_to_category(self, part_number_v, cat):
-        self.lsCatsProd.append((part_number_v, cat))
+    def add_product_to_category(self, part_number_v, cat, diag_num):
+        self.lsCatsProd.append((part_number_v, cat, diag_num))
 
     @property
     def get_ls(self):
@@ -204,8 +204,8 @@ class TestExtraerProds(unittest.TestCase):
         nro_prod = categorizador.extraer_prods(casos.productos_repetidos_categorias, self.mockDB)
         self.assertEqual(self.mockDB.lsCatsProd,
              [
-                 ('34-95304', '0T894577 & Up (USA) > Cylinder Block'),
-                 ('878-9151 2', '0T894577 & Up (USA) > Cylinder Block'),
+                 ('34-95304', '0T894577 & Up (USA) > Cylinder Block','12'),
+                 ('878-9151 2', '0T894577 & Up (USA) > Cylinder Block','1'),
              ]
         )
 
