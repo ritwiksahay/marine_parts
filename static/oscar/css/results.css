@@ -32,12 +32,14 @@ Light Gray: #E6E6E6;
     font-family: 'Gotham Bold' !important;
     color: #0d4a6c;
     background-color: #ffffff;
-    padding: 20px 15px 5px 15px;
+    padding: 0px 15px 0px 15px;
     border-bottom: none !important;
+    min-height: 0;
 }
 
-.page-header hr {
-    margin: 10px 0;
+.page-header .page-header-title {
+    margin: 15px 0 16px 0;
+    border-bottom: 1px solid #ddd;
 }
 
 .page_inner div .sidebar {
