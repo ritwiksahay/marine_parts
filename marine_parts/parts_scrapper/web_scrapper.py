@@ -60,8 +60,8 @@ def marinepartseurope_volvo_penta_scrapper():
     mod_selector = ("//td[@class='bookCell']/h2/a")
     comp_selector = ("//div[@id='ctl00_PageContent_EPCCategories']/"
                      "table[1]//tr")
-    prod_selector = ("//div[@id='ctl00_PageContent_PentaPanel']/"
-                     "table/tbody/tr")
+    diagram_number_selector = ("//div[@id='ctl00_PageContent_PentaPanel']/"
+                               "table/tbody")
 
     scrap_date = str(date.today()).replace(' ', '')
     catalog = {
@@ -70,7 +70,7 @@ def marinepartseurope_volvo_penta_scrapper():
         'scraping_successful': False,
     }
 
-    for cat in tree.xpath(xpath_selector):
+    for cat in tree.xpath(xpath_selector)[0:1]:
         if not os.path.exists(FILE_DIR + '/marine_europe/volvo/' + cat.text):
             os.makedirs(FILE_DIR + '/marine_europe/volvo/' + cat.text)
 
@@ -90,7 +90,7 @@ def marinepartseurope_volvo_penta_scrapper():
             '/' + cat_link)
         tree = html.fromstring(page.content)
 
-        for mod in tree.xpath(mod_selector)[INIT_OFFSET:]:
+        for mod in tree.xpath(mod_selector)[INIT_OFFSET:INIT_OFFSET+1]:
             mod_name = re.sub(r'[\n\t]+', '', mod.text)
             print("'%s' starting...\n" % mod_name)
             mod_link = mod.get('href')
@@ -144,43 +144,66 @@ def marinepartseurope_volvo_penta_scrapper():
                         '/' + comp_link)
                     tree = html.fromstring(page.content)
 
-                    for prod in tree.xpath(prod_selector):
-                        # Build product
+                    for dn in tree.xpath(diagram_number_selector):
 
-                        try:
-                            # if any of the following info is missing,
-                            # then ignore part
-                            diagram_number = prod.xpath('td[1]')[0].text
-                            if not diagram_number:
-                                    part_number = '0'
-                            try:
-                                prod_name = prod.xpath('td[2]/a')[0].text
-                            except IndexError:
-                                prod_name = prod.xpath('td[2]')[0].text
-                                if not prod_name:
-                                    prod_name = prod.xpath('td[2]/img')[0].tail
-                                    if not prod_name:
-                                        continue
+                        diagram_number = ''
+                        # Rows in a diagram_number table
+                        for prod in dn.xpath('tr'):
 
                             try:
-                                part_number = prod.xpath('td[3]/a')[0].text
-                                if not part_number:
+                                # if any of the following info is missing,
+                                # then ignore part
+
+                                # Get Diagram Number
+                                try:
+                                    diagram_number = \
+                                        prod.xpath('td[1]')[0].text \
+                                        if prod.xpath('td[1]')[0] \
+                                            .text.strip() != '' \
+                                        else diagram_number
+                                    if not diagram_number:
+                                            diagram_number = '0'
+                                except IndexError:
                                     continue
-                            except IndexError:
+
+                                # Get Product Title
+                                try:
+                                    prod_name = prod.xpath('td[2]/a')[0].text
+                                except IndexError:
+                                    prod_name = prod.xpath('td[2]')[0].text
+                                    if not prod_name:
+                                        prod_name = \
+                                            prod.xpath('td[2]/img')[0].tail
+                                        if not prod_name:
+                                            continue
+
+                                # Get Part Number
+                                try:
+                                    part_number = prod.xpath('td[3]/a')[0].text
+                                    if not part_number:
+                                        continue
+                                except IndexError:
+                                    continue
+
+                                # Get Availability
+                                try:
+                                    available = prod.xpath('td[5]')[0] \
+                                        .text.strip() != 'Out of production'
+                                except IndexError:
+                                    continue
+
+                            except TypeError:
                                 continue
 
-                        except TypeError:
-                            continue
-
-                        product = {
-                            'product': prod_name.strip(),
-                            'part_number': part_number.strip(),
-                            'diagram_number': diagram_number.strip(),
-                            'replacements': [],
-                            'is_available': [],
-                            'manufacturer': '',
-                        }
-                        component['products'].append(product.copy())
+                            product = {
+                                'product': prod_name.strip(),
+                                'part_number': part_number.strip(),
+                                'diagram_number': diagram_number.strip(),
+                                'replacements': [],
+                                'is_available': available,
+                                'manufacturer': '',
+                            }
+                            component['products'].append(product.copy())
 
                     # Save component
                     if section != {}:
@@ -709,7 +732,7 @@ def marineengine_mercruiser_scrapper():
                 'category_url': mod.get('href'),
                 'sub_category': []
             }
-            category['sub_category'].append(model)
+            category['sub_category'] = [model]
 
             # Serial Range scrapping
             page = request_get(
@@ -738,7 +761,7 @@ def marineengine_mercruiser_scrapper():
                 else:
                     print("Caso especial mercruiser")
 
-                for comp in comps[-2:]:
+                for comp in comps:
                     component = {
                         'category_name': 'component',
                         'category': comp.text,
