@@ -152,14 +152,3 @@ class FacetedSearchView(views.FacetedSearchView):
             page = paginator.page(1)
             return (paginator, page)
         return super(FacetedSearchView, self).build_page()
-
-    def create_response(self):
-            """
-            Generates the actual HttpResponse to send back to the user.
-            """
-            print self.request
-            if self.request.is_ajax():
-                print "Yay!"
-            context = self.get_context()
-
-            return render(self.request, self.template, context)
