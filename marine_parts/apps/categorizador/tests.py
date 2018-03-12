@@ -123,6 +123,25 @@ class TestUnitExtraerCats(unittest.TestCase):
         self.assertEqual(resul, casos.casoR_nivelesCompletos_variasCateg_variasSerial_variosComp)
 
 
+class CreaProdsTest(unittest.TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.cat = create_from_breadcrumbs('Prueba')
+        cls.pc = ProductClass.objects.create(name='Subcomponent')
+        cls.partner = Partner.objects.create(name='Loaded')
+        cls.part_number = ProductAttribute.objects.create(
+            product_class=cls.pc, name='Part number', code='PN', required=True, type=ProductAttribute.TEXT)
+
+    def setUp(self):
+        self.realDB = categorizador.DBAccess('Prueba')
+
+    def test_productos_sin_partnumber__regresaRunTimeError(self):
+        self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', None, 'Man', '1')
+
+    def test_productos_partnumber_string_empty__regresaRunTimeError(self):
+        self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', '', 'Man', '1')
+
+
 class TestNavProds(unittest.TestCase):
 
     def setUp(self):

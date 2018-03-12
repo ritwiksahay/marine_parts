@@ -18,6 +18,8 @@ from django.conf import settings
 from django.core.files import File
 
 from datetime import datetime
+
+from django.utils.lorem_ipsum import paragraph
 from oscar.apps.catalogue.models import (ProductClass,
                                          ProductCategory,
                                          ProductAttribute)
@@ -170,6 +172,9 @@ class DBAccess(DBHandler):
 
         if part_num_v:
             self.part_number.save_value(item, part_num_v)
+        else:
+            raise RuntimeError('Part Number does not exists')
+
         if manufac_v:
             self.manufacturer.save_value(item, manufac_v)
         if diag_num_v:
