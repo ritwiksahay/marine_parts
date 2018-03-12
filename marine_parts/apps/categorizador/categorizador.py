@@ -101,7 +101,7 @@ class DBAccess(DBHandler):
                 url = os.path.join(settings.SCRAPPER_ROOT, comp_img)
                 result = urllib.urlretrieve(url)
                 cat.diagram_image.save(
-                    os.path.basename(url),
+                    comp_img,
                     File(open(result[0]))
                 )
                 cat.save()
