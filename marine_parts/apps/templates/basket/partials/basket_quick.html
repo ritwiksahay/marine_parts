@@ -1,6 +1,5 @@
 {% load history_tags %}
 {% load basket_tags %}
-{% load component_filters %}
 {% load currency_filters %}
 {% load thumbnail %}
 {% load i18n %}
@@ -31,7 +30,7 @@
                 <li class="mini-item text-left">
                     {% render_field form.quantity class+="form-control quantity_input" type="text" %}
                     <a href="{{ product.get_absolute_url }}">
-                        <medium> {{ product.title | strip_part_number |truncatewords:4}}</medium>
+                        <medium>{{ product.title }}</medium>
                     </a>
                     <i class="icon icon-cross basket-line-remove"></i>
                 </li>

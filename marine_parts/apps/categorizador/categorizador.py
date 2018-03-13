@@ -55,13 +55,17 @@ class DBHandler:
     def obt_crea_atributos_prods(self, product_class):
         pass
 
-    def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
+    def crear_prods(self, cat, is_aval, prod_name,
+                    part_num_v, manufac_v, orig_v,
+                    diag_num_v):
         pass
 
+
 class DBAccess(DBHandler):
+
     def __init__(self, cat_base):
         self.subcomp_class = self.obt_subcomponent_class()
-        self.part_number, self.manufacturer, self.diag_number = \
+        self.diag_number, self.manufacturer, self.origin, self.part_number = \
             self.obt_crea_atributos_prods(self.subcomp_class)
         self.partner = self.obt_partner()
         self.part_number_set = set()
@@ -123,8 +127,8 @@ class DBAccess(DBHandler):
         return product_class
 
     def asign_prod_replacement(self, p_origin, p_asign):
-        ReplacementProduct.objects.get_or_create(primary=p_asign,
-                                          replacement=p_origin)
+        ReplacementProduct.objects.get_or_create(primary=p_origin,
+                                                 replacement=p_asign)
         return
 
     def add_product_to_category(self, prod, cat):
@@ -145,10 +149,22 @@ class DBAccess(DBHandler):
             num_in_stock=amount)
 
     def obt_crea_atributos_prods(self, product_class):
+        diag_number, _ = ProductAttribute.objects.get_or_create(
+            product_class=product_class,
+            name='Diagram number',
+            code='DN',
+            required=True,
+            type=ProductAttribute.TEXT)
         manufacturer, _ = ProductAttribute.objects.get_or_create(
             product_class=product_class,
             name='Manufacturer',
             code='M', required=True,
+            type=ProductAttribute.TEXT)
+        origin, _ = ProductAttribute.objects.get_or_create(
+            product_class=product_class,
+            name='Origin',
+            code='O',
+            required=False,
             type=ProductAttribute.TEXT)
         part_number, _ = ProductAttribute.objects.get_or_create(
             product_class=product_class,
@@ -156,24 +172,22 @@ class DBAccess(DBHandler):
             code='PN',
             required=True,
             type=ProductAttribute.TEXT)
-        diag_number, _ = ProductAttribute.objects.get_or_create(
-            product_class=product_class,
-            name='Diagram number',
-            code='DN',
-            required=True,
-            type=ProductAttribute.TEXT)
 
-        return part_number, manufacturer, diag_number
+        return diag_number, manufacturer, origin, part_number
 
-    def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
-        item = Product.objects.create(product_class=self.subcomp_class, title=prod_name)
-
-        if part_num_v:
-            self.part_number.save_value(item, part_num_v)
-        if manufac_v:
-            self.manufacturer.save_value(item, manufac_v)
+    def crear_prods(self, cat, is_aval, prod_name,
+                    part_num_v, manufac_v, orig_v,
+                    diag_num_v):
+        item = Product.objects.create(product_class=self.subcomp_class,
+                                      title=prod_name)
         if diag_num_v:
             self.diag_number.save_value(item, diag_num_v)
+        if manufac_v:
+            self.manufacturer.save_value(item, manufac_v)
+        if orig_v:
+            self.origin.save_value(item, orig_v)
+        if part_num_v:
+            self.part_number.save_value(item, part_num_v)
 
         item.save()
 
@@ -185,14 +199,14 @@ class DBAccess(DBHandler):
         return item
 
 
-########################################################################################################################
+###############################################################################
 
 def nav_prods(json_products, bre_cat, db_oscar):
     """
     Crea los productos que se encuentre en el JSON en la BD del proyecto.
+
     Devuelve el numero de productos procesados.
     """
-
     def obt_sucesores(hijo):
         products = hijo.get('products')
         if products:
@@ -222,12 +236,15 @@ def nav_prods(json_products, bre_cat, db_oscar):
             part_number_v = prod_json.get('part_number')
             manufacturer_v = prod_json.get('manufacturer')
             diagram_number_v = prod_json.get('diagram_number')
+            origin_v = prod_json.get('origin')
 
             prod, exists = db_oscar.check_partnumber(part_number_v)
             if exists:
                 db_oscar.add_product_to_category(prod, cat)
             else:
-                pro = db_oscar.crear_prods(cat, is_available, prod_name, part_number_v, manufacturer_v, diagram_number_v)
+                pro = db_oscar.crear_prods(cat, is_available, prod_name,
+                                           part_number_v, manufacturer_v,
+                                           origin_v, diagram_number_v)
                 db_oscar.add_part_number(part_number_v)
                 nro_products += 1
 

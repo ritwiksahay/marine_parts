@@ -49,17 +49,21 @@ def request_get(path, stream=False):
         print(e)
 
 
-def get_product_title(text):
+def get_product_title(text, part_number):
     """Extract part's title from text."""
-    lis = text.split(" - ")
-    for idx, elem in enumerate(lis):
-        if not re.sub('[\s-]+', '', elem).isdigit():
-            return " - ".join(lis[idx:])
+    pn = re.sub('[\s-]', '', part_number)
 
+    def comp(s):
+        return pn not in re.sub('[\s-]', '', s) and s != 'Priced Individually'
+
+    lis = text.split(" - ")
+    new = filter(comp, lis)
+    return ' - '.join(new)
 
 ##################################################################
 # MARINE PARTS EUROPE WEB ########################################
 ##################################################################
+
 
 def marinepartseurope_volvo_penta_scrapper():
     """Scrapper for Marine Parts Europe Volvo Penta Parts."""
@@ -108,7 +112,7 @@ def marinepartseurope_volvo_penta_scrapper():
             '/' + cat_link)
         tree = html.fromstring(page.content)
 
-        for mod in tree.xpath(mod_selector)[INIT_OFFSET:INIT_OFFSET+1]:
+        for mod in tree.xpath(mod_selector)[INIT_OFFSET:INIT_OFFSET + 1]:
             mod_name = re.sub(r'[\n\t]+', '', mod.text)
             print("'%s' starting...\n" % mod_name)
             mod_link = mod.get('href')
@@ -295,8 +299,11 @@ def marineengine_mercury_scrapper():
         for idx, hp in enumerate(hps):
             hp_name = re.sub(r'[\n\t]+', '', hp.text)
             hp_slug = slugify(hp_name)
-            print("'%s' starting... (%.2f %%)\n" % (hp_name,
-                  float(INIT_OFFSET + idx) / float(num_hps) * 100))
+            print("'%s' starting... (%d of %d categories... %.2f %%)\n" %
+                  (hp_name,
+                   INIT_OFFSET + idx,
+                   num_hps,
+                   float(INIT_OFFSET + idx) / float(num_hps) * 100))
             horse_power = {
                 'category_name': 'horse power',
                 'category': hp_name,
@@ -390,7 +397,7 @@ def marineengine_mercury_scrapper():
                             if not title:
                                 continue
 
-                            title = re.sub('\t\n', '', title)
+                            title = re.sub(r' +', ' ', title.strip())
 
                             # Get original vs aftermarket attribute
                             origin = None
@@ -405,23 +412,16 @@ def marineengine_mercury_scrapper():
                             except IndexError:
                                 pass
 
-                            product = {
-                                'diagram_number': diag_number,
-                                'origin': origin,
-                                'product': get_product_title(title),
-                                'replacements': []
-                            }
-
                             # Check if it's unavailable obsolete and replaced
                             is_replaced = False
                             if prod.xpath('td[3]/small[1]'):
-                                product['is_available'] = False
+                                is_available = False
                                 xpath = prod.xpath('td[3]/small[2]/br')
                                 if xpath is not None and xpath != []:
                                     match = xpath[0].tail.strip()
                                     is_replaced = "Replaced" in match
                             else:
-                                product['is_available'] = True
+                                is_available = True
 
                             # Product details scraping
                             page = request_get(
@@ -447,12 +447,23 @@ def marineengine_mercury_scrapper():
 
                                 if value:
                                     if count == 0:
-                                        product['part_number'] = value
+                                        part_number = value.strip()
                                     else:
-                                        product['manufacturer'] = value
+                                        manufacturer = value.strip()
                                         break
 
                                 count += 1
+
+                            title = get_product_title(title, part_number)
+                            product = {
+                                'diagram_number': diag_number,
+                                'manufacturer': manufacturer,
+                                'origin': origin,
+                                'part_number': part_number,
+                                'product': title,
+                                'is_available': is_available,
+                                'replacements': []
+                            }
 
                             # we add replacements only in the replacement
                             # list of the replaced object to avoid
