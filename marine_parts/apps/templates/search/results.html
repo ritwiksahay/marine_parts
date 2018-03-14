@@ -61,16 +61,18 @@
                 <p class="text-center">{% trans "(Scroll over the image to zoom in or zoom out)" %}</p>
             </div>
         </div>
-        <div class="col-xs-12 col-md-4" style="overflow-y: scroll;height: 1000px;font-size: 12px;">
+        <div class="col-xs-12 col-md-4" style="overflow-y: scroll;height: 1000px;font-size: 13px;">
             {% if page.object_list %}
                 <table id="part-table" class="table text-center" style="table-layout: fixed;">
 
                     <tbody>
-                        {% with results=page.object_list|get_products %}
-                            {% for product in results  %}
-                                    {% purchase_info_for_product request product as session %}
-                                    {% render_component_part_header product session%}
-                                    {% render_component_part product session %}
+                        {% with results=page.object_list|build_results:component.pk %}
+                            {% for result in results  %}
+                                    {% with product=result.object %}
+                                        {% purchase_info_for_product request product as session %}
+                                        {% render_component_part_header product session%}
+                                        {% render_component_part product session %}
+                                    {% endwith %}
                                 <tr><td><div style="min-height: 0px"></div></td><td></td><td colspan="3"></td></tr>
                             {% endfor %}
                         {% endwith %}
