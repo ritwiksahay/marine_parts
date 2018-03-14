@@ -66,11 +66,11 @@
                 <table id="part-table" class="table text-center" style="table-layout: fixed;">
 
                     <tbody>
-                        {% with results=page.object_list %}
+                        {% with results=page.object_list|get_products %}
                             {% for product in results  %}
-                                {% purchase_info_for_product request product as session %}
-                                {% render_component_part_header product session%}
-                                {% render_component_part product session %}
+                                    {% purchase_info_for_product request product as session %}
+                                    {% render_component_part_header product session%}
+                                    {% render_component_part product session %}
                                 <tr><td><div style="min-height: 0px"></div></td><td></td><td colspan="3"></td></tr>
                             {% endfor %}
                         {% endwith %}

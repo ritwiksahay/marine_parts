@@ -6,6 +6,14 @@ from django.template.loader import select_template
 register = template.Library()
 
 
+@register.filter
+def get_products(result_page):
+    """."""
+    parts = [sr.object for sr in result_page
+             if sr.object.replacements.count() == 0]
+    return parts
+
+
 def get_key(p):
     """Key to sort products by diagram number."""
     try:
