@@ -1,5 +1,5 @@
 import django.test as unittest
-from django.core.management import call_command
+from django.core.management import call_command, CommandError
 import casos_prueba as casos
 from django.utils.six import StringIO
 from marine_parts.apps.catalogue.models import Product, ProductClass, ProductAttribute, ProductCategory
@@ -77,8 +77,8 @@ class MockDB(categorizador.DBHandler):
         self.cnt += 1
         return prod_name
 
-    def add_product_to_category(self, part_number_v, cat):
-        self.lsCatsProd.append((part_number_v, cat))
+    def add_product_to_category(self, part_number_v, cat, diag_num):
+        self.lsCatsProd.append((part_number_v, cat, diag_num))
 
     @property
     def get_ls(self):
@@ -121,6 +121,25 @@ class TestUnitExtraerCats(unittest.TestCase):
         self.handler.entrada = casos.caso_nivelesCompletos_variasCateg_variasSerial_variosComp
         resul = categorizador.extraer_cats(self.handler.leer('prueba.json'))
         self.assertEqual(resul, casos.casoR_nivelesCompletos_variasCateg_variasSerial_variosComp)
+
+
+class CreaProdsTest(unittest.TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.cat = create_from_breadcrumbs('Prueba')
+        cls.pc = ProductClass.objects.create(name='Subcomponent')
+        cls.partner = Partner.objects.create(name='Loaded')
+        cls.part_number = ProductAttribute.objects.create(
+            product_class=cls.pc, name='Part number', code='PN', required=True, type=ProductAttribute.TEXT)
+
+    def setUp(self):
+        self.realDB = categorizador.DBAccess('Prueba')
+
+    def test_productos_sin_partnumber__regresaRunTimeError(self):
+        self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', None, 'Man', '1')
+
+    def test_productos_partnumber_string_empty__regresaRunTimeError(self):
+        self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', '', 'Man', '1')
 
 
 class TestNavProds(unittest.TestCase):
@@ -185,8 +204,8 @@ class TestExtraerProds(unittest.TestCase):
         nro_prod = categorizador.extraer_prods(casos.productos_repetidos_categorias, self.mockDB)
         self.assertEqual(self.mockDB.lsCatsProd,
              [
-                 ('34-95304', '0T894577 & Up (USA) > Cylinder Block'),
-                 ('878-9151 2', '0T894577 & Up (USA) > Cylinder Block'),
+                 ('34-95304', '0T894577 & Up (USA) > Cylinder Block','12'),
+                 ('878-9151 2', '0T894577 & Up (USA) > Cylinder Block','1'),
              ]
         )
 
@@ -250,16 +269,34 @@ class LoadProductsManageTest(unittest.TestCase):
 
     def setUp(self):
         self.out = StringIO()
-        self.out.write("")
+        self.out.flush()
+        self.derr = StringIO()
+        self.derr.flush()
 
     def test_executeFilepathsEmpty_regresaException(self):
-        call_command('load_products', '', stdout=self.out)
+        call_command('load_products', '', stdout=self.out, stderr=self.derr)
         self.assertIn('No products were created', self.out.getvalue())
 
     def test_executeInvalidSeveralFilePaths_regresaLog(self):
-        call_command('load_products', 'file1', stderr=self.out)
-        self.assertIn('An error occurred while processing this file: file1. Skipping...', self.out.getvalue())
+        call_command('load_products', 'file1', stderr=self.out, stdout=self.derr)
+        self.assertIn('An error occurred while processing this file: file1', self.out.getvalue())
 
     def test_execWithCatBase_regresaLog(self):
-        call_command('load_products', 'file1', 'file2', stdout=self.out, cat_base='Prueba')
+        call_command('load_products', 'file1', 'file2', stdout=self.out, cat_base='Prueba', stderr=self.derr)
         self.assertIn('Using base category: Prueba.', self.out.getvalue())
+
+########################################################################################################################
+
+class RetrieveCategoriesTest(unittest.TestCase):
+    def setUp(self):
+        self.out = StringIO()
+        self.out.flush()
+        self.derr = StringIO()
+        self.derr.flush()
+
+    def test_executeFilepathsEmpty_regresaException(self):
+        self.assertRaises(CommandError, call_command, 'retrieve_categories', stdout=self.out, stderr=self.derr)
+
+    def test_executeInvalidFilePath_regresaLog(self):
+        call_command('retrieve_categories', 'file1', stderr=self.out, stdio=self.derr)
+        self.assertIn('An error occurred while processing this file: file1', self.out.getvalue())

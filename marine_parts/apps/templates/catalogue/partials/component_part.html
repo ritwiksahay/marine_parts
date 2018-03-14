@@ -1,5 +1,4 @@
 {% load basket_tags %}
-{% load component_filters %}
 {% load component_tags %}
 {% load currency_filters %}
 {% load purchase_info_tags %}
@@ -8,7 +7,7 @@
 {% with replacements=product.replacement_products.all %}
 
 <tr>
-    <td colspan="4" scope="colgroup"><a {% if replacements %} class="deprecated" {% else %}href="{{ product.get_absolute_url }}"{% endif %}>{{ product.get_title | strip_part_number }}</a></td>
+    <td colspan="4" scope="colgroup"><a {% if replacements %} class="deprecated" {% else %}href="{{ product.get_absolute_url }}"{% endif %}>{{ product.get_title }}</a></td>
 
     {% if session.availability.is_available_to_buy %}
         <td colspan="1">
