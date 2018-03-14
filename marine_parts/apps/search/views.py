@@ -67,7 +67,7 @@ class FacetedSearchView(views.FacetedSearchView):
         # get var element (contains the complete category path)
         try:
             path = self.request.GET.get('var')[9:].split('/')
-        except IndexError:
+        except:
             path = []
 
         # get categories to show in refined search form
