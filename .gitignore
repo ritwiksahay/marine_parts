@@ -8,6 +8,7 @@ logs/
 *.xml
 *.tgz
 *.ppk
+*.pem
 
 media/categories
 marine_parts/parts_scrapper/
