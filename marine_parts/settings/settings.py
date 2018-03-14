@@ -29,7 +29,7 @@ SECRET_KEY = 'cs)qm+=(yp=uvrkdam@vteo-giw_(4%4rdqmpq=b0otx9u*1*w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.marineparts.us']
 
 
 # Application definition
@@ -161,8 +161,9 @@ AUTHENTICATION_BACKENDS = (
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://127.0.0.1:8983/solr/prueba_parts',
-        'ADMIN_URL': 'http://127.0.0.1:8983/solr/',
+        'URL': 'http://54.82.245.119:8983/solr/marine_parts',
+        'ADMIN_URL': 'http://54.82.245.119:8983/solr/',
+        'TIMEOUT': 60 * 5,
         'INCLUDE_SPELLING': True,
         'EXCLUDED_INDEXES': ['oscar.apps.search.search_indexes.ProductIndex'],
     },
