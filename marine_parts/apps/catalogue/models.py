@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
 from oscar.apps.catalogue import abstract_models
-from oscar.apps.catalogue.abstract_models import AbstractCategory
+from oscar.apps.catalogue.abstract_models import AbstractCategory, AbstractProductCategory
 
 from marine_parts.apps.catalogue.abstract_models \
     import AbstractReplacementProduct
@@ -35,6 +35,18 @@ class Category(AbstractCategory):
     def get_search_url(self):
         """Build part of the url that points to the search of the category."""
         return 'category:' + to_url(self.full_slug)
+
+
+class ProductCategory(AbstractProductCategory):
+    """Override to include diagram numbers."""
+
+    diagram_number = models.CharField(
+        max_length=5,
+        blank=True,
+        null=True,
+        verbose_name=_("Diagram number"),
+        help_text=_("Number associated with part diagram.")
+    )
 
 
 # @python_2_unicode_compatible
