@@ -87,7 +87,7 @@
                     <a href="{{category.get_absolute_url}}">
                         <img class="img-responsive category-icon" src="{%if category.image%}{{ category.image.url }}{%endif%}" alt="{{category.name}}">
                         <p class="category_name">
-                            {{category.name}}
+                            {% trans category.name %}
                         </p>
                     </a>
                 </div>

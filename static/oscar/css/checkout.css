@@ -33,6 +33,15 @@ body {
 	padding-left: 20px;
 }
 
+.header .navbar-static-top .checkout-brand {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.header .navbar-static-top .navbar-nav li{
+    margin-top: 1.65%;
+}
+
 .nav-checkout .active .navbar-text {
 	color: #04a0d3;
 }

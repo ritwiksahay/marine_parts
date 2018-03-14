@@ -279,6 +279,7 @@ class IntegerField(SearchField):
         if value is None:
             return None
 
+        # Original line: return int(value[0])
         return int(value)
 
 
@@ -297,7 +298,7 @@ class FloatField(SearchField):
     def convert(self, value):
         if value is None:
             return None
-
+        #Original line: return float(value)
         return float(value)
 
 

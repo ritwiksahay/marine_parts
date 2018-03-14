@@ -69,7 +69,10 @@ class AsynBasketAddView(BasketAddView):
             flash_messages.info(self.get_success_message(form))
 
             # pass Basket formset to handle the basket element
-            formset = BasketLineFormSet(self.request.strategy)
+            formset = BasketLineFormSet(
+                strategy=self.request.basket.strategy,
+                queryset=self.request.basket.all_lines()
+            )
 
             ctx = {"formset": formset}
             return self.json_response(ctx, flash_messages)

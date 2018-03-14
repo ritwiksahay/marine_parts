@@ -6,13 +6,14 @@ from django.core.paginator import Paginator
 from django.http import Http404
 
 from haystack import views
-from oscar.core.loading import get_class, get_model
-from oscar.apps.basket.formsets import BasketLineFormSet
-from django.shortcuts import render
+from oscar.core.loading import get_class, get_model, get_classes
+from oscar.core.compat import user_is_authenticated
 
 from . import signals
 
 from marine_parts.apps.catalogue.models import Cat, Category
+BasketLineFormSet, SavedLineFormSet = get_classes(
+    'basket.formsets', ('BasketLineFormSet', 'SavedLineFormSet'))
 
 Product = get_model('catalogue', 'Product')
 FacetMunger = get_class('search.facets', 'FacetMunger')
@@ -58,9 +59,12 @@ class FacetedSearchView(views.FacetedSearchView):
         extra['component'] = self.is_component
 
         # pass Basket formset to handle the basket element
-        formset = BasketLineFormSet(self.request.strategy)
-
+        formset = BasketLineFormSet(
+            strategy=self.request.basket.strategy,
+            queryset=self.request.basket.all_lines()
+        )
         extra['formset'] = formset
+
         # pass the user basket
         extra['basket'] = self.request.basket
 

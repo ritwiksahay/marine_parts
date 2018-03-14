@@ -1,0 +1,72 @@
+/*
+Header style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+.navbar-nav{
+    float: none;
+}
+
+.navbar-default{
+    border-color: #e6e6e6;
+    background-color: #e6e6e6;
+}
+
+.brand-col{
+    padding-right: 0px;
+}
+
+.logo-brand .brand{
+    border-right-style: solid;
+    border-right-color: #0d4a6c;
+    border-right-width: 2px;
+    padding-right: 15px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.navbar-form{
+    margin-right: 0px;
+    margin-top: 1px;
+    margin-bottom: 0px;
+}
+
+.header .navbar-static-top{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.header .navbar-nav a{
+    font-family: "Gotham Book";
+    color: #0d4a6c;
+    font-size: 18px;
+}
+
+.header .navbar-nav div.text-center{
+    margin-top: 2.5%;
+}
+
+.header .navbar-nav div.search-bar{
+    margin-top: 1.5%;
+}
+
+.header .navbar-nav div.search-bar form div .search-form{
+    max-width: 92%;
+    font-family: 'Gotham Book';
+    font-size: 16px;
+    height: 40px;
+}
+
+.header .navbar-nav div.search-bar form div button{
+    height: 40px;
+    background-color: #0d4a6c;
+    color: #ffffff;
+    line-height: 30px;
+    font-size: 1.7rem;
+}
