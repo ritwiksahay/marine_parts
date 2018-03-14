@@ -51,7 +51,6 @@ THIRD_PARTY_APPS = [
 SYSTEM_APPS = [
     'marine_parts.apps.users',
     'marine_parts.parts_scrapper',
-    'marine_parts.apps.authorize',
     'marine_parts.apps.dashboard.bulk_price_updater'
 ]
 

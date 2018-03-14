@@ -29,7 +29,7 @@ SECRET_KEY = 'cs)qm+=(yp=uvrkdam@vteo-giw_(4%4rdqmpq=b0otx9u*1*w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.marineparts.us', 'marineparts.us']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -100,6 +100,7 @@ OSCAR_DASHBOARD_NAVIGATION[1]['children'].append(
     {
         'label': 'Bulk price update',
         'url_name': 'dashboard:bulk-price-updater-index',
+        # 'access_fn': lambda user, url_name, url_args, url_kwargs: user.is_staff
     }
 )
 
@@ -114,6 +115,7 @@ OSCAR_DASHBOARD_NAVIGATION += [
             }
         ]
     },
+
 ]
 
 
@@ -149,17 +151,18 @@ ROOT_URLCONF = 'marine_parts.urls'
 # Disable when there is real email service available
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
+
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://54.210.86.226:8983/solr/marine_parts',
-        'ADMIN_URL': 'http://54.210.86.226:8983/solr/',
-        'TIMEOUT': 60 * 5,
+        'URL': 'http://127.0.0.1:8983/solr/prueba_parts',
+        'ADMIN_URL': 'http://127.0.0.1:8983/solr/',
         'INCLUDE_SPELLING': True,
         'EXCLUDED_INDEXES': ['oscar.apps.search.search_indexes.ProductIndex'],
     },
@@ -217,22 +220,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'marine_parts_db',
-        'USER': 'mp_user',
-        'PASSWORD': 'AmP19451X',
-        'HOST': 'marineparts.ca9ar9i4iarq.us-east-1.rds.amazonaws.com',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
         'PORT': '',
     }
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'marine_parts_db',
-#         'USER': 'mp_user',
-#         'PASSWORD': '@mP19451#',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -245,8 +238,9 @@ DATABASES = {
 #     }
 # }
 
+
 # Google Ads
-ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  # OPTIONAL-DEFAULT TO None
+ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  #OPTIONAL-DEFAULT TO None
 
 ADS_ZONES = {
     'header': {
@@ -318,15 +312,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = location('/home/ubuntu/marine-parts/static')
-
+STATIC_ROOT = location('../static/')
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-
 STATICFILES_DIRS = (
-
+    os.path.join('static/'),
 )
 
 MEDIA_URL = '/media/'
