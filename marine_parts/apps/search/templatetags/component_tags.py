@@ -3,24 +3,33 @@
 from django import template
 from django.template.loader import select_template
 
+from marine_parts.apps.catalogue.models import ProductCategory
+
 register = template.Library()
 
 
 @register.filter
-def get_products(result_page):
-    """."""
-    parts = [sr.object for sr in result_page
-             if sr.object.replacements.count() == 0]
-    return parts
+def build_results(result_page, comp_id):
+    """Return searched parts with their Diagram number."""
+    results = []
+    for idx, sr in enumerate(result_page):
+        pr = sr.object
+        if sr.object.replacements.count() == 0:
+            pr.DN = ProductCategory.objects.get(product=pr, category=comp_id) \
+                .diagram_number
+            results.append(sr)
+
+    results.sort(key=get_key)
+    return results
 
 
-def get_key(p):
+def get_key(sr):
     """Key to sort products by diagram number."""
     try:
-        if p.attr.DN[0] == "#":
-            dn = int((p.attr.DN)[1:])
+        if sr.object.DN[0] == "#":
+            dn = int((sr.object.DN)[1:])
         else:
-            dn = int(p.attr.DN)
+            dn = int(sr.object.DN)
 
     except (ValueError, IndexError):
         dn = 100000
