@@ -32,7 +32,7 @@
                 <li class="mini-item text-left">
                     {% render_field form.quantity class+="form-control quantity_input" type="text" %}
                     <a href="{{ product.get_absolute_url }}">
-                        <medium>{{ product.title }}</medium>
+                        <medium>{{ product.title|truncatewords:2  }}</medium>
                     </a>
                     <i class="icon icon-cross basket-line-remove"></i>
                 </li>
