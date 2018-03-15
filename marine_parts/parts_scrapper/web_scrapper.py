@@ -3,10 +3,7 @@
 import argparse
 import copy
 from datetime import date
-<<<<<<< HEAD
-=======
 import errno
->>>>>>> 666c0b4fac845c6da8632f2f7d9e4756a22ca659
 import json
 from lxml import etree, html
 import os
