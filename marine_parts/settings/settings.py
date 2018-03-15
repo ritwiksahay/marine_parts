@@ -221,23 +221,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'marine_parts_db',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '',
+        'USER': 'mp_user',
+        'PASSWORD': 'mP19451AxC',
+        'HOST': 'marineparts.ca9ar9i4iarq.us-east-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': 'db.sqlite3',
-#         'USER': '',
-#         'PASSWORD': '',
-#         'HOST': '',
-#         'PORT': '',
-#         'ATOMIC_REQUESTS': True,
-#     }
-# }
 
 
 # Google Ads
@@ -341,3 +330,4 @@ EMAIL_HOST_PASSWORD = 'M@rine0470'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 SCRAPPER_ROOT = os.path.join(BASE_DIR, 'parts_scrapper/')
+

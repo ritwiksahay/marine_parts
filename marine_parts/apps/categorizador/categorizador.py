@@ -137,11 +137,7 @@ class DBAccess(DBHandler):
         except IntegrityError:
             pass
 
-<<<<<<< HEAD
-    def add_stock_records(self, pro, part_number, amount):
-=======
     def add_stock_records(self, pro, part_number,  amount):
->>>>>>> 666c0b4fac845c6da8632f2f7d9e4756a22ca659
         StockRecord.objects.create(
             product=pro,
             partner=self.partner,
