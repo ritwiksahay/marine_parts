@@ -221,8 +221,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'marine_parts_db',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'USER': 'mp_user',
+        'PASSWORD': 'mP19451AxC',
         'HOST': 'localhost',
         'PORT': '',
     }
