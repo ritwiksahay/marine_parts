@@ -71,6 +71,9 @@ def marinepartseurope_volvo_penta_scrapper():
 
     print('Starting Marine Parts Europe Volvo Penta Scrapping...')
 
+    output_root_path = FILE_DIR + '/marine_europe/volvo/'
+    images_root_folder = 'img/marine_europe/volvo/'
+
     # Get Index Page
     page = request_get(MARINE_PARTS_EUROPE_BASE_URL)
     tree = html.fromstring(page.content)
@@ -82,6 +85,7 @@ def marinepartseurope_volvo_penta_scrapper():
     mod_selector = ("//td[@class='bookCell']/h2/a")
     comp_selector = ("//div[@id='ctl00_PageContent_EPCCategories']/"
                      "table[1]//tr")
+    ximg_selector = "//img[@id='ctl00_PageContent_PentaMap101']"
     diagram_number_selector = ("//div[@id='ctl00_PageContent_PentaPanel']/"
                                "table/tbody")
 
@@ -93,12 +97,12 @@ def marinepartseurope_volvo_penta_scrapper():
     }
 
     for cat in tree.xpath(xpath_selector)[0:1]:
-        if not os.path.exists(FILE_DIR + '/marine_europe/volvo/' + cat.text):
-            os.makedirs(FILE_DIR + '/marine_europe/volvo/' + cat.text)
+        cat_name = cat.text
+        cat_slug = slugify(cat_name)
 
         category = {
             'category_name': 'category',
-            'category': cat.text,
+            'category': cat_name,
             'sub_category': []
         }
 
@@ -112,9 +116,18 @@ def marinepartseurope_volvo_penta_scrapper():
             '/' + cat_link)
         tree = html.fromstring(page.content)
 
-        for mod in tree.xpath(mod_selector)[INIT_OFFSET:INIT_OFFSET + 1]:
+        mods = tree.xpath(mod_selector)[INIT_OFFSET:]
+        num_mods = len(mods) + INIT_OFFSET
+
+        for idx, mod in enumerate(mods):
             mod_name = re.sub(r'[\n\t]+', '', mod.text)
-            print("'%s' starting...\n" % mod_name)
+            mod_slug = slugify(mod_name)
+            print("'%s' starting... (%d of %d categories... %.2f %%)\n" %
+                  (mod_name,
+                   INIT_OFFSET + idx,
+                   num_mods,
+                   float(INIT_OFFSET + idx) / float(num_mods) * 100))
+
             mod_link = mod.get('href')
 
             model = {
@@ -132,7 +145,8 @@ def marinepartseurope_volvo_penta_scrapper():
             tree = html.fromstring(page.content)
             section = {}
 
-            for comp in tree.xpath(comp_selector)[0:2]:
+            for comp in tree.xpath(comp_selector)[0:3]:
+
                 # Section Header
                 if (comp.xpath("td[@class='catalogHeaderCell']/h2")):
                     # Save Previous section
@@ -149,8 +163,19 @@ def marinepartseurope_volvo_penta_scrapper():
                 else:
                     comp_a = comp.xpath(
                         "td[@class='catalogCell']/span/a")[0]
-                    comp_name = comp_a.xpath('h3')[0].text
+                    comp_name = comp_a.xpath('h3')[0].text.strip()
                     comp_link = comp_a.get('href')
+
+                    # get related model
+                    rel_model = comp.xpath(
+                        "td[2]/a")[0].text
+                    if rel_model:
+                        comp_name += ' - ' + rel_model.strip()
+
+                    comp_slug = slugify(comp_name)
+
+                    print("Scrapping component '%s' \n\turl: %s"
+                          % (comp_name, comp_link))
 
                     # Build component
                     component = {
@@ -166,9 +191,27 @@ def marinepartseurope_volvo_penta_scrapper():
                         '/' + comp_link)
                     tree = html.fromstring(page.content)
 
+                    # Download Component Image
+                    component_image = MARINE_PARTS_EUROPE_BASE_URL
+                    component_image += tree.xpath(ximg_selector)[0] \
+                        .get('src')
+
+                    r = request_get(component_image, stream=True)
+                    image_rel_path = images_root_folder + \
+                        mod_slug + '/' + \
+                        comp_slug + '.gif'
+                    image_final_path = os.path.join(FILE_DIR,
+                                                    image_rel_path)
+                    save_downloaded_file(image_final_path, r)
+                    component_image = image_rel_path
+
+                    component['image'] = component_image
+
                     for dn in tree.xpath(diagram_number_selector):
 
                         diagram_number = ''
+                        product = {}
+                        last_replaced = None
                         # Rows in a diagram_number table
                         for prod in dn.xpath('tr'):
 
@@ -190,14 +233,25 @@ def marinepartseurope_volvo_penta_scrapper():
 
                                 # Get Product Title
                                 try:
-                                    prod_name = prod.xpath('td[2]/a')[0].text
+                                    prod_name = \
+                                        prod.xpath('td[2]/a')[0].text.strip()
                                 except IndexError:
-                                    prod_name = prod.xpath('td[2]')[0].text
-                                    if not prod_name:
+                                    try:
                                         prod_name = \
-                                            prod.xpath('td[2]/img')[0].tail
-                                        if not prod_name:
-                                            continue
+                                            prod.xpath('td[2]/img')[-1]\
+                                            .tail.strip()
+                                    except IndexError:
+                                        prod_name = \
+                                            prod.xpath('td[2]')[0].text.strip()
+
+                                # if name is empty, ignore part
+                                if not prod_name:
+                                    continue
+
+                                # Check if the previous part is replaced
+                                if prod_name == 'Replaced by:':
+                                    last_replaced = product
+                                    continue
 
                                 # Get Part Number
                                 try:
@@ -225,7 +279,14 @@ def marinepartseurope_volvo_penta_scrapper():
                                 'is_available': available,
                                 'manufacturer': '',
                             }
-                            component['products'].append(product.copy())
+
+                            # we add replacements only in the replacement
+                            # list of the replaced object to avoid
+                            # duplicated inserts in DB
+                            if last_replaced is None:
+                                component['products'].append(product)
+                            else:
+                                last_replaced['replacements'].append(product)
 
                     # Save component
                     if section != {}:
@@ -235,8 +296,13 @@ def marinepartseurope_volvo_penta_scrapper():
             if section != {}:
                         model['sub_category'].append(section.copy())
 
+            print("\n'%s' done...\n" % mod_name)
+            output_file_path = output_root_path + \
+                cat_slug + '/' + mod_slug + \
+                '.json'
+            create_output_file(catalog, output_file_path)
+
     print('Finished Marine Parts Europe Volvo Penta Scrapping...')
-    print(json.dumps(catalog, indent=4))
 
 ##################################################################
 # MARINE ENGINE WEB ##############################################
