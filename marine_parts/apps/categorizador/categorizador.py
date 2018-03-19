@@ -171,10 +171,13 @@ class DBAccess(DBHandler):
     def crear_prods(self, cat, is_aval, prod_name,
                     part_num_v, manufac_v, orig_v,
                     diag_num_v):
+
         item = Product.objects.create(product_class=self.subcomp_class,
                                       title=prod_name)
         if part_num_v:
             self.part_number.save_value(item, part_num_v)
+            item.upc = part_num_v
+            item.save()
         else:
             raise RuntimeError('Part Number does not exists')
 
