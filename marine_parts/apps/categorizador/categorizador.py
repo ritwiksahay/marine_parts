@@ -238,6 +238,8 @@ def nav_prods(json_products, bre_cat, db_oscar):
             prod, exists = db_oscar.check_partnumber(part_number_v)
             if exists:
                 db_oscar.add_product_to_category(prod, cat, diagram_number_v)
+                if padr:
+                    db_oscar.asign_prod_replacement(padr, prod)
             else:
                 pro = db_oscar.crear_prods(cat, is_available, prod_name,
                                            part_number_v, manufacturer_v,
