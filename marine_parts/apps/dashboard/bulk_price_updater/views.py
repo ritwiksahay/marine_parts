@@ -4,6 +4,7 @@ from forms import UploadFileForm
 from price_updater import execUpdater
 import os
 
+
 class UploadFileView(FormView):
     form_class = UploadFileForm
     success_url = 'review/'
