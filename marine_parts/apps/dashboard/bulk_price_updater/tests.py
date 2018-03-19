@@ -218,7 +218,7 @@ class TestIntegrationUpdatePartNumber(test.TestCase):
         self.part_number.save_value(p, part_number)
         if hasStock:
             StockRecord.objects.create(product=p, partner=self.partner
-                                       , partner_sku=title, price_excl_tax=D('0.00'), num_in_stock=1)
+                                       , partner_sku=part_number, price_excl_tax=D('0.00'), num_in_stock=1)
 
     @classmethod
     def setUpTestData(cls):
@@ -265,6 +265,13 @@ class TestIntegrationUpdatePartNumber(test.TestCase):
         db = DBHandler(self.partner, D(30))
         sr2, _ = db.update_by_part_number(self.p2['IMITMC'], self.p2['Your Price'], self.p2['List'], self.p2['Dealer'])
         self.assertEqual(sr2.price_excl_tax, D(71.50))
+
+    def test_createNewStockRecordNewPartnerProductWithStock_NotRaiseIntegrityError(self):
+        partner = Partner.objects.create(name='AnotherPartner')
+        db = DBHandler(partner, D(0))
+        sr1, created = db.update_by_part_number(self.p1['IMITMC'], self.p1['Your Price'], self.p1['List'], self.p1['Dealer'])
+        self.assertTrue(created)
+        self.assertEqual(sr1.partner.name, 'AnotherPartner')
 
     def test_updateProductWithStockWithIncrease_returnsTrue(self):
         db = DBHandler(self.partner, D(30))

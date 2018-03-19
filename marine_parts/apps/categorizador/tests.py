@@ -39,7 +39,9 @@ class StubDBHandler(categorizador.DBHandler):
     def obt_crea_atributos_prods(self, p):
         return (FakeObjectOscar(), FakeObjectOscar(), FakeObjectOscar())
 
-    def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
+    def crear_prods(self, cat, is_aval, prod_name,
+                    part_num_v, manufac_v, orig_v,
+                    diag_num_v):
         return FakeObjectOscar, True
 
 class MockDB(categorizador.DBHandler):
@@ -72,7 +74,9 @@ class MockDB(categorizador.DBHandler):
     def obt_subcomponent_class(self):
         pass
 
-    def crear_prods(self, cat, is_aval, prod_name, part_num_v, manufac_v, diag_num_v):
+    def crear_prods(self, cat, is_aval, prod_name,
+                    part_num_v, manufac_v, orig_v,
+                    diag_num_v):
         self.ls.append((self.cnt, prod_name))
         self.cnt += 1
         return prod_name
@@ -136,10 +140,10 @@ class CreaProdsTest(unittest.TestCase):
         self.realDB = categorizador.DBAccess('Prueba')
 
     def test_productos_sin_partnumber__regresaRunTimeError(self):
-        self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', None, 'Man', '1')
+        self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', None, 'Man', 'ori', '1')
 
     def test_productos_partnumber_string_empty__regresaRunTimeError(self):
-        self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', '', 'Man', '1')
+        self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', '', 'Man', 'ori', '1')
 
 
 class TestNavProds(unittest.TestCase):

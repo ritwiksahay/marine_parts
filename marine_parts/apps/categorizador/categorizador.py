@@ -137,6 +137,7 @@ class DBAccess(DBHandler):
         except IntegrityError:
             pass
 
+
     def add_stock_records(self, pro, part_number, amount):
         StockRecord.objects.create(
             product=pro,
@@ -171,10 +172,13 @@ class DBAccess(DBHandler):
     def crear_prods(self, cat, is_aval, prod_name,
                     part_num_v, manufac_v, orig_v,
                     diag_num_v):
+
         item = Product.objects.create(product_class=self.subcomp_class,
                                       title=prod_name)
         if part_num_v:
             self.part_number.save_value(item, part_num_v)
+            item.upc = part_num_v
+            item.save()
         else:
             raise RuntimeError('Part Number does not exists')
 
@@ -234,6 +238,8 @@ def nav_prods(json_products, bre_cat, db_oscar):
             prod, exists = db_oscar.check_partnumber(part_number_v)
             if exists:
                 db_oscar.add_product_to_category(prod, cat, diagram_number_v)
+                if padr:
+                    db_oscar.asign_prod_replacement(padr, prod)
             else:
                 pro = db_oscar.crear_prods(cat, is_available, prod_name,
                                            part_number_v, manufacturer_v,
