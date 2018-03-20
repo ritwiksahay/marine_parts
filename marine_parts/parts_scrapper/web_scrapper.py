@@ -151,9 +151,12 @@ def marinepartseurope_volvo_penta_scrapper():
                 if (comp.xpath("td[@class='catalogHeaderCell']/h2")):
                     # Save Previous section
                     if section != {}:
-                        model['sub_category'].append(section.copy())
+                        model['sub_category'].append(section)
                     sect_name = comp.xpath(
                         "td[@class='catalogHeaderCell']/h2")[0].text
+                    # if section title is empty, ignore
+                    if not sect_name:
+                        continue
                     section = {
                         'category_name': 'section',
                         'category': sect_name.strip(),
@@ -161,6 +164,10 @@ def marinepartseurope_volvo_penta_scrapper():
                     }
                 # Component entry
                 else:
+                    # if section title is empty, ignore
+                    if not sect_name:
+                        continue
+
                     comp_a = comp.xpath(
                         "td[@class='catalogCell']/span/a")[0]
                     comp_name = comp_a.xpath('h3')[0].text.strip()
@@ -295,11 +302,11 @@ def marinepartseurope_volvo_penta_scrapper():
 
                     # Save component
                     if section != {}:
-                        section['sub_category'].append(component.copy())
+                        section['sub_category'].append(component)
 
             # Save Last Section
             if section != {}:
-                        model['sub_category'].append(section.copy())
+                model['sub_category'].append(section)
 
             print("\n'%s' done...\n" % mod_name)
             output_file_path = output_root_path + \
