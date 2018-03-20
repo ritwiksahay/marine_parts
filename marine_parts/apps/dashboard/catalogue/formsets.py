@@ -32,12 +32,12 @@ ProductRecommendation = get_model('catalogue', 'ProductRecommendation')
 BaseStockRecordFormSet = inlineformset_factory(
     Product, StockRecord, form=StockRecordForm, extra=1)
 
-BaseProductRecommendationFormSet = inlineformset_factory(
+BaseProductReplacementFormSet = inlineformset_factory(
     Product, ReplacementProduct, form=ProductReplacementForm,
-    extra=5, fk_name="replacement")
+    extra=5, fk_name="primary")
 
 
-class ProductReplacementFormSet(BaseProductRecommendationFormSet):
+class ProductReplacementFormSet(BaseProductReplacementFormSet):
 
     def __init__(self, product_class, user, *args, **kwargs):
         super(ProductReplacementFormSet, self).__init__(*args, **kwargs)

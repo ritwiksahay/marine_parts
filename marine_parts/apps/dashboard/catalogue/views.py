@@ -202,11 +202,11 @@ class ProductCreateUpdateView(generic.UpdateView):
 
     def __init__(self, *args, **kwargs):
         super(ProductCreateUpdateView, self).__init__(*args, **kwargs)
-        self.formsets = {'category_formset': self.category_formset,
-                         'image_formset': self.image_formset,
-                         'recommended_formset': self.recommendations_formset,
-                        'replacement_formset': self.replacement_formset,
-                         'stockrecord_formset': self.stockrecord_formset}
+        self.formsets = {   'category_formset': self.category_formset,
+                            'image_formset': self.image_formset,
+                            'recommended_formset': self.recommendations_formset,
+                            'replacement_formset': self.replacement_formset,
+                            'stockrecord_formset': self.stockrecord_formset}
 
     def dispatch(self, request, *args, **kwargs):
         resp = super(ProductCreateUpdateView, self).dispatch(
