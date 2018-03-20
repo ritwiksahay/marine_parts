@@ -1,6 +1,7 @@
 from oscar.apps.partner.models import StockRecord, Partner
 from marine_parts.apps.catalogue.models import Product
 from decimal import Decimal, InvalidOperation
+from datetime import datetime
 import logging
 import StringIO
 
@@ -31,11 +32,12 @@ class DBHandler:
         self.percent = percent / Decimal(100)
 
     def update_by_part_number(self, part_number, price_excl_tax, price_retail, cost_price):
-        # Search by part_number
+        # Search by par t_number
         pro = Product.objects.get(attribute_values__value_text=part_number)
         return StockRecord.objects.update_or_create(product=pro, partner=self.partner,
              defaults={
-                        'price_excl_tax' : self.adjust_by_percent(price_excl_tax)
+                        'partner_sku' : part_number + str(datetime.now())
+                        , 'price_excl_tax' : self.adjust_by_percent(price_excl_tax)
                         , 'price_retail':  price_retail
                         , 'cost_price' : cost_price
                        })
@@ -54,7 +56,7 @@ def updater(ls_st_rec, db):
     }
 
     for p in ls_st_rec:
-        part_number = p['IMITMC']
+        part_number = str(p['IMITMC'])
         try:
             price_retail = Decimal(p['List'])
             cost_price = Decimal(p['Dealer'])

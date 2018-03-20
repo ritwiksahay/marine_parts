@@ -7,7 +7,7 @@
 {% with replacements=product.replacement_products.all %}
 
 <tr>
-    <td colspan="4" scope="colgroup"><a {% if replacements %} class="deprecated" {% else %}href="{{ product.get_absolute_url }}"{% endif %}>{{ product.get_title }}</a></td>
+    <td colspan="4" scope="colgroup"><a {% if replacements %} class="deprecated" {% else %}href="{{ product.get_absolute_url }}"{% endif %}>{{ product.get_title }}</a><br><small>{{product.attr.O}}</small><br><small>{{product.attr.M}}<small></td>
 
     {% if session.availability.is_available_to_buy %}
         <td colspan="1">

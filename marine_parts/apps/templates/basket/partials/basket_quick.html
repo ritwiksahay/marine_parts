@@ -18,6 +18,7 @@
             {% csrf_token %}
             {{ formset.management_form }}
             <input name="output_template" value="basket/partials/basket_quick" type="hidden">
+            
             {% for form in formset %}
                  {{ form.id }}
                  {% for field_errors in form.errors.values %}
@@ -26,16 +27,19 @@
                     {% endfor %}
 
                 {% endfor %}
-                 {% with line=form.instance product=form.instance.product %}
+
+                {% with line=form.instance product=form.instance.product %}
                 <li class="mini-item text-left">
                     {% render_field form.quantity class+="form-control quantity_input" type="text" %}
                     <a href="{{ product.get_absolute_url }}">
-                        <medium>{{ product.title }}</medium>
+                        <medium>{{ product.title|truncatewords:2  }}</medium>
                     </a>
                     <i class="icon icon-cross basket-line-remove"></i>
                 </li>
                 {% endwith %}
+                
             {% endfor %}
+            
             <hr>
             <br>
             <li id="basket_total" class="total text-right">

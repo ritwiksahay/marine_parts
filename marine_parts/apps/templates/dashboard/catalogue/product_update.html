@@ -123,15 +123,17 @@
                         <div class="tab-pane" id="product_category">
                             {% block product_categories_content %}
                                 <table class="table table-striped table-bordered form-inline">
-                                    <caption>{% trans "Category" %}</caption>
+                                    <caption>{% trans "Categories" %}</caption>
                                     {{ category_formset.management_form }}
                                     {{ category_formset.non_form_errors }}
                                     {% for category_form in category_formset %}
-                                        <tr>
-                                            <td>
-                                                {% include "dashboard/partials/form_fields_inline.html" with form=category_form %}
-                                            </td>
-                                        </tr>
+                                         <tr>
+                                             <td>
+                                                 <span class="form-group {% if field.errors %}error{% endif %}">
+                                                     {{ category_form.instance.category }}
+                                                 </span>
+                                             </td>
+                                         </tr>
                                     {% endfor %}
                                 </table>
                             {% endblock product_categories_content %}

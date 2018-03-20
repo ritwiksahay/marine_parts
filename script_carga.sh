@@ -37,7 +37,7 @@ NC='\033[0m' # No Color
 for file in "${INPUT_PATH}"*.json
 do
 	echo "Processing " $(basename "$file")...
-	OUTPUT=$( { python ./manage.py load_products "${file}" --cat_base "Brands > Mercury"; } 2>&1 )
+	OUTPUT=$( { python ./manage.py load_products "${file}" --cat_base "Brands > Mercruiser"; } 2>&1 )
 	LOG_FILE=$(basename "$file").log
 	LOG_FILE="${LOGS_PATH}${LOG_FILE}"
 	touch "$LOG_FILE"
@@ -47,10 +47,10 @@ do
 	RETVAL=$?
 	if [ ! $RETVAL -eq 0 ]; then
 		mv "$file" "$OUTPUT_PATH"
-		printf "${GREEN}COMPLETED SUCCESSFULLY. ${file} loaded and moved to ${OUTPUT_PATH}${NC}"
+		printf "${GREEN}COMPLETED SUCCESSFULLY. ${file} loaded and moved to ${OUTPUT_PATH}${NC}\n"
 	else
 		mv "$file" "$FAILED_PATH"
-                printf "${RED}FAILED. ${file} moved to ${FAILED_PATH}${NC}"
+                printf "${RED}FAILED. ${file} moved to ${FAILED_PATH}${NC}\n"
 	fi
 	OUTPUT=""
 done

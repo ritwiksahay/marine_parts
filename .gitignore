@@ -1,10 +1,14 @@
 __pycache__/
 cache/
+haystack/
+logs/
+*.log
 *.pyc
 *.sqlite3
 *.xml
 *.tgz
 *.ppk
+*.pem
 
 media/categories
 marine_parts/parts_scrapper/

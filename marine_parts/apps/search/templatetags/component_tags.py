@@ -3,24 +3,51 @@
 from django import template
 from django.template.loader import select_template
 
+from marine_parts.apps.catalogue.models import ProductCategory
+
 register = template.Library()
 
 
 @register.filter
-def get_products(result_page):
-    """."""
-    parts = [sr.object for sr in result_page
-             if sr.object.replacements.count() == 0]
-    return parts
+def build_results(result_page, comp_id):
+    """Return searched parts with their Diagram number."""
+    parts_pks = [part.object.pk for part in result_page]
+    results = []
+
+    # We don't want the replacements to appear twice
+    # in the result page, so, if a replacement is already
+    # in the results list then we remove it from there.
+    def remove_duplicates(l_parts):
+        for part in l_parts:
+            if part.pk in parts_pks:
+                parts_pks.remove(part.pk)
+            else:
+                if part.replacement_products.count() != 0:
+                    remove_duplicates(part.replacement_products.all())
+
+    for rs in result_page:
+        remove_duplicates(rs.object.replacement_products.all())
+
+    for rs in result_page:
+        if rs.object.pk in parts_pks:
+            # add Diagram Number attributes to the results
+            rs.object.DN = \
+                ProductCategory.objects \
+                .get(product=rs.object, category=comp_id) \
+                .diagram_number
+            results.append(rs)
+
+    results.sort(key=get_key)
+    return results
 
 
-def get_key(p):
+def get_key(sr):
     """Key to sort products by diagram number."""
     try:
-        if p.attr.DN[0] == "#":
-            dn = int((p.attr.DN)[1:])
+        if sr.object.DN[0] == "#":
+            dn = int((sr.object.DN)[1:])
         else:
-            dn = int(p.attr.DN)
+            dn = int(sr.object.DN)
 
     except (ValueError, IndexError):
         dn = 100000

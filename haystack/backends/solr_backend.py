@@ -423,6 +423,7 @@ class SolrSearchBackend(BaseSearchBackend):
 
         for raw_result in raw_results.docs:
             app_label, model_name = raw_result[DJANGO_CT].split('.')
+            # Original line: app_label, model_name = raw_result[DJANGO_CT].split('.')
             additional_fields = {}
             model = haystack_get_model(app_label, model_name)
 

@@ -197,7 +197,9 @@ ul.basket-mini-item {
 }
 
 .basket-mini-item .mini-item .icon-cross {
-    color: red;
+    color: #0d4a6c;
     cursor: pointer;
-    margin-left: 1rem;
+    float: right;
+    font-size: 12px;
+    margin-top: 12px;
 } 
