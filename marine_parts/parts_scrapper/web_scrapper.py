@@ -245,6 +245,10 @@ def marinepartseurope_volvo_penta_scrapper():
                                     except IndexError:
                                         prod_name = \
                                             prod.xpath('td[2]')[0].text.strip()
+                                    except AttributeError:
+                                        continue
+                                except AttributeError:
+                                    continue
 
                                 # if name is empty, ignore part
                                 if not prod_name:
