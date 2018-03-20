@@ -189,7 +189,6 @@ def marinepartseurope_volvo_penta_scrapper():
                         'category_name': 'component',
                         'category': comp_name,
                         'products': [],
-                        'sub_category': []
                     }
 
                     # Scrap component parts
@@ -302,7 +301,8 @@ def marinepartseurope_volvo_penta_scrapper():
 
                     # Save component
                     if section != {}:
-                        section['sub_category'].append(component)
+                        if component['products'] != []:
+                            section['sub_category'].append(component)
 
             # Save Last Section
             if section != {}:
