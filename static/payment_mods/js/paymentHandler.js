@@ -1,7 +1,6 @@
   var responseHandler = function(status, response) {
         var $form = $('#payment-info-form');
         $('#someHiddenDiv').hide();
-        console.log(status);
         if (status != 201) {
             if (response.error && status != 400) {
                 var error = response["error"];
