@@ -145,7 +145,7 @@ def marinepartseurope_volvo_penta_scrapper():
             tree = html.fromstring(page.content)
             section = {}
 
-            for comp in tree.xpath(comp_selector)[0:3]:
+            for comp in tree.xpath(comp_selector):
 
                 # Section Header
                 if (comp.xpath("td[@class='catalogHeaderCell']/h2")):
@@ -156,7 +156,7 @@ def marinepartseurope_volvo_penta_scrapper():
                         "td[@class='catalogHeaderCell']/h2")[0].text
                     section = {
                         'category_name': 'section',
-                        'category': sect_name,
+                        'category': sect_name.strip(),
                         'sub_category': []
                     }
                 # Component entry
@@ -174,8 +174,8 @@ def marinepartseurope_volvo_penta_scrapper():
 
                     comp_slug = slugify(comp_name)
 
-                    print("Scrapping component '%s' \n\turl: %s"
-                          % (comp_name, comp_link))
+                    print("Scrapping section '%s' component '%s' \n\turl: %s"
+                          % (sect_name, comp_name, comp_link))
 
                     # Build component
                     component = {
@@ -230,6 +230,8 @@ def marinepartseurope_volvo_penta_scrapper():
                                             diagram_number = '0'
                                 except IndexError:
                                     continue
+                                except AttributeError:
+                                    pass
 
                                 # Get Product Title
                                 try:
@@ -277,7 +279,6 @@ def marinepartseurope_volvo_penta_scrapper():
                                 'diagram_number': diagram_number.strip(),
                                 'replacements': [],
                                 'is_available': available,
-                                'manufacturer': '',
                             }
 
                             # we add replacements only in the replacement
@@ -298,7 +299,7 @@ def marinepartseurope_volvo_penta_scrapper():
 
             print("\n'%s' done...\n" % mod_name)
             output_file_path = output_root_path + \
-                cat_slug + '/' + mod_slug + \
+                cat_slug + '/' + mod_slug[0:64] + \
                 '.json'
             create_output_file(catalog, output_file_path)
 
