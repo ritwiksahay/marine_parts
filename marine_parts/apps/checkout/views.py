@@ -8,11 +8,21 @@ from oscar.apps.payment import models, exceptions
 
 from authorizenet import apicontractsv1
 from authorizenet.apicontrollers import createTransactionController
-from marine_parts.apps.checkout.lib_payeezy import setup_params_request, execPaymentPayeezySandbox, execPaymentPayeezyLive
+from marine_parts.apps.checkout.lib_payeezy import (
+    setup_params_request,
+    execPaymentPayeezySandbox,
+    execPaymentPayeezyLive
+)
+from marine_parts.apps.checkout.forms import PayeezyForm
 
 
 class PaymentDetailsView(views.PaymentDetailsView):
     """View Class to put, process the Payeezy payments."""
+
+    def get_context_data(self, **kwargs):
+        kwargs = super(PaymentDetailsView, self).get_context_data(**kwargs)
+        kwargs['form'] = PayeezyForm()
+        return kwargs
 
     def post(self, request, *args, **kwargs):
         """Override so we can validate the bankcard submission.
@@ -31,20 +41,31 @@ class PaymentDetailsView(views.PaymentDetailsView):
             cardholder_name = request.POST['cardholder_name']
             exp_date = request.POST['exp_date']
             if token_chk and card_type and cardholder_name and exp_date:
-                # Render preview with bankcard and billing address details hidden
+                # Render preview with bankcard and
+                # billing address details hidden
 
-                return self.render_preview(request, token_chk=token_chk, card_type=card_type
-                           , cardholder_name=cardholder_name, exp_date=exp_date, payment_method=payment_m)
+                return self.render_preview(
+                    request,
+                    token_chk=token_chk,
+                    card_type=card_type,
+                    cardholder_name=cardholder_name,
+                    exp_date=exp_date,
+                    payment_method=payment_m
+                )
             else:
                 return self.render_payment_details(request)
         else:
             token = request.POST['dataValue']
             descriptor = request.POST['dataDescriptor']
             if token and descriptor:
-                return self.render_preview(request, token=token, payment_method=payment_m, descriptor=descriptor)
+                return self.render_preview(
+                    request,
+                    token=token,
+                    payment_method=payment_m,
+                    descriptor=descriptor
+                )
             else:
                 return self.render_payment_details(request)
-
 
     def do_place_order(self, request):
         # Helper method to check that the hidden forms wasn't tinkered
