@@ -129,9 +129,7 @@
                                     {% for category_form in category_formset %}
                                          <tr>
                                              <td>
-                                                 <span class="form-group {% if field.errors %}error{% endif %}">
-                                                     {{ category_form.instance.category }}
-                                                 </span>
+                                                 {% include "dashboard/partials/form_fields_inline.html" with form=category_form %}
                                              </td>
                                          </tr>
                                     {% endfor %}
