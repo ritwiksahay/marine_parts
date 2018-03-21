@@ -205,7 +205,7 @@ def marinepartseurope_volvo_penta_scrapper():
                     r = request_get(component_image, stream=True)
                     image_rel_path = images_root_folder + \
                         mod_slug[0:64] + '/' + \
-                        comp_slug + '.gif'
+                        comp_slug[0:64] + '.gif'
                     image_final_path = os.path.join(FILE_DIR,
                                                     image_rel_path)
                     save_downloaded_file(image_final_path, r)
