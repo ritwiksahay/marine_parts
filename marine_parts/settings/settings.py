@@ -228,7 +228,6 @@ DATABASES = {
     }
 }
 
-
 # Google Ads
 ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  #OPTIONAL-DEFAULT TO None
 
