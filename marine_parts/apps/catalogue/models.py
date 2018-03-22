@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from oscar.apps.catalogue import abstract_models
 from oscar.apps.catalogue.abstract_models import AbstractCategory, AbstractProductCategory
 
+from django.utils.encoding import python_2_unicode_compatible
 from marine_parts.apps.catalogue.abstract_models \
     import AbstractReplacementProduct
 
@@ -37,6 +38,7 @@ class Category(AbstractCategory):
         return 'category:' + to_url(self.full_slug)
 
 
+@python_2_unicode_compatible
 class ProductCategory(AbstractProductCategory):
     """Override to include diagram numbers."""
 
@@ -47,6 +49,13 @@ class ProductCategory(AbstractProductCategory):
         verbose_name=_("Diagram number"),
         help_text=_("Number associated with part diagram.")
     )
+
+    def __repr__(self):
+        return u'%s' % self.category.full_name
+
+    def __str__(self):
+        return u'%s' % self.category.full_name
+
 
 
 # @python_2_unicode_compatible
