@@ -330,3 +330,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 SCRAPPER_ROOT = os.path.join(BASE_DIR, 'parts_scrapper/')
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500
