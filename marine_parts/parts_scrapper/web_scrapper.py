@@ -570,7 +570,9 @@ def marineengine_mercury_scrapper():
 def marineengine_johnson_evinrude_scrapper():
     """Scrapper for Marine Engine Johnson Evinrude Parts."""
     # Marineengine base url
-    global MARINE_ENGINE_BASE_URL
+    global MARINE_ENGINE_BASE_URL, FILE_DIR
+
+    images_root_folder = 'img/marine_engine/j&e/'
 
     print('Starting Marine Engine Johnson & Evinrude Scrapping...')
     # Categorys scraping
@@ -604,31 +606,37 @@ def marineengine_johnson_evinrude_scrapper():
 
     # Categories on johnson evinrude
     for cat in tree.xpath(xpath_selector)[0:1]:
-        if not os.path.exists(FILE_DIR + '/marine_engine/j&e/' + cat.text):
-            os.makedirs(FILE_DIR + '/marine_engine/j&e/' + cat.text)
+        cat_name = cat.text
+        cat_slug = slugify(cat_name)
+
         category = {
             'category_name': 'category',
-            'category': cat.text,
+            'category': cat_name,
             'category_url': cat.get('href'),
             'sub_category': []
         }
         catalog['categories'].append(category)
 
+        # Years cycle
         page = request_get(
             MARINE_ENGINE_BASE_URL + category['category_url']
         )
         tree = html.fromstring(page.content)
-        # Years cycle
-        for yr in tree.xpath(xyears_selector)[INIT_OFFSET:]:
-            if not os.path.exists(FILE_DIR + '/marine_engine/j&e/' +
-                                  re.sub(r'/', r'\\', cat.text) + '/' +
-                                  yr.text):
-                os.makedirs(FILE_DIR + '/marine_engine/j&e/' +
-                            re.sub(r'/', r'\\', cat.text) +
-                            '/' + yr.text)
+
+        yrs = tree.xpath(xyears_selector)[INIT_OFFSET:]
+        num_yrs = len(yrs) + INIT_OFFSET
+
+        for idx, yr in enumerate(yrs):
+            yr_name = re.sub(r'[\n\t]+', '', yr.text)
+            yr_slug = slugify(yr_name)
+            print("'%s' starting... (%d of %d categories... %.2f %%)\n" %
+                  (yr_name,
+                   INIT_OFFSET + idx,
+                   num_yrs,
+                   float(INIT_OFFSET + idx) / float(num_yrs) * 100))
             year = {
                 'category_name': 'years',
-                'category': yr.text,
+                'category': yr_name,
                 'category_url': yr.get('href'),
                 'sub_category': []
             }
@@ -638,13 +646,20 @@ def marineengine_johnson_evinrude_scrapper():
                 MARINE_ENGINE_BASE_URL + year['category_url']
             )
             tree = html.fromstring(page.content)
+
             # Horse power cycle
-            for hp in tree.xpath(xyears_selector)[0:1]:
-                cat_name = re.sub(r'[\n\t]+', '', hp.text)
+            for hp in tree.xpath(xyears_selector):
+                hp_name = re.sub(r'[\n\t]+', '', hp.text)
+                hp_slug = slugify(hp_name)
+                hp_link = hp.get('href')
+
+                print("\n\tScrapping Horse Power '%s'\n\t\turl: %s\n"
+                      % (hp_name, hp_link))
+
                 horse_power = {
                     'category_name': 'horse power',
-                    'category': cat_name,
-                    'category_url': hp.get('href'),
+                    'category': hp_name,
+                    'category_url': hp_link,
                     'sub_category': []
                 }
                 year['sub_category'].append(horse_power)
@@ -653,78 +668,89 @@ def marineengine_johnson_evinrude_scrapper():
                     MARINE_ENGINE_BASE_URL + horse_power['category_url']
                 )
                 tree = html.fromstring(page.content)
-                # Horse power cycle
-                for diagrams in tree.xpath(xyears_selector)[0:1]:
-                    models = {
+
+                # Models cycle
+                for model in tree.xpath(xyears_selector):
+                    model_name = re.sub(r'[\n\t]+', '', model.text) \
+                        .lstrip("Model ").strip()
+                    model_slug = slugify(model_name)
+
+                    model = {
                         'category_name': 'model',
-                        'category': diagrams.text,
-                        'category_url': diagrams.get('href'),
+                        'category': model_name,
+                        'category_url': model.get('href'),
                         'sub_category': []
                     }
-                    horse_power['sub_category'].append(models)
+
+                    horse_power['sub_category'].append(model)
 
                     page = request_get(
-                        MARINE_ENGINE_BASE_URL + models['category_url']
+                        MARINE_ENGINE_BASE_URL + model['category_url']
                     )
                     tree = html.fromstring(page.content)
 
                     # Parts cycle
-                    for comp in tree.xpath(xcomponents_selector)[0:1]:
+                    for comp in tree.xpath(xcomponents_selector):
+                        comp_name = comp.text
+                        comp_slug = slugify(comp_name)
                         component = {
                             'category_name': 'component',
-                            'category': comp.text,
+                            'category': comp_name,
                             'category_url': comp.get('href'),
                             'products': []
                         }
 
-                        print("Scrapping component '%s' \n\turl: %s"
-                              % (component['category'],
+                        print("\t\tScrapping component '%s' from model '%s'\n"
+                              "\t\t\turl: %s"
+                              % (comp_name,
+                                 model_name,
                                  component['category_url']))
-
-                        models['sub_category'].append(component)
 
                         page = request_get(
                             MARINE_ENGINE_BASE_URL + component['category_url']
                         )
                         tree = html.fromstring(page.content)
 
+                        # Download Component Image
                         component_image = None
                         if(len(tree.xpath(xcomponent_img_selector)) > 0):
                             component_image = \
+                                MARINE_ENGINE_BASE_URL + \
                                 tree.xpath(xcomponent_img_selector)[0] \
                                 .get('src')
 
                         if component_image:
-                            r = request_get(MARINE_ENGINE_BASE_URL +
-                                            component_image,
-                                            stream=True)
-                            save_downloaded_file(
-                                FILE_DIR +
-                                '/img/marine_engine/j&e/' +
-                                component_image.split('/')[-1], r)
-                            component_image = 'img/marine_engine/j&e/' + \
-                                component_image.split('/')[-1]
+                            r = request_get(component_image, stream=True)
+                            image_rel_path = images_root_folder + \
+                                yr_slug + '/' + \
+                                hp_slug + '/' + \
+                                model_slug + '/' + \
+                                comp_slug + '.gif'
+                            image_final_path = os.path.join(FILE_DIR,
+                                                            image_rel_path)
+                            save_downloaded_file(image_final_path, r)
+                            component_image = image_rel_path
 
                         component['image'] = component_image
 
-                        # products cycle
+                        # parts cycle
                         diag_number = -1
                         product = None
                         last_replaced = None
                         for prod in tree.xpath(xcomponent_parts_selector):
                             if prod.get('class') is None:
-                                name = ''
+                                title = ''
                                 link = ''
 
                                 if prod.xpath('td[3]/a/strong'):
-                                    name = \
+                                    title = \
                                         re.sub(' +',
                                                ' ',
                                                prod.xpath('td[3]/a/strong')[0]
                                                .text)
                                     link = prod.xpath('td[3]/a')[0].get('href')
                                 elif prod.xpath('td[3]/p/strong/a'):
-                                    name = \
+                                    title = \
                                         re.sub(
                                             ' +',
                                             ' ',
@@ -733,24 +759,33 @@ def marineengine_johnson_evinrude_scrapper():
                                     link = prod.xpath('td[3]/p/strong/a')[0] \
                                         .get('href')
 
-                                if name and link:
-                                    product = {
-                                        'product': name,
-                                        'diagram_number': diag_number,
-                                        'replacements': []
-                                    }
+                                if title and link:
+                                    title = re.sub(r' +', ' ', title.strip())
+
+                                    # Get original vs aftermarket attribute
+                                    origin = None
+                                    try:
+                                        origin = \
+                                            prod.xpath('td[2]/p[2]/a/img')[0] \
+                                            .get('src').split("/")[-1]
+                                        if origin == 'oem.png':
+                                            origin = 'original'
+                                        elif origin == 'aftermarket.png':
+                                            origin = 'aftermarket'
+                                    except IndexError:
+                                        pass
 
                                     # Check if it's unavailable obsolete and
                                     # replaced
                                     is_replaced = False
                                     if prod.xpath('td[3]/small[1]'):
-                                        product['is_available'] = False
+                                        is_available = False
                                         xpath = prod.xpath('td[3]/small[2]/br')
                                         if xpath is not None and xpath != []:
                                             match = xpath[0].tail.strip()
                                             is_replaced = "Replaced" in match
                                     else:
-                                        product['is_available'] = True
+                                        is_available = True
 
                                     page = request_get(
                                         MARINE_ENGINE_BASE_URL +
@@ -779,12 +814,26 @@ def marineengine_johnson_evinrude_scrapper():
 
                                         if value:
                                             if count == 0:
-                                                product['part_number'] = \
-                                                    value.split()[0]
+                                                part_number = \
+                                                    value.strip().split()[0]
                                             else:
-                                                product['manufacturer'] = value
+                                                manufacturer = \
+                                                    value.strip()
+                                                break
 
                                         count += 1
+
+                                    title = \
+                                        get_product_title(title, part_number)
+                                    product = {
+                                        'diagram_number': diag_number,
+                                        'manufacturer': manufacturer,
+                                        'origin': origin,
+                                        'part_number': part_number,
+                                        'product': title,
+                                        'is_available': is_available,
+                                        'replacements': []
+                                    }
 
                                     # we add replacements only in the
                                     # replacement list of the replaced
@@ -804,12 +853,16 @@ def marineengine_johnson_evinrude_scrapper():
                                 if prod.xpath('td/span/strong'):
                                     diag_number = \
                                         prod.xpath("td/span/strong")[0] \
-                                            .text.replace('#', '')
+                                            .text.strip().replace('#', '')
+
+                        # Store the component
+                        if component['products']:
+                            model['sub_category'].append(component)
 
                 print("\n'%s' done...\n" % yr.text)
                 output_file_path = FILE_DIR + '/marine_engine/j&e/' + \
-                    re.sub(r'/', r'\\', cat.text) + "/" + \
-                    yr.text + "/" + re.sub(r'/', r'\\', cat_name) + \
+                    cat_slug + "/" + \
+                    yr_slug + \
                     '.json'
                 create_output_file(catalog, output_file_path)
 
@@ -2629,7 +2682,7 @@ if __name__ == '__main__':
 
     parser_marine_engine.add_argument(
         'manufacturer', type=str,
-        choices=["mercury", "mercruiser"],
+        choices=["johnson", "mercruiser", "mercury"],
         help="The name of the manufacturer"
     )
 
