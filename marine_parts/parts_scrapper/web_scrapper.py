@@ -859,12 +859,12 @@ def marineengine_johnson_evinrude_scrapper():
                         if component['products']:
                             model['sub_category'].append(component)
 
-                print("\n'%s' done...\n" % yr.text)
-                output_file_path = FILE_DIR + '/marine_engine/j&e/' + \
-                    cat_slug + "/" + \
-                    yr_slug + \
-                    '.json'
-                create_output_file(catalog, output_file_path)
+            print("\n'%s' done...\n" % yr.text)
+            output_file_path = FILE_DIR + '/marine_engine/j&e/' + \
+                cat_slug + "/" + \
+                yr_slug + \
+                '.json'
+            create_output_file(catalog, output_file_path)
 
 
 def marineengine_mercruiser_scrapper():
