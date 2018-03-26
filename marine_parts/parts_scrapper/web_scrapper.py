@@ -19,6 +19,7 @@ MARINE_ENGINE_BASE_URL = 'https://www.marineengine.com'
 MARINE_EXPRESS_BASE_URL = 'http://www.marinepartsexpress.com'
 MARINE_PARTS_EUROPE_BASE_URL = 'http://www.marinepartseurope.com'
 INIT_OFFSET = 0
+INIT_OFFSET_2 = 0
 PRETTY_OUTPUT = False
 
 
@@ -570,7 +571,7 @@ def marineengine_mercury_scrapper():
 def marineengine_johnson_evinrude_scrapper():
     """Scrapper for Marine Engine Johnson Evinrude Parts."""
     # Marineengine base url
-    global MARINE_ENGINE_BASE_URL, FILE_DIR
+    global INIT_OFFSET, INIT_OFFSET_2, MARINE_ENGINE_BASE_URL, FILE_DIR
 
     images_root_folder = 'img/marine_engine/j&e/'
 
@@ -623,8 +624,12 @@ def marineengine_johnson_evinrude_scrapper():
         )
         tree = html.fromstring(page.content)
 
+        # Apply given offset in years cycle
         yrs = tree.xpath(xyears_selector)[INIT_OFFSET:]
         num_yrs = len(yrs) + INIT_OFFSET
+
+        # Reset offset so it can only be applied once
+        INIT_OFFSET = 0
 
         for idx, yr in enumerate(yrs):
             yr_name = re.sub(r'[\n\t]+', '', yr.text)
@@ -647,8 +652,14 @@ def marineengine_johnson_evinrude_scrapper():
             )
             tree = html.fromstring(page.content)
 
+            # Apply given offset in horse power cycle
+            hps = tree.xpath(xyears_selector)[INIT_OFFSET_2:]
+
+            # Reset offset so it can only be applied once
+            INIT_OFFSET_2 = 0
+
             # Horse power cycle
-            for hp in tree.xpath(xyears_selector):
+            for hp in hps:
                 hp_name = re.sub(r'[\n\t]+', '', hp.text)
                 hp_slug = slugify(hp_name)
                 hp_link = hp.get('href')
@@ -2693,6 +2704,12 @@ if __name__ == '__main__':
         help="Initial offset"
     )
 
+    parser_marine_engine.add_argument(
+        '--offset2', type=int,
+        dest='offset2',
+        help="Secondary offset"
+    )
+
     parser_marineeurope = subparsers.add_parser('marineparts_europe')
 
     parser_marineeurope.add_argument(
@@ -2712,11 +2729,16 @@ if __name__ == '__main__':
     # a site has to be introduced
     if not args.site:
         parser.error(message="Too few arguments")
+
     # json output mode
     PRETTY_OUTPUT = args.pretty
-    # scrapper offset
+
+    # scrapper offsets
     if args.offset:
         INIT_OFFSET = args.offset
+
+    if args.offset2:
+        INIT_OFFSET_2 = args.offset2
 
     ###############################################
     # ----------- Directories creation ---------- #
