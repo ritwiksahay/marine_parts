@@ -798,6 +798,16 @@ def marineengine_johnson_evinrude_scrapper():
                                     else:
                                         is_available = True
 
+                                    # Get price
+                                    price = None
+                                    if is_available:
+                                        elem = \
+                                            prod.xpath('td[3]/p[2]/small/span')
+                                        if elem:
+                                            price = \
+                                                elem[-1].text.lstrip('$')\
+                                                .rstrip()
+
                                     page = request_get(
                                         MARINE_ENGINE_BASE_URL +
                                         link
@@ -841,6 +851,7 @@ def marineengine_johnson_evinrude_scrapper():
                                         'manufacturer': manufacturer,
                                         'origin': origin,
                                         'part_number': part_number,
+                                        'price': price,
                                         'product': title,
                                         'is_available': is_available,
                                         'replacements': []
