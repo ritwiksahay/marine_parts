@@ -4,6 +4,7 @@ import argparse
 import copy
 from datetime import date
 import errno
+from functools import partial
 import json
 from lxml import etree, html
 import os
@@ -81,7 +82,7 @@ def marinepartseurope_volvo_penta_scrapper():
 
     # The selectors goes here so they dont recreate on every cicle
     xpath_selector = ("//table[@width='301']//tr[@class='cartItems']"
-                      "[position()<3]/td[2]/a")
+                      "/td[2]/a")
 
     mod_selector = ("//td[@class='bookCell']/h2/a")
     comp_selector = ("//div[@id='ctl00_PageContent_EPCCategories']/"
@@ -97,9 +98,11 @@ def marinepartseurope_volvo_penta_scrapper():
         'scraping_successful': False,
     }
 
-    for cat in tree.xpath(xpath_selector)[0:1]:
+    for cat in tree.xpath(xpath_selector)[2:3]:
         cat_name = cat.text
         cat_slug = slugify(cat_name)
+
+        print("Scrapping category '%s'\n" % (cat_name))
 
         category = {
             'category_name': 'category',
@@ -136,8 +139,6 @@ def marinepartseurope_volvo_penta_scrapper():
                 'category': mod_name,
                 'sub_category': []
             }
-
-            category['sub_category'] = [model]
 
             # Get Components Page
             page = request_get(
@@ -309,11 +310,14 @@ def marinepartseurope_volvo_penta_scrapper():
             if section != {}:
                 model['sub_category'].append(section)
 
-            print("\n'%s' done...\n" % mod_name)
-            output_file_path = output_root_path + \
-                cat_slug + '/' + mod_slug[0:64] + \
-                '.json'
-            create_output_file(catalog, output_file_path)
+            if model['sub_category']:
+                category['sub_category'] = [model]
+
+                print("\n'%s' done...\n" % mod_name)
+                output_file_path = output_root_path + \
+                    cat_slug + '/' + mod_slug[0:64] + \
+                    '.json'
+                create_output_file(catalog, output_file_path)
 
     print('Finished Marine Parts Europe Volvo Penta Scrapping...')
 
@@ -568,7 +572,7 @@ def marineengine_mercury_scrapper():
             create_output_file(catalog, output_file_path)
 
 
-def marineengine_johnson_evinrude_scrapper():
+def marineengine_johnson_evinrude_scrapper(init_offset=0, end_offset=None):
     """Scrapper for Marine Engine Johnson Evinrude Parts."""
     # Marineengine base url
     global INIT_OFFSET, INIT_OFFSET_2, MARINE_ENGINE_BASE_URL, FILE_DIR
@@ -625,20 +629,20 @@ def marineengine_johnson_evinrude_scrapper():
         tree = html.fromstring(page.content)
 
         # Apply given offset in years cycle
-        yrs = tree.xpath(xyears_selector)[INIT_OFFSET:]
-        num_yrs = len(yrs) + INIT_OFFSET
+        yrs = tree.xpath(xyears_selector)[init_offset:end_offset]
+        num_yrs = len(yrs) + init_offset
 
         # Reset offset so it can only be applied once
-        INIT_OFFSET = 0
+        init_offset = 0
 
         for idx, yr in enumerate(yrs):
             yr_name = re.sub(r'[\n\t]+', '', yr.text)
             yr_slug = slugify(yr_name)
             print("'%s' starting... (%d of %d categories... %.2f %%)\n" %
                   (yr_name,
-                   INIT_OFFSET + idx,
+                   init_offset + idx,
                    num_yrs,
-                   float(INIT_OFFSET + idx) / float(num_yrs) * 100))
+                   float(init_offset + idx) / float(num_yrs) * 100))
             year = {
                 'category_name': 'years',
                 'category': yr_name,
@@ -2735,6 +2739,12 @@ if __name__ == '__main__':
         help="Initial offset"
     )
 
+    parser_marineeurope.add_argument(
+        '--offset2', type=int,
+        dest='offset2',
+        help="Secondary offset"
+    )
+
     args = parser.parse_args()
 
     # a site has to be introduced
@@ -2764,7 +2774,8 @@ if __name__ == '__main__':
     # this dict maps user's input with a scrapper
     OPT_DICT = {
         "marine_engine mercury": marineengine_mercury_scrapper,
-        "marine_engine johnson": marineengine_johnson_evinrude_scrapper,
+        "marine_engine johnson": partial(marineengine_johnson_evinrude_scrapper,
+                                         INIT_OFFSET),
         "marine_engine mercruiser": marineengine_mercruiser_scrapper,
         "marineparts_europe volvo": marinepartseurope_volvo_penta_scrapper,
     }
