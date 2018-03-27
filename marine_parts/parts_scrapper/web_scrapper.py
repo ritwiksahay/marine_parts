@@ -758,7 +758,7 @@ def marineengine_johnson_evinrude_scrapper():
                                         re.sub(' +',
                                                ' ',
                                                prod.xpath('td[3]/a/strong')[0]
-                                               .text)
+                                               .text or '')
                                     link = prod.xpath('td[3]/a')[0].get('href')
                                 elif prod.xpath('td[3]/p/strong/a'):
                                     title = \
@@ -766,7 +766,7 @@ def marineengine_johnson_evinrude_scrapper():
                                             ' +',
                                             ' ',
                                             prod.xpath('td[3]/p/strong/a')[0]
-                                            .text)
+                                            .text or '')
                                     link = prod.xpath('td[3]/p/strong/a')[0] \
                                         .get('href')
 
