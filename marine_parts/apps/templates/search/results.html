@@ -36,8 +36,11 @@
 {% endblock %}
 
 {% block pre-content %}
-    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-centered">
-        {% include 'search/partials/search_filter.html' with category_tree=category_tree name=data.name items=data.results %}
+    <div class="col-xs-12 col-md-6">
+        {% include 'search/partials/search_filter_serial.html' %}
+    </div>
+    <div class="col-xs-12 col-md-6">
+        {% include 'search/partials/search_filter.html' %}
     </div>
 {% endblock %}
 

@@ -1,0 +1,19 @@
+{% load i18n %}
+{% load widget_tweaks %}
+{% load component_tags %}
+
+<h3 class="filter-title h3 text-center">
+    {% trans "Search By Serial Number"|upper %}
+</h3>
+<form method="get" action="{% url 'search:search' %}" class="filter-form form-horizontal col-lg-12 col-md-12" id="searchFilter_form">
+    <div class="form-group text-center" id="search_field">
+        <div class="select-wrapper">
+        	{% render_field serial_form.q class+="search-field" %}
+        </div>
+    </div>
+    <div class="form-group text-center">
+        <button type="submit" class="search-button btn btn-primary col-sm-7">
+            {% trans "Search"|upper %}
+        </button>
+    </div>
+</form>

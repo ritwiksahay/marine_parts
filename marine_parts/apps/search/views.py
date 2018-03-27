@@ -11,6 +11,8 @@ from oscar.core.compat import user_is_authenticated
 
 from . import signals
 
+from .forms import SearchBySerialForm
+
 from marine_parts.apps.catalogue.models import Cat, Category
 BasketLineFormSet, SavedLineFormSet = get_classes(
     'basket.formsets', ('BasketLineFormSet', 'SavedLineFormSet'))
@@ -57,6 +59,10 @@ class FacetedSearchView(views.FacetedSearchView):
         # check if it is a compoenent and pass it to context
 
         extra['component'] = self.is_component
+
+        # Pass the form for the search by serial number
+        serial_search_form = SearchBySerialForm(self.request.GET)
+        extra['serial_form'] = serial_search_form
 
         # pass Basket formset to handle the basket element
         formset = BasketLineFormSet(
