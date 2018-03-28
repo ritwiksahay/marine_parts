@@ -23,6 +23,7 @@ INIT_OFFSET = 0
 INIT_OFFSET_2 = 0
 PRETTY_OUTPUT = False
 THREADED = False
+THREADS = 1
 
 
 def create_output_file(data, path):
@@ -150,6 +151,7 @@ def marinepartseurope_volvo_penta_scrapper(begin=0, end=None):
             tree = html.fromstring(page.content)
             section = {}
             last_comp_slug = None
+            sect_name = None
 
             for comp in tree.xpath(comp_selector):
 
@@ -337,12 +339,19 @@ def marinepartseurope_volvo_penta_scrapper(begin=0, end=None):
 
     print('Finished Marine Parts Europe Volvo Penta Scrapping...')
 
-def threaded_volvo_scrapper():
+def threaded_volvo_scrapper(num_threads=1):
     from threading import Thread
 
+    num_cats = 42
+
+    if num_threads > num_cats:
+        diff = 1
+    else:
+        diff = num_cats / num_threads
+
     threads = []
-    for idx in range(0, 10):
-        t = Thread(target=marinepartseurope_volvo_penta_scrapper, args=(idx, idx+1,))
+    for idx in range(0, num_cats, diff):
+        t = Thread(target=marinepartseurope_volvo_penta_scrapper, args=(idx, idx+diff,))
         threads.append(t)
         t.start()
 
@@ -2731,7 +2740,8 @@ if __name__ == '__main__':
 
     parser.add_argument(
         '--threaded',
-        action='store_true',
+        type=int,
+        dest='threads',
         help="Thread processing"
     )
 
@@ -2790,7 +2800,9 @@ if __name__ == '__main__':
     PRETTY_OUTPUT = args.pretty
 
     # threading processing
-    THREADED = args.threaded
+    if args.threads:
+        THREADS = args.threads
+        THREADED = True
 
     # scrapper offsets
     if args.offset:
@@ -2818,7 +2830,7 @@ if __name__ == '__main__':
         "marine_engine mercruiser False": marineengine_mercruiser_scrapper,
         "marineparts_europe volvo False": partial(marinepartseurope_volvo_penta_scrapper,
                                             INIT_OFFSET),
-        "marineparts_europe volvo True": threaded_volvo_scrapper
+        "marineparts_europe volvo True": partial(threaded_volvo_scrapper, THREADS)
     }
 
     try:
