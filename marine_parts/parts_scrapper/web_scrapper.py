@@ -609,7 +609,7 @@ def marineengine_mercury_scrapper():
             create_output_file(catalog, output_file_path)
 
 
-def marineengine_johnson_evinrude_scrapper(init_offset=0, end_offset=None):
+def marineengine_johnson_evinrude_scrapper(begin=0, end=None):
     """Scrapper for Marine Engine Johnson Evinrude Parts."""
     # Marineengine base url
     global INIT_OFFSET, INIT_OFFSET_2, MARINE_ENGINE_BASE_URL, FILE_DIR
@@ -666,20 +666,17 @@ def marineengine_johnson_evinrude_scrapper(init_offset=0, end_offset=None):
         tree = html.fromstring(page.content)
 
         # Apply given offset in years cycle
-        yrs = tree.xpath(xyears_selector)[init_offset:end_offset]
-        num_yrs = len(yrs) + init_offset
-
-        # Reset offset so it can only be applied once
-        init_offset = 0
+        yrs = tree.xpath(xyears_selector)[begin:end]
+        num_yrs = len(yrs) + begin
 
         for idx, yr in enumerate(yrs):
             yr_name = re.sub(r'[\n\t]+', '', yr.text)
             yr_slug = slugify(yr_name)
             print("'%s' starting... (%d of %d categories... %.2f %%)\n" %
                   (yr_name,
-                   init_offset + idx,
+                   begin + idx,
                    num_yrs,
-                   float(init_offset + idx) / float(num_yrs) * 100))
+                   float(begin + idx) / float(num_yrs) * 100))
             year = {
                 'category_name': 'years',
                 'category': yr_name,
@@ -752,11 +749,11 @@ def marineengine_johnson_evinrude_scrapper(init_offset=0, end_offset=None):
                             'products': []
                         }
 
-                        print("\t\tScrapping component '%s' from model '%s'\n"
-                              "\t\t\turl: %s"
-                              % (comp_name,
-                                 model_name,
-                                 component['category_url']))
+                        # print("\t\tScrapping component '%s' from model '%s'\n"
+                        #       "\t\t\turl: %s"
+                        #       % (comp_name,
+                        #          model_name,
+                        #          component['category_url']))
 
                         page = request_get(
                             MARINE_ENGINE_BASE_URL + component['category_url']
@@ -930,6 +927,25 @@ def marineengine_johnson_evinrude_scrapper(init_offset=0, end_offset=None):
                     '.json'
                 create_output_file(catalog, output_file_path)
 
+
+def threaded_johnson_evinrude_scrapper(num_threads=1):
+    from threading import Thread
+
+    num_cats = 58
+
+    if num_threads > num_cats:
+        diff = 1
+    else:
+        diff = num_cats / num_threads
+
+    threads = []
+    for idx in range(0, num_cats, diff):
+        t = Thread(target=marineengine_johnson_evinrude_scrapper, args=(idx, idx+diff,))
+        threads.append(t)
+        t.start()
+
+    for t in threads:
+        t.join()
 
 def marineengine_mercruiser_scrapper():
     """Scrapper for marine engine's Mercruiser section."""
@@ -2830,7 +2846,8 @@ if __name__ == '__main__':
         "marine_engine mercruiser False": marineengine_mercruiser_scrapper,
         "marineparts_europe volvo False": partial(marinepartseurope_volvo_penta_scrapper,
                                             INIT_OFFSET),
-        "marineparts_europe volvo True": partial(threaded_volvo_scrapper, THREADS)
+        "marineparts_europe volvo True": partial(threaded_volvo_scrapper, THREADS),
+        "marine_engine johnson True": partial(threaded_johnson_evinrude_scrapper, THREADS)
     }
 
     try:
