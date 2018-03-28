@@ -149,13 +149,6 @@ class CreaProdsTest(unittest.TestCase):
     def test_agregarDiagNumMayor5Caracteres_LevantaDatabaseError(self):
         self.assertRaises(DatabaseError, self.realDB.crear_prods, self.cat, True, 'Prod', '1', 'Man', 'Origin', 'pppppp')
 
-    def test_agregarDiagNum5Caracteres_LevantaDatabaseError(self):
-        self.assertRaises(DatabaseError, self.realDB.crear_prods, self.cat, True, 'Prod', '1', 'Man', 'Origin', '-----')
-
-    def test_agregarDiagNumMenor5CaracteresCaracteres_LevantaDatabaseError(self):
-        self.assertRaises(DatabaseError, self.realDB.crear_prods, self.cat, True, 'Prod', '1', 'Man', 'Origin', '----')
-
-
 class TestNavProds(unittest.TestCase):
 
     def setUp(self):
