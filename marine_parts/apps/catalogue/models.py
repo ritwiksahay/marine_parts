@@ -50,6 +50,7 @@ class ProductCategory(AbstractProductCategory):
         help_text=_("Number associated with part diagram.")
     )
 
+    # Document this feature and erase this code when it was done.
     def __repr__(self):
         return u'%s' % self.category.full_name
 
