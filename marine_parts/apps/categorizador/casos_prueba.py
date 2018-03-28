@@ -306,6 +306,8 @@ varios_productos_con_un_anidado = \
         ]
     }
 
+
+
 varios_productos_anidados = \
     {
         "category_url": "/parts/mercury-outboard-parts/2/0t894577-up-usa/cylinder-block",
@@ -353,6 +355,56 @@ varios_productos_anidados = \
                 "manufacturer": "Mercury Quicksilver",
                 "diagram_number": "12",
                 "replacements": []
+            }
+        ]
+    }
+varios_productos_con_reemplazado_cruzado = \
+    {
+        "category_url": "/parts/mercury-outboard-parts/2/0t894577-up-usa/cylinder-block",
+        "image": "img/marine_engine/mercury/6970.gif",
+        "products": [
+            {
+                "is_available": True,
+                "part_number": "878-9151  2",
+                "product": "878-9151 2 - Cylinder Block",
+                "manufacturer": "Mercury Quicksilver",
+                "diagram_number": "1",
+                "replacements": [
+                    {
+                        "is_available": True,
+                        "part_number": "22-8M0064617",
+                        "product": "228M0064617 - Nipple Fitting",
+                        "manufacturer": "Mercury Quicksilver",
+                        "diagram_number": "5",
+                        "replacements": []
+                    },
+                ]
+            },
+            {
+                "is_available": True,
+                "part_number": "12-809931044",
+                "product": "12-809931044 - Washer",
+                "manufacturer": "Mercury Quicksilver",
+                "diagram_number": "10",
+                "replacements": [
+                    {
+                        "is_available": True,
+                        "part_number": "878-9151  2",
+                        "product": "878-9151 2 - Cylinder Block",
+                        "manufacturer": "Mercury Quicksilver",
+                        "diagram_number": "1",
+                        "replacements": [
+                            {
+                                "is_available": True,
+                                "part_number": "22-8M0064617",
+                                "product": "228M0064617 - Nipple Fitting",
+                                "manufacturer": "Mercury Quicksilver",
+                                "diagram_number": "5",
+                                "replacements": []
+                            },
+                        ]
+                    },
+                ]
             }
         ]
     }
@@ -412,6 +464,91 @@ productos_repetidos_categorias = \
                     "manufacturer": "Mercury Quicksilver",
                     "diagram_number": "12",
                     "replacements": []
+                    }
+                ]
+            },
+            {
+                "category_url": "/parts/mercury-outboard-parts/2/0t894577-up-usa/cylinder-block",
+                "image": "img/marine_engine/mercury/6970.gif",
+                "category_name": "component",
+                "category": "Cylinder Block Primera",
+                "products": [
+                    {
+                        "is_available": True,
+                        "part_number": "878-9151 2",
+                        "product": "878-9151 2 - Cylinder Block",
+                        "manufacturer": "Mercury Quicksilver",
+                        "diagram_number": "1",
+                        "replacements": []
+                    },
+                    {
+                        "is_available": True,
+                        "part_number": "34-95304",
+                        "product": "34-95304 - Reed Stop, NLA",
+                        "manufacturer": "Mercury Quicksilver",
+                        "diagram_number": "12",
+                        "replacements": [
+                            {
+                                "is_available": True,
+                                "part_number": "22-8M0064618",
+                                "product": "228M0064618 - Nipple Fitting",
+                                "manufacturer": "Mercury Quicksilver",
+                                "diagram_number": "5",
+                                "replacements": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+
+productos_reemplazado = \
+    {
+        "category_url": "/parts/mercury-outboard-parts/2/0t894577-up-usa",
+        "category_name": "serial_range",
+        "category": "0T894577 & Up (USA)",
+        "sub_category": [
+            {
+                "category_url": "/parts/mercury-outboard-parts/2/0t894577-up-usa/cylinder-block",
+                "image": "img/marine_engine/mercury/6970.gif",
+                "category_name": "component",
+                "category": "Cylinder Block",
+                "products": [
+                    {
+                        "is_available": True,
+                        "part_number": "878-9151 2",
+                        "product": "878-9151 2 - Cylinder Block",
+                        "manufacturer": "Mercury Quicksilver",
+                        "diagram_number": "1",
+                        "replacements": [
+                            {
+                                "is_available": True,
+                                "part_number": "22-8M0064617",
+                                "product": "228M0064617 - Nipple Fitting",
+                                "manufacturer": "Mercury Quicksilver",
+                                "diagram_number": "5",
+                                "replacements": [
+                                    {
+                                        "is_available": True,
+                                        "part_number": "32-812940  4",
+                                        "product": "32-812940 4 - Hose",
+                                        "manufacturer": "Mercury Quicksilver",
+                                        "diagram_number": "6",
+                                        "replacements": [
+                                            {
+                                                "is_available": True,
+                                                "part_number": "12-809931044",
+                                                "product": "12-809931044 - Washer",
+                                                "manufacturer": "Mercury Quicksilver",
+                                                "diagram_number": "10",
+                                                "replacements": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                        ]
                     }
                 ]
             },
