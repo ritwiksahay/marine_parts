@@ -26,7 +26,7 @@ from marine_parts.apps.catalogue.models import Product, ReplacementProduct, Prod
 from decimal import Decimal as D
 
 # Necesario para controlar que se introduce en la BD
-from django.db import transaction, IntegrityError
+from django.db import transaction, IntegrityError, DatabaseError
 
 
 class IOHandler:
@@ -136,6 +136,9 @@ class DBAccess(DBHandler):
                 ProductCategory.objects.create(product=prod, category=cat, diagram_number=diag_number)
         except IntegrityError:
             pass
+        except DatabaseError:
+            print('Offending data (%s, %s, %s)' % (prod.title, cat.name, diag_number))
+            raise
 
     def add_stock_records(self, pro, part_number, amount):
         StockRecord.objects.create(
@@ -186,8 +189,12 @@ class DBAccess(DBHandler):
         if orig_v:
             self.origin.save_value(item, orig_v)
 
-        ProductCategory.objects.create(product=item, category=cat,
+        try:
+            ProductCategory.objects.create(product=item, category=cat,
                                        diagram_number=diag_num_v)
+        except DatabaseError:
+            print('Offending data (%s, %s, %s)' % (item.title, cat.name, diag_num_v))
+            raise
 
         if is_aval:
             self.add_stock_records(item, part_num_v, 1000)
