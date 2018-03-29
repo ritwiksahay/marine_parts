@@ -724,6 +724,9 @@ def marineengine_johnson_evinrude_scrapper(begin=0, end=None):
                         .lstrip("Model ").strip()
                     model_slug = slugify(model_name)
 
+		    print("\n\tScrapping Model '%s'\n\t\turl: %s\n"
+                      % (model_name, model.get('href')))
+
                     model = {
                         'category_name': 'model',
                         'category': model_name,
@@ -919,7 +922,7 @@ def marineengine_johnson_evinrude_scrapper(begin=0, end=None):
                         if component['products']:
                             model['sub_category'].append(component)
 
-                print("\n'%s' done...\n" % yr.text)
+                print("\n\n'%s' - '%s' done...\n" % (yr_name, hp_name))
                 output_file_path = FILE_DIR + '/marine_engine/j&e/' + \
                     cat_slug + "/" + \
                     yr_slug + '-' + \
@@ -939,8 +942,8 @@ def threaded_johnson_evinrude_scrapper(num_threads=1):
         diff = num_cats / num_threads
 
     threads = []
-    for idx in range(0, num_cats, diff):
-        t = Thread(target=marineengine_johnson_evinrude_scrapper, args=(idx, idx+diff,))
+    for idx in range(40, 50):
+        t = Thread(target=marineengine_johnson_evinrude_scrapper, args=(idx, idx+1,))
         threads.append(t)
         t.start()
 
