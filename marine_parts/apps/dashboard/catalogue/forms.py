@@ -6,7 +6,7 @@ from django.forms import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from oscar.apps.dashboard.catalogue import forms as base_form
-from marine_parts.apps.dashboard.catalogue.widgets import ProductSelect
+from marine_parts.apps.dashboard.catalogue.widgets import ProductSelect, CategorySelect
 
 from marine_parts.apps.catalogue.models import Category, ReplacementProduct, ProductCategory
 
@@ -72,12 +72,15 @@ class ProductReplacementForm(forms.ModelForm):
         self.fields['replacement'].widget.attrs['class'] = 'select2'
 
 
+class ProductCategoryForm(forms.ModelForm):
 
-# class ProductCategoryForm(forms.ModelForm):
-#
-#     class Meta:
-#         model = ProductCategory
-#         fields = ('category', )
-#         widgets = {
-#             'replacement': ProductSelect,
-#         }
+    class Meta:
+        model = ProductCategory
+        fields = ('category', )
+        widgets = {
+            'category': CategorySelect,
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ProductCategoryForm, self).__init__(*args, **kwargs)
+        self.fields['category'].widget.attrs['class'] = 'select2'

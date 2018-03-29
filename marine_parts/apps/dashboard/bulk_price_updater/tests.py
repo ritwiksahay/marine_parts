@@ -31,7 +31,7 @@ test_data = \
     [
         {
             'IMMFGC' : 'A/P',
-            'IMITMC' : '1',
+            'Part Number' : '1',
             'IMDESC' : 'PACKING-TEFLON 3/16X',
             'IMSUOM' : 'EA',
             'List' : '27.13',
@@ -40,7 +40,7 @@ test_data = \
         },
         {
             'IMMFGC': 'A/P',
-            'IMITMC': '2',
+            'Part Number': '2',
             'IMDESC': 'PACKING-TEFLON 5/16X	',
             'IMSUOM': 'EA',
             'List': '12.43',
@@ -49,7 +49,7 @@ test_data = \
         },
         {
             'IMMFGC' : 'A/P',
-            'IMITMC' : '3',
+            'Part Number' : '3',
             'IMDESC' : 'PACKING-TEFLON 1/2X3',
             'IMSUOM' :'EA',
             'List' : '79.43',
@@ -58,7 +58,7 @@ test_data = \
         },
         {
             'IMMFGC': 'ABA',
-            'IMITMC': '4',
+            'Part Number': '4',
             'IMDESC': 'RUBBER LINED CLAMP',
             'IMSUOM': 'EA',
             'List': '1.8',
@@ -85,14 +85,14 @@ test_data_bad_prices = \
     [
         {
             'IMMFGC': 'ABA',
-            'IMITMC': '1',
+            'Part Number': '1',
             'IMDESC': 'RUBBER LINED CLAMP',
             'IMSUOM': 'EA',
             'List': None,
         },
         {
             'IMMFGC': 'ABA',
-            'IMITMC': '2',
+            'Part Number': '2',
             'IMDESC': 'RUBBER LINED CLAMP',
             'IMSUOM': 'EA',
             'List': 'dasd'
@@ -100,7 +100,7 @@ test_data_bad_prices = \
     ]
 
 test_file = [
-    ['IMMFGC','IMITMC',	'IMDESC', 'IMSUOM', 'List', 'Dealer', 'Your Price'],
+    ['IMMFGC','Part Number', 'IMDESC', 'IMSUOM', 'List', 'Dealer', 'Your Price'],
     ['A/C', 'GF-626', 'MEMO - REFERENCE ONL', 'EA', '0', '0', '0'],
     ['A/C', '1', 'MEMO - REFERENCE ONL', 'EA', '0', '0', '55'],
     ['A/C', '2', 'MEMO - REFERENCE ONL', 'EA', '0', '0', '100']
@@ -177,7 +177,7 @@ class TestUpdater(test.TestCase):
         self.assertRaises(KeyError, updater, test_data_Wrong_keys, self.st)
         # self.assertEqual(self.log_buf.getvalue(),
         #                  'Wrong header: error. Unable to continue.'
-        #                  'Use the following headers: IMITMC, List, Dealer and Your Price\n'
+        #                  'Use the following headers: Part Number, List, Dealer and Your Price\n'
         #                  )
 
     def test_WrongValuePrices_return2(self):
@@ -213,12 +213,12 @@ class TestUAdjustPercent(test.TestCase):
 
 class TestIntegrationUpdatePartNumber(test.TestCase):
     # Auxiliar method
-    def create_prod(self, title, hasStock, part_number):
+    def create_prod(self, title, hasStock, part_number, num_stock):
         p = Product.objects.create(product_class=self.pc, title=title)
         self.part_number.save_value(p, part_number)
         if hasStock:
             StockRecord.objects.create(product=p, partner=self.partner
-                                       , partner_sku=part_number, price_excl_tax=D('0.00'), num_in_stock=1)
+                                       , partner_sku=part_number, price_excl_tax=D('0.00'), num_in_stock=num_stock)
 
     @classmethod
     def setUpTestData(cls):
@@ -228,12 +228,12 @@ class TestIntegrationUpdatePartNumber(test.TestCase):
             product_class=cls.pc, name='Part number', code='PN', required=True, type=ProductAttribute.TEXT)
 
     def setUp(self):
-        self.create_prod('PACKING-TEFLON 3/16X', True, '4721')
-        self.create_prod('RUBBER LINED CLAMP', False, '13302')
+        self.create_prod('PACKING-TEFLON 3/16X', True, '4721', 10)
+        self.create_prod('RUBBER LINED CLAMP', False, '13302', 0)
 
         self.p1 = {
             'IMMFGC' : 'A/P',
-            'IMITMC' : '4721',
+            'Part Number' : '4721',
             'IMDESC' : 'PACKING-TEFLON 3/16X',
             'IMSUOM' : 'EA',
             'List' : D('27.13'),
@@ -243,7 +243,7 @@ class TestIntegrationUpdatePartNumber(test.TestCase):
 
         self.p2 =      {
             'IMMFGC': 'ABA',
-            'IMITMC': '13302',
+            'Part Number': '13302',
             'IMDESC': 'RUBBER LINED CLAMP',
             'IMSUOM': 'EA',
             'List': D('1.8'),
@@ -254,30 +254,43 @@ class TestIntegrationUpdatePartNumber(test.TestCase):
         self.db = DBHandler(self.partner, D(0))
 
     def test_updateProductWithStock_returnsTrue(self):
-        sr1, _ = self.db.update_by_part_number(self.p1['IMITMC'], self.p1['Your Price'], self.p1['List'], self.p1['Dealer'])
+        sr1, _ = self.db.update_by_part_number(self.p1['Part Number'], self.p1['Your Price'], self.p1['List'], self.p1['Dealer'])
         self.assertEqual(sr1.price_excl_tax, D(25.00))
 
     def test_updateProductWithoutStock_returnsTrue(self):
-        sr2, _ = self.db.update_by_part_number(self.p2['IMITMC'], self.p2['Your Price'], self.p2['List'], self.p2['Dealer'])
+        sr2, _ = self.db.update_by_part_number(self.p2['Part Number'], self.p2['Your Price'], self.p2['List'], self.p2['Dealer'])
         self.assertEqual(sr2.price_excl_tax, D(55.00))
 
     def test_updateProductWithoutStockWithIncrease_returnsTrue(self):
         db = DBHandler(self.partner, D(30))
-        sr2, _ = db.update_by_part_number(self.p2['IMITMC'], self.p2['Your Price'], self.p2['List'], self.p2['Dealer'])
+        sr2, _ = db.update_by_part_number(self.p2['Part Number'], self.p2['Your Price'], self.p2['List'], self.p2['Dealer'])
         self.assertEqual(sr2.price_excl_tax, D(71.50))
 
     def test_createNewStockRecordNewPartnerProductWithStock_NotRaiseIntegrityError(self):
         partner = Partner.objects.create(name='AnotherPartner')
         db = DBHandler(partner, D(0))
-        sr1, created = db.update_by_part_number(self.p1['IMITMC'], self.p1['Your Price'], self.p1['List'], self.p1['Dealer'])
+        sr1, created = db.update_by_part_number(self.p1['Part Number'], self.p1['Your Price'], self.p1['List'], self.p1['Dealer'])
         self.assertTrue(created)
         self.assertEqual(sr1.partner.name, 'AnotherPartner')
 
     def test_updateProductWithStockWithIncrease_returnsTrue(self):
         db = DBHandler(self.partner, D(30))
-        sr1, _ = db.update_by_part_number(self.p1['IMITMC'], self.p1['Your Price'], self.p1['List'],
+        sr1, _ = db.update_by_part_number(self.p1['Part Number'], self.p1['Your Price'], self.p1['List'],
                                                self.p1['Dealer'])
         self.assertEqual(sr1.price_excl_tax, D(32.50))
+
+    def test_updateProductWithStockNumStockPrevious_returnsTrue(self):
+        sr1, _ = self.db.update_by_part_number(self.p1['Part Number'], self.p1['Your Price'], self.p1['List'],
+                                          self.p1['Dealer'])
+        self.assertEqual(sr1.num_in_stock, 10)
+
+    def test_updateProductWithStockNumStockZero_returnsTrue(self):
+        self.create_prod('PACKING-TEFLON', True, '4722', 0)
+        self.p1['Part Number'] = '4722'
+        sr1, c = self.db.update_by_part_number(self.p1['Part Number'], self.p1['Your Price'], self.p1['List'],
+                                          self.p1['Dealer'])
+        self.assertFalse(c)
+        self.assertEqual(sr1.num_in_stock, 1000)
 
 
 class TestUploadFileForm(test.TestCase):
@@ -417,7 +430,7 @@ class ReviewUpdaterClientTests(test.TestCase):
         cls.session_review_file_empty = {'stats' : {'not_found' : 0, 'updated' : 0, 'created' : 0, 'total' : 0}, 'log' : ''}
         cls.session_review_sucessful = {'stats': {'not_found': 0, 'updated': 4, 'created': 4, 'total' : 8}, 'log': ''}
         cls.session_review_key_error = { 'stats' : {}, 'log': 'ERROR - Missing header: bad_key. Unable to continue.'
-             'Use the following headers: IMITMC, List, Dealer and Your Price'}
+             'Use the following headers: Part Number, List, Dealer and Your Price'}
 
     def setUp(self):
         self.factory = test.RequestFactory()
@@ -462,7 +475,7 @@ class ReviewUpdaterClientTests(test.TestCase):
         response = ReviewUpdater.as_view()(request)
         self.assertEqual(response.template_name[0], 'dashboard/bulk_price_updater/update-price-review.html')
         self.assertContains(response,
-            'ERROR - Missing header: bad_key. Unable to continue.Use the following headers: IMITMC, List, Dealer and Your Price')
+            'ERROR - Missing header: bad_key. Unable to continue.Use the following headers: Part Number, List, Dealer and Your Price')
         self.assertContains(response,
             '''
             <table class="table table-striped table-bordered">

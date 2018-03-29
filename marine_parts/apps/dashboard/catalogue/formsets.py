@@ -5,25 +5,25 @@ from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
 from oscar.core.loading import get_classes, get_model
 
-from marine_parts.apps.catalogue.models import Product, ReplacementProduct
-from marine_parts.apps.dashboard.catalogue.forms import ProductReplacementForm
+from marine_parts.apps.catalogue.models import Product, ReplacementProduct, ProductCategory
+from marine_parts.apps.dashboard.catalogue.forms import ProductReplacementForm, ProductCategoryForm
 
 ProductClass = get_model('catalogue', 'ProductClass')
 ProductAttribute = get_model('catalogue', 'ProductAttribute')
 Category = get_model('catalogue', 'Category')
 StockRecord = get_model('partner', 'StockRecord')
-ProductCategory = get_model('catalogue', 'ProductCategory')
+#ProductCategory = get_model('catalogue', 'ProductCategory')
 ProductImage = get_model('catalogue', 'ProductImage')
 ProductRecommendation = get_model('catalogue', 'ProductRecommendation')
 
 (StockRecordForm,
- ProductCategoryForm,
+ #ProductCategoryForm,
  ProductImageForm,
  ProductRecommendationForm,
  ProductAttributesForm) = \
     get_classes('dashboard.catalogue.forms',
                 ('StockRecordForm',
-                 'ProductCategoryForm',
+                 #'ProductCategoryForm',
                  'ProductImageForm',
                  'ProductRecommendationForm',
                  'ProductAttributesForm'))
