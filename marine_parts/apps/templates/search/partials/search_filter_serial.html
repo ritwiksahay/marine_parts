@@ -5,10 +5,11 @@
 <h3 class="filter-title h3 text-center">
     {% trans "Search By Serial Number"|upper %}
 </h3>
-<form method="get" action="{% url 'search:search' %}" class="filter-form form-horizontal col-lg-12 col-md-12" id="searchFilter_form">
+<form method="get" action="{% url 'search:searchBySerial' %}" class="filter-form form-horizontal col-lg-12 col-md-12" id="searchFilter_form">
     <div class="form-group text-center" id="search_field">
+        <input type="text" name='var' value="category:{{category.full_slug}}" hidden>
         <div class="select-wrapper">
-        	{% render_field serial_form.q class+="search-field" %}
+        	{% render_field serial_form.q_serial class+="search-field" %}
         </div>
     </div>
     <div class="form-group text-center">

@@ -42,7 +42,7 @@ class BrowseCategoryForm(FacetedSearchForm):
 class SearchBySerialForm(forms.Form):
     """This is the form for handling the search by serial number mode."""
 
-    q = forms.CharField(
+    q_serial = forms.CharField(
         required=True,
         label='',
         widget=forms.TextInput(attrs={'type': 'search',
