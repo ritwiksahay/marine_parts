@@ -98,7 +98,7 @@ def marinepartseurope_volvo_penta_scrapper():
         'scraping_successful': False,
     }
 
-    for cat in tree.xpath(xpath_selector)[2:3]:
+    for cat in tree.xpath(xpath_selector)[3:4]:
         cat_name = cat.text
         cat_slug = slugify(cat_name)
 
@@ -151,6 +151,11 @@ def marinepartseurope_volvo_penta_scrapper():
 
                 # Section Header
                 if (comp.xpath("td[@class='catalogHeaderCell']/h2")):
+                    # Components with same name can occur
+                    # so we have to append a counter to the
+                    # component name so it can be unique
+                    # and don't cause inconsistency in the DB 
+                    rep_component_counter = 0
                     # Save Previous section
                     if section != {}:
                         model['sub_category'].append(section)
@@ -302,9 +307,8 @@ def marinepartseurope_volvo_penta_scrapper():
                                 last_replaced['replacements'].append(product)
 
                     # Save component
-                    if section != {}:
-                        if component['products'] != []:
-                            section['sub_category'].append(component)
+                    if section != {} and component['products'] != []:
+                        section['sub_category'].append(component)
 
             # Save Last Section
             if section != {}:
