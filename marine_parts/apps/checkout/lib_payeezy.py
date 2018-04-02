@@ -25,11 +25,16 @@ def setup_params_request(price, card_type, token, cardholder_name, exp_date):
     nonces = get_nonces()
     timestamp = get_timestamp()
     hmac = gen_hmac(timestamp, nonces
-                    , constants.apiKey, constants.apiSecret, constants.token, json.dumps(payload))
+                    , constants.apiKey, constants.apiSecret, constants.token_live, json.dumps(payload))
+    # Use 'token_live' when it is deployed
+    # hmac = gen_hmac(timestamp, nonces
+    #                 , constants.apiKey, constants.apiSecret, constants.token, json.dumps(payload))
 
     headers = {
         'apikey': constants.apiKey,
-        'token': constants.token,
+        # Use 'token_live' when it is deployed
+        #'token': constants.token,
+        'token': constants.token_live,
         'Content-type': 'application/json',
         'Authorization': hmac,
         'nonce': nonces,

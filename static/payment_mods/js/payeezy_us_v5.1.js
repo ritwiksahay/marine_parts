@@ -37,7 +37,7 @@ var Payeezy = function() {
     }
     return {
         createToken: function(e) {
-            var n = "api-cert.payeezy.com";
+            var n = "api.payeezy.com";
             this["clientCallback"] = e;
             var r = t();
             var i = 0;
