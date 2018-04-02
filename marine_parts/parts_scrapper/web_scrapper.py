@@ -11,9 +11,9 @@ import os
 import re
 import requests
 import textwrap
-from urlparse import urlparse as parse
+from urllib.parse import urlparse as parse
 
-from django.utils.text import slugify
+from slugify import slugify
 
 FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 MARINE_ENGINE_BASE_URL = 'https://www.marineengine.com'
@@ -723,9 +723,7 @@ def marineengine_johnson_evinrude_scrapper(begin=0, end=None):
                     model_name = re.sub(r'[\n\t]+', '', model.text) \
                         .lstrip("Model ").strip()
                     model_slug = slugify(model_name)
-
-		    print("\n\tScrapping Model '%s'\n\t\turl: %s\n"
-                      % (model_name, model.get('href')))
+                    print("\n\tScrapping Model '%s'\n\t\turl: %s\n" % (model_name, model.get('href')))
 
                     model = {
                         'category_name': 'model',
@@ -932,7 +930,7 @@ def marineengine_johnson_evinrude_scrapper(begin=0, end=None):
 
 
 def threaded_johnson_evinrude_scrapper(num_threads=1):
-    from threading import Thread
+    import multiprocessing as mp
 
     num_cats = 58
 
@@ -941,9 +939,10 @@ def threaded_johnson_evinrude_scrapper(num_threads=1):
     else:
         diff = num_cats / num_threads
 
+    mp.set_start_method('spawn')
     threads = []
-    for idx in range(40, 50):
-        t = Thread(target=marineengine_johnson_evinrude_scrapper, args=(idx, idx+1,))
+    for idx in range(30, 35):
+        t = mp.Process(target=marineengine_johnson_evinrude_scrapper, args=(idx, idx+1,))
         threads.append(t)
         t.start()
 
