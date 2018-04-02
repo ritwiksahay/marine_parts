@@ -32,34 +32,25 @@ def config_logger_prod(with_dates=True):
 
 
 class DBHandler:
+
     def __init__(self, partner, percent):
         self.partner = partner
         self.percent = percent / Decimal(100)
 
+    def adjust_by_percent(self, price):
+        return (price * self.percent) + price
+
     def update_by_part_number(
-        self,
-        part_number,
-        price_excl_tax,
-        price_retail,
-        cost_price
-    ):
+            self,
+            part_number,
+            price_excl_tax,
+            price_retail,
+            cost_price):
         # Search by part_number
-        num_in_stock = 0
         pro = Product.objects.get(attribute_values__value_text=part_number)
 
-        try:
-            stock_record = StockRecord.objects.get(
-                product=pro,
-                partner=self.partner
-            )
-            num_in_stock = stock_record.num_in_stock
-        except ObjectDoesNotExist:
-            pass
-
-        if num_in_stock is None or num_in_stock == 0:
-            num_in_stock = 1000
-
-        return StockRecord.objects.update_or_create(
+        # Search StockRecord, get it. If it exists update its values
+        sr, is_created = StockRecord.objects.get_or_create(
             product=pro,
             partner=self.partner,
             defaults={
@@ -67,11 +58,20 @@ class DBHandler:
                 'price_excl_tax': self.adjust_by_percent(price_excl_tax),
                 'price_retail': price_retail,
                 'cost_price': cost_price,
-                'num_in_stock': num_in_stock
-            })
+                'num_in_stock': 1000
+            }
+        )
 
-    def adjust_by_percent(self, price):
-        return (price * self.percent) + price
+        if not is_created:
+            sr.price_excl_tax = self.adjust_by_percent(price_excl_tax)
+            sr.price_retail = price_retail
+            sr.cost_price = cost_price
+            if sr.num_in_stock == 0:
+                sr.num_in_stock = 1000
+
+            sr.save()
+
+        return sr, is_created
 
 
 # This function must use Atomic Transactions for avoiding to damage
@@ -85,7 +85,7 @@ def updater(ls_st_rec, db):
     }
 
     for p in ls_st_rec:
-        part_number = p['Part Number']
+        part_number = str(p['Part Number'])
         try:
             price_retail = Decimal(p['List'])
             cost_price = Decimal(p['Dealer'])
