@@ -58,7 +58,7 @@
                         <img src="{% static 'img/logo/isotipo.png' %}" alt="{{ component.name }}" class="img-responsive"/>
                    {% endif %}
                 </div>
-                <p class="text-center">{% trans "(Scroll over the image to zoom in or zoom out)" %}</p>
+                <p class="text-center hidden-xs">{% trans "(Scroll over the image to zoom in or zoom out)" %}</p>
             </div>
         </div>
         <div class="col-xs-12 col-md-4" style="overflow-y: scroll;height: 1000px;font-size: 13px;">
@@ -146,17 +146,19 @@
     oscar.basket.init(options);
 
     {% if component and component.diagram_image %}
-        /* Enable Zoom to diagram parts image */  
-        $("#diagram_img").elevateZoom(
-            {
-                responsive: true,
-                easing: true,
-                scrollZoom: true,
-                zoomType: "inner",
-                cursor: "crosshair",
-                zoomSizeMode:'image'
-            }
-        );
+        /* Enable Zoom to diagram parts image */
+        if( !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+            $("#diagram_img").elevateZoom(
+                {
+                    responsive: true,
+                    easing: true,
+                    scrollZoom: true,
+                    zoomType: "inner",
+                    cursor: "crosshair",
+                    zoomSizeMode:'image'
+                }
+            );
+        }
     {% endif %}
 {% endblock %}
 
