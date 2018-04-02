@@ -46,8 +46,8 @@ jQuery(function($) {
         //$form.find('button').prop('disabled', true);
         var apiKey = 'EJZ6amehkA5MAh7eyloKWVxidg8iiCTS';
         var js_security_key = 'js-2fa4b3230eef3e6286bc8a860b64a8e92fa4b3230eef3e62';
-        var auth = 'false';
-        var ta_token = 'NOIW';
+        var auth = 'true';
+        var ta_token = 'VIUA';
         var currency = 'USD';
 
         Payeezy.setApiKey(apiKey);
