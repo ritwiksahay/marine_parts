@@ -17,6 +17,10 @@ from marine_parts.apps.catalogue.abstract_models \
 class Category(AbstractCategory):
     """Override of Category Model."""
 
+    name = models.CharField(_('Name'), max_length=512, db_index=True)
+    description = models.TextField(_('Description'), blank=True)
+    slug = models.fields.SlugField(_('Slug'), max_length=512, db_index=True)
+
     diagram_image = models.ImageField(
         _('Diagram'),
         upload_to='categories',

@@ -44,8 +44,8 @@ jQuery(function($) {
         $('#payment-errors').html('');
         //var $form = $(this);
         //$form.find('button').prop('disabled', true);
-        var apiKey = 'y6pWAJNyJyjGv66IsVuWnklkKUPFbb0a';
-        var js_security_key = 'js-6125e57ce5c46e10087a545b9e9d7354c23e1a1670d9e9c7';
+        var apiKey = 'EJZ6amehkA5MAh7eyloKWVxidg8iiCTS';
+        var js_security_key = 'js-2fa4b3230eef3e6286bc8a860b64a8e92fa4b3230eef3e62';
         var auth = 'false';
         var ta_token = 'NOIW';
         var currency = 'USD';

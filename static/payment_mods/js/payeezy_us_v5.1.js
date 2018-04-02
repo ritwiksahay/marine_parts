@@ -37,7 +37,7 @@ var Payeezy = function() {
     }
     return {
         createToken: function(e) {
-            var n = "api-cert.payeezy.com";
+            var n = "api.payeezy.com";
             this["clientCallback"] = e;
             var r = t();
             var i = 0;
@@ -76,7 +76,7 @@ var Payeezy = function() {
                 e(i, s);
                 return false
             }
-            var a = "https://" + n + "/v1/securitytokens?apikey=" + this.apikey + "&js_security_key=" + this.js_security_key + "&callback=Payeezy.callback&auth=" + this.auth + "&ta_token=" + this.ta_token + "&type=FDToken&credit_card.type=" + r["card_type"] + "&credit_card.cardholder_name=" + r["cardholder_name"] + "&credit_card.card_number=" + r["cc_number"] + "&credit_card.exp_date=" + r["exp_month"] + r["exp_year"] + "&credit_card.cvv=" + r["cvv_code"] + "&currency=" + r["currency"]+ "&billing_address.city=" + r["city"]+ "&billing_address.country=" + r["country"]+ "&billing_address.email=" + r["email"]+ "&billing_address.phone.type=" + r["type"]+ "&billing_address.phone.number=" + r["number"]+ "&billing_address.street=" + r["street"]+ "&billing_address.state_province=" + r["state_province"]+ "&billing_address.zip_postal_code=" + r["zip_postal_code"];
+            var a = "https://" + n + "/v1/transactions/securitytokens?apikey=" + this.apikey + "&js_security_key=" + this.js_security_key + "&callback=Payeezy.callback&auth=" + this.auth + "&ta_token=" + this.ta_token + "&type=FDToken&credit_card.type=" + r["card_type"] + "&credit_card.cardholder_name=" + r["cardholder_name"] + "&credit_card.card_number=" + r["cc_number"] + "&credit_card.exp_date=" + r["exp_month"] + r["exp_year"] + "&credit_card.cvv=" + r["cvv_code"] + "&currency=" + r["currency"]+ "&billing_address.city=" + r["city"]+ "&billing_address.country=" + r["country"]+ "&billing_address.email=" + r["email"]+ "&billing_address.phone.type=" + r["type"]+ "&billing_address.phone.number=" + r["number"]+ "&billing_address.street=" + r["street"]+ "&billing_address.state_province=" + r["state_province"]+ "&billing_address.zip_postal_code=" + r["zip_postal_code"];
 			var f = document.createElement("script");
             f.src = a;
             document.getElementsByTagName("head")[0].appendChild(f)
