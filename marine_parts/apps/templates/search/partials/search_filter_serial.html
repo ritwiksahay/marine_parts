@@ -5,12 +5,26 @@
 <h3 class="filter-title h3 text-center">
     {% trans "Search By Serial Number"|upper %}
 </h3>
-<form method="get" action="{% url 'search:searchBySerial' %}" class="filter-form form-horizontal col-lg-12 col-md-12" id="searchFilter_form">
-    <div class="form-group text-center" id="search_field">
+<form method="get" action="{% url 'search:searchBySerial' %}" class="filter-form form-horizontal col-lg-12 col-md-12 categories_form" id="serial_search_category_form">
+    <div class="form-group text-center" id="serial_search_field">
         <input type="text" name='var' value="category:{{category.full_slug}}" hidden>
         <div class="select-wrapper">
         	{% render_field serial_form.q_serial class+="search-field" %}
         </div>
+
+        {% if serial_results %}
+        <div class="form-group text-center rounded category-select" style="margin-top: .7rem;">
+            <i class="icon-chevron-down"></i>
+            <select class="form-control rounded" name="var" id="var">
+                <option value="{{category.get_search_url}}">--{% trans "Select Category" %}--</option>'
+                {% for cat in serial_results %}
+                    <option value="{{cat.get_search_url}}"{% if cat.is_selected %}selected{% endif %}>{{ cat.full_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
+
+
     </div>
     <div class="form-group text-center">
         <button type="submit" class="search-button btn btn-primary col-sm-7">

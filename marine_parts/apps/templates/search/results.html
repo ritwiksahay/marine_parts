@@ -114,6 +114,7 @@
         
         {% if request.GET.q %}
             {% if page.object_list %}
+
                 <section id="results">
                     <div>
                         <ol class="row">
@@ -175,19 +176,27 @@
                the search form is submitted automatically */
             $('select[name="var"]').on('change', function(){
 
+                /* When the 'Select Category' option is selected in serial search view, don't do anything */
+                if($(this).val() == undefined){
+                    return
+                }
+
                 $.each($(this).nextUntil('#search_field'), function(key, elem){
                     elem.remove();
                 });
-                
+
                 $('select[name="var"]').attr("disabled", true);
                 $(this).attr("disabled", false);
-                var url = $('#categories_form').attr('action');
+                var url = $('#search_category_form').attr('action');
                 url += "?var=" + $(this).val();
                 location.href = url;
             });
 
-            $("#categories_form button[type='submit']").on("click", function() {
+            $("#search_categories_form button[type='submit']").on("click", function() {
                 $('select[name="var"]:not(:last)').attr("disabled", true);
+            });
+            $("#serial_search_category_form button[type='submit']").on("click", function() {
+                $('select[name="var"]').attr("disabled", true);
             });
 
             /* When the user scrolls down, the basket in the sidebar will 

@@ -1,16 +1,18 @@
 """."""
 
-import itertools
 import sys
 
 from django.core.paginator import Paginator
 from django.http import Http404
+from django.utils.translation import ugettext_lazy as _
 
 from haystack import views
+from oscar.core import ajax
 from oscar.core.loading import get_class, get_model, get_classes
 
 from . import signals
 from .forms import SearchBySerialForm
+from .serial_search import get_serial_search_results
 
 from marine_parts.apps.catalogue.models import Cat, Category
 BasketLineFormSet, SavedLineFormSet = get_classes(
@@ -186,19 +188,22 @@ class SerialSearchView(FacetedSearchView):
 
     def __get_categories(self, serial_number):
         """Search for categories whose serial number match with the specified."""
-        # Get all grand-grand-child (serial number categories) of the current cat
-        children = self.category.get_children()
-        g_children = map(lambda a: a.get_children(), children)
-        g_children = reduce(lambda a, b: a.union(b), g_children)
-        gg_children = map(lambda a: a.get_children(), g_children)
-        gg_children = reduce(lambda a, b: a.union(b), gg_children)
-
-        result = gg_children.filter(name__icontains=serial_number)
+        # Get all grand-grand-child (serial number categories)
+        # of the current cat
+        return get_serial_search_results(self.category, serial_number)
 
     def extra_context(self):
+        """Add the serial search results to the context."""
         extra = super(SerialSearchView, self).extra_context()
-        q = self.request.GET.get('q_serial', 0)
+        q = self.request.GET.get('q_serial', None)
         extra['serial_results'] = self.__get_categories(q)
+
+        # if not serials were found, show message to user
+        if not extra['serial_results']:
+            flash_messages = ajax.FlashMessages()
+            flash_messages.error(_("No categories were found."))
+            flash_messages.apply_to_request(self.request)
+
         return extra
 
     def build_page(self):
