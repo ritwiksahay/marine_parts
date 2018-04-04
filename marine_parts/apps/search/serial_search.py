@@ -61,4 +61,6 @@ def get_serial_search_results(category, q_serial):
 META_BRAND_SEARCH_BY_SERIAL = {
     'evinrude-johnson': (3, exact_search),
     'mercury': (2, exact_search),
+    'volvo-penta': (1, exact_search),
+    'mercruiser': (2, exact_search),
 }
