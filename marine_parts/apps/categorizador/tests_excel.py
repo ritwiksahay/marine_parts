@@ -69,17 +69,32 @@ class IntegrationTestsExcelLoad(test.TestCase):
         self.db = DBAccess("Base")
 
     def test_excel_load__complete_headers__returns2(self):
-        nro = excel_load(["", "Ext"], self.db, self.excel_stub.leer('a.xls'), 'A', 'Original')
+        nro = excel_load("Ext", self.db, self.excel_stub.leer('a.xls'), 'A', 'Original')
         self.assertEqual(2, nro)
 
-    def test_excel_load__name_header_does_not_exists__returns2(self):
+    def test_excel_load__name_header_does_not_exists__returnsKeyError(self):
         self.excel_stub.data[0][3] = ''
-        self.assertRaises(KeyError, excel_load, ["", "Ext"], self.db, self.excel_stub.leer('a.xls')
+        self.assertRaises(KeyError, excel_load, "Ext", self.db, self.excel_stub.leer('a.xls')
                           , 'A', 'Original')
 
-    def test_excel_load__sku_header_does_not_exists__returns2(self):
+    def test_excel_load__sku_header_does_not_exists__returnsKeyError(self):
         self.excel_stub.data[0][5] = ''
-        self.assertRaises(KeyError, excel_load, ["", "Ext"], self.db, self.excel_stub.leer('a.xls')
+        self.assertRaises(KeyError, excel_load, "Ext", self.db, self.excel_stub.leer('a.xls')
+                          , 'A', 'Original')
+
+    def test_excel_load__cost_header_does_not_exists__returnsKeyError(self):
+        self.excel_stub.data[0][8] = ''
+        self.assertRaises(KeyError, excel_load, "Ext", self.db, self.excel_stub.leer('a.xls')
+                          , 'A', 'Original')
+
+    def test_excel_load__price_header_does_not_exists__returnsKeyError(self):
+        self.excel_stub.data[0][10] = ''
+        self.assertRaises(KeyError, excel_load, "Ext", self.db, self.excel_stub.leer('a.xls')
+                          , 'A', 'Original')
+
+    def test_excel_load__saleprice_header_does_not_exists__returnsKeyError(self):
+        self.excel_stub.data[0][11] = ''
+        self.assertRaises(KeyError, excel_load, "Ext", self.db, self.excel_stub.leer('a.xls')
                           , 'A', 'Original')
 
 ########################################################################################################################

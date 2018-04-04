@@ -34,7 +34,7 @@ class DBHandler:
 
     def crear_prods(self, cat, is_aval, prod_name,
                     part_num_v, manufac_v, orig_v,
-                    diag_num_v):
+                    diag_num_v, price_excl_tax, price_retail, cost_price):
         pass
 
 
@@ -118,14 +118,14 @@ class DBAccess(DBHandler):
             print('Offending data (%s, %s, %s)' % (prod.title, cat.name, diag_number))
             raise
 
-    def add_stock_records(self, pro, part_number, amount):
+    def add_stock_records(self, pro, part_number, amount, price_excl_tax, price_retail, cost_price):
         StockRecord.objects.create(
             product=pro,
             partner=self.partner,
             partner_sku=part_number + str(datetime.now()),
-            price_excl_tax=D(0.00),
-            price_retail=D(0.00),
-            cost_price=D(0.00),
+            price_excl_tax=price_excl_tax,
+            price_retail=price_retail,
+            cost_price=cost_price,
             num_in_stock=amount)
 
     def obt_crea_atributos_prods(self, product_class):
@@ -151,7 +151,7 @@ class DBAccess(DBHandler):
 
     def crear_prods(self, cat, is_aval, prod_name,
                     part_num_v, manufac_v, orig_v,
-                    diag_num_v):
+                    diag_num_v, price_excl_tax, price_retail, cost_price):
 
         item = Product.objects.create(product_class=self.subcomp_class,
                                       title=prod_name)
@@ -175,6 +175,6 @@ class DBAccess(DBHandler):
             raise
 
         if is_aval:
-            self.add_stock_records(item, part_num_v, 1000)
+            self.add_stock_records(item, part_num_v, 1000, price_excl_tax, price_retail, cost_price)
 
         return item

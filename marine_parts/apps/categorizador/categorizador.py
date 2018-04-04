@@ -13,6 +13,7 @@
 from file_handler import FileHandler
 from django.db import transaction
 from db_handler import DBAccess
+from decimal import Decimal as D
 
 
 ###############################################################################
@@ -52,6 +53,9 @@ def nav_prods(json_products, bre_cat, db_oscar):
             part_number_v = prod_json.get('part_number')
             manufacturer_v = prod_json.get('manufacturer')
             diagram_number_v = prod_json.get('diagram_number')
+            price_excl_tax = prod_json.get('price_excl_tax', D(0.00))
+            cost_price = prod_json.get('cost_price', D(0.00))
+            price_retail = prod_json.get('price_retail', D(0.00))
             origin_v = prod_json.get('origin')
 
             prod, exists = db_oscar.check_partnumber(part_number_v)
@@ -62,7 +66,9 @@ def nav_prods(json_products, bre_cat, db_oscar):
             else:
                 pro = db_oscar.crear_prods(cat, is_available, prod_name,
                                            part_number_v, manufacturer_v,
-                                           origin_v, diagram_number_v)
+                                           origin_v, diagram_number_v,
+                                           price_excl_tax, price_retail,
+                                           cost_price)
                 db_oscar.add_part_number(part_number_v)
                 nro_products += 1
 
