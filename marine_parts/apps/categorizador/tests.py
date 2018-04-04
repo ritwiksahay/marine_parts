@@ -149,7 +149,7 @@ class CreaProdsTest(unittest.TestCase):
     def test_productos_partnumber_string_empty__regresaRunTimeError(self):
         self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', '', 'Man', 'ori',
                           '1', D(0.00), D(0.00), D(0.00))
-    
+
     def test_agregarDiagNumMayor5Caracteres_LevantaDatabaseError(self):
         self.assertRaises(DatabaseError, self.realDB.crear_prods, self.cat, True, 'Prod', '1', 'Man', 'Origin'
                           , 'pppppp', D(0.00), D(0.00), D(0.00))
