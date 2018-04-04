@@ -26,8 +26,8 @@
 {% endblock top_banner %}
 
 {% block headertext %}
-    {% if component and component.diagram_image %}
-        <h3 class="page-header-title">{{component.name | upper}}</h3>
+    {% if is_component and category.diagram_image %}
+        <h3 class="page-header-title">{{category.name | upper}}</h3>
     {% else %}
         {% if request.GET.q %}
             {% trans "Results"|upper %}
@@ -36,8 +36,13 @@
 {% endblock %}
 
 {% block pre-content %}
-    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-centered">
-        {% include 'search/partials/search_filter.html' with category_tree=category_tree name=data.name items=data.results %}
+    {% if is_brand_child %}
+    <div class="col-xs-12 col-md-6">
+        {% include 'search/partials/search_filter_serial.html' %}
+    </div>
+    {% endif %}
+    <div class="col-xs-12 col-md-6 {% if not is_brand_child %}col-centered{% endif %}">
+        {% include 'search/partials/search_filter.html' %}
     </div>
 {% endblock %}
 
@@ -48,14 +53,14 @@
 {% endblock %}
 
 {% block content %}
-    {% if component and component.diagram_image %}
+    {% if is_component and category.diagram_image %}
         <div class="col-xs-12 col-md-8">
             <div class="thumbnail">
                 <div>
-                   {% if component.diagram_image %} 
-                        <img id="diagram_img" src="{{ component.diagram_image.url }}" data-zoom-image="{{ component.diagram_image.url }}" alt="{{ component.name }}" class="img-responsive"/>
+                   {% if category.diagram_image %} 
+                        <img id="diagram_img" src="{{ category.diagram_image.url }}" data-zoom-image="{{ category.diagram_image.url }}" alt="{{ category.name }}" class="img-responsive"/>
                    {% else %}
-                        <img src="{% static 'img/logo/isotipo.png' %}" alt="{{ component.name }}" class="img-responsive"/>
+                        <img src="{% static 'img/logo/isotipo.png' %}" alt="{{ category.name }}" class="img-responsive"/>
                    {% endif %}
                 </div>
                 <p class="text-center hidden-xs">{% trans "(Scroll over the image to zoom in or zoom out)" %}</p>
@@ -66,7 +71,7 @@
                 <table id="part-table" class="table text-center" style="table-layout: fixed;">
 
                     <tbody>
-                        {% with results=page.object_list|build_results:component.pk %}
+                        {% with results=page.object_list|build_results:category.pk %}
                             {% for result in results  %}
                                     {% with product=result.object %}
                                         {% purchase_info_for_product request product as session %}
@@ -109,6 +114,7 @@
         
         {% if request.GET.q %}
             {% if page.object_list %}
+
                 <section id="results">
                     <div>
                         <ol class="row">
@@ -127,7 +133,7 @@
 {% block scripts %}
     {{ block.super }}
 
-    {% if component %}
+    {% if is_component %}
         <script src="{% static 'js/jquery.elevateZoom-3.0.8.min.js' %}"></script>
     {% endif %}
 {% endblock %}
@@ -145,20 +151,19 @@
     };
     oscar.basket.init(options);
 
-    {% if component and component.diagram_image %}
-        /* Enable Zoom to diagram parts image */
-        if( !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
-            $("#diagram_img").elevateZoom(
-                {
-                    responsive: true,
-                    easing: true,
-                    scrollZoom: true,
-                    zoomType: "inner",
-                    cursor: "crosshair",
-                    zoomSizeMode:'image'
-                }
-            );
-        }
+    {% if is_component and category.diagram_image %}
+        /* Enable Zoom to diagram parts image */  
+        $("#diagram_img").elevateZoom(
+            {
+                responsive: true,
+                easing: true,
+                scrollZoom: true,
+                zoomType: "inner",
+                cursor: "crosshair",
+                zoomSizeMode:'image'
+            }
+        );
+
     {% endif %}
 {% endblock %}
 
@@ -171,19 +176,27 @@
                the search form is submitted automatically */
             $('select[name="var"]').on('change', function(){
 
+                /* When the 'Select Category' option is selected in serial search view, don't do anything */
+                if($(this).val() == undefined){
+                    return
+                }
+
                 $.each($(this).nextUntil('#search_field'), function(key, elem){
                     elem.remove();
                 });
-                
+
                 $('select[name="var"]').attr("disabled", true);
                 $(this).attr("disabled", false);
-                var url = $('#categories_form').attr('action');
+                var url = $('#search_category_form').attr('action');
                 url += "?var=" + $(this).val();
                 location.href = url;
             });
 
-            $("#categories_form button[type='submit']").on("click", function() {
+            $("#search_categories_form button[type='submit']").on("click", function() {
                 $('select[name="var"]:not(:last)').attr("disabled", true);
+            });
+            $("#serial_search_category_form button[type='submit']").on("click", function() {
+                $('select[name="var"]').attr("disabled", true);
             });
 
             /* When the user scrolls down, the basket in the sidebar will 
