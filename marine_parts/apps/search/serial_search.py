@@ -3,9 +3,23 @@
 from marine_parts.apps.catalogue.models import Category
 
 
+def get_category_brand(category):
+    """Given a category, returns its category brand."""
+    current = category
+    while current:
+        parent = current.get_parent()
+        if parent.full_slug == 'brands':
+            return current
+        current = parent
+    return None
+
+
 def get_serial_queryset(brand):
     """Get queryset containing the serial cats corresp to the brand."""
     initial = Category.objects.none()
+
+    if not brand:
+        return initial
 
     def f_chi(a):
         return a.get_children()
@@ -25,12 +39,13 @@ def get_serial_queryset(brand):
 
 def exact_search(qs, q_serial):
     """Perform a exact match search over the given serial number."""
-    return qs.filter(name__contains=q_serial)
+    return qs.filter(name__icontains=q_serial)
 
 
-def get_serial_search_results(brand, q_serial):
+def get_serial_search_results(category, q_serial):
     """Return the results of search by serial for a given category brand."""
     try:
+        brand = get_category_brand(category)
         qs = get_serial_queryset(brand)
         type_of_search_func = META_BRAND_SEARCH_BY_SERIAL[brand.slug][1]
         result = type_of_search_func(qs, q_serial)

@@ -4,6 +4,7 @@ import sys
 
 from django.core.paginator import Paginator
 from django.http import Http404
+from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
 from haystack import views
@@ -47,7 +48,7 @@ class FacetedSearchView(views.FacetedSearchView):
         """Override of parent call method."""
         self.category = self._get_category(request)
         self.is_component = self._is_component(request)
-        self.is_brand_child = self._is_brand_child_category(request)
+        self.is_brand_child = self._is_brand_descendant_category(request)
         return super(FacetedSearchView, self).__call__(request)
 
     # Override this method to add the spelling suggestion to the context and to
@@ -129,14 +130,16 @@ class FacetedSearchView(views.FacetedSearchView):
         """Check if the category is a leaf (Component) and returns it."""
         return bool(self.category) and self.category.is_leaf()
 
-    def _is_brand_child_category(self, request):
-        """Check if the current category is a direct child."""
-        """ of the category 'Brands'. e.g. Mercury, Mercruiser."""
+    def _is_brand_descendant_category(self, request):
+        """Check if the current category is a descendant ."""
+        """of the category 'Brands'. e.g. Mercury, Mercruiser."""
         if self.category:
-            parent = self.category.get_parent()
-            if parent and parent.slug == 'brands':
-                return True
-
+            category_path = self.category.full_slug.split('/')
+            if len(category_path) > 1:  # if it's not a root, continue
+                # get the slug of the root category
+                root_slug = category_path[0]
+                if root_slug == 'brands':
+                    return True
         return False
 
     def _get_category(self, request):
@@ -186,25 +189,29 @@ class SerialSearchView(FacetedSearchView):
         """Override to add the component attribute."""
         super(SerialSearchView, self).__init__(*args, **kwargs)
 
-    def __get_categories(self, serial_number):
-        """Search for categories whose serial number match with the specified."""
-        # Get all grand-grand-child (serial number categories)
-        # of the current cat
-        return get_serial_search_results(self.category, serial_number)
-
     def extra_context(self):
         """Add the serial search results to the context."""
         extra = super(SerialSearchView, self).extra_context()
         q = self.request.GET.get('q_serial', None)
-        extra['serial_results'] = self.__get_categories(q)
-
-        # if not serials were found, show message to user
-        if not extra['serial_results']:
-            flash_messages = ajax.FlashMessages()
-            flash_messages.error(_("No categories were found."))
-            flash_messages.apply_to_request(self.request)
-
+        extra['serial_results'] = get_serial_search_results(self.category, q)
         return extra
+
+    def create_response(self):
+        """Generate the actual HttpResponse to send back to the user."""
+        # if only one result is returned then automatically redirect
+        # to that serial category page
+        context = self.get_context()
+        results = context['serial_results']
+        if results.count() == 1:
+            cat = results[0]
+            return redirect(cat)
+        else:
+            # if not serials were found, show message to user
+            if not results:
+                flash_messages = ajax.FlashMessages()
+                flash_messages.error(_("No categories were found."))
+                flash_messages.apply_to_request(self.request)
+            return super(SerialSearchView, self).create_response()
 
     def build_page(self):
         """We're not displaying any result pages in serial search view."""
