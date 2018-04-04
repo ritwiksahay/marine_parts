@@ -13,7 +13,7 @@
         <td colspan="1">
             {% if session.price.exists %}
                 {% if session.price.excl_tax == 0 %}
-                    <p class="price_color">{% trans "Free" %}</p>
+                    <p class="price_color">{% trans "Call for price" %}</p>
                 {% elif session.price.is_tax_known %}
                     <p class="price_color">{{ session.price.incl_tax|currency:session.price.currency }}</p>
                 {% else %}
@@ -22,12 +22,14 @@
             {% else %}
                 <p class="price_color">&nbsp;</p>
             {% endif %}
+            {%if not session.price.excl_tax == 0%}
             {% basket_form request product 'single' as basket_form %}
             <form data-basket-add-url="{% url 'basket:add' product.pk %}">
                 {% csrf_token %}
                 {{ basket_form.as_p }}
                 <button class="btn btn-primary btn-sm btn-block basket-add-btn">Add</button>
             </form>
+            {%endif%}
         </td>
     </tr>
     {% else %}
