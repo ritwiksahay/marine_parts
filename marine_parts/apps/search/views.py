@@ -40,7 +40,6 @@ class FacetedSearchView(views.FacetedSearchView):
     def __init__(self, *args, **kwargs):
         """Override to add the component attribute."""
         super(FacetedSearchView, self).__init__(*args, **kwargs)
-        self.component = None
         self.is_category = None
         self.is_brand_child = None
 
@@ -162,7 +161,7 @@ class FacetedSearchView(views.FacetedSearchView):
     def build_page(self):
         """Override to add component behaviour."""
         # Check if the category is a leaf (Component)
-        if self.component:
+        if self.is_component:
             # if it's component then there's not pagination
             paginator = Paginator(self.results, sys.maxsize)
             page = paginator.page(1)
@@ -212,11 +211,3 @@ class SerialSearchView(FacetedSearchView):
                 flash_messages.error(_("No categories were found."))
                 flash_messages.apply_to_request(self.request)
             return super(SerialSearchView, self).create_response()
-
-    def build_page(self):
-        """We're not displaying any result pages in serial search view."""
-        return (None, None)
-
-    def get_results(self):
-        """We're not displaying any part results in serial search view."""
-        return []
