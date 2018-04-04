@@ -1,10 +1,12 @@
 import django.test as test
+from django.core.management import call_command, CommandError
+from marine_parts.apps.catalogue.management.commands import load_prods_excel
 from test_utils import create_test_file
 from file_handler import ExcelHandler
-from db_handler import DBAccess, DBHandler
+from db_handler import DBAccess
 from prods_excel import excel_load
 from pyexcel import get_records
-
+from django.utils.six import StringIO
 
 class TestExcelHandler(ExcelHandler):
 
@@ -23,6 +25,16 @@ class TestExcelHandler(ExcelHandler):
 
     def get_records_from_xlsx(self, nom_arch):
         return get_records(file_type='xlsx', file_content=create_test_file(self.data, 'xlsx').getvalue())
+
+class TestCommand(load_prods_excel.Command):
+    nro = 0
+    raise_exp = False
+
+    def ejec(self, filepath, cat, cat_base, nom_man, nom_ori):
+        if self.raise_exp:
+            raise CommandError('An error occurred while processing this file: %s.' % filepath)
+
+        return self.nro
 
 
 ########################################################################################################################
@@ -57,15 +69,68 @@ class IntegrationTestsExcelLoad(test.TestCase):
         self.db = DBAccess("Base")
 
     def test_excel_load__complete_headers__returns2(self):
-        nro = excel_load(["", "Ext"], self.db, self.excel_stub.leer('a.xls'), 'A', 'Original', None)
+        nro = excel_load(["", "Ext"], self.db, self.excel_stub.leer('a.xls'), 'A', 'Original')
         self.assertEqual(2, nro)
 
     def test_excel_load__name_header_does_not_exists__returns2(self):
         self.excel_stub.data[0][3] = ''
         self.assertRaises(KeyError, excel_load, ["", "Ext"], self.db, self.excel_stub.leer('a.xls')
-                          , 'A', 'Original', None)
+                          , 'A', 'Original')
 
     def test_excel_load__sku_header_does_not_exists__returns2(self):
         self.excel_stub.data[0][5] = ''
         self.assertRaises(KeyError, excel_load, ["", "Ext"], self.db, self.excel_stub.leer('a.xls')
-                          , 'A', 'Original', None)
+                          , 'A', 'Original')
+
+########################################################################################################################
+
+# Write required named parameters into *args
+class UnitTestLoadProdsExcel(test.TestCase):
+
+    def setUp(self):
+        self.out = StringIO()
+        self.out.flush()
+        self.derr = StringIO()
+        self.derr.flush()
+        self.command = TestCommand()
+
+    def test_executeCatArgNoPresent_regresaException(self):
+        self.assertRaises(CommandError, call_command, 'self.command', '', 'stdout=self.out', 'stderr=self.derr')
+
+    def test_executeManufacturerArgNoPresent_regresaException(self):
+        self.assertRaises(CommandError, call_command, 'self.command', 'cat=Prueba', 'stdout=self.out', 'stderr=self.derr')
+
+    def test_executeOriginArgNoPresent_regresaException(self):
+        self.assertRaises(CommandError, call_command, 'self.command', 'cat=Prueba','manufacturer=Manu'
+                          , 'stdout=self.out', 'stderr=self.derr')
+
+    def test_executeFilepathsEmptyWithDefaultCatbase_regresaException(self):
+        call_command(self.command, '', '--cat=Prueba', '--manufacturer=Manu', '--origin=Origin', stdout=self.out, stderr=self.derr)
+        self.assertIn('No products were created', self.out.getvalue())
+        self.assertIn('Using base category: Best Sellers > Extension Kits.', self.out.getvalue())
+
+    def test_executeWithDefaultCatbase_returns1(self):
+        self.command.nro = 1
+        call_command(self.command, 'file', '--cat=Prueba', '--manufacturer=Manu', '--origin=Origin'
+                     , stdout=self.out, stderr=self.derr)
+        self.assertIn('%s products were created in DB from %s' % (self.command.nro, 'file'), self.out.getvalue())
+        self.assertIn('Using base category: Best Sellers > Extension Kits.', self.out.getvalue())
+
+    def test_executeInvalidSeveralFilePaths_regresaLog(self):
+        self.command.raise_exp = True
+        call_command(self.command, 'file1', '--cat=Prueba', '--manufacturer=Manu', '--origin=Origin',
+                     stderr=self.derr, stdout=self.out)
+        self.assertIn('An error occurred while processing this file: file1. Skipping...', self.derr.getvalue())
+
+    def test_execWithCatBase_regresaLog(self):
+        call_command(self.command, 'file1', '--cat_base=Prueba', '--cat=Ext', '--manufacturer=Manu', '--origin=Origin'
+            , stdout=self.out, stderr=self.derr)
+        self.assertIn('Using base category: Prueba.', self.out.getvalue())
+    #
+    def test_execWithCatManuOrig_regresaLog(self):
+        call_command(self.command, 'file1', '--cat_base=Prueba', '--cat=Ext', '--manufacturer=Manu', '--origin=Origin',
+                     stdout=self.out, stderr=self.derr)
+        self.assertIn('Using base category: Prueba.', self.out.getvalue())
+        self.assertIn('Category name: Ext.', self.out.getvalue())
+        self.assertIn('Manufacturer name: Manu.', self.out.getvalue())
+        self.assertIn('Origin name: Origin.', self.out.getvalue())
