@@ -44,9 +44,11 @@
     {% endif %}
 
     {% if replacements %}
-        {% for replacement in  replacements%}
-            {% purchase_info_for_product request replacement as replacement_session %}
-            {% render_component_part replacement replacement_session %}
+        {% for replacement in replacements%}
+            {% if category in replacement.categories.all %}
+                {% purchase_info_for_product request replacement as replacement_session %}
+                {% render_component_part replacement replacement_session %}
+            {% endif %}
         {% endfor %}
     {% endif %}
 {% endwith %}

@@ -40,15 +40,13 @@ class FacetedSearchView(views.FacetedSearchView):
     def __init__(self, *args, **kwargs):
         """Override to add the component attribute."""
         super(FacetedSearchView, self).__init__(*args, **kwargs)
-        self.component = None
-        self.is_category = None
-        self.is_brand_child = None
+        self.is_component = False
 
     def __call__(self, request):
         """Override of parent call method."""
         self.category = self._get_category(request)
-        self.is_component = self._is_component(request)
-        self.is_brand_child = self._is_brand_descendant_category(request)
+        self.is_brand_descendant = self._is_brand_descendant_category()
+        self.is_component = self._is_component()
         return super(FacetedSearchView, self).__call__(request)
 
     # Override this method to add the spelling suggestion to the context and to
@@ -68,8 +66,8 @@ class FacetedSearchView(views.FacetedSearchView):
         # pass 'is component' flag to the template
         extra['is_component'] = self.is_component
 
-        # pass whether is a direct child of the Brands Category
-        extra['is_brand_child'] = self.is_brand_child
+        # pass whether is a descendant of one of the Brands Category
+        extra['is_brand_descendant'] = self.is_brand_descendant
 
         # Pass the form for the search by serial number
         serial_search_form = SearchBySerialForm(self.request.GET)
@@ -126,11 +124,13 @@ class FacetedSearchView(views.FacetedSearchView):
 
         return get_tree(roots, path)
 
-    def _is_component(self, request):
-        """Check if the category is a leaf (Component) and returns it."""
-        return bool(self.category) and self.category.is_leaf()
+    def _is_component(self):
+        """Check if category is a leaf (Component) from a brand category."""
+        return bool(self.category) and \
+            self.is_brand_descendant and \
+            self.category.is_leaf()
 
-    def _is_brand_descendant_category(self, request):
+    def _is_brand_descendant_category(self):
         """Check if the current category is a descendant ."""
         """of the category 'Brands'. e.g. Mercury, Mercruiser."""
         if self.category:
@@ -162,7 +162,7 @@ class FacetedSearchView(views.FacetedSearchView):
     def build_page(self):
         """Override to add component behaviour."""
         # Check if the category is a leaf (Component)
-        if self.component:
+        if self.is_component:
             # if it's component then there's not pagination
             paginator = Paginator(self.results, sys.maxsize)
             page = paginator.page(1)
@@ -212,11 +212,3 @@ class SerialSearchView(FacetedSearchView):
                 flash_messages.error(_("No categories were found."))
                 flash_messages.apply_to_request(self.request)
             return super(SerialSearchView, self).create_response()
-
-    def build_page(self):
-        """We're not displaying any result pages in serial search view."""
-        return (None, None)
-
-    def get_results(self):
-        """We're not displaying any part results in serial search view."""
-        return []
