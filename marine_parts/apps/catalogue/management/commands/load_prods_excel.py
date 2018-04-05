@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from marine_parts.apps.categorizador.prods_excel import exec_excel_load
+from os.path import split, splitext
 
 
 class Command(BaseCommand):
@@ -19,7 +20,6 @@ class Command(BaseCommand):
         parser.add_argument(
             '--cat',
             action='store',
-            required=True,
             dest='cat',
             help='Category where the created products belongs.'
         )
@@ -46,9 +46,6 @@ class Command(BaseCommand):
         cat_base = options['cat_base']
         self.stdout.write(self.style.WARNING('Using base category: %s.' % cat_base))
 
-        cat = options['cat']
-        self.stdout.write(self.style.WARNING('Category name: %s.' % cat))
-
         manufacturer = options['manufacturer']
         self.stdout.write(self.style.WARNING('Manufacturer name: %s.' % manufacturer))
 
@@ -57,6 +54,13 @@ class Command(BaseCommand):
 
         for filepath in options['filepaths']:
             self.stdout.write('Processing file %s. Please wait...' % filepath)
+
+            cat = options['cat']
+            if not cat:
+                cat = splitext(split(filepath)[1])[0]
+
+            self.stdout.write(self.style.WARNING('Category name: %s.' % cat))
+
             try:
                 nro = self.ejec(filepath, cat, cat_base, manufacturer, origin)
             except CommandError as ce:

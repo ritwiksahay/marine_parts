@@ -124,6 +124,18 @@ class UnitTestLoadProdsExcel(test.TestCase):
         self.assertIn('No products were created', self.out.getvalue())
         self.assertIn('Using base category: Best Sellers > Extension Kits.', self.out.getvalue())
 
+    def test_executeWithoutCatArg_returns1(self):
+        self.command.nro = 1
+        call_command(self.command, '/path/Brand.xls', '--manufacturer=Manu', '--origin=Origin'
+                     , stdout=self.out, stderr=self.derr)
+        self.assertIn('Category name: Brand.', self.out.getvalue())
+
+    def test_executeWithoutCatArgFilenameWithoutExtension_returns1(self):
+        self.command.nro = 1
+        call_command(self.command, 'path/Brand', '--manufacturer=Manu', '--origin=Origin'
+                     , stdout=self.out, stderr=self.derr)
+        self.assertIn('Category name: Brand.', self.out.getvalue())
+
     def test_executeWithDefaultCatbase_returns1(self):
         self.command.nro = 1
         call_command(self.command, 'file', '--cat=Prueba', '--manufacturer=Manu', '--origin=Origin'
