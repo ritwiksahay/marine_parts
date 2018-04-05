@@ -42,6 +42,16 @@ def exact_search(qs, q_serial):
     return qs.filter(name__icontains=q_serial)
 
 
+def contains_search(qs, q_serial):
+    """Perform a 'LIKE '%%'' match search over the given serial number."""
+    return qs.filter(name__icontains=q_serial)
+
+
+def range_search(qs, q_serial):
+    """Perform range search by serial number."""
+    return
+
+
 def get_serial_search_results(category, q_serial):
     """Return the results of search by serial for a given category brand."""
     try:
