@@ -1,0 +1,31 @@
+/*
+Browse style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+.product_main h1{
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+    font-size: 22.4px;
+    margin-bottom: 10px;
+}
+
+.sub-header h2{
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+    font-size: 18px;
+}
+
+.product_page p, td{
+    font-family: 'Gotham Book';
+}
+
+.product_page th{
+    font-family: 'Gotham Bold';
+}

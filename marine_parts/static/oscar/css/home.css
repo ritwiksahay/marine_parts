@@ -1,0 +1,115 @@
+/*
+Header style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+.page_inner{
+    padding: 0px;
+    background-color: #e6e6e6 !important;
+}
+
+.brands{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+    background-image: url('../img/brands-home.jpg');
+    background-position: top center;
+}
+
+.brands-title{
+    font-family: 'Magneto';
+    font-size: 40px;
+    color: #FFFFFF;
+    margin-bottom: 0px;
+}
+
+
+.brands .helper {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.best-sellers{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-left: 0px;
+    margin-right: 0px;
+    font-family: 'Gotham Bold';
+}
+
+.best-sellers > div{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.best-sellers-title{
+    font-family: 'Magneto';
+    font-size: 36px;
+    color: #0d4a6c;
+    margin-bottom: 5px;
+}
+
+.best-sellers-title .canvas {
+    display: inline-block;
+    height: 25px;
+}
+
+.best-sellers-title .pixel{
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin: 0 10px;
+    background-color: #bababa;
+}
+
+
+.best-sellers div div.row .col-centered{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.best-sellers div div .row .category a p{
+    margin-bottom: 0px;
+}
+
+.categories{
+    padding-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+}
+
+.categories-title{
+    font-family: 'Magneto';
+    font-size: 36px;
+    color: #0d4a6c;
+}
+
+.categories div .row div.category{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top: 1px solid #0d4a6c;
+}
+
+.categories div .row div a:hover{
+    color: #0d4a6c;
+}
+
+.categories div .row div a{
+    color: #0d4a6c;
+    text-decoration: none;
+}
+
+.categories div .row div a .category_name{
+    display: inline-block;
+    width: 75%;
+    margin-bottom: 10px;
+}

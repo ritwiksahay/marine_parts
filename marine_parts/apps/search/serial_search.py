@@ -39,7 +39,7 @@ def get_serial_queryset(brand):
 
 def exact_search(qs, q_serial):
     """Perform a exact match search over the given serial number."""
-    return qs.filter(name__icontains=q_serial)
+    return qs.filter(name__iexact=q_serial)
 
 
 def contains_search(qs, q_serial):
@@ -64,13 +64,24 @@ def get_serial_search_results(category, q_serial):
         return Category.objects.none()
 
 
+def get_serial_or_model(category):
+    """Return string containing the domain of the field to search."""
+    """Engine Model Number or Serial Number"""
+    brand = get_category_brand(category)
+    brand_slug = brand.slug
+    aux = META_BRAND_SEARCH_BY_SERIAL.get(brand_slug, None)
+    if aux:
+        return aux[2]
+    return "Serial/Model"
+
 # Structure that holds information about the serial search by brand
 # For each category brand, we store the depth of the serial categories in the
 # category tree corresponding to that brand. We also store the type of the
-# search to be perfomed.
+# search to be perfomed. Finally we store the domain of the field we'll be
+# searching in
 META_BRAND_SEARCH_BY_SERIAL = {
-    'evinrude-johnson': (3, exact_search),
-    'mercury': (2, exact_search),
-    'volvo-penta': (1, exact_search),
-    'mercruiser': (2, exact_search),
+    'evinrude-johnson': (3, contains_search, 'Engine Model'),
+    'mercury': (2, contains_search, 'Serial'),
+    'volvo-penta': (1, contains_search, 'Engine Model'),
+    'mercruiser': (2, contains_search, 'Serial'),
 }

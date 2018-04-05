@@ -1,0 +1,91 @@
+/*
+Layout style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+.page .page_inner{
+    border-radius: 0px 0px 0px 0px;
+}
+
+
+/*Fonts*/
+@font-face {
+    font-family: 'Gotham Book';
+    src: url('fonts/gotham-book.ttf');
+}
+
+@font-face {
+    font-family: 'Gotham Bold';
+    src: url('fonts/gotham-bold.ttf');
+}
+
+@font-face {
+    font-family: 'Magneto';
+    src: url('fonts/magneto.ttf');
+}
+
+@font-face {
+    font-family: 'Neo Latina';
+    src: url('fonts/neo-latina.ttf');
+}
+
+@font-face{
+    font-family: 'Ico Moon';
+    src: url('fonts/icomoon.ttf');
+}
+
+/*General styles*/
+form{
+    margin-bottom: 0px;
+}
+
+#language_selector select {
+    width: 135px;
+}
+
+/*Custom Bootstrap*/
+.col-xs-5ths,
+.col-sm-5ths,
+.col-md-5ths,
+.col-lg-5ths {
+    position: relative;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.col-xs-5ths {
+    width: 20%;
+    float: left;
+}
+
+@media (min-width: 768px) {
+    .col-sm-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-md-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-lg-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}

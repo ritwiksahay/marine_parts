@@ -22,10 +22,12 @@ para realizar los pagos. Esta cadena de pago se ejecuta en el checkout del porta
 ########################################################################################################################
 
 Para habilitar las pasarelas en modo producción:
-    - Registrar al mercader en el portal de Payeezy. Obtener tu transarmor y su ta_token. Se edita el script js
-     paymentHandler.js. (Más info: https://github.com/payeezy/payeezy_js/raw/master/guide/payeezy_js07012015.pdf)
-    - Payeezy: usar la función execPaymentPayeezyLive con los datos apropiados.
-
+    Payeezy
+    - Registrar al mercader en el portal de Payeezy. Obtener tu transarmor que es su ta_token. Se edita el script js
+     paymentHandler.js. En `var ta_token = '';`, se asigna el valor obtenido.
+     (Más info: https://github.com/payeezy/payeezy_js/raw/master/guide/payeezy_js07012015.pdf)
+    - Usar la función execPaymentPayeezyLive en views.py.
+    - En `setup_params_request()` usar las variables `constants.token_live` en donde se encuentre `constants.token`.
 
 Para usar la pasarela se utiliza el siguiente pesudocódigo a modo de ilustración:
      def ejecPayeezy(order_number, amount, card_type, token_chk, cardholder_name, exp_date):
@@ -48,9 +50,12 @@ gen_hmac, get_nonce, get_timestamp y setup_params_request son funciones auxiliar
 pasarela de pago (Más información: https://developer.payeezy.com/payeezy-api/apis/post/transactions-4)
 
 
-Notas:
+## Notas
 
     - Es opcional el uso de 'order_number'.
+    - IMPORTANTE: Payeezy cambió el endpoint del script js. Ahora es `https://api-cert.payeezy.com/v1/securitytokens`.
+        Se edita el payeezy_us_v5.1.js en `static`.
+
 
 ########################################################################################################################
     TESTS

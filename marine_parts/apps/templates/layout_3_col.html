@@ -7,7 +7,7 @@ Keep the same header and footer as the standard layout template but override the
 main content area to split it into a sidebar and a content block
 {% endcomment %}
 {% block content_wrapper %}
-<div class="container-fluid page{% if is_component and category.diagram_image %} is-component{% endif %}">
+<div class="container-fluid page{% if is_component %} is-component{% endif %}">
     <div class="page-banner">
         {% block top_banner %}
                 {% block top_banner_title %}
