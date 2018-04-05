@@ -2,6 +2,7 @@ from django.conf.urls import url
 from haystack.views import search_view_factory
 
 from oscar.apps.search import facets
+from .views import SerialSearchView
 from oscar.core.application import Application
 from oscar.core.loading import get_class
 
@@ -20,7 +21,14 @@ class SearchApplication(Application):
                 view_class=self.search_view,
                 form_class=self.search_form,
                 searchqueryset=self.get_sqs()),
-                name='search'),
+                name='search'
+                ),
+            url(r'^serial/$', search_view_factory(
+                view_class=SerialSearchView,
+                form_class=self.search_form,
+                searchqueryset=self.get_sqs()),
+                name='searchBySerial'
+                ),
         ]
         return self.post_process_urls(urlpatterns)
 

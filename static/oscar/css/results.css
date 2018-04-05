@@ -100,10 +100,10 @@ Light Gray: #E6E6E6;
 }
 
 .page_inner div .pre-content form div select {
-    width: 90%;
+    width: 100%;
     float: none;
     display: inline-block;
-    background-color: #E6E6E6;
+    background-color: transparent;
     font-family: 'Gotham Book';
     font-size: 16px;
     height: 21px;
@@ -134,7 +134,7 @@ Light Gray: #E6E6E6;
 }
 
 /* Search By Categories form styles */
-#categories_form select[name='var'] {
+.categories_form select[name='var'] {
     text-align: center;
     -webkit-appearance: none; 
     -moz-appearance: none;
@@ -154,20 +154,22 @@ Light Gray: #E6E6E6;
     text-align-last: center;
 }
 
-#categories_form .form-group {
+.categories_form .form-group {
     margin-bottom: 6px;  
 }
 
-#categories_form .form-group.category-select {
+.categories_form .form-group.category-select {
     position: relative;
     cursor: pointer;
     position: relative;
     background-color: #ffffff;
     color: white;
     display: block;
+    width: 90%;
+    margin: 6px auto;
 }
 
-#categories_form .form-group > i.icon-chevron-down {
+.categories_form .form-group > i.icon-chevron-down {
     position: absolute;
     right: 11px;
     font-size: 1.3rem;
@@ -176,7 +178,7 @@ Light Gray: #E6E6E6;
     z-index: 0;
 }
 
-.is-component #categories_form .form-group > i.icon-chevron-down {
+.is-component .categories_form .form-group > i.icon-chevron-down {
     color: #0d4a6c;
 }
 
@@ -239,7 +241,7 @@ Light Gray: #E6E6E6;
     font-size: 12px;
 }
 
-#messages .alert {
+#messages_async .alert {
     display: none;
     position: fixed;
     z-index: 2;
