@@ -941,7 +941,7 @@ def threaded_johnson_evinrude_scrapper(num_threads=1):
 
     mp.set_start_method('spawn')
     threads = []
-    for idx in range(30, 35):
+    for idx in range(15, 25):
         t = mp.Process(target=marineengine_johnson_evinrude_scrapper, args=(idx, idx+1,))
         threads.append(t)
         t.start()

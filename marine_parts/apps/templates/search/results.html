@@ -26,7 +26,7 @@
 {% endblock top_banner %}
 
 {% block headertext %}
-    {% if is_component and category.diagram_image %}
+    {% if is_component %}
         <h3 class="page-header-title">{{category.name | upper}}</h3>
     {% else %}
         {% if request.GET.q %}
@@ -36,12 +36,12 @@
 {% endblock %}
 
 {% block pre-content %}
-    {% if is_brand_child %}
+    {% if is_brand_descendant %}
     <div class="col-xs-12 col-md-6">
         {% include 'search/partials/search_filter_serial.html' %}
     </div>
     {% endif %}
-    <div class="col-xs-12 col-md-6 {% if not is_brand_child %}col-centered{% endif %}">
+    <div class="col-xs-12 col-md-6 {% if not is_brand_descendant %}col-centered{% endif %}">
         {% include 'search/partials/search_filter.html' %}
     </div>
 {% endblock %}
@@ -53,7 +53,7 @@
 {% endblock %}
 
 {% block content %}
-    {% if is_component and category.diagram_image %}
+    {% if is_component %}
         <div class="col-xs-12 col-md-8">
             <div class="thumbnail">
                 <div>
@@ -95,7 +95,7 @@
             {% endfor %}
             <input type="hidden" name="q" value="{{ search_form.q.value }}" />
             
-            {% if request.GET.q %}
+            {% if request.GET.q or category.is_leaf %}
                 {% if paginator.count %}
                     {% if paginator.num_pages > 1 %}
                         {% blocktrans with start=page.start_index end=page.end_index num_results=paginator.count %}
@@ -112,7 +112,7 @@
             {% endif %} 
         </form>
         
-        {% if request.GET.q %}
+        {% if request.GET.q or category.is_leaf %}
             {% if page.object_list %}
 
                 <section id="results">
@@ -151,7 +151,7 @@
     };
     oscar.basket.init(options);
 
-    {% if is_component and category.diagram_image %}
+    {% if is_component %}
         /* Enable Zoom to diagram parts image */  
         $("#diagram_img").elevateZoom(
             {
