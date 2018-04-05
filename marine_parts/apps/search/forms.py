@@ -39,6 +39,17 @@ class BrowseCategoryForm(FacetedSearchForm):
         return self.searchqueryset
 
 
+class SearchBySerialForm(forms.Form):
+    """This is the form for handling the search by serial number mode."""
+
+    q_serial = forms.CharField(
+        required=True,
+        label='',
+        widget=forms.TextInput(attrs={'type': 'search',
+                                      'class': 'form-control',
+                                      'placeholder': 'Serial Number'}))
+
+
 class SearchForm(BrowseCategoryForm):
     """
     In Haystack, the search form is used for interpreting
