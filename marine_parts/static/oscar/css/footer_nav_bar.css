@@ -1,0 +1,52 @@
+/*
+Footer style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+.footer .footer_links{
+    background-color: #0d4a6c;
+    border: none;
+    border-radius: 0px;
+    padding: 15px 15px;
+}
+
+.footer .footer_links .nav div.language-bar form select{
+    font-family: 'Gotham Book';
+    color: #fff;
+    background-color: #0d4a6c;
+    height: 40px;
+    font-size: 16px;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+    cursor:pointer;
+}
+
+.footer .footer_links .nav div.language-bar .form-group:after{
+    content: '\f078';
+    font: normal normal normal 17px/1 FontAwesome;
+    color: #fff;
+    position: absolute;
+    pointer-events: none;
+    top: 10px;
+}
+
+.footer .footer_links .nav div a{
+    color: #FFFFFF;
+    font-family: "Gotham Book";
+    font-size: 18px;
+}
+
+.footer .footer_links .nav div a.brand img{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    float: none;
+    margin-right: auto;
+    margin-left: auto;
+}

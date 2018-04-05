@@ -1,0 +1,67 @@
+/*
+Custom style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+a {
+    color: #04a0d3;
+}
+
+.btn{
+    border-radius: 0px;
+    font-family: 'Gotham Book';
+}
+
+.btn-primary{
+    background-color: #04a0d3 !important;
+    border-color: #04a0d3 !important;
+}
+
+.btn-danger{
+    color: #04a0d3 !important;
+    background-color: #0d4a6c !important;
+    border-color: #0d4a6c !important;
+}
+
+.table-bordered{
+    border: 2px solid #11274F; 
+}
+
+.table-striped > tbody > tr:nth-child(odd) > td, 
+.table-striped > tbody > tr:nth-child(odd) > th{
+    background-color: #FFFFFF;
+}
+
+.alert-info{
+    background-color: #04a0d3;
+    border-color: #04a0d3;
+    color: #FFFFFF;
+}
+
+.form-control{
+    border-radius: 0px;
+}
+
+.rounded {
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+}
+
+.bg-mid-blue {
+    background-color: #0d4a6c !important;
+}
+
+.bg-light-gray {
+    background-color: #e6e6e6 !important;
+}
+
+.sub-header {
+    border-bottom: 2px solid #0d4a6c;
+}

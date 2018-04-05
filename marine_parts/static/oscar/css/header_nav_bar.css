@@ -1,0 +1,109 @@
+/*
+Header style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+.navbar-nav{
+    float: none;
+}
+
+.navbar-default{
+    border-color: #e6e6e6;
+    background-color: #e6e6e6;
+}
+
+.brand-col{
+    padding-right: 0px;
+}
+
+.logo-brand .brand{
+    border-right-style: solid;
+    border-right-color: #0d4a6c;
+    border-right-width: 2px;
+    padding-right: 15px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.logo-brand .brand-xs{
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
+.navbar-form{
+    margin-right: 0px;
+    margin-top: 1px;
+    margin-bottom: 0px;
+}
+
+.header .navbar-static-top{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.header .navbar-nav a{
+    font-family: "Gotham Book";
+    color: #0d4a6c;
+}
+
+.header .navbar-nav div.text-center{
+    margin-top: 2%;
+    font-size: 18px;
+}
+
+.header .navbar-nav div h4{
+    margin-bottom: 0px;
+    font-family: 'Gotham Book';
+    color: #0d4a6c;
+    font-size: 18px;
+}
+
+.header .navbar-nav div.user-cart a:hover{
+    text-decoration: none;
+}
+
+.header .navbar-nav div.user-cart .user{
+    font-size: 20px;
+}
+
+.header .navbar-nav div.user-cart .basket{
+    font-size: 18px;
+}
+
+.header .navbar-nav div.user-cart .basket .rounded{
+    width: 30px;
+    height: 21px;
+    color: #e6e6e6;
+    background-color: #0d4a6c; 
+    display: inline-block;
+    font-size: 18px;
+}
+
+.header .navbar-nav hr{
+    border-top: 1px solid #0d4a6c;
+}
+
+.header .navbar-nav div.search-bar form div .search-form{
+    font-family: 'Gotham Book';
+    font-size: 16px;
+    height: 40px;
+}
+
+.header .navbar-nav div.search-bar form div button{
+    height: 40px;
+    background-color: #0d4a6c;
+    color: #ffffff;
+    line-height: 30px;
+    font-size: 1.7rem;
+}
