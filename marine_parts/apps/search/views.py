@@ -13,7 +13,7 @@ from oscar.core.loading import get_class, get_model, get_classes
 
 from . import signals
 from .forms import SearchBySerialForm
-from .serial_search import get_serial_search_results
+from .serial_search import get_serial_search_results, get_serial_or_model
 
 from marine_parts.apps.catalogue.models import Cat, Category
 BasketLineFormSet, SavedLineFormSet = get_classes(
@@ -69,9 +69,14 @@ class FacetedSearchView(views.FacetedSearchView):
         # pass whether is a descendant of one of the Brands Category
         extra['is_brand_descendant'] = self.is_brand_descendant
 
-        # Pass the form for the search by serial number
-        serial_search_form = SearchBySerialForm(self.request.GET)
-        extra['serial_form'] = serial_search_form
+        if self.is_brand_descendant:
+            # Pass the form for the search by serial number
+            serial_search_form = SearchBySerialForm(self.request.GET)
+            extra['serial_form'] = serial_search_form
+
+            """Pass if it's serial number or model number we're searching"""
+            extra['serial_form_title'] = 'search by {} number'.format(
+                get_serial_or_model(self.category)).upper()
 
         # pass Basket formset to handle the basket element
         formset = BasketLineFormSet(

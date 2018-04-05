@@ -1,0 +1,185 @@
+/*
+Layout style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+body {
+	color: #0d4a6c;
+}
+
+.page_inner {
+	padding-bottom: 0;
+}
+
+.form-wrapper {
+	margin: 0 -30px;
+	padding: 20px 30px 0px 30px;
+	background-color: #0d4a6c;
+}
+
+.navbar-inverse .navbar-text{
+	color: white;
+	font-family: 'Gotham Book';
+	font-weight: bold;
+}
+
+.header .navbar-static-top {
+	padding-left: 20px;
+}
+
+.header .navbar-static-top .checkout-brand {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.header .navbar-static-top .navbar-nav li{
+    margin-top: 1.65%;
+}
+
+.nav-checkout .active .navbar-text {
+	color: #04a0d3;
+}
+
+form .control-label{
+	color: #ffffff;
+}
+
+form .form-control{
+	-webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    color: #0d4a6c;
+}
+
+form {
+	color: white;
+}
+
+form .form-group .row{
+	margin: 0;
+}
+
+.sub-header {
+	font-family: 'Gotham Bold';
+	text-transform: uppercase;
+}
+
+.sub-header h2 {
+	color: #0d4a6c;
+}
+
+.sub-header-1{
+	margin: 0;
+	font-family: 'Gotham Book';
+	border: none;
+	text-transform: uppercase;
+}
+
+.sub-header-1 h2 {
+	color: #0d4a6c;
+}
+
+.page_inner form select {
+	min-width: 100px;
+    text-align-last: center;
+ 	text-align: center;
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;       /* remove default arrow */
+    background: transparent;
+    outline: none;
+    border: none;
+    font-family: 'Gotham Book';
+    width: 100%;
+    z-index: 1;
+    padding: 0;
+    cursor: pointer;
+    padding-inline-end: 32px;
+    padding-inline-start: 27px;
+    position: relative;
+}
+
+.select-wrapper{
+	position: relative;
+	background-color: white;
+	-webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-right: 10px;
+    padding: 0;
+}
+
+.select-wrapper:after {
+	content: "\f078";
+	font-family: "FontAwesome";
+	position: absolute;
+	right: 10px;
+	top: 7px;
+	background-color: transparent;
+	color: #0d4a6c;
+	font-size: 1.3rem;
+}
+
+
+tbody th > h3 {
+    font-weight: 500;
+    font-size: 17.5px;
+}
+
+.table-condensed tbody tr th {
+    font-family: 'Gotham Bold';
+}
+
+.table-condensed tr th.total, .table-condensed tr td.total {
+    background-color: #FFFFFF !important;
+    border-bottom: 1px solid #04a0d3;
+    border-top: 1px solid #04a0d3;
+    color: #04a0d3;
+    font-weight: bold;
+}
+
+.table-condensed tr th.total > h3 {
+	color: #0d4a6c;
+}
+
+.basket-items {
+    background: transparent !important;
+    border: 1px solid #0d4a6c;
+}
+
+.basket-items div h3 a {
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+}
+
+.basket-items div p.price_color, .basket-items div span.availability {
+    color: #04a0d3;
+}
+
+.basket-items .price_color {
+	font-family: "Gotham Book";
+	font-size: 15.1px;
+	line-height: 1.4;
+	font-weight: bold;
+}
+
+.basket-title div h4, .basket-title div .h4,
+.basket-title div h3, .basket-title div .h3 {
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+}
+
+.basket-items .image_container {
+	min-height: 0;
+}
+
+.total h3.price_color {
+	font-family: "Gotham Bold";
+}
