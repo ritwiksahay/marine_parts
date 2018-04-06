@@ -49,7 +49,20 @@ def contains_search(qs, q_serial):
 
 def range_search(qs, q_serial):
     """Perform range search by serial number."""
-    return
+    q = q_serial.lower()
+    for cat in qs:
+        range_split = cat.slug.split('-')
+        if len(range_split) > 1:
+            begin, end = range_split[0], range_split[1]
+            if len(q) == len(begin) and \
+               (len(begin) == len(end) or end == 'up'):
+                if end == 'up':
+                    end = begin[0:2] + '9' * (len(begin) - 2)
+                if q >= begin and q <= end:
+                    continue
+
+        qs = qs.exclude(pk=cat.pk)
+    return qs
 
 
 def get_serial_search_results(category, q_serial):
@@ -74,6 +87,7 @@ def get_serial_or_model(category):
         return aux[2]
     return "Serial/Model"
 
+
 # Structure that holds information about the serial search by brand
 # For each category brand, we store the depth of the serial categories in the
 # category tree corresponding to that brand. We also store the type of the
@@ -81,7 +95,7 @@ def get_serial_or_model(category):
 # searching in
 META_BRAND_SEARCH_BY_SERIAL = {
     'evinrude-johnson': (3, contains_search, 'Engine Model'),
-    'mercury': (2, contains_search, 'Serial'),
+    'mercury': (2, range_search, 'Serial'),
     'volvo-penta': (1, contains_search, 'Engine Model'),
-    'mercruiser': (2, contains_search, 'Serial'),
+    'mercruiser': (2, range_search, 'Serial'),
 }
