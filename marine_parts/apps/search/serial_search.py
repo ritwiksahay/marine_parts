@@ -1,5 +1,7 @@
 """Auxiliar functions and structures for serial search functionality."""
 
+from collections import defaultdict
+
 from marine_parts.apps.catalogue.models import Category
 
 
