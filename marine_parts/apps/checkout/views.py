@@ -122,8 +122,8 @@ class PaymentDetailsView(views.PaymentDetailsView):
                                                 , tk_card['exp_date'])
 
         # When it's deployed, comment this line and uncoment the next line
-        isSucess, reference = execPaymentPayeezySandbox(order_number, headers, payload)
-        #isSucess, reference = execPaymentPayeezyLive(order_number, headers, payload)
+        #isSucess, reference = execPaymentPayeezySandbox(order_number, headers, payload)
+        isSucess, reference = execPaymentPayeezyLive(order_number, headers, payload)
 
         if isSucess:
             # Record payment source and event

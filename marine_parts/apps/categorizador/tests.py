@@ -7,9 +7,12 @@ from oscar.apps.partner.models import Partner, StockRecord
 from oscar.apps.catalogue.categories import create_from_breadcrumbs
 from decimal import Decimal as D
 import categorizador
+from db_handler import DBHandler, DBAccess
+from file_handler import FSHandler
+from django.db import DatabaseError
 
 
-class TestHandler(categorizador.IOHandler):
+class TestHandler(FSHandler):
     entrada = None
 
     def leer(self, nomArch):
@@ -20,7 +23,7 @@ class FakeObjectOscar:
     pass
 
 
-class StubDBHandler(categorizador.DBHandler):
+class StubDBHandler(DBHandler):
     def add_part_number(self, part_number_v):
         pass
 
@@ -41,10 +44,10 @@ class StubDBHandler(categorizador.DBHandler):
 
     def crear_prods(self, cat, is_aval, prod_name,
                     part_num_v, manufac_v, orig_v,
-                    diag_num_v):
+                    diag_num_v, price_excl_tax, price_retail, cost_price):
         return FakeObjectOscar, True
 
-class MockDB(categorizador.DBHandler):
+class MockDB(DBHandler):
 
     def __init__(self):
         self.ls = list()
@@ -76,7 +79,7 @@ class MockDB(categorizador.DBHandler):
 
     def crear_prods(self, cat, is_aval, prod_name,
                     part_num_v, manufac_v, orig_v,
-                    diag_num_v):
+                    diag_num_v, price_excl_tax, price_retail, cost_price):
         self.ls.append((self.cnt, prod_name))
         self.cnt += 1
         return prod_name
@@ -137,14 +140,19 @@ class CreaProdsTest(unittest.TestCase):
             product_class=cls.pc, name='Part number', code='PN', required=True, type=ProductAttribute.TEXT)
 
     def setUp(self):
-        self.realDB = categorizador.DBAccess('Prueba')
+        self.realDB = DBAccess('Prueba')
 
     def test_productos_sin_partnumber__regresaRunTimeError(self):
-        self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', None, 'Man', 'ori', '1')
+        self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', None, 'Man', 'ori',
+                          '1', D(0.00), D(0.00), D(0.00))
 
     def test_productos_partnumber_string_empty__regresaRunTimeError(self):
-        self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', '', 'Man', 'ori', '1')
+        self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', '', 'Man', 'ori',
+                          '1', D(0.00), D(0.00), D(0.00))
 
+    def test_agregarDiagNumMayor5Caracteres_LevantaDatabaseError(self):
+        self.assertRaises(DatabaseError, self.realDB.crear_prods, self.cat, True, 'Prod', '1', 'Man', 'Origin'
+                          , 'pppppp', D(0.00), D(0.00), D(0.00))
 
 class TestNavProds(unittest.TestCase):
 
@@ -199,6 +207,7 @@ class TestNavProds(unittest.TestCase):
             ])
 
 
+
 class TestExtraerProds(unittest.TestCase):
 
     def setUp(self):
@@ -215,9 +224,10 @@ class TestExtraerProds(unittest.TestCase):
 
         self.assertEqual(nro_prod, 6)
 
+
 class TestIntegrationExtraerProds(unittest.TestCase):
     def setUp(self):
-        self.realDB = categorizador.DBAccess("catBase")
+        self.realDB = DBAccess("catBase")
 
     def test_crear_productos_regresa6(self):
         nro_prod = categorizador.extraer_prods(casos.productos_repetidos_categorias, self.realDB)
@@ -245,7 +255,7 @@ class TestIntegrationDB_NavProds(unittest.TestCase):
 
 
     def setUp(self):
-        self.realDB = categorizador.DBAccess("catBase")
+        self.realDB = DBAccess("catBase")
 
     def test_crear_productos_anidados_regresa5(self):
         nro_recom = categorizador.nav_prods(
@@ -259,13 +269,10 @@ class TestIntegrationDB_NavProds(unittest.TestCase):
             casos.varios_productos_no_anidados, ["", "Prueba"], self.realDB)
         self.assertEqual(2, nro_recom)
 
-    # def test_checkPartNumber_regresaMultiplesObjectsReturned(self):
-    #     self.create_prod("878-9151 2 - Cylinder Block", False, "878-9151 2")
-    #     nro_recom = categorizador.nav_prods(
-    #         casos.varios_productos_no_anidados, ["", "Prueba"], self.realDB)
+    def test_varios_prods_cruzados_returnsTrue(self):
+        nro_recom = categorizador.nav_prods(casos.varios_productos_con_reemplazado_cruzado, ["Hola", "Prueba"], self.realDB)
+        self.assertEqual(nro_recom, 3)
 
-
-# Faltan los mas casos de productos iguales en varios archivos y su manejo.
 
 ########################################################################################################################
 

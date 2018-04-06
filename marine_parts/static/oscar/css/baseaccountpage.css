@@ -1,0 +1,40 @@
+/*
+Basket style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+h2, h3{
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+}
+
+label, p, li{
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+}
+
+.sidebar .nav-pills li.active a{
+    background-color: #04a0d3;
+    border-radius: 0px;
+    color: #fff;
+}
+
+.sidebar .nav-pills li a{
+    color: #0d4a6c;
+}
+
+.page-banner .top_banner_title{
+    font-family: 'Magneto';
+    font-size: 40px;
+    color: #fff;
+    margin-bottom: 0px;
+    padding: 62px 0px;
+    background-image: url('../../img/banners/banner-profile.png');
+    background-position: center center; 
+}

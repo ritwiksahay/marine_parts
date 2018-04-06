@@ -23,6 +23,8 @@ class CatalogueApplication(DashboardApplication):
                                   'ProductListView')
     product_lookup_view = get_class('dashboard.catalogue.views',
                                     'ProductLookupView')
+    category_lookup_view = get_class('dashboard.catalogue.views',
+                                    'CategoryLookupView')
     product_create_redirect_view = get_class('dashboard.catalogue.views',
                                              'ProductCreateRedirectView')
     product_createupdate_view = get_class('dashboard.catalogue.views',
@@ -76,6 +78,8 @@ class CatalogueApplication(DashboardApplication):
                 name='stock-alert-list'),
             url(r'^product-lookup/$', self.product_lookup_view.as_view(),
                 name='catalogue-product-lookup'),
+            url(r'^category-lookup/$', self.category_lookup_view.as_view(),
+                name='catalogue-category-lookup'),
             url(r'^categories/$', self.category_list_view.as_view(),
                 name='catalogue-category-list'),
             url(r'^categories/(?P<pk>\d+)/$',

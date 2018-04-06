@@ -15,6 +15,7 @@ from oscar.core.loading import get_classes, get_model
 from oscar.views.generic import ObjectLookupView
 
 from marine_parts.apps.dashboard.catalogue.formsets import ProductReplacementFormSet
+from marine_parts.apps.catalogue.models import ProductCategory
 
 (ProductForm,
  ProductClassSelectForm,
@@ -46,7 +47,7 @@ ProductTable, CategoryTable \
 Product = get_model('catalogue', 'Product')
 Category = get_model('catalogue', 'Category')
 ProductImage = get_model('catalogue', 'ProductImage')
-ProductCategory = get_model('catalogue', 'ProductCategory')
+#ProductCategory = get_model('catalogue', 'ProductCategory')
 ProductClass = get_model('catalogue', 'ProductClass')
 StockRecord = get_model('partner', 'StockRecord')
 StockAlert = get_model('partner', 'StockAlert')
@@ -202,11 +203,11 @@ class ProductCreateUpdateView(generic.UpdateView):
 
     def __init__(self, *args, **kwargs):
         super(ProductCreateUpdateView, self).__init__(*args, **kwargs)
-        self.formsets = {'category_formset': self.category_formset,
-                         'image_formset': self.image_formset,
-                         'recommended_formset': self.recommendations_formset,
-                        'replacement_formset': self.replacement_formset,
-                         'stockrecord_formset': self.stockrecord_formset}
+        self.formsets = {   'category_formset': self.category_formset,
+                            'image_formset': self.image_formset,
+                            'recommended_formset': self.recommendations_formset,
+                            'replacement_formset': self.replacement_formset,
+                            'stockrecord_formset': self.stockrecord_formset}
 
     def dispatch(self, request, *args, **kwargs):
         resp = super(ProductCreateUpdateView, self).dispatch(
@@ -630,6 +631,16 @@ class ProductLookupView(ObjectLookupView):
     def lookup_filter(self, qs, term):
         return qs.filter(Q(title__icontains=term)
                          | Q(parent__title__icontains=term))
+
+
+class CategoryLookupView(ObjectLookupView):
+    model = Category
+
+    def get_queryset(self):
+        return self.model.objects.all()
+
+    def lookup_filter(self, qs, term):
+        return qs.filter(Q(name__icontains=term))
 
 
 class ProductClassCreateUpdateView(generic.UpdateView):
