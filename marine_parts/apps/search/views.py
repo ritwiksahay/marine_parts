@@ -13,7 +13,10 @@ from oscar.core.loading import get_class, get_model, get_classes
 
 from . import signals
 from .forms import SearchByModelSerialForm
-from .serial_search import get_serial_search_results, get_serial_or_model
+from .serial_search import (get_model_search_results,
+                            get_serial_search_results,
+                            get_serial_or_model,
+                            get_list_horses_power)
 
 from marine_parts.apps.catalogue.models import Cat, Category
 BasketLineFormSet, SavedLineFormSet = get_classes(
@@ -45,7 +48,8 @@ class FacetedSearchView(views.FacetedSearchView):
     def __call__(self, request):
         """Override of parent call method."""
         self.category = self._get_category(request)
-        self.is_brand_descendant, self.brand_slug = self._is_brand_descendant_category()
+        self.is_brand_descendant, self.brand_slug = \
+            self._is_brand_descendant_category()
         self.is_component = self._is_component()
         return super(FacetedSearchView, self).__call__(request)
 
@@ -70,20 +74,23 @@ class FacetedSearchView(views.FacetedSearchView):
         extra['is_brand_descendant'] = self.is_brand_descendant
 
         # Check if the search by model/serial must be shown
-        if self.is_brand_descendant and \
-            (self.brand_slug not in ['mercury', 'mercruiser'] or
-             self.category.get_depth() >= 3):
-            # if it's mercury or mercruiser (range search)
-            # the widget must appear when are in the hp
-            # level of the main search
-            extra['can_search_by_model_serial'] = True
-            # Pass the form for the search by serial number
-            serial_search_form = SearchByModelSerialForm(self.request.GET)
-            extra['model_serial_form'] = serial_search_form
+        if self.is_brand_descendant:
+            is_serial_or_model = get_serial_or_model(self.category)
+            if is_serial_or_model == 'Engine Model' or \
+                    self.category.get_depth() >= 3:
+                # if it's mercury or mercruiser (range search)
+                # the widget must appear when are in the hp
+                # level of the main search
+                extra['can_search_by_model_serial'] = True
+                # Pass the form for the search by serial number
+                serial_search_form = SearchByModelSerialForm(self.request.GET)
+                extra['model_serial_form'] = serial_search_form
 
-            """Pass if it's serial number or model number we're searching"""
-            extra['model_serial_form_title'] = 'search by {} number'.format(
-                get_serial_or_model(self.category)).upper()
+                """Pass if it's serial or model number we're searching"""
+                extra['is_model_or_serial'] = is_serial_or_model
+
+                if is_serial_or_model == 'Serial':
+                    extra['list_hps'] = get_list_horses_power()
 
         # pass Basket formset to handle the basket element
         formset = BasketLineFormSet(
@@ -192,7 +199,7 @@ class FacetedSearchView(views.FacetedSearchView):
             return []
 
 
-class SerialSearchView(FacetedSearchView):
+class ModelSearchView(FacetedSearchView):
     """View for the search by serial number requirement."""
 
     template = "search/results.html"
@@ -206,7 +213,38 @@ class SerialSearchView(FacetedSearchView):
         """Add the serial search results to the context."""
         extra = super(SerialSearchView, self).extra_context()
         q = self.request.GET.get('q_serial', None)
-        extra['serial_results'] = get_serial_search_results(self.category, q)
+        extra['serial_results'] = get_model_search_results(self.category, q)
+        return extra
+
+    def create_response(self):
+        """Generate the actual HttpResponse to send back to the user."""
+        # if only one result is returned then automatically redirect
+        # to that serial category page
+        context = self.get_context()
+        results = context['serial_results']
+        if results.count() == 1:
+            cat = results[0]
+            return redirect(cat)
+        else:
+            # if not serials were found, show message to user
+            if not results:
+                flash_messages = ajax.FlashMessages()
+                flash_messages.error(_("No categories were found."))
+                flash_messages.apply_to_request(self.request)
+            return super(SerialSearchView, self).create_response()
+
+
+class SerialSearchView(FacetedSearchView):
+    """View for the search by engine model number requirement."""
+
+    def extra_context(self):
+        """Add the serial search results to the context."""
+        extra = super(SerialSearchView, self).extra_context()
+        q = self.request.GET.get('q_serial', None)
+        hp = self.request.GET.get('hp', None)
+        extra['selected_hp'] = hp
+        extra['serial_results'] = \
+            get_serial_search_results(self.category, q, hp)
         return extra
 
     def create_response(self):
