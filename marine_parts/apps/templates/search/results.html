@@ -36,12 +36,18 @@
 {% endblock %}
 
 {% block pre-content %}
-    {% if is_brand_descendant %}
-    <div class="col-xs-12 col-md-6">
-        {% include 'search/partials/search_filter_serial.html' %}
-    </div>
+    {% if can_search_by_model_serial %}
+        {% if is_model_or_serial == 'Serial' %}
+            <div class="col-xs-12 col-md-6">
+                {% include 'search/partials/search_filter_by_serial.html' %}
+            </div>
+        {% else %}
+            <div class="col-xs-12 col-md-6">
+                {% include 'search/partials/search_filter_by_model.html' %}
+            </div>
+        {% endif %}
     {% endif %}
-    <div class="col-xs-12 col-md-6 {% if not is_brand_descendant %}col-centered{% endif %}">
+    <div class="col-xs-12 col-md-6 {% if not can_search_by_model_serial %}col-centered{% endif %}">
         {% include 'search/partials/search_filter.html' %}
     </div>
 {% endblock %}
