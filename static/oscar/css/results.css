@@ -134,7 +134,7 @@ Light Gray: #E6E6E6;
 }
 
 /* Search By Categories form styles */
-.categories_form select[name='var'] {
+.categories_form select {
     text-align: center;
     -webkit-appearance: none; 
     -moz-appearance: none;
