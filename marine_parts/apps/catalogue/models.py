@@ -47,7 +47,7 @@ class ProductCategory(AbstractProductCategory):
     """Override to include diagram numbers."""
 
     diagram_number = models.CharField(
-        max_length=5,
+        max_length=8,
         blank=True,
         null=True,
         verbose_name=_("Diagram number"),
