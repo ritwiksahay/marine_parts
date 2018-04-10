@@ -53,9 +53,9 @@ def nav_prods(json_products, bre_cat, db_oscar):
             part_number_v = prod_json.get('part_number')
             manufacturer_v = prod_json.get('manufacturer')
             diagram_number_v = prod_json.get('diagram_number')
-            price_excl_tax = prod_json.get('price', D(0.00))
-            cost_price = prod_json.get('cost_price', D(0.00))
-            price_retail = prod_json.get('price_retail', D(0.00))
+            price_excl_tax = prod_json.get('price', '0.00')
+            cost_price = prod_json.get('cost_price', '0.00')
+            price_retail = prod_json.get('price_retail', '0.00')
             origin_v = prod_json.get('origin')
 
             prod, exists = db_oscar.check_partnumber(part_number_v)
