@@ -30,7 +30,7 @@
             <select class="form-control rounded" name="var" id="var">
                 <option value="{{category.get_search_url}}">--{% trans "Select Category" %}--</option>'
                 {% for cat in serial_results %}
-                    <option value="{{cat.get_search_url}}"{% if cat.is_selected %}selected{% endif %}>{{ cat.name }}</option>
+                    <option value="{{cat.get_search_url}}"{% if cat.is_selected %}selected{% endif %}>{{cat.get_parent.name}}  /  {{ cat.name }}</option>
                 {% endfor %}
             </select>
         </div>
