@@ -6,6 +6,7 @@ from marine_parts.apps.catalogue.models import Product, ProductClass, ProductAtt
 from oscar.apps.partner.models import Partner, StockRecord
 from oscar.apps.catalogue.categories import create_from_breadcrumbs
 from decimal import Decimal as D
+from decimal import InvalidOperation
 import categorizador
 from db_handler import DBHandler, DBAccess
 from file_handler import FSHandler
@@ -144,15 +145,29 @@ class CreaProdsTest(unittest.TestCase):
 
     def test_productos_sin_partnumber__regresaRunTimeError(self):
         self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', None, 'Man', 'ori',
-                          '1', D(0.00), D(0.00), D(0.00))
+                          '1', '0.00', '0.00', '0.00')
 
     def test_productos_partnumber_string_empty__regresaRunTimeError(self):
         self.assertRaises(RuntimeError, self.realDB.crear_prods, self.cat, True, 'Hey', '', 'Man', 'ori',
-                          '1', D(0.00), D(0.00), D(0.00))
+                          '1', '0.00', '0.00', '0.00')
 
     def test_agregarDiagNumMayor5Caracteres_LevantaDatabaseError(self):
         self.assertRaises(DatabaseError, self.realDB.crear_prods, self.cat, True, 'Prod', '1', 'Man', 'Origin'
-                          , 'pppppp', D(0.00), D(0.00), D(0.00))
+                          , 'pppppp', '0.00', '0.00', '0.00')
+
+    def test_incluirPreciosPriceExclTaxComa_OK(self):
+        prod = self.realDB.crear_prods(self.cat, True, 'Prod', '1', 'Man', 'Origin'
+                          , 'pppppp', '1,002.00', '0.00', '0.00')
+        self.assertEqual(prod.title, 'Prod')
+
+    def test_incluirPreciosPriceExclTax_OK(self):
+        prod = self.realDB.crear_prods(self.cat, True, 'Prod', '1', 'Man', 'Origin'
+                          , 'pppppp', '2.00', '0.00', '0.00')
+        self.assertEqual(prod.title, 'Prod')
+
+    def test_incluirPreciosPriceExclTaxComa_regresaInvalidOperation(self):
+        self.assertRaises(InvalidOperation, self.realDB.crear_prods, self.cat, True, 'Prod', '1', 'Man', 'Origin'
+                          , 'pppppp', '', '0.00', '0.00')
 
 class TestNavProds(unittest.TestCase):
 

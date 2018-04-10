@@ -123,9 +123,9 @@ class DBAccess(DBHandler):
             product=pro,
             partner=self.partner,
             partner_sku=part_number + str(datetime.now()),
-            price_excl_tax=price_excl_tax,
-            price_retail=price_retail,
-            cost_price=cost_price,
+            price_excl_tax=D(price_excl_tax),
+            price_retail=D(price_retail),
+            cost_price=D(cost_price),
             num_in_stock=amount)
 
     def obt_crea_atributos_prods(self, product_class):
@@ -175,6 +175,9 @@ class DBAccess(DBHandler):
             raise
 
         if is_aval:
+            price_excl_tax = D(price_excl_tax.replace(',', ''))
+            cost_price = D(cost_price.replace(',', ''))
+            price_retail = D(price_retail.replace(',', ''))
             self.add_stock_records(item, part_num_v, 1000, price_excl_tax, price_retail, cost_price)
 
         return item
