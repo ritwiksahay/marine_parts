@@ -2,7 +2,7 @@ from django.conf.urls import url
 from haystack.views import search_view_factory
 
 from oscar.apps.search import facets
-from .views import SerialSearchView
+from .views import ModelSearchView, SerialSearchView
 from oscar.core.application import Application
 from oscar.core.loading import get_class
 
@@ -13,7 +13,6 @@ class SearchApplication(Application):
     search_form = get_class('search.forms', 'SearchForm')
 
     def get_urls(self):
-
         # The form class has to be passed to the __init__ method as that is how
         # Haystack works.  It's slightly different to normal CBVs.
         urlpatterns = [
@@ -22,6 +21,12 @@ class SearchApplication(Application):
                 form_class=self.search_form,
                 searchqueryset=self.get_sqs()),
                 name='search'
+                ),
+            url(r'^model/$', search_view_factory(
+                view_class=ModelSearchView,
+                form_class=self.search_form,
+                searchqueryset=self.get_sqs()),
+                name='searchByModel'
                 ),
             url(r'^serial/$', search_view_factory(
                 view_class=SerialSearchView,

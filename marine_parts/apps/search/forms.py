@@ -39,7 +39,7 @@ class BrowseCategoryForm(FacetedSearchForm):
         return self.searchqueryset
 
 
-class SearchBySerialForm(forms.Form):
+class SearchByModelSerialForm(forms.Form):
     """This is the form for handling the search by serial number mode."""
 
     q_serial = forms.CharField(
