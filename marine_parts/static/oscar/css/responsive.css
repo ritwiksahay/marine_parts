@@ -1,0 +1,859 @@
+/*
+Responsive style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+/* Extra extra small devices (portrait phones, less than 299px)*/
+@media (max-width: 299px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    /*Header*/
+    header .row{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .header .navbar-nav div.search-bar form div h4{
+        text-align: center;
+    }
+
+    .header .navbar-nav div.search-bar form div .search-form{
+        width: 72%;
+        display: inline-block;
+    }
+
+    /*Home*/
+    .brands{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .brands div .row .brand{
+        height: 80px;
+        margin-top: 1%;
+        padding: 12px 25px 12px 25px;
+    }
+
+    .brands div .row .brand img{
+        margin-right: auto;
+        margin-left: auto;
+        max-width: 150px;
+        vertical-align: middle;
+    }
+
+    .categories div .row div.category{
+        height: 130px;
+        text-align: center;
+    }
+    
+    .categories div .row div a .category_name {
+        font-size: 15px;
+    }
+
+    .categories div .row div img.category-icon{
+        width: 44px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /*Results page*/
+    .customer-service .row .info h1{
+        font-size: 30px;
+    }
+
+    .customer-service .row .info h2{
+        font-size: 20px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 18px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 32px;
+    }
+
+    /*Footer*/
+    .footer .footer_links .nav div.text-center{
+        margin-top: 0%;
+    }
+
+    .footer .footer_links .nav div.language-bar{
+        margin-top: 3%;
+        float: none;
+    }
+    
+    .footer .footer_links .nav div.language-bar select{
+        border:1px solid #fff;
+    }
+    
+    .footer .footer_links .nav div.language-bar .form-group:after{
+        display: none;
+    }
+}
+
+/* Extra extra small devices (portrait phones, less than 402)*/
+@media (min-width: 300px) and (max-width: 402px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    /*Header*/
+    header .row{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .header .navbar-nav div.search-bar form div h4{
+        text-align: center;
+    }
+
+    .header .navbar-nav div.search-bar form div .search-form{
+        width: 78%;
+        display: inline-block;
+    }
+
+    /*Home*/
+    .brands{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .brands div .row .brand{
+        height: 90px;
+        margin-top: 1%;
+        padding: 12px 10px 12px 10px;
+    }
+    
+    .brands div .row .brand img{
+        margin-right: auto;
+        margin-left: auto;
+        max-width: 240px;
+        vertical-align: middle;
+    }
+
+    .best-sellers div div .row .category a img{
+        max-height: 320px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .categories div .row div.category{
+        height: 130px;
+        text-align: center;
+    }
+    
+    .categories div .row div a .category_name {
+        font-size: 17px;
+    }
+
+    .categories div .row div img.category-icon{
+        width: 45px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /*Results page*/
+    .customer-service .row .info h1{
+        font-size: 30px;
+    }
+
+    .customer-service .row .info h2{
+        font-size: 20px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 18px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 32px;
+    }
+
+    /*Footer*/
+    .footer .footer_links .nav div.text-center{
+        margin-top: 0%;
+    }
+
+    .footer .footer_links .nav div.language-bar{
+        margin-top: 3%;
+        float: none;
+    }
+    
+    .footer .footer_links .nav div.language-bar select{
+        border:1px solid #fff;
+    }
+
+    .footer .footer_links .nav div.language-bar .form-group:after{
+        display: none;
+    }
+}
+
+/* Extra small devices (portrait phones, less than 576px)*/
+@media (min-width: 403px) and (max-width: 575px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    /*Header*/
+    header .row{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .header .navbar-nav div.search-bar form div h4{
+        text-align: center;
+    }
+
+    .header .navbar-nav div.search-bar form div .search-form{
+        width: 85%;
+        display: inline-block;
+    }
+
+    /*Home*/
+    .brands{
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .brands div .row .brand{
+        height: 124px;
+        margin-top: 3%;
+        padding: 12px 10px 12px 10px;
+    }
+
+    .brands div .row .brand img{
+        margin-right: auto;
+        margin-left: auto;
+        max-width: 300px;
+        vertical-align: middle;
+    }
+
+    .best-sellers div div .row .category a img{
+        max-height: 320px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .categories div .row div.category{
+        height: 120px;
+        text-align: center;
+    }
+    
+    .categories div .row div a .category_name {
+        font-size: 18px;
+    }
+
+    .categories div .row div img.category-icon{
+        width: 45px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /*Results page*/
+    .customer-service .row .info h1{
+        font-size: 30px;
+    }
+
+    .customer-service .row .info h2{
+        font-size: 20px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 18px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 32px;
+    }
+
+    /*Footer*/
+    .footer .footer_links .nav div.text-center{
+        margin-top: 0%;
+    }
+
+    .footer .footer_links .nav div.language-bar{
+        margin-top: 3%;
+        float: none;
+    }
+    
+    .footer .footer_links .nav div.language-bar select{
+        border:1px solid #fff;
+    }
+
+    .footer .footer_links .nav div.language-bar .form-group:after{
+        display: none;
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    /*Header*/
+    .header .navbar-nav div.search-bar form div h4{
+        text-align: center;
+    }
+
+    .header .navbar-nav div.search-bar form div .search-form{
+        width: 90%;
+        display: inline-block;
+    }
+    
+    /*Home*/
+    .brands{
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .brands div .row .brand{
+        height: 124px;
+        margin-top: 3%;
+        padding: 12px 25px 12px 25px;
+    }
+    
+    .brands div .row .brand img{
+        margin-right: auto;
+        margin-left: auto;
+        max-width: 300px;
+        vertical-align: middle;
+    }
+
+    .best-sellers div div .row .category a img{
+        max-height: 320px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .categories div .row div.category{
+        height: 100px;
+        text-align: center;
+    }
+    
+    .categories div .row div a .category_name {
+        font-size: 16px;
+    }
+
+    .categories div .row div img.category-icon{
+        width: 40px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /*Results page*/
+    .basket-wrapper{
+        position: static;
+    }
+
+    .customer-service .row .info,
+    .customer-service .row .time{
+        height: 214px;
+    }
+
+
+    /*Footer*/
+    .footer .footer_links .nav div.text-center{
+        margin-top: 0%;
+    }
+
+    .footer .footer_links .nav div.language-bar{
+        margin-top: 3%;
+        float: none;
+    }
+    
+    .footer .footer_links .nav div.language-bar select{
+        border:1px solid #fff;
+    }
+
+    .footer .footer_links .nav div.language-bar .form-group:after{
+        display: none;
+    }
+}
+
+
+@media (min-width: 768px) and (max-width: 923px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    /*Header*/
+    .header .navbar-nav div.search-bar form div .search-form{
+        width: 88%;
+    }
+
+    /*Home*/
+    .brands{
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .brands div .row .brand{
+        height: 130px;
+        padding: 12px 25px 12px 25px;
+    }
+
+    .best-sellers div div .row{
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .best-sellers div div .row .bordered{
+        border-left: 0px;
+    }
+
+    .best-sellers div div .row .category a img{
+        max-height: 250px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .categories div .row div.category{
+        height: 100px;
+        text-align: center;
+    }
+    
+    .categories div .row div a .category_name {
+        font-size: 16px;
+    }
+
+    .categories div .row div img.category-icon{
+        width: 40px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /*Results page*/
+    .basket-wrapper{
+        position: relative;
+    }
+
+    .customer-service .row .info,
+    .customer-service .row .time{
+        height: 214px;
+    }
+
+    /*Footer*/
+    .footer .footer_links .nav div.text-center{
+        margin-top: 5%;
+    }
+
+    .footer .footer_links .nav div.language-bar{
+        margin-top: 4.5%;
+    }
+
+    .footer .footer_links .nav div.language-bar select{
+        border:0px;
+    }
+
+
+    .footer .footer_links .nav div.language-bar .form-group:after{
+        right: 12px;
+    }
+}
+
+
+@media (min-width: 924px) and (max-width: 991px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    /*Header*/
+    .header .navbar-nav div.search-bar form div .search-form{
+        width: 88%;
+    }
+
+    /*Home*/
+    .brands{
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .brands div .row .brand{
+        height: 130px;
+        padding: 12px 25px 12px 25px;
+    }
+
+    .best-sellers div div .row{
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .best-sellers div div .row .bordered{
+        border-left: 0px;
+    }
+
+    .best-sellers div div .row .category a img{
+        max-height: 250px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .categories div .row div a .category_name {
+        font-size: 12px;
+    }
+
+    .categories div .row div img.category-icon{
+        width: 35px;
+        display: inline-block;
+    }
+
+    /*Results page*/
+    .basket-wrapper{
+        position: relative;
+    }
+
+    .customer-service .row .info,
+    .customer-service .row .time{
+        height: 214px;
+    }
+
+    .customer-service .row .info h1{
+        font-size: 40px;
+    }
+
+    .customer-service .row .info h2{
+        font-size: 22px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 20px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 40px;
+    }
+
+    /*Footer*/
+    .footer .footer_links .nav div.text-center{
+        margin-top: 5%;
+    }
+
+    .footer .footer_links .nav div.language-bar{
+        margin-top: 4.5%;
+    }
+
+    .footer .footer_links .nav div.language-bar select{
+        border:0px;
+    }
+
+
+    .footer .footer_links .nav div.language-bar .form-group:after{
+        right: 12px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1060px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    /*Header*/
+    .header .navbar-nav div.search-bar form div{
+        margin-left: 10px;
+        margin-bottom: 5px;
+    }
+
+    .header .navbar-nav div.search-bar form div .search-form{
+        width: 88%;
+    }
+
+    /*Home*/
+    .brands{
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .brands div .row .brand{
+        height: 110px;
+        padding: 12px 25px 12px 25px;
+    }
+
+    .best-sellers div div .row{
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .best-sellers div div .row .bordered{
+        border-left: 1px solid #04a0d3;
+    }
+
+    .best-sellers div div .row .category a img{
+        max-height: 200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .categories div .row div.bordered{
+        border-right: 1px solid #0d4a6c;
+    }
+
+    .categories div .row div a .category_name {
+        font-size: 12px;
+    }
+
+    .categories div .row div img.category-icon {
+        width: 38px;
+        display: inline-block;
+    }    
+
+    /*Results page*/
+    .basket-wrapper{
+        position: relative;
+    }
+
+    .customer-service .row .info,
+    .customer-service .row .time{
+        height: 214px;
+    }
+
+    .customer-service .row .info h1{
+        font-size: 34px;
+    }
+
+    .customer-service .row .info h2{
+        font-size: 22px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 20px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 34px;
+    }
+
+    /*Footer*/
+    .footer .footer_links .nav div.text-center{
+        margin-top: 5%;
+    }
+
+    .footer .footer_links .nav div.language-bar .form-group:after{
+        right: 30px;
+    }
+
+    .footer .footer_links .nav div.language-bar{
+        margin-top: 4.5%;
+    }
+
+    .footer .footer_links .nav div.language-bar select{
+        border:0px;
+    }
+}
+
+@media (min-width: 1061px) and (max-width: 1199px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    /*Header*/
+    .header .navbar-nav div.search-bar form div{
+        margin-left: 10px;
+        margin-bottom: 5px;
+    }
+
+    .header .navbar-nav div.search-bar form div .search-form{
+        width: 88%;
+    }
+
+    /*Home*/
+    .brands{
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .brands div .row .brand{
+        height: 110px;
+        padding: 12px 25px 12px 25px;
+    }
+
+    .best-sellers div div .row{
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .best-sellers div div .row .bordered{
+        border-left: 1px solid #04a0d3;
+    }
+
+    .best-sellers div div .row .category a img{
+        max-height: 200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .categories div .row div.bordered{
+        border-right: 1px solid #0d4a6c;
+    }
+
+    .categories div .row div a .category_name {
+        font-size: 14px;
+    }
+
+    .categories div .row div img.category-icon {
+        width: 40px;
+        display: inline-block;
+    }
+
+    /*Results page*/
+    .basket-wrapper{
+        position: relative;
+    }
+
+    .customer-service .row .info,
+    .customer-service .row .time{
+        height: 214px;
+    }
+
+    .customer-service .row .info h1{
+        font-size: 36px;
+    }
+
+    .customer-service .row .info h2{
+        font-size: 22px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 20px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 36px;
+    }
+
+    /*Footer*/
+    .footer .footer_links .nav div.text-center{
+        margin-top: 5%;
+    }
+
+    .footer .footer_links .nav div.language-bar .form-group:after{
+        right: 30px;
+    }
+
+    .footer .footer_links .nav div.language-bar{
+        margin-top: 4.5%;
+    }
+
+    .footer .footer_links .nav div.language-bar select{
+        border:0px;
+    }
+    
+}
+
+/*Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {
+    /*General*/
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    /*Header*/
+    .header .navbar-nav div.search-bar form div{
+        margin-left: 18px;
+        margin-bottom: 5px;
+    }
+
+    .header .navbar-nav div.search-bar form div .search-form{
+        width: 91%;
+    }
+
+    /*Home*/
+    .brands{
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .brands div .row .brand{
+        height: 110px;
+        padding: 12px 25px 12px 25px;
+    }
+
+    .best-sellers div div .row{
+        padding-left: 34px;
+        padding-right: 34px;
+    }
+
+    .best-sellers div div .row .bordered{
+        border-left: 1px solid #04a0d3;
+    }
+
+    .best-sellers div div .row .category a img{
+        max-height: 175px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .categories div .row div.bordered{
+        border-right: 1px solid #0d4a6c;
+    }
+
+    .categories div .row div img.category-icon{
+        width: 42px;
+        display: inline-block;
+    }
+
+    /*Results page*/
+    .basket-wrapper{
+        position: relative;
+    }
+
+    .customer-service .row .info,
+    .customer-service .row .time{
+        height: 214px;
+    }
+
+    .customer-service .row .info h1{
+        font-size: 40px;
+    }
+
+    .customer-service .row .time h1{
+        font-size: 40px;
+    }
+
+    .customer-service .row .time h3{
+        font-size: 24px;
+    }
+
+    /*Footer*/
+    .footer .footer_links .nav div.text-center{
+        margin-top: 3%;
+    }
+
+    .footer .footer_links .nav div.language-bar .form-group:after{
+        right: 55px;
+    }
+
+    .footer .footer_links .nav div.language-bar{
+        margin-top: 2.35%;
+    }
+
+    .footer .footer_links .nav div.language-bar select{
+        border:0px;
+    }
+}

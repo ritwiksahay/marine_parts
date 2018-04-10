@@ -1,0 +1,25 @@
+/*
+Login style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+h2{
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+}
+
+p, label{
+    font-family: 'Gotham Book';
+    color: #0d4a6c;
+}
+
+.well{
+    background-color: #fff;
+    border: 1px solid #0d4a6c;
+}
