@@ -207,11 +207,11 @@ class ModelSearchView(FacetedSearchView):
 
     def __init__(self, *args, **kwargs):
         """Override to add the component attribute."""
-        super(SerialSearchView, self).__init__(*args, **kwargs)
+        super(ModelSearchView, self).__init__(*args, **kwargs)
 
     def extra_context(self):
         """Add the serial search results to the context."""
-        extra = super(SerialSearchView, self).extra_context()
+        extra = super(ModelSearchView, self).extra_context()
         q = self.request.GET.get('q_serial', None)
         extra['serial_results'] = get_model_search_results(self.category, q)
         return extra
@@ -231,7 +231,7 @@ class ModelSearchView(FacetedSearchView):
                 flash_messages = ajax.FlashMessages()
                 flash_messages.error(_("No categories were found."))
                 flash_messages.apply_to_request(self.request)
-            return super(SerialSearchView, self).create_response()
+            return super(ModelSearchView, self).create_response()
 
 
 class SerialSearchView(FacetedSearchView):
