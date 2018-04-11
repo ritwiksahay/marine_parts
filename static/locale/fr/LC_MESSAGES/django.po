@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django-oscar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-14 19:46+0000\n"
+"POT-Creation-Date: 2018-04-10 18:39+0000\n"
 "PO-Revision-Date: 2017-02-02 13:10+0000\n"
 "Last-Translator: Thomas Jost <schnouki@schnouki.net>\n"
 "Language-Team: French (http://www.transifex.com/codeinthehole/django-oscar/"
@@ -72,6 +72,8 @@ msgstr[1] ""
 #: marine_parts/apps/templates/dashboard/vouchers/voucher_list.html:35
 #: marine_parts/apps/templates/dashboard/vouchers/voucher_list.html:40
 #: marine_parts/apps/templates/search/partials/search_filter.html:19
+#: marine_parts/apps/templates/search/partials/search_filter_by_model.html:31
+#: marine_parts/apps/templates/search/partials/search_filter_by_serial.html:43
 msgid "Search"
 msgstr "Rechercher"
 
@@ -144,7 +146,7 @@ msgid "Replacement Product"
 msgstr "Produit recommandé"
 
 #: marine_parts/apps/catalogue/abstract_models.py:34
-#: marine_parts/apps/catalogue/models.py:47
+#: marine_parts/apps/catalogue/models.py:73
 #: marine_parts/apps/templates/dashboard/catalogue/product_update.html:320
 #, fuzzy
 #| msgid "Recommended products"
@@ -152,16 +154,64 @@ msgid "Replacement products"
 msgstr "Produits recommandés"
 
 #: marine_parts/apps/catalogue/models.py:20
+#: marine_parts/apps/customer/abstract_models.py:163
+#: marine_parts/apps/templates/customer/profile/profile.html:17
+#: marine_parts/apps/templates/customer/wishlists/wishlists_list.html:17
+#: marine_parts/apps/templates/dashboard/catalogue/product_class_form.html:96
+#: marine_parts/apps/templates/dashboard/catalogue/product_class_list.html:26
+#: marine_parts/apps/templates/dashboard/comms/list.html:32
+#: marine_parts/apps/templates/dashboard/offers/offer_detail.html:62
+#: marine_parts/apps/templates/dashboard/offers/summary.html:10
+#: marine_parts/apps/templates/dashboard/orders/order_detail.html:33
+#: marine_parts/apps/templates/dashboard/orders/order_detail.html:44
+#: marine_parts/apps/templates/dashboard/partners/partner_list.html:44
+#: marine_parts/apps/templates/dashboard/promotions/promotion_list.html:41
+#: marine_parts/apps/templates/dashboard/ranges/range_list.html:31
+#: marine_parts/apps/templates/dashboard/reports/partials/open_basket_report.html:9
+#: marine_parts/apps/templates/dashboard/reports/partials/order_report.html:10
+#: marine_parts/apps/templates/dashboard/reports/partials/submitted_basket_report.html:9
+#: marine_parts/apps/templates/dashboard/reports/partials/user_report.html:9
+#: marine_parts/apps/templates/dashboard/shipping/weight_based_detail.html:31
+#: marine_parts/apps/templates/dashboard/shipping/weight_based_list.html:31
+#: marine_parts/apps/templates/dashboard/users/detail.html:32
+#: marine_parts/apps/templates/dashboard/vouchers/voucher_delete.html:37
+#: marine_parts/apps/templates/dashboard/vouchers/voucher_detail.html:32
+#: marine_parts/apps/templates/dashboard/vouchers/voucher_list.html:52
+msgid "Name"
+msgstr "Nom"
+
+#: marine_parts/apps/catalogue/models.py:21
+#: marine_parts/apps/templates/dashboard/offers/offer_detail.html:67
+#: marine_parts/apps/templates/dashboard/offers/summary.html:12
+#: marine_parts/apps/templates/dashboard/shipping/weight_based_detail.html:35
+msgid "Description"
+msgstr "Description"
+
+#: marine_parts/apps/catalogue/models.py:22
+msgid "Slug"
+msgstr "Diminutif"
+
+#: marine_parts/apps/catalogue/models.py:25
 msgid "Diagram"
 msgstr ""
 
-#: marine_parts/apps/catalogue/models.py:25
+#: marine_parts/apps/catalogue/models.py:30
 msgid ""
 "Parts Diagram. Only upload a diagram image if you are creating a Leaf "
 "Category (Component)."
 msgstr ""
 
-#: marine_parts/apps/catalogue/models.py:49
+#: marine_parts/apps/catalogue/models.py:53
+#, fuzzy
+#| msgid "Card number"
+msgid "Diagram number"
+msgstr "Numéro de carte"
+
+#: marine_parts/apps/catalogue/models.py:54
+msgid "Number associated with part diagram."
+msgstr ""
+
+#: marine_parts/apps/catalogue/models.py:75
 #, fuzzy
 #| msgid ""
 #| "These are products that are recommended to accompany the main product."
@@ -169,15 +219,85 @@ msgid "These are products that are designated to replace main product."
 msgstr ""
 "Les produits suivants sont recommandés pour aller avec le produit principal."
 
-#: marine_parts/apps/catalogue/models.py:55
+#: marine_parts/apps/catalogue/models.py:81
 #: marine_parts/apps/templates/dashboard/catalogue/product_update.html:301
 msgid "Recommended products"
 msgstr "Produits recommandés"
 
-#: marine_parts/apps/catalogue/models.py:57
+#: marine_parts/apps/catalogue/models.py:83
 msgid "These are products that are recommended to accompany the main product."
 msgstr ""
 "Les produits suivants sont recommandés pour aller avec le produit principal."
+
+#: marine_parts/apps/checkout/forms.py:9
+#, fuzzy
+#| msgid "Delete category"
+msgid "--Select Card Type--"
+msgstr "Supprimer la catégorie ?"
+
+#: marine_parts/apps/checkout/forms.py:17
+msgid "January (01)"
+msgstr ""
+
+#: marine_parts/apps/checkout/forms.py:18
+msgid "February (02)"
+msgstr ""
+
+#: marine_parts/apps/checkout/forms.py:19
+msgid "March (03)"
+msgstr ""
+
+#: marine_parts/apps/checkout/forms.py:20
+msgid "April (04)"
+msgstr ""
+
+#: marine_parts/apps/checkout/forms.py:21
+msgid "May (05)"
+msgstr ""
+
+#: marine_parts/apps/checkout/forms.py:22
+msgid "June (06)"
+msgstr ""
+
+#: marine_parts/apps/checkout/forms.py:23
+msgid "July (07)"
+msgstr ""
+
+#: marine_parts/apps/checkout/forms.py:24
+msgid "August (08)"
+msgstr ""
+
+#: marine_parts/apps/checkout/forms.py:25
+msgid "September (09)"
+msgstr ""
+
+#: marine_parts/apps/checkout/forms.py:26
+msgid "October (10)"
+msgstr ""
+
+#: marine_parts/apps/checkout/forms.py:27
+msgid "November (11)"
+msgstr ""
+
+#: marine_parts/apps/checkout/forms.py:28
+msgid "December (12)"
+msgstr ""
+
+#: marine_parts/apps/checkout/forms.py:50
+#, fuzzy
+#| msgid "Card number"
+msgid "Card Name"
+msgstr "Numéro de carte"
+
+#: marine_parts/apps/checkout/forms.py:58
+#, fuzzy
+#| msgid "Card number"
+msgid "Card Number"
+msgstr "Numéro de carte"
+
+#: marine_parts/apps/checkout/forms.py:66
+msgid "Card CCV Code"
+msgstr ""
 
 #: marine_parts/apps/customer/abstract_models.py:57
 msgid "email address"
@@ -327,32 +447,6 @@ msgstr ""
 msgid "Code used for looking up this event programmatically"
 msgstr "Code utilisé pour rechercher de manière automatique cet événement"
 
-#: marine_parts/apps/customer/abstract_models.py:163
-#: marine_parts/apps/templates/customer/profile/profile.html:17
-#: marine_parts/apps/templates/customer/wishlists/wishlists_list.html:17
-#: marine_parts/apps/templates/dashboard/catalogue/product_class_form.html:96
-#: marine_parts/apps/templates/dashboard/catalogue/product_class_list.html:26
-#: marine_parts/apps/templates/dashboard/comms/list.html:32
-#: marine_parts/apps/templates/dashboard/offers/offer_detail.html:62
-#: marine_parts/apps/templates/dashboard/offers/summary.html:10
-#: marine_parts/apps/templates/dashboard/orders/order_detail.html:33
-#: marine_parts/apps/templates/dashboard/orders/order_detail.html:44
-#: marine_parts/apps/templates/dashboard/partners/partner_list.html:44
-#: marine_parts/apps/templates/dashboard/promotions/promotion_list.html:41
-#: marine_parts/apps/templates/dashboard/ranges/range_list.html:31
-#: marine_parts/apps/templates/dashboard/reports/partials/open_basket_report.html:9
-#: marine_parts/apps/templates/dashboard/reports/partials/order_report.html:10
-#: marine_parts/apps/templates/dashboard/reports/partials/submitted_basket_report.html:9
-#: marine_parts/apps/templates/dashboard/reports/partials/user_report.html:9
-#: marine_parts/apps/templates/dashboard/shipping/weight_based_detail.html:31
-#: marine_parts/apps/templates/dashboard/shipping/weight_based_list.html:31
-#: marine_parts/apps/templates/dashboard/users/detail.html:32
-#: marine_parts/apps/templates/dashboard/vouchers/voucher_delete.html:37
-#: marine_parts/apps/templates/dashboard/vouchers/voucher_detail.html:32
-#: marine_parts/apps/templates/dashboard/vouchers/voucher_list.html:52
-msgid "Name"
-msgstr "Nom"
-
 #: marine_parts/apps/customer/abstract_models.py:164
 msgid "This is just used for organisational purposes"
 msgstr "Ceci est utilisé uniquement à des fins d'organisation"
@@ -366,7 +460,6 @@ msgid "User related"
 msgstr "Lié à l'utilisateur"
 
 #: marine_parts/apps/customer/abstract_models.py:176
-#: marine_parts/apps/templates/dashboard/catalogue/product_update.html:127
 #: marine_parts/apps/templates/dashboard/comms/list.html:33
 msgid "Category"
 msgstr "Catégorie"
@@ -972,7 +1065,7 @@ msgstr "-- Choisissez le type --"
 msgid "Use positive value to increase or negative one to decrease"
 msgstr ""
 
-#: marine_parts/apps/dashboard/catalogue/forms.py:44
+#: marine_parts/apps/dashboard/catalogue/forms.py:43
 msgid "A non leaf category cannot have a diagram image"
 msgstr ""
 
@@ -1050,11 +1143,11 @@ msgid_plural "%s Categories"
 msgstr[0] ""
 msgstr[1] ""
 
-#: marine_parts/apps/dashboard/catalogue/views.py:90
+#: marine_parts/apps/dashboard/catalogue/views.py:91
 msgid "Product search results"
 msgstr "Résultats de la recherche de produit"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:91
+#: marine_parts/apps/dashboard/catalogue/views.py:92
 #: marine_parts/apps/templates/dashboard/catalogue/product_delete.html:17
 #: marine_parts/apps/templates/dashboard/catalogue/product_list.html:11
 #: marine_parts/apps/templates/dashboard/catalogue/product_list.html:19
@@ -1066,118 +1159,118 @@ msgstr "Résultats de la recherche de produit"
 msgid "Products"
 msgstr "Produits"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:163
+#: marine_parts/apps/dashboard/catalogue/views.py:164
 msgid "Please choose a product type"
 msgstr "Merci de choisir un type de produit"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:283
+#: marine_parts/apps/dashboard/catalogue/views.py:284
 #, python-format
 msgid "Create new %(product_class)s product"
 msgstr "Créer un nouveau produit %(product_class)s"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:286
+#: marine_parts/apps/dashboard/catalogue/views.py:287
 #, python-format
 msgid "Create new variant of %(parent_product)s"
 msgstr "Créer une nouvelle variante de %(parent_product)s"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:292
+#: marine_parts/apps/dashboard/catalogue/views.py:293
 #, python-format
 msgid "Editing variant of %(parent_product)s"
 msgstr "Editer la variante du produit %(parent_product)s"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:383
-#: marine_parts/apps/dashboard/catalogue/views.py:670
+#: marine_parts/apps/dashboard/catalogue/views.py:384
+#: marine_parts/apps/dashboard/catalogue/views.py:681
 msgid "Your submitted data was not valid - please correct the errors below"
 msgstr ""
 "Les données envoyées ne sont pas valides - merci de corriger les erreurs ci-"
 "dessous"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:447
+#: marine_parts/apps/dashboard/catalogue/views.py:448
 msgid "Delete product variant?"
 msgstr "Supprimer la variante du produit?"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:449
+#: marine_parts/apps/dashboard/catalogue/views.py:450
 msgid "Delete product?"
 msgstr "Supprimer le produit ?"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:493
+#: marine_parts/apps/dashboard/catalogue/views.py:494
 #, python-format
 msgid "Deleted product variant '%s'"
 msgstr "Supprimer la variante '%s' du produit"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:499
+#: marine_parts/apps/dashboard/catalogue/views.py:500
 #, python-format
 msgid "Deleted product '%s'"
 msgstr "Le produit '%s' a été supprimé"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:521
+#: marine_parts/apps/dashboard/catalogue/views.py:522
 #, python-format
 msgid "Alerts with status \"%s\""
 msgstr "Alertes dans l'état \"%s\""
 
-#: marine_parts/apps/dashboard/catalogue/views.py:524
+#: marine_parts/apps/dashboard/catalogue/views.py:525
 msgid "All alerts"
 msgstr "Toutes les alertes"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:579
+#: marine_parts/apps/dashboard/catalogue/views.py:580
 msgid "Add a new category"
 msgstr "Créer une nouvelle catégorie"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:583
+#: marine_parts/apps/dashboard/catalogue/views.py:584
 msgid "Category created successfully"
 msgstr "Catégorie créée avec succès"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:601
+#: marine_parts/apps/dashboard/catalogue/views.py:602
 #, python-format
 msgid "Update category '%s'"
 msgstr "Mettre à jour la catégorie '%s'"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:606
+#: marine_parts/apps/dashboard/catalogue/views.py:607
 msgid "Category updated successfully"
 msgstr "La catégorie a été mise à jour avec succès"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:620
+#: marine_parts/apps/dashboard/catalogue/views.py:621
 msgid "Category deleted successfully"
 msgstr "La catégorie a été supprimée avec succès"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:700
+#: marine_parts/apps/dashboard/catalogue/views.py:711
 msgid "Add a new product type"
 msgstr "Ajouter un type de produit"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:703
+#: marine_parts/apps/dashboard/catalogue/views.py:714
 msgid "Product type created successfully"
 msgstr "Type de produit créé"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:712
+#: marine_parts/apps/dashboard/catalogue/views.py:723
 #, python-format
 msgid "Update product type '%s'"
 msgstr "Mettre à jour le type de produit '%s'"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:715
+#: marine_parts/apps/dashboard/catalogue/views.py:726
 msgid "Product type updated successfully"
 msgstr "Le type de produit a été mis à jour avec succès."
 
-#: marine_parts/apps/dashboard/catalogue/views.py:731
+#: marine_parts/apps/dashboard/catalogue/views.py:742
 #: marine_parts/apps/templates/dashboard/catalogue/product_class_list.html:23
 msgid "Product Types"
 msgstr "Types de produits"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:743
+#: marine_parts/apps/dashboard/catalogue/views.py:754
 #, python-format
 msgid "Delete product type '%s'"
 msgstr "Supprimer le type de produit '%s'"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:748
+#: marine_parts/apps/dashboard/catalogue/views.py:759
 #, python-format
 msgid "Unable to delete '%s'"
 msgstr "Impossible de supprimer '%s'"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:750
+#: marine_parts/apps/dashboard/catalogue/views.py:761
 #, python-format
 msgid "%i products are still assigned to this type"
 msgstr "Les produits %i sont déjà rattachés à ce type de produit"
 
-#: marine_parts/apps/dashboard/catalogue/views.py:755
+#: marine_parts/apps/dashboard/catalogue/views.py:766
 msgid "Product type deleted successfully"
 msgstr "Type de produit supprimé"
 
@@ -1258,45 +1351,61 @@ msgid_plural "%d Rows"
 msgstr[0] ""
 msgstr[1] ""
 
-#: marine_parts/apps/search/forms.py:51 marine_parts/apps/search/forms.py:53
+#: marine_parts/apps/search/forms.py:50
+msgid "Enter engine model code"
+msgstr ""
+
+#: marine_parts/apps/search/forms.py:61
+#, fuzzy
+#| msgid "Enter a valid year."
+msgid "Enter a serial number"
+msgstr "Entrer une année valide."
+
+#: marine_parts/apps/search/forms.py:73 marine_parts/apps/search/forms.py:75
 msgid "Keywords or part number"
 msgstr ""
 
-#: marine_parts/apps/search/forms.py:68
+#: marine_parts/apps/search/forms.py:90
 msgid "Relevancy"
 msgstr "Pertinence"
 
-#: marine_parts/apps/search/forms.py:69
+#: marine_parts/apps/search/forms.py:91
 msgid "Customer rating"
 msgstr "Note des clients"
 
-#: marine_parts/apps/search/forms.py:70
+#: marine_parts/apps/search/forms.py:92
 msgid "Newest"
 msgstr "Le plus récent"
 
-#: marine_parts/apps/search/forms.py:71
+#: marine_parts/apps/search/forms.py:93
 msgid "Price high to low"
 msgstr "Prix décroissant"
 
-#: marine_parts/apps/search/forms.py:72
+#: marine_parts/apps/search/forms.py:94
 msgid "Price low to high"
 msgstr "Prix croissant"
 
-#: marine_parts/apps/search/forms.py:73
+#: marine_parts/apps/search/forms.py:95
 msgid "Title A to Z"
 msgstr "Titre de A à Z"
 
-#: marine_parts/apps/search/forms.py:74
+#: marine_parts/apps/search/forms.py:96
 msgid "Title Z to A"
 msgstr "Titre de Z à A"
 
-#: marine_parts/apps/search/forms.py:94
+#: marine_parts/apps/search/forms.py:116
 msgid "Sort by"
 msgstr "Trier par"
 
 #: marine_parts/apps/search/search_handlers.py:104
 msgid "Page is not 'last', nor can it be converted to an int."
 msgstr "Cette page n'est pas «la dernière», ni convertible en un int."
+
+#: marine_parts/apps/search/views.py:234 marine_parts/apps/search/views.py:265
+#, fuzzy
+#| msgid "No pages found."
+msgid "No categories were found."
+msgstr "Aucune page trouvée."
 
 #: marine_parts/apps/shipping/models.py:11
 #, fuzzy
@@ -1375,7 +1484,7 @@ msgstr "Accueil"
 #: marine_parts/apps/templates/basket/basket.html:23
 #: marine_parts/apps/templates/basket/basket.html:28
 #: marine_parts/apps/templates/basket/basket.html:36
-#: marine_parts/apps/templates/basket/partials/basket_quick.html:13
+#: marine_parts/apps/templates/basket/partials/basket_quick.html:12
 #: marine_parts/apps/templates/basket/partials/basket_totals.html:10
 #: marine_parts/apps/templates/basket/partials/basket_totals.html:166
 #: marine_parts/apps/templates/checkout/thank_you.html:181
@@ -1513,8 +1622,8 @@ msgid "Price"
 msgstr "Prix"
 
 #: marine_parts/apps/templates/basket/partials/basket_content.html:32
-#: marine_parts/apps/templates/basket/partials/basket_quick.html:48
-#: marine_parts/apps/templates/basket/partials/basket_quick.html:50
+#: marine_parts/apps/templates/basket/partials/basket_quick.html:47
+#: marine_parts/apps/templates/basket/partials/basket_quick.html:49
 #: marine_parts/apps/templates/checkout/checkout.html:116
 #: marine_parts/apps/templates/checkout/thank_you.html:125
 msgid "Total"
@@ -1664,7 +1773,7 @@ msgid "Proceed to checkout"
 msgstr "Procéder au paiement"
 
 #: marine_parts/apps/templates/basket/partials/basket_content.html:169
-#: marine_parts/apps/templates/basket/partials/basket_quick.html:56
+#: marine_parts/apps/templates/basket/partials/basket_quick.html:55
 msgid "Your basket is empty."
 msgstr "Votre panier est vide"
 
@@ -1685,7 +1794,7 @@ msgstr "Articles"
 msgid "Move to basket"
 msgstr "Mettre dans le panier"
 
-#: marine_parts/apps/templates/basket/partials/basket_quick.html:53
+#: marine_parts/apps/templates/basket/partials/basket_quick.html:52
 #: marine_parts/apps/templates/checkout/checkout.html:9
 msgid "Checkout"
 msgstr "Paiement"
@@ -1949,10 +2058,11 @@ msgstr "Suppression..."
 msgid "Please login to add products to a wish list."
 msgstr "Logez-vous pour ajouter des produits à une liste d'envies."
 
-#: marine_parts/apps/templates/catalogue/partials/component_part.html:17
-#: marine_parts/apps/templates/catalogue/partials/stock_record.html:9
-msgid "Free"
-msgstr "Gratuit"
+#: marine_parts/apps/templates/catalogue/partials/component_part.html:16
+#, fuzzy
+#| msgid "Cost price"
+msgid "Call for price"
+msgstr "Prix d'achat"
 
 #: marine_parts/apps/templates/catalogue/partials/review.html:23
 #, python-format
@@ -2043,6 +2153,10 @@ msgstr[1] ""
 msgid "This review has no votes."
 msgstr "Cet avis n'a pas de votes."
 
+#: marine_parts/apps/templates/catalogue/partials/stock_record.html:9
+msgid "Free"
+msgstr "Gratuit"
+
 #: marine_parts/apps/templates/checkout/checkout.html:39
 #: marine_parts/apps/templates/checkout/checkout.html:70
 #: marine_parts/apps/templates/checkout/checkout.html:93
@@ -2117,13 +2231,13 @@ msgid "Get a password reminder"
 msgstr "J'ai oublié mon mot de passe"
 
 #: marine_parts/apps/templates/checkout/gateway.html:59
-#: marine_parts/apps/templates/checkout/payment_details.html:194
+#: marine_parts/apps/templates/checkout/payment_details.html:157
 #: marine_parts/apps/templates/checkout/shipping_address.html:79
 msgid "Continuing..."
 msgstr "En cours..."
 
 #: marine_parts/apps/templates/checkout/gateway.html:59
-#: marine_parts/apps/templates/checkout/payment_details.html:194
+#: marine_parts/apps/templates/checkout/payment_details.html:157
 #: marine_parts/apps/templates/checkout/shipping_address.html:79
 #: marine_parts/apps/templates/dashboard/offers/step_form.html:74
 #: marine_parts/apps/templates/payment_details.html:29
@@ -2153,12 +2267,12 @@ msgstr "4. Aperçu"
 msgid "5. Confirmation"
 msgstr "5. Confirmation"
 
-#: marine_parts/apps/templates/checkout/payment_details.html:5
+#: marine_parts/apps/templates/checkout/payment_details.html:6
 #: marine_parts/apps/templates/payment_details.html:5
 msgid "Payment details"
 msgstr "Détails du paiement"
 
-#: marine_parts/apps/templates/checkout/payment_details.html:12
+#: marine_parts/apps/templates/checkout/payment_details.html:13
 #: marine_parts/apps/templates/payment_details.html:12
 msgid "Enter payment details"
 msgstr "Saisissez les détails du paiement"
@@ -3382,6 +3496,7 @@ msgstr ""
 #: marine_parts/apps/templates/dashboard/catalogue/category_list.html:17
 #: marine_parts/apps/templates/dashboard/catalogue/category_list.html:24
 #: marine_parts/apps/templates/dashboard/catalogue/product_update.html:73
+#: marine_parts/apps/templates/dashboard/catalogue/product_update.html:127
 #: marine_parts/apps/templates/partials/footer.html:35
 #: marine_parts/apps/templates/partials/nav_primary.html:51
 msgid "Categories"
@@ -4115,12 +4230,6 @@ msgstr "Date de création :"
 #: marine_parts/apps/templates/dashboard/offers/offer_detail.html:57
 msgid "Offer details"
 msgstr "Détails d'offre"
-
-#: marine_parts/apps/templates/dashboard/offers/offer_detail.html:67
-#: marine_parts/apps/templates/dashboard/offers/summary.html:12
-#: marine_parts/apps/templates/dashboard/shipping/weight_based_detail.html:35
-msgid "Description"
-msgstr "Description"
 
 #: marine_parts/apps/templates/dashboard/offers/offer_detail.html:71
 #: marine_parts/apps/templates/dashboard/offers/offer_list.html:49
@@ -6051,6 +6160,8 @@ msgid "Send reset email"
 msgstr "Envoyer un mail de réinitialisation"
 
 #: marine_parts/apps/templates/search/partials/category_search_field.html:7
+#: marine_parts/apps/templates/search/partials/search_filter_by_model.html:19
+#: marine_parts/apps/templates/search/partials/search_filter_by_serial.html:31
 #, fuzzy
 #| msgid "Delete category"
 msgid "Select Category"
@@ -6062,6 +6173,20 @@ msgstr "Supprimer la catégorie ?"
 msgid "Refine Search"
 msgstr "Recherche d'avis"
 
+#: marine_parts/apps/templates/search/partials/search_filter_by_model.html:6
+msgid "Search by Engine Model"
+msgstr ""
+
+#: marine_parts/apps/templates/search/partials/search_filter_by_serial.html:6
+msgid "Search by Serial Number"
+msgstr ""
+
+#: marine_parts/apps/templates/search/partials/search_filter_by_serial.html:18
+#, fuzzy
+#| msgid "Delete category"
+msgid "Select Horse Power"
+msgstr "Supprimer la catégorie ?"
+
 #: marine_parts/apps/templates/search/results.html:23
 #, fuzzy
 #| msgid "Order Search Results"
@@ -6072,11 +6197,11 @@ msgstr "Résultats de la recherche de commande"
 msgid "Results"
 msgstr ""
 
-#: marine_parts/apps/templates/search/results.html:61
+#: marine_parts/apps/templates/search/results.html:72
 msgid "(Scroll over the image to zoom in or zoom out)"
 msgstr ""
 
-#: marine_parts/apps/templates/search/results.html:94
+#: marine_parts/apps/templates/search/results.html:107
 #, fuzzy, python-format
 #| msgid ""
 #| "\n"
@@ -6094,36 +6219,41 @@ msgstr ""
 "affichage de <strong>%(start)s</strong> à <strong>%(end)s</strong>.\n"
 "                "
 
-#: marine_parts/apps/templates/search/results.html:98
+#: marine_parts/apps/templates/search/results.html:111
 #, python-format
 msgid "Found <strong>%(num_results)s</strong> results."
 msgstr "<strong>%(num_results)s</strong> résultat trouvé"
 
-#: marine_parts/apps/templates/search/results.html:102
+#: marine_parts/apps/templates/search/results.html:115
 msgid "Found <strong>0</strong> results."
 msgstr "<strong>0</strong> résultat trouvé"
 
 #: marine_parts/settings/development.py:280
 #: marine_parts/settings/production.py:278
-#: marine_parts/settings/settings.py:295
+#: marine_parts/settings/settings.py:294
 msgid "American English"
 msgstr ""
 
 #: marine_parts/settings/development.py:281
 #: marine_parts/settings/production.py:279
-#: marine_parts/settings/settings.py:296
+#: marine_parts/settings/settings.py:295
 msgid "Spanish"
 msgstr ""
 
 #: marine_parts/settings/development.py:282
 #: marine_parts/settings/production.py:280
-#: marine_parts/settings/settings.py:297
+#: marine_parts/settings/settings.py:296
 msgid "French"
 msgstr ""
 
 #: templatetags/history_tags.py:65
 msgid "Back to search results"
 msgstr "Retour aux résultats de recherche"
+
+#, fuzzy
+#~| msgid "Order Number"
+#~ msgid "Serial Number"
+#~ msgstr "Numéro de commande"
 
 #, fuzzy
 #~| msgid ""
@@ -6526,9 +6656,6 @@ msgstr "Retour aux résultats de recherche"
 
 #~ msgid "Voucher '%s' removed from basket"
 #~ msgstr "Code de réduction '%s' enlevé du panier"
-
-#~ msgid "Slug"
-#~ msgstr "Diminutif"
 
 #~ msgid "Requires shipping?"
 #~ msgstr "Nécessite une livraison?"
@@ -8288,9 +8415,6 @@ msgstr "Retour aux résultats de recherche"
 #~ msgid "Bankcards"
 #~ msgstr "Cartes bancaires"
 
-#~ msgid "Card number"
-#~ msgstr "Numéro de carte"
-
 #~ msgid "Please enter a valid credit card number."
 #~ msgstr "Merci d'entrer un numéro de carte valide"
 
@@ -8299,9 +8423,6 @@ msgstr "Retour aux résultats de recherche"
 
 #~ msgid "Enter a valid month."
 #~ msgstr "Entrer un mois valide"
-
-#~ msgid "Enter a valid year."
-#~ msgstr "Entrer une année valide."
 
 #~ msgid "Valid to"
 #~ msgstr "Valide jusqu'au"
