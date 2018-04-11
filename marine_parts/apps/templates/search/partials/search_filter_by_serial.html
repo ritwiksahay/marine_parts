@@ -2,8 +2,8 @@
 {% load widget_tweaks %}
 {% load component_tags %}
 
-<h3 class="filter-title h3 text-center">
-    {% trans 'Search by Serial Number' %}    
+<h3 class="filter-title h3 text-center text-uppercase">
+    {% trans 'Search by Serial Number' %}   
 </h3>
 <form method="get" action="{% url 'search:searchBySerial' %}" class="filter-form form-horizontal col-lg-12 col-md-12 categories_form" id="serial_search_category_form">
     <div class="form-group text-center" id="serial_search_field">
