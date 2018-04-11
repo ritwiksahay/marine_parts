@@ -39,7 +39,18 @@ class BrowseCategoryForm(FacetedSearchForm):
         return self.searchqueryset
 
 
-class SearchByModelSerialForm(forms.Form):
+class SearchByModelForm(forms.Form):
+    """This is the form for handling the search by model number mode."""
+
+    q_serial = forms.CharField(
+        required=True,
+        label='',
+        widget=forms.TextInput(attrs={'type': 'search',
+                                      'class': 'form-control',
+                                      'placeholder': _('Enter engine model code')}))
+
+
+class SearchBySerialForm(forms.Form):
     """This is the form for handling the search by serial number mode."""
 
     q_serial = forms.CharField(
@@ -47,7 +58,7 @@ class SearchByModelSerialForm(forms.Form):
         label='',
         widget=forms.TextInput(attrs={'type': 'search',
                                       'class': 'form-control',
-                                      'placeholder': 'Serial Number'}))
+                                      'placeholder': _('Enter a serial number')}))
 
 
 class SearchForm(BrowseCategoryForm):

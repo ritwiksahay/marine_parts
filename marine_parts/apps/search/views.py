@@ -12,7 +12,7 @@ from oscar.core import ajax
 from oscar.core.loading import get_class, get_model, get_classes
 
 from . import signals
-from .forms import SearchByModelSerialForm
+from .forms import SearchByModelForm, SearchBySerialForm
 from .serial_search import (get_model_search_results,
                             get_serial_search_results,
                             get_serial_or_model,
@@ -82,15 +82,17 @@ class FacetedSearchView(views.FacetedSearchView):
                 # the widget must appear when are in the hp
                 # level of the main search
                 extra['can_search_by_model_serial'] = True
-                # Pass the form for the search by serial number
-                serial_search_form = SearchByModelSerialForm(self.request.GET)
-                extra['model_serial_form'] = serial_search_form
-
-                """Pass if it's serial or model number we're searching"""
-                extra['is_model_or_serial'] = is_serial_or_model
 
                 if is_serial_or_model == 'Serial':
+                    # Pass the form for the search by serial number
+                    model_serial_search_form = SearchBySerialForm(self.request.GET)
                     extra['list_hps'] = get_list_horses_power()
+                else:
+                    model_serial_search_form = SearchByModelForm(self.request.GET)
+
+                extra['model_serial_form'] = model_serial_search_form
+                """Pass if it's serial or model number we're searching"""
+                extra['is_model_or_serial'] = is_serial_or_model
 
         # pass Basket formset to handle the basket element
         formset = BasketLineFormSet(
