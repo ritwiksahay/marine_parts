@@ -24,6 +24,8 @@ MARINE_PARTS_EUROPE_BASE_URL = 'http://www.marinepartseurope.com'
 INIT_OFFSET = 0
 INIT_OFFSET_2 = 0
 PRETTY_OUTPUT = False
+THREADED = False
+THREADS = 1
 
 
 def create_output_file(data, path):
@@ -69,7 +71,9 @@ def get_product_title(text, part_number):
 ##################################################################
 
 
-def marinepartseurope_volvo_penta_scrapper():
+
+
+def marinepartseurope_volvo_penta_scrapper(begin=0, end=None):
     """Scrapper for Marine Parts Europe Volvo Penta Parts."""
     global MARINE_PARTS_EUROPE_BASE_URL, FILE_DIR
 
@@ -122,17 +126,17 @@ def marinepartseurope_volvo_penta_scrapper():
             '/' + cat_link)
         tree = html.fromstring(page.content)
 
-        mods = tree.xpath(mod_selector)[INIT_OFFSET:]
-        num_mods = len(mods) + INIT_OFFSET
+        mods = tree.xpath(mod_selector)[begin:end]
+        num_mods = len(mods) + begin
 
         for idx, mod in enumerate(mods):
             mod_name = re.sub(r'[\n\t]+', '', mod.text)
             mod_slug = slugify(mod_name)
             print("'%s' starting... (%d of %d categories... %.2f %%)\n" %
                   (mod_name,
-                   INIT_OFFSET + idx,
+                   begin + idx,
                    num_mods,
-                   float(INIT_OFFSET + idx) / float(num_mods) * 100))
+                   float(begin + idx) / float(num_mods) * 100))
 
             mod_link = mod.get('href')
 
@@ -148,6 +152,8 @@ def marinepartseurope_volvo_penta_scrapper():
                 '/' + mod_link)
             tree = html.fromstring(page.content)
             section = {}
+            last_comp_slug = None
+            sect_name = None
 
             for comp in tree.xpath(comp_selector):
 
@@ -163,6 +169,7 @@ def marinepartseurope_volvo_penta_scrapper():
                         model['sub_category'].append(section)
                     sect_name = comp.xpath(
                         "td[@class='catalogHeaderCell']/h2")[0].text
+                    rep_counter = 0
                     # if section title is empty, ignore
                     if not sect_name:
                         continue
@@ -182,16 +189,26 @@ def marinepartseurope_volvo_penta_scrapper():
                     comp_name = comp_a.xpath('h3')[0].text.strip()
                     comp_link = comp_a.get('href')
 
-                    # get related model
+                    # get related model serial
                     rel_model = comp.xpath(
                         "td[2]/a")[0].text
                     if rel_model:
                         comp_name += ' - ' + rel_model.strip()
 
+                    # handle case where components names are equal
                     comp_slug = slugify(comp_name)
 
-                    print("Scrapping section '%s' component '%s' \n\turl: %s"
-                          % (sect_name, comp_name, comp_link))
+                    if comp_slug == last_comp_slug:
+                        rep_counter += 1
+                        comp_name += " - v%d" % (rep_counter + 1)
+                    else:
+                        rep_counter = 0
+
+                    last_comp_slug = comp_slug
+                    comp_slug = slugify(comp_name)
+
+                    # print("Scrapping section '%s' component '%s' \n\turl: %s"
+                    #       % (sect_name, comp_name, comp_link))
 
                     # Build component
                     component = {
@@ -312,6 +329,7 @@ def marinepartseurope_volvo_penta_scrapper():
                     if section != {} and component['products'] != []:
                         section['sub_category'].append(component)
 
+
             # Save Last Section
             if section != {}:
                 model['sub_category'].append(section)
@@ -326,6 +344,25 @@ def marinepartseurope_volvo_penta_scrapper():
                 create_output_file(catalog, output_file_path)
 
     print('Finished Marine Parts Europe Volvo Penta Scrapping...')
+
+def threaded_volvo_scrapper(num_threads=1):
+    from threading import Thread
+
+    num_cats = 42
+
+    if num_threads > num_cats:
+        diff = 1
+    else:
+        diff = num_cats / num_threads
+
+    threads = []
+    for idx in range(0, num_cats, diff):
+        t = Thread(target=marinepartseurope_volvo_penta_scrapper, args=(idx, idx+diff,))
+        threads.append(t)
+        t.start()
+
+    for t in threads:
+        t.join()
 
 ##################################################################
 # MARINE ENGINE WEB ##############################################
@@ -578,7 +615,7 @@ def marineengine_mercury_scrapper():
             create_output_file(catalog, output_file_path)
 
 
-def marineengine_johnson_evinrude_scrapper(init_offset=0, end_offset=None):
+def marineengine_johnson_evinrude_scrapper(begin=0, end=None):
     """Scrapper for Marine Engine Johnson Evinrude Parts."""
     # Marineengine base url
     global INIT_OFFSET, INIT_OFFSET_2, MARINE_ENGINE_BASE_URL, FILE_DIR
@@ -635,20 +672,17 @@ def marineengine_johnson_evinrude_scrapper(init_offset=0, end_offset=None):
         tree = html.fromstring(page.content)
 
         # Apply given offset in years cycle
-        yrs = tree.xpath(xyears_selector)[init_offset:end_offset]
-        num_yrs = len(yrs) + init_offset
-
-        # Reset offset so it can only be applied once
-        init_offset = 0
+        yrs = tree.xpath(xyears_selector)[begin:end]
+        num_yrs = len(yrs) + begin
 
         for idx, yr in enumerate(yrs):
             yr_name = re.sub(r'[\n\t]+', '', yr.text)
             yr_slug = slugify(yr_name)
             print("'%s' starting... (%d of %d categories... %.2f %%)\n" %
                   (yr_name,
-                   init_offset + idx,
+                   begin + idx,
                    num_yrs,
-                   float(init_offset + idx) / float(num_yrs) * 100))
+                   float(begin + idx) / float(num_yrs) * 100))
             year = {
                 'category_name': 'years',
                 'category': yr_name,
@@ -721,11 +755,11 @@ def marineengine_johnson_evinrude_scrapper(init_offset=0, end_offset=None):
                             'products': []
                         }
 
-                        print("\t\tScrapping component '%s' from model '%s'\n"
-                              "\t\t\turl: %s"
-                              % (comp_name,
-                                 model_name,
-                                 component['category_url']))
+                        # print("\t\tScrapping component '%s' from model '%s'\n"
+                        #       "\t\t\turl: %s"
+                        #       % (comp_name,
+                        #          model_name,
+                        #          component['category_url']))
 
                         page = request_get(
                             MARINE_ENGINE_BASE_URL + component['category_url']
@@ -899,6 +933,25 @@ def marineengine_johnson_evinrude_scrapper(init_offset=0, end_offset=None):
                     '.json'
                 create_output_file(catalog, output_file_path)
 
+
+def threaded_johnson_evinrude_scrapper(num_threads=1):
+    from threading import Thread
+
+    num_cats = 58
+
+    if num_threads > num_cats:
+        diff = 1
+    else:
+        diff = num_cats / num_threads
+
+    threads = []
+    for idx in range(0, num_cats, diff):
+        t = Thread(target=marineengine_johnson_evinrude_scrapper, args=(idx, idx+diff,))
+        threads.append(t)
+        t.start()
+
+    for t in threads:
+        t.join()
 
 def marineengine_mercruiser_scrapper():
     """Scrapper for marine engine's Mercruiser section."""
@@ -2758,9 +2811,17 @@ if __name__ == '__main__':
                         help='outputs json in a friendly indented format',
                         action='store_true')
 
+    parser.add_argument(
+        '--threaded',
+        type=int,
+        dest='threads',
+        help="Thread processing"
+    )
+
     subparsers = parser.add_subparsers(
         dest='site',
         help="The name of the site to scrap")
+
 
     parser_marine_engine = subparsers.add_parser('marine_engine')
 
@@ -2818,6 +2879,11 @@ if __name__ == '__main__':
     # json output mode
     PRETTY_OUTPUT = args.pretty
 
+    # threading processing
+    if args.threads:
+        THREADS = args.threads
+        THREADED = True
+
     # scrapper offsets
     try:
         if args.offset:
@@ -2835,17 +2901,21 @@ if __name__ == '__main__':
         os.makedirs(FILE_DIR + '/manuals')
 
     # get user's input from stdin
-    selected_scrapper = "%s %s" % (args.site,
-                                   args.manufacturer)
+    selected_scrapper = "%s %s %s" % (args.site,
+                                      args.manufacturer,
+                                      THREADED)
 
     # this dict maps user's input with a scrapper
     OPT_DICT = {
-        "marine_engine mercury": marineengine_mercury_scrapper,
-        "marine_engine johnson": partial(marineengine_johnson_evinrude_scrapper,
-                                         INIT_OFFSET),
-        "marine_engine mercruiser": marineengine_mercruiser_scrapper,
-        "marineparts_europe volvo": marinepartseurope_volvo_penta_scrapper,
+        "marine_engine mercury False": marineengine_mercury_scrapper,
+        "marine_engine johnson False": partial(marineengine_johnson_evinrude_scrapper,
+                                               INIT_OFFSET),
         "boatsnet yamaha": boatsnet_yamaha_scrapper,
+        "marine_engine mercruiser False": marineengine_mercruiser_scrapper,
+        "marineparts_europe volvo False": partial(marinepartseurope_volvo_penta_scrapper,
+                                                  INIT_OFFSET),
+        "marineparts_europe volvo True": partial(threaded_volvo_scrapper, THREADS),
+        "marine_engine johnson True": partial(threaded_johnson_evinrude_scrapper, THREADS)
     }
 
     try:
