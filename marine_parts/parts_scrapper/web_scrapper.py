@@ -2234,11 +2234,11 @@ def boatsnet_yamaha_scrapper(init_offset=0, end_offset=None):
     }
 
     # Apply given offset in years cycle
-    yrs = tree.xpath(xyears_selector)[init_offset:end_offset]
+    yrs = tree.xpath(xpath_selector)[init_offset:end_offset]
 
     # Categorys to scrap on boatsnet yamaha
     for yr in yrs:
-        yr_name = yr.text()
+        yr_name = yr.text
         yr_slug = slugify(yr_name)
         yr_url = yr.get('href')
         year = {
@@ -2247,25 +2247,27 @@ def boatsnet_yamaha_scrapper(init_offset=0, end_offset=None):
             'category_url': yr_url,
             'sub_category': []
         }
-        catalog['categories'].append(year)
+        catalog['categories'] = [year]
+
+        print("\n\tScrapping Year '%s'\n"
+              % yr_name)
 
         # Horse Power scraping
         page = request_get(BOATSNET_BASE_URL +
                            yr_url)
         tree = html.fromstring(page.content)
 
-        for hp in tree.xpath(xhp_selector):
+        for hp in tree.xpath(xhp_selector)[0:2]:
             if 'ResultHP' in hp.get('class'):
                 hp_name = re.sub(r'[\n\t]+', '', hp.xpath('b')[0].text)
                 hp_slug = slugify(hp_name)
-                hp_url = hp.xpath('b')[0].get('href')
                 horse_power = {
                     'category_name': 'horse power',
                     'category': hp_name,
-                    'category_url': hp_url,
                     'sub_category': []
                 }
                 year['sub_category'].append(horse_power)
+
             elif 'result' in hp.get('class') and not hp.xpath('b'):
                 model_name = re.sub(r'[\n\t]+', '', hp.xpath('a')[0].text)
                 model_slug = slugify(model_name)
@@ -2277,6 +2279,11 @@ def boatsnet_yamaha_scrapper(init_offset=0, end_offset=None):
                     'sub_category': []
                 }
                 horse_power['sub_category'].append(model)
+
+                print("\n\tYear '%s'\n\t\tHorse Power '%s'\n"
+                      "\t\t\tModel '%s'\n"
+                      % (yr_name, hp_name, model_name))
+
                 page = request_get(
                     BOATSNET_BASE_URL +
                     model['category_url']
@@ -2322,25 +2329,29 @@ def boatsnet_yamaha_scrapper(init_offset=0, end_offset=None):
 
                     component['image'] = image
                     count = 0
-                    old_diag = -1
+                    # old_diag = -1
                     product = None
-                    old_product = None
+                    # old_product = None
                     for prod in tree.xpath(xproduct_selector):
                         if 'ma-obs' in prod.get('class'):
+                            product['is_available'] = False
                             count = -1
                         elif count == 0:
                             product = {
                                 "diagram_number": re.sub(r'[\n\t]',
                                                          '',
-                                                         prod.text),
+                                                         prod.text.strip()),
+                                'is_available': True,
+                                'replacements': [],
                             }
 
                             """
                             if(old_diag == re.sub(r'[\n\t]', '', prod.text)):
                                 product["recomended"] = old_product
-                            """
+
                             old_product = product
                             old_diag = re.sub(r'[\n\t]', '', prod.text)
+                            """
                             component['products'].append(product)
                         elif count == 1:
                             product['product'] = prod.xpath('h2/a')[0].text
@@ -2348,13 +2359,11 @@ def boatsnet_yamaha_scrapper(init_offset=0, end_offset=None):
                                 .get('href')
                             product['part_number'] = prod.xpath('p/a')[0].text
                         elif count == 2:
+                            """
                             page = request_get(
-                                base_url + product['product_url']
+                                BOATSNET_BASE_URL + product['product_url']
                             )
-
                             tree = html.fromstring(page.content)
-
-                            # To get images
                             image = None
                             if tree.xpath(xproduct_img_selector):
                                 image = tree.xpath(xproduct_img_selector)[0] \
@@ -2363,6 +2372,7 @@ def boatsnet_yamaha_scrapper(init_offset=0, end_offset=None):
                                 image = tree.xpath(xproduct_img_selector2)[0] \
                                     .get('src')
 
+
                             if image:
                                 r = request_get('http:' + image, stream=True)
                                 save_downloaded_file('img/boats_net/yamaha/' +
@@ -2370,13 +2380,14 @@ def boatsnet_yamaha_scrapper(init_offset=0, end_offset=None):
                                                      r)
                                 image = 'img/boats_net/yamaha/' + \
                                     image.split('/')[-1]
+                            """
 
                             product['list_price'] = \
                                 prod.xpath('div[1]')[0].text
 
                             # If theres another price
                             if prod.xpath('div[2]'):
-                                product['your_price'] = \
+                                product['price'] = \
                                     prod.xpath('div[2]')[0].text
 
                             product['manufacturer'] = "Yamaha"
@@ -2385,19 +2396,11 @@ def boatsnet_yamaha_scrapper(init_offset=0, end_offset=None):
                             count = -1
 
                         count += 1
-                        counter += 1
-                        if counter > 100:
-                            catalog['scraping_successful'] = True
-                            print('Finishing Boats Net Yamaha Scraping...\n')
-                            file_name = 'boats_net_yamaha-' + \
-                                        scrap_date + \
-                                        '.json'
-                            with open(file_name, 'w') as outfile:
-                                json.dump(catalog, outfile, indent=4)
-                                pass
-                            return
-            else:
-                print('Caso especial Yamaha Boats Net.')
+
+        print("\n'%s' done...\n" % yr_name)
+        output_file_path = FILE_DIR + '/boatsnet/yamaha/' + \
+            yr_slug + '.json'
+        create_output_file(catalog, output_file_path)
 
 
 def boatsnet_honda_marine_scrapper():
@@ -2816,11 +2819,14 @@ if __name__ == '__main__':
     PRETTY_OUTPUT = args.pretty
 
     # scrapper offsets
-    if args.offset:
-        INIT_OFFSET = args.offset
+    try:
+        if args.offset:
+            INIT_OFFSET = args.offset
 
-    if args.offset2:
-        INIT_OFFSET_2 = args.offset2
+        if args.offset2:
+            INIT_OFFSET_2 = args.offset2
+    except AttributeError:
+        pass
 
     ###############################################
     # ----------- Directories creation ---------- #
