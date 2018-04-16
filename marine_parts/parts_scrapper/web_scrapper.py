@@ -71,8 +71,6 @@ def get_product_title(text, part_number):
 ##################################################################
 
 
-
-
 def marinepartseurope_volvo_penta_scrapper(begin=0, end=None):
     """Scrapper for Marine Parts Europe Volvo Penta Parts."""
     global MARINE_PARTS_EUROPE_BASE_URL, FILE_DIR
@@ -104,7 +102,7 @@ def marinepartseurope_volvo_penta_scrapper(begin=0, end=None):
         'scraping_successful': False,
     }
 
-    for cat in tree.xpath(xpath_selector)[3:4]:
+    for cat in tree.xpath(xpath_selector)[0:1]:
         cat_name = cat.text
         cat_slug = slugify(cat_name)
 
@@ -162,7 +160,7 @@ def marinepartseurope_volvo_penta_scrapper(begin=0, end=None):
                     # Components with same name can occur
                     # so we have to append a counter to the
                     # component name so it can be unique
-                    # and don't cause inconsistency in the DB 
+                    # and don't cause inconsistency in the DB
                     rep_component_counter = 0
                     # Save Previous section
                     if section != {}:
