@@ -15,7 +15,9 @@ from urllib.parse import urlparse as parse
 
 from slugify import slugify
 
+# CONSTANT DEFINITIONS
 FILE_DIR = os.path.dirname(os.path.realpath(__file__))
+BOATSNET_BASE_URL = 'http://www.boats.net'
 MARINE_ENGINE_BASE_URL = 'https://www.marineengine.com'
 MARINE_EXPRESS_BASE_URL = 'http://www.marinepartsexpress.com'
 MARINE_PARTS_EUROPE_BASE_URL = 'http://www.marinepartseurope.com'
@@ -69,8 +71,6 @@ def get_product_title(text, part_number):
 ##################################################################
 
 
-
-
 def marinepartseurope_volvo_penta_scrapper(begin=0, end=None):
     """Scrapper for Marine Parts Europe Volvo Penta Parts."""
     global MARINE_PARTS_EUROPE_BASE_URL, FILE_DIR
@@ -102,7 +102,7 @@ def marinepartseurope_volvo_penta_scrapper(begin=0, end=None):
         'scraping_successful': False,
     }
 
-    for cat in tree.xpath(xpath_selector)[3:4]:
+    for cat in tree.xpath(xpath_selector)[0:1]:
         cat_name = cat.text
         cat_slug = slugify(cat_name)
 
@@ -157,6 +157,11 @@ def marinepartseurope_volvo_penta_scrapper(begin=0, end=None):
 
                 # Section Header
                 if (comp.xpath("td[@class='catalogHeaderCell']/h2")):
+                    # Components with same name can occur
+                    # so we have to append a counter to the
+                    # component name so it can be unique
+                    # and don't cause inconsistency in the DB
+                    rep_component_counter = 0
                     # Save Previous section
                     if section != {}:
                         model['sub_category'].append(section)
@@ -319,9 +324,8 @@ def marinepartseurope_volvo_penta_scrapper(begin=0, end=None):
                                 last_replaced['replacements'].append(product)
 
                     # Save component
-                    if section != {}:
-                        if component['products'] != []:
-                            section['sub_category'].append(component)
+                    if section != {} and component['products'] != []:
+                        section['sub_category'].append(component)
 
 
             # Save Last Section
@@ -2239,7 +2243,7 @@ def marinepartsexpress_volvo_penta_marine_scrapper():
 
 
 ##################################################################
-## BOATS NET
+# BOATS NET
 '''
 Yamaha
 http://www.boats.net/parts/search/Yamaha/Outboard/parts.html
@@ -2251,140 +2255,193 @@ Suzuki Marine
 http://www.boats.net/parts/search/Suzuki/Outboard/parts.html
 '''
 ##################################################################
-def boatsnet_yamaha_scrapper():
-    # boatsnet base url
-    base_url = 'http://www.boats.net'
+
+
+def boatsnet_yamaha_scrapper(init_offset=0, end_offset=None):
+    """Scrapper for Boatsnet's Yamaha Parts."""
+    global BOATSNET_BASE_URL, FILE_DIR
+
+    print('Starting Boatsnet\'s Yamaha Scrapping...')
+
+    output_root_path = FILE_DIR + '/marine_europe/yamaha/'
+    images_root_folder = 'img/boatsnet/yamaha/'
+
     # Categorys scraping
-    page = requests.get(
-        base_url + '/parts/search/Yamaha/Outboard/parts.html'
-    )
+    page = request_get(BOATSNET_BASE_URL +
+                        '/parts/search/Yamaha/Outboard/parts.html')
     tree = html.fromstring(page.content)
 
     xpath_selector = "//*[@class='year-link-container']/a"
     xhp_selector = "//*[@id='parts-surl-model']/div[position()>1]//div"
-    xcomponents_selector = "//*[@id='parts-surl-component']/div[position()>1]/div/a"
+    xcomponents_selector = ("//*[@id='parts-surl-component']/"
+                            "div[position()>1]/div/a")
     ximg_selector = "//*[@id='product-image']"
     xproduct_selector = "//*[@id='component-list']/div/div/div[2]/ul//li/div"
-    xproduct_img_selector = "//*[@id='main-product-image']/div[2]/ul/li[1]/a/img"
+    xproduct_img_selector = ("//*[@id='main-product-image']/"
+                             "div[2]/ul/li[1]/a/img")
     xproduct_img_selector2 = "//*[@id='main-product-image']/a/img"
 
-    scrap_date = str(date.today()).replace(' ', '')
     catalog = {
         'categories': [],
-        'scraped_date': scrap_date,
         'scraping_successful': False,
     }
 
-    counter = 0
+    # Apply given offset in years cycle
+    yrs = tree.xpath(xpath_selector)[init_offset:end_offset]
+
     # Categorys to scrap on boatsnet yamaha
-    for yr in tree.xpath(xpath_selector):
+    for yr in yrs:
+        yr_name = yr.text
+        yr_slug = slugify(yr_name)
+        yr_url = yr.get('href')
         year = {
             'category_name': 'years',
-            'category': yr.text,
-            'category_url': yr.get('href'),
+            'category': yr_name,
+            'category_url': yr_url,
             'sub_category': []
         }
-        catalog['categories'].append(year)
+        catalog['categories'] = [year]
+
+        print("\n\tScrapping Year '%s'\n"
+              % yr_name)
+
         # Horse Power scraping
-        page = requests.get(
-            base_url + year['category_url']
-        )
+        page = request_get(BOATSNET_BASE_URL +
+                           yr_url)
         tree = html.fromstring(page.content)
 
-        for hp in tree.xpath(xhp_selector):
+        for hp in tree.xpath(xhp_selector)[0:2]:
             if 'ResultHP' in hp.get('class'):
+                hp_name = re.sub(r'[\n\t]+', '', hp.xpath('b')[0].text)
+                hp_slug = slugify(hp_name)
                 horse_power = {
                     'category_name': 'horse power',
-                    'category': re.sub(r'[\n\t]+', '', hp.xpath('b')[0].text),
-                    'category_url': hp.xpath('b')[0].get('href'),
+                    'category': hp_name,
                     'sub_category': []
                 }
                 year['sub_category'].append(horse_power)
+
             elif 'result' in hp.get('class') and not hp.xpath('b'):
+                model_name = re.sub(r'[\n\t]+', '', hp.xpath('a')[0].text)
+                model_slug = slugify(model_name)
+                model_url = hp.xpath('a')[0].get('href')
                 model = {
                     'category_name': 'model',
-                    'category': re.sub(r'[\n\t]+', '', hp.xpath('a')[0].text),
-                    'category_url': hp.xpath('a')[0].get('href'),
+                    'category': model_name,
+                    'category_url': model_url,
                     'sub_category': []
                 }
                 horse_power['sub_category'].append(model)
-                page = requests.get(
-                    base_url + model['category_url']
+
+                print("\n\tYear '%s'\n\t\tHorse Power '%s'\n"
+                      "\t\t\tModel '%s'\n"
+                      % (yr_name, hp_name, model_name))
+
+                page = request_get(
+                    BOATSNET_BASE_URL +
+                    model['category_url']
                 )
                 tree = html.fromstring(page.content)
 
                 for comp in tree.xpath(xcomponents_selector):
+                    comp_name = comp.text
+                    comp_slug = slugify(comp_name)
+                    comp_url = comp.get('href')
                     component = {
                         'category_name': 'component',
-                        'category': comp.text,
-                        'category_url': comp.get('href'),
+                        'category': comp_name,
+                        'category_url': comp_url,
                         'products': []
                     }
                     model['sub_category'].append(component)
 
                     # Products scraping
-                    page = requests.get(
-                        base_url + component['category_url']
+                    page = request_get(
+                        BOATSNET_BASE_URL +
+                        component['category_url']
                     )
 
                     tree = html.fromstring(page.content)
                     image = None
                     a = etree.tostring(tree.xpath('//*[@id="diagram"]')[0])
-                    z = re.search(r"xlink:href\", *\"[^\"]*\"", a.decode()).group(0).split(',')
+                    z = re.search(r"xlink:href\", *\"[^\"]*\"", a.decode()) \
+                        .group(0).split(',')
 
-                    if len(z)> 1:
+                    if len(z) > 1:
                         image = re.sub(r'[\ \"]', '', z[1])
-                        r = requests.get('http:' + image, stream=True)
-                        save_downloaded_file('img/boats_net/yamaha/'+ image.split('/')[-1], r)
-                        image = 'img/boats_net/yamaha/'+ image.split('/')[-1]
+                        r = request_get('http:' + image, stream=True)
+                        image_rel_path = images_root_folder + \
+                            yr_slug + '/' + \
+                            hp_slug + '/' + \
+                            model_slug + '/' + \
+                            comp_slug + '.gif'
+                        image_final_path = os.path.join(FILE_DIR,
+                                                        image_rel_path)
+                        save_downloaded_file(image_final_path, r)
+                        image = image_rel_path
 
                     component['image'] = image
                     count = 0
-                    old_diag = -1
+                    # old_diag = -1
                     product = None
-                    old_product = None
+                    # old_product = None
                     for prod in tree.xpath(xproduct_selector):
                         if 'ma-obs' in prod.get('class'):
+                            product['is_available'] = False
                             count = -1
                         elif count == 0:
                             product = {
-                                "diagram_number": re.sub(r'[\n\t]', '', prod.text),
+                                "diagram_number": re.sub(r'[\n\t]',
+                                                         '',
+                                                         prod.text.strip()),
+                                'is_available': True,
+                                'replacements': [],
                             }
 
+                            """
                             if(old_diag == re.sub(r'[\n\t]', '', prod.text)):
                                 product["recomended"] = old_product
 
                             old_product = product
                             old_diag = re.sub(r'[\n\t]', '', prod.text)
+                            """
                             component['products'].append(product)
                         elif count == 1:
                             product['product'] = prod.xpath('h2/a')[0].text
-                            product['product_url'] = prod.xpath('h2/a')[0].get('href')
+                            product['product_url'] = prod.xpath('h2/a')[0] \
+                                .get('href')
                             product['part_number'] = prod.xpath('p/a')[0].text
                         elif count == 2:
-                            page = requests.get(
-                                base_url + product['product_url']
+                            """
+                            page = request_get(
+                                BOATSNET_BASE_URL + product['product_url']
                             )
-
                             tree = html.fromstring(page.content)
-
-                            # To get images
                             image = None
                             if tree.xpath(xproduct_img_selector):
-                                image = tree.xpath(xproduct_img_selector)[0].get('src')
+                                image = tree.xpath(xproduct_img_selector)[0] \
+                                    .get('src')
                             elif tree.xpath(xproduct_img_selector2):
-                                image = tree.xpath(xproduct_img_selector2)[0].get('src')
+                                image = tree.xpath(xproduct_img_selector2)[0] \
+                                    .get('src')
+
 
                             if image:
-                                r = requests.get('http:' + image, stream=True)
-                                save_downloaded_file('img/boats_net/yamaha/'+ image.split('/')[-1], r)
-                                image = 'img/boats_net/yamaha/'+ image.split('/')[-1]
+                                r = request_get('http:' + image, stream=True)
+                                save_downloaded_file('img/boats_net/yamaha/' +
+                                                     image.split('/')[-1],
+                                                     r)
+                                image = 'img/boats_net/yamaha/' + \
+                                    image.split('/')[-1]
+                            """
 
-                            product['list_price'] = prod.xpath('div[1]')[0].text
+                            product['list_price'] = \
+                                prod.xpath('div[1]')[0].text
 
                             # If theres another price
                             if prod.xpath('div[2]'):
-                                product['your_price'] = prod.xpath('div[2]')[0].text
+                                product['price'] = \
+                                    prod.xpath('div[2]')[0].text
 
                             product['manufacturer'] = "Yamaha"
                             product['image'] = image
@@ -2392,16 +2449,11 @@ def boatsnet_yamaha_scrapper():
                             count = -1
 
                         count += 1
-                        counter += 1
-                        if counter > 100:
-                            catalog['scraping_successful'] = True
-                            print('Finishing Boats Net Yamaha Scraping...\n')
-                            with open('boats_net_yamaha-' + scrap_date + '.json', 'w') as outfile:
-                                json.dump(catalog, outfile, indent=4)
-                                pass
-                            return
-            else:
-                print('Caso especial Yamaha Boats Net.')
+
+        print("\n'%s' done...\n" % yr_name)
+        output_file_path = FILE_DIR + '/boatsnet/yamaha/' + \
+            yr_slug + '.json'
+        create_output_file(catalog, output_file_path)
 
 
 def boatsnet_honda_marine_scrapper():
@@ -2561,7 +2613,9 @@ def boatsnet_honda_marine_scrapper():
             else:
                 print('Caso especial Honda Marine Boats Net.')
 
+
 def boatsnet_suzuki_marine_scrapper():
+    """Scrapper for Boatnet's Suzuki Parts."""
     # Marineengine base url
     base_url = 'http://www.boats.net'
     # Categorys for scraping
@@ -2572,7 +2626,8 @@ def boatsnet_suzuki_marine_scrapper():
 
     xpath_selector = "//*[@class='year-link-container']/a"
     xhp_selector = "//*[@id='parts-surl-model']/div[position()>1]//div"
-    xcomponents_selector = "//*[@id='parts-surl-component']/div[position()>1]/div/a"
+    xcomponents_selector = ("//*[@id='parts-surl-component']/"
+                            "div[position()>1]/div/a")
     ximg_selector = "//*[@id='product-image']"
     xproduct_selector = "//*[@id='component-list']/div/div/div[2]/ul//li/div"
     xproduct_img_selector = "//*[@id='main-product-image']/div[2]/ul/li[1]/a/img"
@@ -2808,6 +2863,13 @@ if __name__ == '__main__':
         help="Secondary offset"
     )
 
+    parser_boatsnet = subparsers.add_parser('boatsnet')
+    parser_boatsnet.add_argument(
+        'manufacturer', type=str,
+        choices=["yamaha"],
+        help="The name of the manufacturer"
+    )
+
     args = parser.parse_args()
 
     # a site has to be introduced
@@ -2823,11 +2885,14 @@ if __name__ == '__main__':
         THREADED = True
 
     # scrapper offsets
-    if args.offset:
-        INIT_OFFSET = args.offset
+    try:
+        if args.offset:
+            INIT_OFFSET = args.offset
 
-    if args.offset2:
-        INIT_OFFSET_2 = args.offset2
+        if args.offset2:
+            INIT_OFFSET_2 = args.offset2
+    except AttributeError:
+        pass
 
     ###############################################
     # ----------- Directories creation ---------- #
@@ -2837,17 +2902,18 @@ if __name__ == '__main__':
 
     # get user's input from stdin
     selected_scrapper = "%s %s %s" % (args.site,
-                                   args.manufacturer,
-                                   THREADED)
+                                      args.manufacturer,
+                                      THREADED)
 
     # this dict maps user's input with a scrapper
     OPT_DICT = {
         "marine_engine mercury False": marineengine_mercury_scrapper,
         "marine_engine johnson False": partial(marineengine_johnson_evinrude_scrapper,
-                                         INIT_OFFSET),
+                                               INIT_OFFSET),
+        "boatsnet yamaha": boatsnet_yamaha_scrapper,
         "marine_engine mercruiser False": marineengine_mercruiser_scrapper,
         "marineparts_europe volvo False": partial(marinepartseurope_volvo_penta_scrapper,
-                                            INIT_OFFSET),
+                                                  INIT_OFFSET),
         "marineparts_europe volvo True": partial(threaded_volvo_scrapper, THREADS),
         "marine_engine johnson True": partial(threaded_johnson_evinrude_scrapper, THREADS)
     }
