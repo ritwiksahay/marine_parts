@@ -26,8 +26,6 @@ def get_queryset_filtered_by_hp(qs, hp):
                 re.search('(V-)?' + '\s' + hp + ' HP', q.name)):
                 continue
         qs = qs.exclude(pk=q.pk)
-
-    print(qs)
     return qs
 
 

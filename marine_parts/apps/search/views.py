@@ -122,6 +122,7 @@ class FacetedSearchView(views.FacetedSearchView):
         def get_tree(parents, path):
             result = []
             selected = None
+            parents = parents.order_by('name')
             for parent in parents:
                 # build category dict
                 cat = Cat()
