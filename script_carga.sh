@@ -37,7 +37,7 @@ NC='\033[0m' # No Color
 for file in "${INPUT_PATH}"*.json
 do
 	echo "Processing " $(basename "$file")...
-	OUTPUT=$( { python ./manage.py load_products "${file}" --cat_base "Brands > Volvo Penta"; } 2>&1 )
+	OUTPUT=$( { python ./manage.py load_products "${file}" --cat_base 'Brands > Evinrude Johnson'; } 2>&1 )
 	LOG_FILE=$(basename "$file").log
 	LOG_FILE="${LOGS_PATH}${LOG_FILE}"
 	touch "$LOG_FILE"
