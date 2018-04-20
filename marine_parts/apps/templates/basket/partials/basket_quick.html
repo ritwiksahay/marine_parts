@@ -1,0 +1,58 @@
+{% load history_tags %}
+{% load basket_tags %}
+{% load currency_filters %}
+{% load thumbnail %}
+{% load i18n %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+
+<div class="basket-title col-xs-12">
+    <div>
+        <p class="col-xs-12 h3 align-center">{% trans "Basket"|upper %}</p>
+    </div>
+</div>
+<ul class="basket-mini-item list-unstyled text-center">
+    {% if not request.basket.is_empty %}
+        <form id="basket_formset" data-basket-summary-url="{% url 'basket:summary' %}">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <input name="output_template" value="basket/partials/basket_quick" type="hidden">
+            
+            {% for form in formset %}
+                 {{ form.id }}
+                 {% for field_errors in form.errors.values %}
+                    {% for error in field_errors %}
+                        <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                    {% endfor %}
+
+                {% endfor %}
+
+                {% with line=form.instance product=form.instance.product %}
+                <li class="mini-item text-left">
+                    {% render_field form.quantity class+="form-control quantity_input" type="text" %}
+                    <a href="{{ product.get_absolute_url }}">
+                        <medium>{{ product.title|truncatewords:2  }}</medium>
+                    </a>
+                    <i class="icon icon-cross basket-line-remove"></i>
+                </li>
+                {% endwith %}
+                
+            {% endfor %}
+            
+            <hr>
+            <br>
+            <li id="basket_total" class="total text-right">
+                {% if request.basket.is_tax_known %}
+                    <strong>{% trans "Total" %}</strong>: <span>{{ request.basket.total_incl_tax|currency:request.basket.currency }}</span>
+                {% else %}
+                    <strong>{% trans "Total" %}</strong>: <span>{{ request.basket.total_excl_tax|currency:request.basket.currency }}</span>
+                {% endif %}
+            </li>
+        <li class="text-right" ><a href="{% url 'checkout:index' %}">{% trans "Checkout" %}</a></li>
+        </form>
+    {% else %}
+        <li><p>{% trans "Your basket is empty." %}</p></li>
+    {% endif %}
+</ul>
+

@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block extrastyles %}
+    <link rel="stylesheet" href="{% static 'oscar/css/customer_contact.css' %}">
+{% endblock extrastyles %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li>
+        <a href="{{ homepage_url }}">{% trans 'Home' %}</a>
+    </li>
+    <li class="active">{% trans 'Contact us' %}</li>
+</ul>
+{% endblock %}
+
+{% block secondheadertext %}
+    {% trans "Contact us"|upper %}
+{% endblock secondheadertext %}
+
+{% block content %}
+    <form action="." method="post" class="form">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {% render_field field class="form-control" placeholder=field.help_text%}
+            </div>
+        {% endfor %}
+        <button class="btn btn-primary btn-lg text-uppercase send">
+            {% trans "Send" %}
+        </button>
+    </form>
+{% endblock content %}
+
+{% block bottom_banner %}
+<div class="container-fluid contact-image hidden-xs">
+    <div class="row">
+        <img class="img-responsive" src="{% static 'img/banners/contact.jpg' %}" alt="contact">
+    </div>
+</div>
+{% endblock bottom_banner %}

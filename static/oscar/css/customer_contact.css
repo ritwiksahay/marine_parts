@@ -1,0 +1,22 @@
+/*
+Custom style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+.page-header h3{
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+}
+
+form button.send{    
+    float: none;
+    font-family: 'Gotham Bold';
+    font-size: 16px;
+    height: 40px;
+}

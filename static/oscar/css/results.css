@@ -1,0 +1,261 @@
+/*
+Header style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #E6E6E6;
+
+*/
+
+.pre-content {
+    color: #ffffff;
+    padding: 0;
+}
+
+.filter-title {
+    font-family: 'Gotham Bold' !important;
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+.page_inner {
+    padding: 0px 15px;
+}
+
+.page-header{
+    margin: 0;
+}
+
+.page-header{
+    font-family: 'Gotham Bold' !important;
+    color: #0d4a6c;
+    background-color: #ffffff;
+    padding: 0px 15px 0px 15px;
+    border-bottom: none !important;
+    min-height: 0;
+}
+
+.page-header .page-header-title {
+    margin: 15px 0 16px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.page_inner div .sidebar {
+    padding-bottom: 0;
+    color: #0d4a6c;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.page_inner div .content {
+    padding-top: 0;
+}
+
+.page_inner div .pre-content {
+    padding-top: 20px;
+    padding-bottom: 5px;
+}
+
+.page_inner div .content {
+    padding-bottom: 30px;
+    padding-top: 30px;
+}
+
+.page-banner .top_banner_title{
+    font-family: 'Magneto';
+    font-size: 40px;
+    color: #fff;
+    margin-bottom: 0px;
+    padding: 62px 0px;
+    background-image: url('../../img/banners/banner-search.png');
+    background-position: center center; 
+}
+
+.page_inner div .content{
+    background-color: #FFFFFF;
+    color: #0d4a6c;
+}
+
+.page_inner div .content{
+    padding: 0;
+}
+
+/*Basket styles*/
+.page_inner .sidebar .basket-wrapper .quantity_input{
+    max-width: 34px;
+    display: inline-block;
+}
+
+
+.page_inner div .sidebar form div select{
+    width: 90%;
+    float: none;
+    display: inline-block;
+    background-color: #E6E6E6;
+    font-family: 'Gotham Book';
+    font-size: 16px;
+    height: 40px;
+}
+
+.page_inner div .pre-content form div select {
+    width: 100%;
+    float: none;
+    display: inline-block;
+    background-color: transparent;
+    font-family: 'Gotham Book';
+    font-size: 16px;
+    height: 21px;
+}
+
+.page_inner div .sidebar form div .search-field,
+.page_inner div .pre-content form div .search-field{
+    width: 90%;
+    float: none;
+    display: inline-block;
+    background-color: #E6E6E6;
+    font-family: 'Gotham Book';
+    font-size: 16px;
+    height: 35px;
+}
+
+.page_inner div .sidebar form div .search-button,
+.page_inner div .pre-content form div .search-button{
+    float: none;
+    font-family: 'Gotham Bold';
+    font-size: 16px;
+    height: 35px;
+}
+
+.page_inner div .sidebar {
+    padding-top: 5px;
+    border-bottom: none;
+}
+
+/* Search By Categories form styles */
+.categories_form select {
+    text-align: center;
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;       /* remove default arrow */
+    background: transparent;
+    outline: none;
+    border: none;
+    color: #0d4a6c;
+    font-family: 'Gotham Book';
+    width: 100%;
+    z-index: 1;
+    padding: 0;
+    cursor: pointer;
+    padding-inline-end: 32px;
+    padding-inline-start: 27px;
+    position: relative;
+    text-align-last: center;
+}
+
+.categories_form .form-group {
+    margin-bottom: 6px;  
+}
+
+.categories_form .form-group.category-select {
+    position: relative;
+    cursor: pointer;
+    position: relative;
+    background-color: #ffffff;
+    color: white;
+    display: block;
+    width: 90%;
+    margin: 6px auto;
+}
+
+.categories_form .form-group > i.icon-chevron-down {
+    position: absolute;
+    right: 11px;
+    font-size: 1.3rem;
+    color: #0d4a6c;
+    top: 3px;
+    z-index: 0;
+}
+
+.is-component .categories_form .form-group > i.icon-chevron-down {
+    color: #0d4a6c;
+}
+
+/* Part's table */
+.is-component table.table tbody td,
+.is-component table.table thead th
+ {
+    vertical-align: middle;
+}
+
+.is-component table.table tbody td p{
+    margin: 0;
+}
+
+.is-component table thead {
+    font-family: 'Gotham Bold' !important;
+    background-color: #0d4a6c;
+    color: #ffffff;
+}
+
+.is-component span.diagram_number {
+    border: 2px solid white;
+    border-radius: 20px;
+    padding: 6px 4px;
+    font-size: 1.4rem;
+    font-weight: bolder;
+    color: inherit;
+}
+
+/* Thumbnail styles */
+.is-component .thumbnail p {
+    margin: 5px;
+}
+
+.is-component .table tr.component_header {
+    background-color: #04a0d3;
+    color: white;
+    font-family: "Gotham Bold";
+}
+
+.is-component .table tr.component_header a {
+    color: white;
+}
+
+#results {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+#num_results_form {
+    padding-left: 15px;
+}
+
+.deprecated, .deprecated:hover {
+    color: #04a0d3;
+    text-decoration: none;
+}
+
+#part-table .btn {
+    font-size: 12px;
+}
+
+#messages_async .alert {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    top: 120px;
+    transition: scroll .5s ease 0s;
+    margin: 0 auto;
+}
+
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+

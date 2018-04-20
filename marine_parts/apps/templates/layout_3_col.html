@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load promotion_tags %}
+
+{% comment %}
+Keep the same header and footer as the standard layout template but override the 
+main content area to split it into a sidebar and a content block
+{% endcomment %}
+{% block content_wrapper %}
+<div class="container-fluid page{% if is_component %} is-component{% endif %}">
+    <div class="page-banner">
+        {% block top_banner %}
+                {% block top_banner_title %}
+                    
+                {% endblock top_banner_title %}
+        {% endblock top_banner %}
+    </div>
+    <div class="page_inner bg-light-gray">
+        {% block breadcrumbs %}{% endblock %}
+        <div class="row">
+
+            <aside class="sidebar col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                {# Render promotions at the top of the left-hand sidebar #}
+                <!--
+                    <div id="promotions_left">
+                        {% for promotion in promotions_left %}
+                            {% render_promotion promotion %}
+                        {% endfor %}
+                    </div>
+                -->
+                {% block column_left %}{% endblock %}
+            </aside>
+
+            <div class="content col-xs-12 col-sm-10 col-md-10 col-lg-10">
+                    <div class="pre-content col-xs-12 bg-mid-blue">
+                        {% block pre-content %}
+                        {% endblock %}
+                    </div>
+
+                    {% block header %}
+                    <div class="page-header col-xs-12 action">
+                        {% block headertext %}{% endblock %}
+                    </div>
+                    {% endblock %}
+
+                    <div class="col-xs-12">
+                        {% include "partials/alert_messages_async.html" %}
+                    </div>
+                    <div class="col-xs-12">
+                        {% include "partials/alert_messages.html" %}
+                    </div>
+                    <!--
+                    <div id="promotions">
+                        {% for promotion in promotions_page %}
+                            {% render_promotion promotion %}
+                        {% endfor %}
+                    </div>
+                    -->
+                    {% block content %}{% endblock %}
+
+            </div>
+
+        </div><!-- /row -->
+    {% block bottom_banner %}
+        
+    {% endblock bottom_banner %}
+    </div><!-- /page_inner -->
+</div><!-- /container-fluid -->
+{% endblock %}

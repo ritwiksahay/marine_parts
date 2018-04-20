@@ -1,0 +1,91 @@
+{% load static%}
+{% load staticfiles %}
+{% load currency_filters %}
+{% load i18n %}
+
+<div class="header navbar primary navbar-static-top navbar-default container-fluid">
+    <div class="row">
+        <div class="navbar-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            {# This is used in mobile view #}
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".primary-collapse">
+                <span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="hidden-lg hidden-md hidden-sm col-xs-12">
+            <a class="logo-brand" href="{{ homepage_url }}">
+                <img class="brand-xs img-responsive" src="{% static 'img/logo/isologo-small.png'%}" alt="">
+            </a>
+        </div>
+        <div class="navbar-collapse primary-collapse collapse col-xs-12">
+            {% block nav_dropdown %}
+                <div class="nav navbar-nav row">
+                    <div class="brand-col col-lg-2 col-md-2 col-sm-3 hidden-xs">
+                        <a class="logo-brand" href="{{ homepage_url }}">
+                            <img class="brand img-responsive" src="{% static 'img/logo/isologo-small.png'%}" alt="">
+                        </a>
+                    </div>
+                    <hr class="hidden-lg hidden-md hidden-sm">
+                    <div class="col-lg-1 col-md-1 hidden-sm hidden-xs text-center">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                {% trans "Brands" %}
+                            </a>
+                            <ul class="dropdown-menu" data-navigation="dropdown-menu">
+                                {% if brands %}
+                                    {% for brand in brands %}
+                                        <li><a tabindex="-1" href="{{ brand.get_absolute_url }}">{{ brand.name }}</a></li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </div>
+                    <div class="col-lg-1 col-md-1 hidden-sm hidden-xs text-center">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                {% trans "Categories" %}
+                            </a>
+                            <ul class="dropdown-menu" data-navigation="dropdown-menu">
+                                {% if categories %}
+                                    {% for category in categories %}
+                                        <li><a tabindex="-1" href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-7 col-xs-12 search-bar">
+                        {% include "partials/search.html" %}
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 text-center user-cart">
+                        {% if user.is_authenticated %}
+                            {% if num_unread_notifications > 0 %}
+                                {# If user has new notifications - we change account link to go to inbox #}
+                                <a href="{% url 'customer:notifications-inbox' %}" class="user">
+                                    <span class="icon icon-user"></span>
+                                    <span class="label label-important">{{ num_unread_notifications }}</span>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'customer:summary' %}" class="user">
+                                    <span class="icon icon-user"></span>
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a id="login_link" href="{% url 'customer:login' %}" class="user">
+                                <span class="icon icon-user"></span>
+                            </a>
+                        {% endif %}
+                        <a id="nav_basket-wrapper" href="{% url 'basket:summary' %}" class="basket">
+                            {% include 'partials/nav_basket.html' %}
+                        </a>
+                    </div>
+                </div>
+            {% endblock %}
+        </div><!-- /navbar-collapse -->
+    </div>
+</div><!-- /navbar -->

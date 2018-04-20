@@ -1,0 +1,54 @@
+{% load basket_tags %}
+{% load component_tags %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load i18n %}
+
+{% with replacements=product.replacement_products.all %}
+
+<tr>
+    <td colspan="4" scope="colgroup"><a {% if replacements %} class="deprecated" {% else %}href="{{ product.get_absolute_url }}"{% endif %}>{{ product.get_title }}</a><br><small>{{product.attr.O}}</small><br><small>{{product.attr.M}}<small></td>
+
+    {% if session.availability.is_available_to_buy %}
+        <td colspan="1">
+            {% if session.price.exists %}
+                {% if session.price.excl_tax == 0 %}
+                    <p class="price_color">{% trans "Call for price" %}</p>
+                {% elif session.price.is_tax_known %}
+                    <p class="price_color">{{ session.price.incl_tax|currency:session.price.currency }}</p>
+                {% else %}
+                    <p class="price_color">{{ session.price.excl_tax|currency:session.price.currency }}</p>
+                {% endif %}
+            {% else %}
+                <p class="price_color">&nbsp;</p>
+            {% endif %}
+            {%if not session.price.excl_tax == 0%}
+            {% basket_form request product 'single' as basket_form %}
+            <form data-basket-add-url="{% url 'basket:add' product.pk %}">
+                {% csrf_token %}
+                {{ basket_form.as_p }}
+                <button class="btn btn-primary btn-sm btn-block basket-add-btn">Add</button>
+            </form>
+            {%endif%}
+        </td>
+    </tr>
+    {% else %}
+        <td colspan="1">
+            {% if replacements %}
+                <span>Replaced by <i class="glyphicon glyphicon-arrow-down"></i></span>
+            {% else %}
+                <p>Not in stock</p>
+            {% endif %}
+        </td>
+    </tr>
+    {% endif %}
+
+    {% if replacements %}
+        {% for replacement in replacements%}
+            {% if category in replacement.categories.all %}
+                {% purchase_info_for_product request replacement as replacement_session %}
+                {% render_component_part replacement replacement_session %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endwith %}

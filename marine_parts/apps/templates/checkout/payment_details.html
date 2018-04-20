@@ -1,0 +1,173 @@
+{% extends "checkout/payment_details.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block title %}
+    {% trans "Payment details" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include 'checkout/nav.html' with step=3 %}
+{% endblock %}
+
+{% block checkout_title %}{% trans "Enter payment details" %}{% endblock %}
+
+{% block order_contents %}{% endblock %}
+{% block shipping_address %}{% endblock %}
+{% block shipping_method %}{% endblock %}
+{% block payment_method %}{% endblock %}
+
+{% block payment_details %}
+    {% block payment_details_content %}
+    {% endblock payment_details_content %}
+    <!-- Authorize Payment not available for now 
+    <div class="form-wrapper">
+      <form id="authorize-net-form" class="form-horizontal" role="form" method="post" &lt;!&ndash;action="{% url 'checkout:payment-details' %}"&ndash;&gt; >
+      {% csrf_token %}
+      <fieldset>
+          <h2>Authorize.net</h2>
+          <input type="hidden" class="form-control" name="payment-method" value="authorize-net">
+          <input type="hidden" name="dataValue" id="dataValue" />
+          <input type="hidden" name="dataDescriptor" id="dataDescriptor" />
+          <div class="form-group">
+          <label class="col-sm-3 control-label" for="cardHolderName">Name on Card</label>
+          <div class="col-sm-9">
+              <input type="text" class="form-control" name="cardHolderName" id="cardHolderName" placeholder="Card Holder's Name" value="axy">
+          </div>
+          </div>
+          <div class="form-group">
+          <label class="col-sm-3 control-label" for="cardNumber">Card Number</label>
+          <div class="col-sm-9">
+              <input type="text" class="form-control" name="cardNumber" id="cardNumber" placeholder="Debit/Credit Card Number" value="4007000000027">
+          </div>
+          </div>
+          <div class="form-group">
+              <label class="col-sm-3 control-label" for="expMonth">Expiration Date</label>
+          <div class="col-sm-9">
+            <div class="row">
+              <div class="col-xs-3 select-wrapper">
+                <select class="form-control col-sm-2" name="expMonth" id="expMonth">
+                  <option>Month</option>
+                  <option value="01">Jan (01)</option>
+                  <option value="02">Feb (02)</option>
+                  <option value="03">Mar (03)</option>
+                  <option value="04">Apr (04)</option>
+                  <option value="05">May (05)</option>
+                  <option value="06">June (06)</option>
+                  <option value="07">July (07)</option>
+                  <option value="08">Aug (08)</option>
+                  <option value="09">Sep (09)</option>
+                  <option value="10">Oct (10)</option>
+                  <option value="11">Nov (11)</option>
+                  <option value="12" selected>Dec (12)</option>
+                </select>
+              </div>
+              <div class="col-xs-3 select-wrapper">
+                <select class="form-control" name="expYear" id="expYear">
+                  <option value="13">2013</option>
+                  <option value="14">2014</option>
+                  <option value="15">2015</option>
+                  <option value="16">2016</option>
+                  <option value="17">2017</option>
+                  <option value="18">2018</option>
+                  <option value="19">2019</option>
+                  <option value="20">2020</option>
+                  <option value="21">2021</option>
+                  <option value="22">2022</option>
+                  <option value="23" selected>2023</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="form-group">
+          <label class="col-sm-3 control-label" for="cardCode">Card CVV</label>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" name="cardCode" id="cardCode" placeholder="Security Code" value="123">
+          </div>
+          </div>
+          <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-9">
+            <button type="button" onclick="sendPaymentDataToAnet()" class="btn btn-success">Pay Now</button>
+          </div>
+          </div>
+      </fieldset>
+    </form>
+  </div>
+  <hr>
+	-->
+
+  <div class="form-wrapper">
+    <form method="post" name="payment-info-form" id="payment-info-form" class="form-horizontal" role="form">
+      {% csrf_token %}
+      <h2>Payeezy First Data</h2>
+          <input type="hidden" class="form-control" name="payment-method" value="payeezy">
+  		<h4 style="color: red">
+  			<span id="payment-errors"></span>
+  		</h4>
+  		<h4 style="color: green">
+  			<span id="response_msg"></span>
+  		</h4>
+  		<h4 style="color: blue">
+  			<span id="response_note"></span>
+  		</h4>
+  		<div id="someHiddenDiv" style="display:none;">Please, wait a moment...</div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label" for="cardNumber">Card Type</label>
+        <div class="col-sm-6">
+          <div class="select-wrapper">
+            {% render_field form.card_type class='form-control'%}
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label" for="cardNumber">Cardholder Name</label>
+        <div class="col-sm-6">
+            {% render_field form.cardholder class='form-control' placeholder=form.cardholder.help_text %}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label" for="cardNumber">Card Number</label>
+        <div class="col-sm-6">
+            {% render_field form.card_number class='form-control' placeholder=form.card_number.help_text %}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label" for="cardNumber">CVV Code</label>
+        <div class="col-sm-6">
+            {% render_field form.ccv_code class='form-control' placeholder=form.ccv_code.help_text %}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label" for="expMonth">Expiration Date</label>
+        <div class="col-sm-9">
+          <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 select-wrapper">
+                {%render_field form.exp_month class='form-control' %}
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 select-wrapper">
+                {%render_field form.exp_year class='form-control'%}
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="form-group">
+          <div class="row">
+              <div class="col-centered col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                  <button id="continue" type="submit" class="btn btn-lg btn-block btn-primary" data-loading-text="{% trans 'Continuing...' %}">{% trans "Continue" %}</button>
+              </div>
+          </div>
+      </div>
+  	</form>
+  <br>
+  <form method="post" id="continue-form" name="continue-form" class="form-horizontal" role="form">
+      {% csrf_token %}
+      <input type="hidden" id="payment-method" name="payment-method" value="{{ payment_method }}" />
+      <input type="hidden" id="token_chk" name="token_chk" value="{{ token_chk }}" />
+	  	<input type="hidden" id="cardholder_name" name="cardholder_name" value="{{ cardholder_name }}" />
+	  	<input type="hidden" id="card_type" name="card_type" value="{{ card_type }}" />
+	  	<input type="hidden" id="exp_date" name="exp_date" value="{{ exp_date }}" />
+  </form>
+</div>
+
+{% endblock payment_details %}

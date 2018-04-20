@@ -1,0 +1,104 @@
+{% extends "home_layout.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block extrastyles %}
+    <link rel="stylesheet" type="text/css" href="{% static "oscar/css/home.css" %}" />
+{% endblock extrastyles %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block content %}
+<div class="row brands">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="brands-title text-center">
+                    {% trans "Our brands" %}
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            {%for brand in brands%}
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 brand">
+                <a href="{{brand.get_absolute_url}}">
+                    <span class="helper"></span>
+                    <img class="img-responsive" src="{{brand.image.url}}" alt="">
+                </a>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</div>
+<div class="row best-sellers">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row title">
+            <div class="col-lg-12 col-md-8 col-sm-12 col-xs-12 col-centered">
+                <h1 class="best-sellers-title text-center">
+                    <div class="canvas">
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-xs"></div>
+                        <div class="pixel hidden-xs"></div>
+                        <div class="pixel hidden-xs"></div>
+                    </div>
+                    {% trans "Shop best sellers" %}
+                    <div class="canvas">
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-md hidden-sm hidden-xs"></div>
+                        <div class="pixel hidden-xs"></div>
+                        <div class="pixel hidden-xs"></div>
+                        <div class="pixel hidden-xs"></div>
+                    </div>
+                </h1>
+            </div>
+        </div>
+        <div class="row best-sellers">
+            <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 col-centered">
+                <div class="row">
+                    {%for best_seller in best_sellers%}
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 category {%if not forloop.first%}bordered{%endif%}">
+                            <a href="{{best_seller.get_absolute_url}}">
+                                <img class="img-responsive" src="{{ best_seller.image.url }}" alt="{{ best_seller.name }}">
+                                <p class="text-center">
+                                    {{best_seller.name|upper}}
+                                </p>
+                            </a>
+                        </div>
+                    {%endfor%}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row categories">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            {% for category in categories %}
+                <div class="category {%if not forloop.counter|divisibleby:5%} bordered {%endif%} col-lg-5ths col-md-5ths col-sm-5ths col-xs-6">
+                    <a href="{{category.get_absolute_url}}">
+                        <img class="img-responsive category-icon" src="{%if category.image%}{{ category.image.url }}{%endif%}" alt="{{category.name}}">
+                        <p class="category_name">
+                            {% trans category.name %}
+                        </p>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block ads %}
+    <a href="#">
+        <img class="img-responsive" src="{% static 'img/banners/ads.jpg' %}" alt="">
+    </a>
+{% endblock ads %}

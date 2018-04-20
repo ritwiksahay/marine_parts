@@ -1,0 +1,205 @@
+/*
+Basket style sheet file
+Marine Parts Colors:
+
+Deep Blue: #11274F;
+Mid Blue: #0d4a6c;
+Light Blue: #04a0d3;
+Light Gray: #e6e6e6;
+
+*/
+
+/*Banner*/
+.page-banner .top_banner_title{
+    font-family: 'Magneto';
+    font-size: 40px;
+    color: #fff;
+    margin-bottom: 0px;
+    padding: 62px 0px;
+    background-image: url('../../img/banners/banner-shopping.png');
+    background-position: center center; 
+}
+
+/*Title*/
+.page-header h1{
+    font-size: 22.4px;
+    line-height: 2.14285714;
+    font-weight: normal;
+}
+
+/*Breadcrum*/
+.breadcrumb{
+    background-color: #0d4a6c;
+    border-radius: 0px;
+}
+
+.breadcrumb li a{
+    color: #FFFFFF;
+    font-family:  'Gotham Bold';
+}
+
+.breadcrumb > li + li:before{
+    color: #FFFFFF;
+}
+
+.breadcrumb li.active{
+    color: #FFFFFF;
+    font-family:  'Gotham Bold';
+    font-weight: bold;
+}
+
+/*Page header*/
+.page-header{
+    border-bottom: 1px solid #0d4a6c;
+}
+
+.page-header h1{
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+}
+
+/*Content styles*/
+.basket-title {
+    padding: 10px 15px 0px 15px;
+    border-bottom: none;
+}
+
+.basket-title div .h3,
+.basket-title div .h2 {
+    font-family: 'Gotham Bold';
+    color: #ffffff;
+    background-color: #0d4a6c;
+
+}
+
+.sidebar .basket-title div .h3,
+.sidebar .basket-title div .h2 {
+    padding: 6px 0px 5px 0px;
+    background-color: inherit;
+    color: #0d4a6c;;
+}
+
+.basket-title {
+    margin-bottom: 5px;
+    
+}
+
+.basket-title .h3 {
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+
+.sidebar .basket-title,
+.sidebar {
+    margin: 0;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0;
+}
+
+.basket-wrapper {
+    padding: 0 7px 1px 7px;
+    background-color: #ffffff;
+    transition: top .4s ease .1s;
+    -moz-transition: top .4s ease .1s;
+    -webkit-transition: top .4s ease .1s;
+    -o-transition: top .4s ease .1s;
+}
+.basket-items{
+    background: transparent !important;
+    border: 1px solid #0d4a6c;
+}
+
+.basket-items div h3 a{
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+}
+
+.basket-items div p.price_color,
+.basket-items div p.availability{
+    color: #04a0d3;
+}
+
+.basket-items div .checkout-quantity div .quantity{
+    background-color: #0d4a6c;
+    color: #FFFFFF;
+    border-radius: 0px;
+}
+
+ul.basket-mini-item {
+    margin-bottom: 10px;
+}
+
+.basket-mini-item li {
+    padding: 0px 5px;
+    border: none;
+}
+
+.basket-mini-item li.total {
+    border-bottom: none;
+    background: transparent !important;
+}
+
+.basket-mini-item a {
+    color: #04a0d3;;
+}
+
+.sub-header{
+    border-bottom: 1px solid #0d4a6c;
+}
+
+.sub-header .h3{
+    font-family: 'Gotham Bold';
+    color: #0d4a6c;
+}
+
+.voucher_form_link a{
+    background-color: #0d4a6c;
+    color: #FFFFFF;
+}
+
+.voucher_form_link a:hover{
+    color: #FFFFFF;
+}
+
+.table-condensed tbody tr th{
+    font-family: 'Gotham Bold';
+}
+
+.table-condensed tbody tr th h3{
+    color: #0d4a6c;
+}
+
+.table-condensed tr th.total,
+.table-condensed tr td.total{
+    background-color: #FFFFFF !important;
+    border-bottom: 1px solid #04a0d3;
+    border-top: 1px solid #04a0d3;
+    color: #04a0d3;
+}
+
+.checkout-button a{
+    font-family: 'Gotham Bold';
+}
+
+
+#basket_totals th small {
+    color: #04a0d3;
+}
+
+.total h3.price_color {
+    font-family: "Gotham Bold";
+}
+
+.basket-items .price_color {
+    font-family: "Gotham Book";
+}
+
+.basket-mini-item .mini-item .icon-cross {
+    color: #0d4a6c;
+    cursor: pointer;
+    float: right;
+    font-size: 12px;
+    margin-top: 12px;
+} 

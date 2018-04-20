@@ -1,0 +1,10 @@
+apiLoginId = "6X5kyB5yF"
+transactionKey = "8hr8HwR2TSU83H4D"
+transactionId = "2245440957"
+payerId = "LM6NCLZ5RAKBY"
+customerProfileId = "123212"
+customerPaymentProfileId = "2132322"
+customerProfileShippingId = "123132"
+amount = "12.23"
+subscriptionId = "123234"
+days = 34

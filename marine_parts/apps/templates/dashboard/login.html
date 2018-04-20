@@ -1,0 +1,53 @@
+{% extends "dashboard/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+{% block styles %}
+    {% if use_less %}
+        <link rel="stylesheet/less" type="text/css" href="{% static "oscar/less/dashboard.less" %}" />
+    {% else %}
+        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/dashboard.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/layout.css" %}" />
+    {% endif %}
+{% endblock %}
+
+{% block extrastyles %}
+    <style type="text/css">
+    </style>
+{% endblock %}
+{% block body_class %}dashboard-login{% endblock %}
+
+{% block layout %}
+    <div class="panel col-sm-offset-4 col-sm-4">
+        <div class="panel-body">
+            <form method="post" novalidate>
+                <div class="row">
+                    <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 col-centered">
+                        <img src="{%static 'img/logo/isologo-small.png'%}" alt="Marine Parts" class="img-responsive">
+                    </div>
+                </div>
+                <hr>
+
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    {% trans "Please enter a correct username and password. Note that both fields may be case-sensitive." %}
+                </div>
+                {% endif %}
+
+                <div class="form-group{% if form.username.errors %} has-error{% endif %}">
+                    {{ form.username.label_tag }}
+                    {% render_field form.username class="form-control" %}
+                </div>
+                <div class="form-group{% if form.password.errors %} has-error{% endif %}">
+                    {{ form.password.label_tag }}
+                    {% render_field form.password class="form-control" %}
+                </div>
+
+                <input type="submit" class="btn btn-primary col-sm-12" value="{% trans "Login" %}">
+                <input type="hidden" name="next" value="{{ next }}">
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block onbodyload %}{% endblock %}

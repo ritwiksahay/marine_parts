@@ -1,0 +1,68 @@
+{% load static%}
+{% load staticfiles %}
+{% load currency_filters %}
+{% load i18n %}
+
+<footer class="footer container-fluid">
+    {% block footer %}
+        <div class="footer_links inline primary navbar-static-bottom navbar-default">
+            <div class="nav navbar-nav row">
+                <div class="hidden-lg hidden-md hidden-sm col-xs-6 col-centered">
+                    <a class="brand" href="{{ homepage_url }}">
+                        <img class="col-lg-8 col-md-12 col-sm-6 img-responsive" src="{% static 'img/logo/isotipo-white-small.png' %}" alt="">
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 language-bar">
+                    {% if LANGUAGES|length > 1 %}
+                        <form id="language_selector" action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ language_neutral_url_path }}" />
+                            <div class="form-group">
+                                <select name="language" class="form-control col-xs-6 col-centered" id="language">
+                                    {% get_language_info_list for LANGUAGES as languages %}
+                                    {% for language in languages %}
+                                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE%} selected="selected"{% endif %}>
+                                            {{ language.name_local | capfirst }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="col-lg-1 col-md-1 hidden-sm hidden-xs text-center">
+                    <a href="/search/?var=category:categories">
+                        {% trans "Categories"%}
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 hidden-xs text-center">
+                    <a href="/search/?var=category:brands">
+                        {% trans "Brands"%}
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-4 hidden-xs">
+                    <a class="brand" href="{{ homepage_url }}">
+                        <img class="col-lg-8 col-md-12 col-sm-6 img-responsive" src="{% static 'img/logo/isotipo-white-small.png' %}" alt="">
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-2 hidden-sm hidden-xs text-center">
+                    <a href="{% url 'customer:notifications-inbox' %}">
+                        {% trans "Account" %}
+                        <span class="icon icon-user"></span>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 hidden-xs text-center">
+                    <a href="{% url 'basket:summary' %}">
+                        {% trans "Basket" %}
+                        <span class="icon icon-cart"></span>
+                    </a>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1 text-center">
+                    <a href="/accounts/contact/">
+                        {% trans "Contact"%}
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+</footer>

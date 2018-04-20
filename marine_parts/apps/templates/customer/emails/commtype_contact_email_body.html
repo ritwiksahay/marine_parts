@@ -1,0 +1,13 @@
+{% extends "customer/emails/base.txt" %}
+{% load i18n %}
+<p>
+    {% block body %}{% autoescape off %}{% blocktrans %}
+    The user {{name}} with email: {{email}} and phone number {{phone}}, sent a message:{% endblocktrans %}
+    <br>
+    {{message|safe}}
+
+    {% trans "Engine info:" %}
+    <br>
+    {{engine_info|safe}}.
+</p>
+{% endautoescape %}{% endblock %}

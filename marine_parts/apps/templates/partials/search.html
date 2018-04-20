@@ -1,0 +1,12 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+<form method="get" action="{% url 'search:search' %}" class="navbar-right col-lg-12 col-md-12 col-sm-12">
+    <div class="form-group">
+        <h4>
+            <span class="glyphicon glyphicon-earphone"></span> 1-800-680-0389
+        </h4>
+        {% render_field search_form.q label='' placeholder='Keywords or part number' class+="col-sm-12 search-form" %}
+        <button type="submit" class="btn btn-default"><span class="icon icon-search"></span></button>
+    </div>
+</form>
