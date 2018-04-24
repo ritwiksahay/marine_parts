@@ -40,7 +40,7 @@ def search_original_part(original_part_number):
     Looks for original part in database.
     """
     try:
-        return Product.objects.get(original_part_number)
+        return Product.objects.get(upc=original_part_number)
     except Exception:
         return None
 
@@ -71,8 +71,8 @@ def clone_original_part(data, manufacturer):
 
             return True
         return False
-    except Exception:
-        print("Not found")
+    except Exception as e:
+        print(e)
         return False
 
 
@@ -82,12 +82,10 @@ def load_sierra_products(file, manufacturer):
     With format UPC, OEM, OE#.
     """
     with open(file, 'rb') as csvfile:
-        products = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        products = csv.reader(csvfile, delimiter=',', quotechar='"')
         for row in products:
-            data = row[0].split(',')
-
             # Clone original part, if it exists.
-            clone_original_part(data, manufacturer)
+            clone_original_part(row, manufacturer)
 
 
 class Command(BaseCommand):
@@ -98,4 +96,4 @@ class Command(BaseCommand):
         parser.add_argument('file', nargs='+', type=str)
 
     def handle(self, *args, **options):
-        load_sierra_products(options['file'], options['manufacturer'])
+        load_sierra_products(options['file'][0], options['manufacturer'][0])
