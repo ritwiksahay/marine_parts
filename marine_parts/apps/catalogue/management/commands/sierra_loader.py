@@ -62,8 +62,6 @@ def clone_original_part(data, manufacturer):
         original_part_upc = original_part.upc
 
         if original_part is not None:
-            print("Found")
-
             # Clonning product.
             # Assign None to pk and save will create a new instance.
             original_part.pk = None
@@ -78,7 +76,7 @@ def clone_original_part(data, manufacturer):
             return True
         return False
     except Exception as e:
-        print(e)
+        # print(e)
         return False
 
 
@@ -87,11 +85,15 @@ def load_sierra_products(file, manufacturer):
     Load manufacturer product from a csv file.
     With format UPC, OEM, OE#.
     """
+    count = 0
     with open(file, 'rb') as csvfile:
         products = csv.reader(csvfile, delimiter=',', quotechar='"')
         for row in products:
             # Clone original part, if it exists.
-            clone_original_part(row, manufacturer)
+            if clone_original_part(row, manufacturer):
+                count += 1
+
+    return count
 
 
 class Command(BaseCommand):
@@ -102,4 +104,9 @@ class Command(BaseCommand):
         parser.add_argument('file', nargs='+', type=str)
 
     def handle(self, *args, **options):
-        load_sierra_products(options['file'][0], options['manufacturer'][0])
+        count = load_sierra_products(
+            options['file'][0],
+            options['manufacturer'][0]
+        )
+
+        print("Added: %d new products." % (count))
