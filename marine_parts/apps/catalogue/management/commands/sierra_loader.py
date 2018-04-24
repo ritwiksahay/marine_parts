@@ -1,7 +1,7 @@
 import csv
 
 from django.core.management.base import BaseCommand
-from oscar.apps.catalogue.models import ProductAttribute
+from oscar.apps.catalogue.models import ProductAttributeValue
 from marine_parts.apps.catalogue.models import Product, ProductCategory
 
 
@@ -20,19 +20,25 @@ def copy_categories(original_part_upc, new_part):
         category.save()
 
 
-def copy_attributes(original_part_upc, new_part):
+def copy_attributes(original_part_upc, new_part, manufacturer=""):
     """
     Clone original part attributes and assign them to new part.
     """
-    attributes = ProductAttribute.objects.filter(
+    attribute_values = ProductAttributeValue.objects.filter(
         product__upc=original_part_upc
     )
 
-    for attribute in attributes:
+    for attribute_value in attribute_values:
         # Assign None to pk and save will create a new instance.
-        attribute.pk = None
-        attribute.product = new_part
-        attribute.save()
+        attribute_value.pk = None
+        attribute_value.product = new_part
+
+        if attribute_value.attribute.name == "Manufacturer":
+            attribute_value.value = manufacturer
+        if attribute_value.attribute.name == "Origin":
+            attribute_value.value = "Aftermarket"
+
+        attribute_value.save()
 
 
 def search_original_part(original_part_number):
@@ -67,7 +73,7 @@ def clone_original_part(data, manufacturer):
 
             # Clonning categories and attributes.
             copy_categories(original_part_upc, new_part)
-            copy_attributes(original_part_upc, new_part)
+            copy_attributes(original_part_upc, new_part, manufacturer)
 
             return True
         return False
