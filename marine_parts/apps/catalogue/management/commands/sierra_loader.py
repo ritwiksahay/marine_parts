@@ -19,6 +19,8 @@ def copy_categories(original_part_upc, new_part):
         category.product = new_part
         category.save()
 
+        print("Added category")
+
 
 def copy_attributes(original_part_upc, new_part, manufacturer=""):
     """
@@ -91,6 +93,7 @@ def load_sierra_products(file, manufacturer):
             # Clone original part, if it exists.
             if clone_original_part(row, manufacturer):
                 count += 1
+                print("added +1 %d" % (count))
 
     return count
 
