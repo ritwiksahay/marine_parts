@@ -1,5 +1,6 @@
 import csv
 
+from django.core.management.base import BaseCommand
 from oscar.apps.catalogue.models import ProductAttribute
 from marine_parts.apps.catalogue.models import Product, ProductCategory
 
@@ -44,7 +45,7 @@ def search_original_part(original_part_number):
         return None
 
 
-def clone_original_part(data):
+def clone_original_part(data, manufacturer):
     """
     Data is an array with UPC, OEM and OE#.
     """
@@ -61,7 +62,7 @@ def clone_original_part(data):
             # Assign None to pk and save will create a new instance.
             original_part.pk = None
             original_part.upc = data[0]
-            original_part.title = "Sierra " + original_part.title
+            original_part.title = manufacturer + original_part.title
             new_part = original_part.save()
 
             # Clonning categories and attributes.
@@ -75,9 +76,9 @@ def clone_original_part(data):
         return False
 
 
-def load_sierra_products(file):
+def load_sierra_products(file, manufacturer):
     """
-    Load Sierra product from a csv file.
+    Load manufacturer product from a csv file.
     With format UPC, OEM, OE#.
     """
     with open(file, 'rb') as csvfile:
@@ -86,8 +87,15 @@ def load_sierra_products(file):
             data = row[0].split(',')
 
             # Clone original part, if it exists.
-            clone_original_part(data)
+            clone_original_part(data, manufacturer)
 
 
-if __name__ == "__main__":
-    load_sierra_products('sierra_catalogue.csv')
+class Command(BaseCommand):
+    help = 'Load csv files (generic_upc, oem, oe#): python manage.py manufacturer_name file'
+
+    def add_arguments(self, parser):
+        parser.add_argument('manufacturer', nargs='+', type=str)
+        parser.add_argument('file', nargs='+', type=str)
+
+    def handle(self, *args, **options):
+        load_sierra_products(options['file'], options['manufacturer'])
