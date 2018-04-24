@@ -66,7 +66,6 @@ def clone_original_part(data, manufacturer):
             # Assign None to pk and save will create a new instance.
             original_part.pk = None
             original_part.upc = data[0]
-            original_part.title = manufacturer + original_part.title
             new_part = original_part.save()
 
             # Clonning categories and attributes.
