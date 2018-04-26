@@ -14,12 +14,13 @@ def copy_categories(original_part_upc, new_part):
     )
 
     for category in categories:
-        # Assign None to pk and save will create a new instance.
-        category.pk = None
-        category.product = new_part
-        category.save()
-
-        print("Added category")
+        try:
+            # Assign None to pk and save will create a new instance.
+            category.pk = None
+            category.product = new_part
+            category.save()
+        except Exception as e:
+            print(e)
 
 
 def copy_attributes(original_part_upc, new_part, manufacturer=""):
@@ -68,11 +69,12 @@ def clone_original_part(data, manufacturer):
             # Assign None to pk and save will create a new instance.
             original_part.pk = None
             original_part.upc = data[0]
-            new_part = original_part.save()
+            # Now in original part is the copy.
+            original_part.save()
 
             # Clonning categories and attributes.
-            copy_categories(original_part_upc, new_part)
-            copy_attributes(original_part_upc, new_part, manufacturer)
+            copy_categories(original_part_upc, original_part)
+            copy_attributes(original_part_upc, original_part, manufacturer)
 
             return True
         return False
@@ -93,8 +95,8 @@ def load_sierra_products(file, manufacturer):
             # Clone original part, if it exists.
             if clone_original_part(row, manufacturer):
                 count += 1
-                print("added +1 %d" % (count))
-
+                if (count % 100) == 0:
+                    print("Added 100 products... and continuing....")
     return count
 
 
