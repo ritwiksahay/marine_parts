@@ -83,7 +83,7 @@ def clone_original_part(data, manufacturer):
         return False
 
 
-def load_sierra_products(file, manufacturer):
+def load_products(file, manufacturer):
     """
     Load manufacturer product from a csv file.
     With format UPC, OEM, OE#.
@@ -108,7 +108,7 @@ class Command(BaseCommand):
         parser.add_argument('file', nargs='+', type=str)
 
     def handle(self, *args, **options):
-        count = load_sierra_products(
+        count = load_products(
             options['file'][0],
             options['manufacturer'][0]
         )
