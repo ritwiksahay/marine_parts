@@ -58,10 +58,10 @@ class DBAccess(DBHandler):
         try:
             prod = Product.objects.get(attribute_values__value_text=part_number_v)
         except Product.MultipleObjectsReturned:
-            logging.error("Offending product part number: %s" % part_number_v)
+            logging.error("Offending product part number: %s", part_number_v)
             raise
         except Product.DoesNotExist:
-            logging.warning("No product found with part number: %s" % part_number_v)
+            logging.warning("No product found with part number: %s", part_number_v)
             prod = None
 
         if part_number_v in self.part_number_set:
@@ -79,9 +79,9 @@ class DBAccess(DBHandler):
 
         try:
             cat = create_from_breadcrumbs(path)
-            logging.info("Created Category: %s" % cat)
+            logging.info("Created Category: %s", cat)
         except IntegrityError:
-            logging.error("Offending category: %s" % path)
+            logging.error("Offending category: %s", path)
             raise
 
         if comp_img:
@@ -93,7 +93,7 @@ class DBAccess(DBHandler):
                     File(open(result[0]))
                 )
                 cat.save()
-                logging.info("Saved diagram_image from %s" % url)
+                logging.info("Saved diagram_image from %s", url)
             except Exception as e:
                 print(e)
 
