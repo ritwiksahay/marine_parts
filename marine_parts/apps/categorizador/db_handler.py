@@ -12,7 +12,10 @@ from oscar.apps.partner.models import StockRecord, Partner
 from decimal import Decimal as D
 
 from marine_parts.apps.catalogue.models import Product, ReplacementProduct, ProductCategory
+import logging
 
+
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
 # Interface
 class DBHandler:
@@ -55,14 +58,17 @@ class DBAccess(DBHandler):
         try:
             prod = Product.objects.get(attribute_values__value_text=part_number_v)
         except Product.MultipleObjectsReturned:
-            print("Offending product part number: %s" % part_number_v)
+            logging.error("Offending product part number: %s" % part_number_v)
             raise
         except Product.DoesNotExist:
+            logging.warning("No product found with part number: %s" % part_number_v)
             prod = None
 
         if part_number_v in self.part_number_set:
+            logging.info("Product [%s] already loaded into DB and belongs this file", prod)
             return prod, True
         elif prod:
+            logging.info("Product [%s] already loaded into DB %s", prod)
             self.add_part_number(part_number_v)
             return prod, True
         else:
@@ -73,8 +79,9 @@ class DBAccess(DBHandler):
 
         try:
             cat = create_from_breadcrumbs(path)
+            logging.info("Created Category: %s" % cat)
         except IntegrityError:
-            print("Offending category: %s" % path)
+            logging.error("Offending category: %s" % path)
             raise
 
         if comp_img:
@@ -86,17 +93,20 @@ class DBAccess(DBHandler):
                     File(open(result[0]))
                 )
                 cat.save()
-
+                logging.info("Saved diagram_image from %s" % url)
             except Exception as e:
                 print(e)
 
         return cat
 
     def obt_subcomponent_class(self):
-        return self.obt_crea_prod_class('Subcomponent')
+        subclass = self.obt_crea_prod_class('Subcomponent')
+        logging.info("Retrieved Subcomponent class.")
+        return subclass
 
     def obt_partner(self):
         partner, _ = Partner.objects.get_or_create(name='Loaded')
+        logging.info("Retrieved Partner class.")
         return partner
 
     def obt_crea_prod_class(self, nom):
@@ -115,7 +125,7 @@ class DBAccess(DBHandler):
         except IntegrityError:
             pass
         except DatabaseError:
-            print('Offending data (%s, %s, %s)' % (prod.title, cat.name, diag_number))
+            logging.error("Offending ProductCategory data: (%s, %s, %s)", prod.title, cat.name, diag_number)
             raise
 
     def add_stock_records(self, pro, part_number, amount, price_excl_tax, price_retail, cost_price):
@@ -127,6 +137,7 @@ class DBAccess(DBHandler):
             price_retail=D(price_retail),
             cost_price=D(cost_price),
             num_in_stock=amount)
+        logging.info("Added StockRecord.")
 
     def obt_crea_atributos_prods(self, product_class):
         manufacturer, _ = ProductAttribute.objects.get_or_create(
@@ -155,23 +166,30 @@ class DBAccess(DBHandler):
 
         item = Product.objects.create(product_class=self.subcomp_class,
                                       title=prod_name)
+        logging.info("Created a product: %s", item)
+
         if part_num_v:
             self.part_number.save_value(item, part_num_v)
             item.upc = part_num_v
             item.save()
+            logging.info("With part number: %s", part_num_v)
         else:
             raise RuntimeError('Part Number does not exists')
 
         if manufac_v:
+            logging.info("With manufacturer %s", manufac_v)
             self.manufacturer.save_value(item, manufac_v)
+
         if orig_v:
+            logging.info("With origin %s", orig_v)
             self.origin.save_value(item, orig_v)
 
         try:
             ProductCategory.objects.create(product=item, category=cat,
                                        diagram_number=diag_num_v)
+            logging.info("Asociated to this Category: %s", cat)
         except DatabaseError:
-            print('Offending data (%s, %s, %s)' % (item.title, cat.name, diag_num_v))
+            logging.error("Offending ProductCategory data: (%s, %s, %s)", item.title, cat.name, diag_num_v)
             raise
 
         if is_aval:

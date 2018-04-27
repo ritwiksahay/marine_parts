@@ -8,6 +8,13 @@ class Command(BaseCommand):
         parser.add_argument('filepaths', nargs='+')
 
         parser.add_argument(
+            '--log',
+            action='store_true',
+            dest='log',
+            help='Show log messages.'
+        )
+
+        parser.add_argument(
             '--cat_base',
             action='store',
             dest='cat_base',
@@ -15,16 +22,21 @@ class Command(BaseCommand):
             help='Category where the created products are put.'
         )
 
+
     def handle(self, *args, **options):
         total = 0
 
         cat_base = options['cat_base']
         self.stdout.write(self.style.WARNING('Using base category: %s.' % cat_base))
 
+        verbosity = options['log']
+        if verbosity:
+            self.stdout.write(self.style.WARNING('Log mode on.'))
+
         for filepath in options['filepaths']:
             self.stdout.write('Processing file %s. Please wait...' % filepath)
             try:
-                nro = self.ejec(filepath, cat_base)
+                nro = self.ejec(filepath, cat_base, verbosity)
             except CommandError as ce:
                 self.stderr.write(self.style.ERROR(ce.message.decode('utf-8') + ' Skipping...'))
                 continue
@@ -39,9 +51,9 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING('No products were created'))
 
 
-    def ejec(self, filepath, cat_base):
+    def ejec(self, filepath, cat_base, verbosity):
         try:
-            nro = ejec_cargador(filepath, cat_base)
+            nro = ejec_cargador(filepath, cat_base, verbosity)
         except Exception:
             import sys, traceback
             exc_info = sys.exc_info()

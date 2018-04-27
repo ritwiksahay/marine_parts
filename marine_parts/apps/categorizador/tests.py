@@ -307,9 +307,13 @@ class LoadProductsManageTest(unittest.TestCase):
         call_command('load_products', 'file1', stderr=self.out, stdout=self.derr)
         self.assertIn('An error occurred while processing this file: file1', self.out.getvalue())
 
-    def test_execWithCatBase_regresaLog(self):
+    def test_execWithCatBase_regresaStringCatBase(self):
         call_command('load_products', 'file1', 'file2', stdout=self.out, cat_base='Prueba', stderr=self.derr)
         self.assertIn('Using base category: Prueba.', self.out.getvalue())
+
+    def test_execWithCatBase_regresaStringLog(self):
+        call_command('load_products', 'file1', 'file2', stdout=self.out, cat_base='Prueba', log=True, stderr=self.derr)
+        self.assertIn('Log mode on.', self.out.getvalue())
 
 ########################################################################################################################
 

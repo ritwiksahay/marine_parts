@@ -4,11 +4,12 @@
 #                usando un version simplificada de DFS. Se imprime por
 #                salida estandar los resultados en la notacion jerarquica de Oscar.
 #   Fecha: 7/12/2017
-#   Modificado: 26/02/2017
+#   Modificado: 27/04/2018
 #   Ejecucion: dentro del shell de Django. Usar extraer_prods. Este devuelve el
 #              numero de productos que encuentra. Por otra parte, crea las
 #              categorias, atributos, la clase de producto, y los valores de
 #              los atributos.
+#   - Capacidad de log ad-hoc incluida
 #
 from file_handler import FileHandler
 from django.db import transaction
@@ -180,6 +181,8 @@ def ejec_extraer_cats(caminoArch):
 def ejec_extraer_cats_con(caminoArch, ioh):
     imprimirCate(aNotJerarquica(extraer_cats(ioh.leer(caminoArch))))
 
-def ejec_cargador(caminoArch, cat_base):
+def ejec_cargador(caminoArch, cat_base, verbosity):
+    if verbosity:
+        logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.ERROR)
     fh = FileHandler()
     return extraer_prods(fh.leer(caminoArch), DBAccess(cat_base))
