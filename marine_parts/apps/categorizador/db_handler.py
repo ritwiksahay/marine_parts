@@ -68,7 +68,7 @@ class DBAccess(DBHandler):
             logging.info("Product [%s] already loaded into DB and belongs this file", prod)
             return prod, True
         elif prod:
-            logging.info("Product [%s] already loaded into DB %s", prod)
+            logging.info("Product [%s] already loaded into DB", prod)
             self.add_part_number(part_number_v)
             return prod, True
         else:
@@ -187,9 +187,9 @@ class DBAccess(DBHandler):
         try:
             ProductCategory.objects.create(product=item, category=cat,
                                        diagram_number=diag_num_v)
-            logging.info("Asociated to this Category: %s", cat)
+            logging.info("Asociated to this Category: %s" % cat)
         except DatabaseError:
-            logging.error("Offending ProductCategory data: (%s, %s, %s)", item.title, cat.name, diag_num_v)
+            logging.error("Offending ProductCategory data: (%s, %s, %s)" % (item.title, cat.name, diag_num_v))
             raise
 
         if is_aval:
