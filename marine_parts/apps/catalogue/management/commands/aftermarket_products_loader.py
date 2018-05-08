@@ -59,9 +59,10 @@ def clone_original_part(data, manufacturer):
     Data is an array with UPC, OEM and OE#.
     """
     original_part = None
-
+    print(data[0], data[2])
     try:
         original_part = search_original_part(data[2])
+        print (original_part)
         original_part_upc = original_part.upc
 
         if original_part is not None:
