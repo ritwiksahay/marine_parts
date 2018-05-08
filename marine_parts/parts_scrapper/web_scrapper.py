@@ -1764,7 +1764,7 @@ def marineengine_omc_sterndrive_scrapper():
                             return
 
 ########################################################
-## MARINE PARTS EXPRESS WEB
+# MARINE PARTS EXPRESS WEB
 ########################################################
 def marinepartsexpress_chrysler_marine_scrapper():
     base_url = 'http://www.marinepartsexpress.com/Chrysler_Schematics/'
