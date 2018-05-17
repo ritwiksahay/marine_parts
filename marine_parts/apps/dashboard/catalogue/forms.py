@@ -19,6 +19,8 @@ class CategoryForm(base_form.CategoryForm):
         super(CategoryForm, self).__init__(*args, **kwargs)
 
         # If it's not a Category Leaf, hide diagram field
+        self.fields['_ref_node_id'].widget = CategorySelect()
+        self.fields['_ref_node_id'].widget.attrs['class'] = 'select2'
         if self.instance.has_children():
             del self.fields['diagram_image']
 
@@ -62,7 +64,7 @@ class ProductReplacementForm(forms.ModelForm):
 
     class Meta:
         model = ReplacementProduct
-        fields = ['primary','replacement', 'order']
+        fields = ['primary', 'replacement', 'order']
         widgets = {
             'replacement': ProductSelect,
         }
