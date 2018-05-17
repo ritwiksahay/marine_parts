@@ -15,7 +15,8 @@ from oscar.core.loading import get_classes, get_model
 from oscar.views.generic import ObjectLookupView
 
 from marine_parts.apps.dashboard.catalogue.formsets import ProductReplacementFormSet
-from marine_parts.apps.catalogue.models import ProductCategory
+
+from marine_parts.apps.dashboard.catalogue.widgets import CategorySelect
 
 (ProductForm,
  ProductClassSelectForm,
@@ -47,7 +48,6 @@ ProductTable, CategoryTable \
 Product = get_model('catalogue', 'Product')
 Category = get_model('catalogue', 'Category')
 ProductImage = get_model('catalogue', 'ProductImage')
-#ProductCategory = get_model('catalogue', 'ProductCategory')
 ProductClass = get_model('catalogue', 'ProductClass')
 StockRecord = get_model('partner', 'StockRecord')
 StockAlert = get_model('partner', 'StockAlert')
@@ -600,7 +600,7 @@ class CategoryUpdateView(CategoryListMixin, generic.UpdateView):
     def get_context_data(self, **kwargs):
         ctx = super(CategoryUpdateView, self).get_context_data(**kwargs)
         ctx['title'] = _("Update category '%s'") % self.object.name
-        print ctx
+        form = self.get_form()
         return ctx
 
     def get_success_url(self):
