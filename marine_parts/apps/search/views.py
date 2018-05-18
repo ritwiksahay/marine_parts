@@ -198,6 +198,8 @@ class FacetedSearchView(views.FacetedSearchView):
         # in the Solr index).
         if self.is_component or self.request.GET.get("q"):
             return super(FacetedSearchView, self).get_results()
+        elif self.category.is_leaf():
+            return super(FacetedSearchView, self).get_results()
         else:
             return []
 

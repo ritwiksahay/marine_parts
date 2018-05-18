@@ -175,7 +175,7 @@ class DBAccess(DBHandler):
 
         try:
             part_instance = Product.objects.get(upc=part_num_v)
-        except:     
+        except:
             if part_num_v:
                 self.part_number.save_value(item, part_num_v)
                 item.upc = part_num_v
