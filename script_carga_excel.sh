@@ -11,6 +11,7 @@ if [ ! -d "$1" ]; then
 fi
 
 INPUT_PATH=$1
+CAT_BASE=$2
 OUTPUT_PATH="${INPUT_PATH}processed/"
 FAILED_PATH="${INPUT_PATH}errors/"
 LOGS_PATH="${INPUT_PATH}logs/"
@@ -34,10 +35,10 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-for file in "${INPUT_PATH}"*.json
+for file in "${INPUT_PATH}"*.xls
 do
     echo "Processing " $(basename "$file")...
-    OUTPUT=$( { python ./manage.py load_prods_excel "${file}" --cat_base='Categories' --manufacturer='Original' --origin='Original'; } 2>&1 )
+    OUTPUT=$( { python ./manage.py load_prods_excel "${file}" --cat_base="${CAT_BASE}" --manufacturer='Original' --origin='Original'; } 2>&1 )
     LOG_FILE=$(basename "$file").log
     LOG_FILE="${LOGS_PATH}${LOG_FILE}"
     touch "$LOG_FILE"
@@ -54,3 +55,4 @@ do
     fi
     OUTPUT=""
 done
+
