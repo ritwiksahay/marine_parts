@@ -11,11 +11,16 @@ from oscar.apps.catalogue.categories import create_from_breadcrumbs
 from oscar.apps.partner.models import StockRecord, Partner
 from decimal import Decimal as D
 
-from marine_parts.apps.catalogue.models import Product, ReplacementProduct, ProductCategory
+from marine_parts.apps.catalogue.models import (
+    Product,
+    ReplacementProduct,
+    ProductCategory
+)
 import logging
 
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
+
 
 # Interface
 class DBHandler:
@@ -168,33 +173,40 @@ class DBAccess(DBHandler):
                                       title=prod_name)
         logging.info("Created a product: %s", item)
 
-        if part_num_v:
-            self.part_number.save_value(item, part_num_v)
-            item.upc = part_num_v
-            item.save()
-            logging.info("With part number: %s", part_num_v)
-        else:
-            raise RuntimeError('Part Number does not exists')
-
-        if manufac_v:
-            logging.info("With manufacturer %s", manufac_v)
-            self.manufacturer.save_value(item, manufac_v)
-
-        if orig_v:
-            logging.info("With origin %s", orig_v)
-            self.origin.save_value(item, orig_v)
-
         try:
-            ProductCategory.objects.get_or_create(product=item, category=cat,
-                                       diagram_number=diag_num_v)
-            logging.info("Asociated to this Category: %s" % cat)
-        except DatabaseError:
-            pass
+            part_instance = Product.objects.get(upc=part_num_v)
+        except:     
+            if part_num_v:
+                self.part_number.save_value(item, part_num_v)
+                item.upc = part_num_v
+                item.save()
+                logging.info("With part number: %s", part_num_v)
+            else:
+                raise RuntimeError('Part Number does not exists')
 
-        if is_aval:
-            price_excl_tax = D(price_excl_tax.replace(',', ''))
-            cost_price = D(cost_price.replace(',', ''))
-            price_retail = D(price_retail.replace(',', ''))
-            self.add_stock_records(item, part_num_v, 1000, price_excl_tax, price_retail, cost_price)
+            if manufac_v:
+                logging.info("With manufacturer %s", manufac_v)
+                self.manufacturer.save_value(item, manufac_v)
 
-        return item
+            if orig_v:
+                logging.info("With origin %s", orig_v)
+                self.origin.save_value(item, orig_v)
+
+            try:
+                ProductCategory.objects.get_or_create(
+                    product=item,
+                    category=cat,
+                    diagram_number=diag_num_v
+                )
+                logging.info("Asociated to this Category: %s" % cat)
+            except DatabaseError:
+                pass
+
+            if is_aval:
+                price_excl_tax = D(price_excl_tax.replace(',', ''))
+                cost_price = D(cost_price.replace(',', ''))
+                price_retail = D(price_retail.replace(',', ''))
+                self.add_stock_records(item, part_num_v, 1000, price_excl_tax, price_retail, cost_price)
+
+            return item
+        return part_instance
