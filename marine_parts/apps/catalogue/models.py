@@ -62,7 +62,6 @@ class ProductCategory(AbstractProductCategory):
         return u'%s' % self.category.full_name
 
 
-
 # @python_2_unicode_compatible
 class Product(abstract_models.AbstractProduct):
     """Override to include replacement and recommended products."""
