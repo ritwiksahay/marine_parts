@@ -185,12 +185,11 @@ class DBAccess(DBHandler):
             self.origin.save_value(item, orig_v)
 
         try:
-            ProductCategory.objects.create(product=item, category=cat,
+            ProductCategory.objects.get_or_create(product=item, category=cat,
                                        diagram_number=diag_num_v)
             logging.info("Asociated to this Category: %s" % cat)
         except DatabaseError:
-            logging.error("Offending ProductCategory data: (%s, %s, %s)" % (item.title, cat.name, diag_num_v))
-            raise
+            pass
 
         if is_aval:
             price_excl_tax = D(price_excl_tax.replace(',', ''))

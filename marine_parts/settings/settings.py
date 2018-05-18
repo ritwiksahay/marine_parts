@@ -29,7 +29,7 @@ SECRET_KEY = 'cs)qm+=(yp=uvrkdam@vteo-giw_(4%4rdqmpq=b0otx9u*1*w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.marineparts.us']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -161,16 +161,12 @@ AUTHENTICATION_BACKENDS = (
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://54.82.245.119:8983/solr/marine_parts',
-        'ADMIN_URL': 'http://54.82.245.119:8983/solr/',
-        'TIMEOUT': 60 * 5,
+        'URL': 'http://127.0.0.1:8983/solr/prueba_parts',
+        'ADMIN_URL': 'http://127.0.0.1:8983/solr/',
         'INCLUDE_SPELLING': True,
         'EXCLUDED_INDEXES': ['oscar.apps.search.search_indexes.ProductIndex'],
     },
 }
-
-HAYSTACK_SEARCH_RESULTS_PER_PAGE = 12
-
 OSCAR_SEARCH_FACETS = {
     'fields': OrderedDict([
     ]),
@@ -216,30 +212,17 @@ WSGI_APPLICATION = 'marine_parts.wsgi.application'
 
 
 # Database
-    # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'marine_parts_db',
-        'USER': 'mp_user',
-        'PASSWORD': 'mP19451AxC',
-        'HOST': 'marineparts.ca9ar9i4iarq.us-east-1.rds.amazonaws.com',
-        'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': 'db.sqlite3',
-#         'USER': '',
-#         'PASSWORD': '',
-#         'HOST': '',
-#         'PORT': '',
-#         'ATOMIC_REQUESTS': True,
-#     }
-# }
-
 
 # Google Ads
 ADS_GOOGLE_ADSENSE_CLIENT = 'ca-pub-xxxxxxxxxxxxxxxx'  #OPTIONAL-DEFAULT TO None
@@ -342,5 +325,3 @@ EMAIL_HOST_PASSWORD = 'M@rine0470'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 SCRAPPER_ROOT = os.path.join(BASE_DIR, 'parts_scrapper/')
-
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500
