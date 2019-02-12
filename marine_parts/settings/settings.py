@@ -161,8 +161,8 @@ AUTHENTICATION_BACKENDS = (
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://54.82.245.119:8983/solr/marine_parts',
-        'ADMIN_URL': 'http://54.82.245.119:8983/solr/',
+        'URL': 'http://www.marineparts.us:8983/solr/marine_parts',
+        'ADMIN_URL': 'http://www.marineparts.us:8983/solr/',
         'TIMEOUT': 60 * 5,
         'INCLUDE_SPELLING': True,
         'EXCLUDED_INDEXES': ['oscar.apps.search.search_indexes.ProductIndex'],
